@@ -1,0 +1,10 @@
+/_build/
+/.mooncakes/
+/.moon-lock
+/target/
+/dist/
+*.exe
+*.pdb
+*.obj
+*.o
+/work/
