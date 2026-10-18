@@ -1,0 +1,19 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Ridge-Lab/capnp/examples/telemetry/sample"
+
+import {
+  "Ridge-Lab/capnp",
+}
+
+// Values
+pub fn make_batch() -> Bytes raise @capnp.CapnpError
+
+pub fn verify_report(Bytes) -> Unit raise
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

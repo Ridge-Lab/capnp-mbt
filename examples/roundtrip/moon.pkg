@@ -1,0 +1,7 @@
+import {
+  "Ridge-Lab/capnp",
+  "Ridge-Lab/capnp/examples/telemetry/generated" @telemetry,
+  "Ridge-Lab/capnp/examples/telemetry/sample",
+}
+
+pkgtype(kind: "executable")

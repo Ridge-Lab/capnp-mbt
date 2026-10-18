@@ -1,0 +1,111 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Ridge-Lab/capnp/examples/telemetry/generated"
+
+import {
+  "Ridge-Lab/capnp",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub(all) struct BatchBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BatchBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn BatchBuilder::init_samples(Self, Int) -> BatchSamplesListBuilder raise @capnp.CapnpError
+pub fn BatchBuilder::set_job_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn BatchBuilder::set_source(Self, String) -> Unit raise @capnp.CapnpError
+pub fn BatchBuilder::set_unit(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BatchReader {
+  inner : @capnp.StructReader
+}
+pub fn BatchReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn BatchReader::get_job_id(Self) -> UInt64 raise @capnp.CapnpError
+pub fn BatchReader::get_samples(Self) -> BatchSamplesListReader raise @capnp.CapnpError
+pub fn BatchReader::get_source(Self) -> String raise @capnp.CapnpError
+pub fn BatchReader::get_unit(Self) -> String raise @capnp.CapnpError
+
+pub(all) struct BatchSamplesListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn BatchSamplesListBuilder::get(Self, Int) -> SampleBuilder raise @capnp.CapnpError
+pub fn BatchSamplesListBuilder::length(Self) -> Int
+
+pub(all) struct BatchSamplesListReader {
+  inner : @capnp.ListReader
+}
+pub fn BatchSamplesListReader::get(Self, Int) -> SampleReader raise @capnp.CapnpError
+pub fn BatchSamplesListReader::length(Self) -> Int
+
+pub(all) enum Quality {
+  Valid
+  Missing
+  SensorFault
+  Unknown(UInt)
+}
+pub fn Quality::from_raw(UInt) -> Self
+pub fn Quality::to_raw(Self) -> UInt
+
+pub(all) struct ReportBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn ReportBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn ReportBuilder::init_statistics(Self) -> ReportStatisticsBuilder raise @capnp.CapnpError
+pub fn ReportBuilder::set_accepted(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn ReportBuilder::set_empty(Self) -> Unit raise @capnp.CapnpError
+pub fn ReportBuilder::set_job_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn ReportBuilder::set_rejected(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn ReportBuilder::set_source(Self, String) -> Unit raise @capnp.CapnpError
+pub fn ReportBuilder::set_total(Self, UInt) -> Unit raise @capnp.CapnpError
+
+pub(all) struct ReportReader {
+  inner : @capnp.StructReader
+}
+pub fn ReportReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn ReportReader::get_accepted(Self) -> UInt raise @capnp.CapnpError
+pub fn ReportReader::get_empty(Self) -> Unit raise @capnp.CapnpError
+pub fn ReportReader::get_job_id(Self) -> UInt64 raise @capnp.CapnpError
+pub fn ReportReader::get_rejected(Self) -> UInt raise @capnp.CapnpError
+pub fn ReportReader::get_source(Self) -> String raise @capnp.CapnpError
+pub fn ReportReader::get_statistics(Self) -> ReportStatisticsReader raise @capnp.CapnpError
+pub fn ReportReader::get_total(Self) -> UInt raise @capnp.CapnpError
+pub fn ReportReader::is_empty(Self) -> Bool raise @capnp.CapnpError
+pub fn ReportReader::is_statistics(Self) -> Bool raise @capnp.CapnpError
+pub fn ReportReader::which(Self) -> UInt raise @capnp.CapnpError
+
+pub(all) struct ReportStatisticsBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn ReportStatisticsBuilder::set_maximum(Self, Double) -> Unit raise @capnp.CapnpError
+pub fn ReportStatisticsBuilder::set_mean(Self, Double) -> Unit raise @capnp.CapnpError
+pub fn ReportStatisticsBuilder::set_minimum(Self, Double) -> Unit raise @capnp.CapnpError
+
+pub(all) struct ReportStatisticsReader {
+  inner : @capnp.StructReader
+}
+pub fn ReportStatisticsReader::get_maximum(Self) -> Double raise @capnp.CapnpError
+pub fn ReportStatisticsReader::get_mean(Self) -> Double raise @capnp.CapnpError
+pub fn ReportStatisticsReader::get_minimum(Self) -> Double raise @capnp.CapnpError
+
+pub(all) struct SampleBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn SampleBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn SampleBuilder::set_quality(Self, Quality) -> Unit raise @capnp.CapnpError
+pub fn SampleBuilder::set_timestamp_ns(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn SampleBuilder::set_value(Self, Double) -> Unit raise @capnp.CapnpError
+
+pub(all) struct SampleReader {
+  inner : @capnp.StructReader
+}
+pub fn SampleReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn SampleReader::get_quality(Self) -> Quality raise @capnp.CapnpError
+pub fn SampleReader::get_timestamp_ns(Self) -> UInt64 raise @capnp.CapnpError
+pub fn SampleReader::get_value(Self) -> Double raise @capnp.CapnpError
+
+// Type aliases
+
+// Traits

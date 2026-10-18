@@ -1,0 +1,4 @@
+import {
+  "Ridge-Lab/capnp",
+  "Ridge-Lab/capnp/examples/telemetry/generated" @telemetry,
+}
