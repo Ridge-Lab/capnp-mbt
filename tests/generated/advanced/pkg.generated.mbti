@@ -1,0 +1,269 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Ridge-Lab/capnp/tests/generated/advanced"
+
+import {
+  "Ridge-Lab/capnp",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub(all) struct DefaultsBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn DefaultsBuilder::init_item(Self) -> ItemBuilder raise @capnp.CapnpError
+pub fn DefaultsBuilder::init_items(Self, Int) -> DefaultsItemsListBuilder raise @capnp.CapnpError
+pub fn DefaultsBuilder::init_nested(Self, Int) -> DefaultsNestedListBuilder raise @capnp.CapnpError
+pub fn DefaultsBuilder::init_numbers(Self, Int) -> DefaultsNumbersListBuilder raise @capnp.CapnpError
+pub fn DefaultsBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn DefaultsBuilder::set_infinity(Self, Double) -> Unit raise @capnp.CapnpError
+pub fn DefaultsBuilder::set_nan(Self, Float) -> Unit raise @capnp.CapnpError
+pub fn DefaultsBuilder::set_negative_zero(Self, Double) -> Unit raise @capnp.CapnpError
+
+pub(all) struct DefaultsItemsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn DefaultsItemsListBuilder::get(Self, Int) -> ItemBuilder raise @capnp.CapnpError
+pub fn DefaultsItemsListBuilder::length(Self) -> Int
+
+pub(all) struct DefaultsItemsListReader {
+  inner : @capnp.ListReader
+}
+pub fn DefaultsItemsListReader::get(Self, Int) -> ItemReader raise @capnp.CapnpError
+pub fn DefaultsItemsListReader::length(Self) -> Int
+
+pub(all) struct DefaultsNestedListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn DefaultsNestedListBuilder::init(Self, Int, Int) -> DefaultsNestedListItemBuilder raise @capnp.CapnpError
+pub fn DefaultsNestedListBuilder::length(Self) -> Int
+
+pub(all) struct DefaultsNestedListItemBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn DefaultsNestedListItemBuilder::length(Self) -> Int
+pub fn DefaultsNestedListItemBuilder::set(Self, Int, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct DefaultsNestedListItemReader {
+  inner : @capnp.ListReader
+}
+pub fn DefaultsNestedListItemReader::get(Self, Int) -> String raise @capnp.CapnpError
+pub fn DefaultsNestedListItemReader::length(Self) -> Int
+
+pub(all) struct DefaultsNestedListReader {
+  inner : @capnp.ListReader
+}
+pub fn DefaultsNestedListReader::get(Self, Int) -> DefaultsNestedListItemReader raise @capnp.CapnpError
+pub fn DefaultsNestedListReader::length(Self) -> Int
+
+pub(all) struct DefaultsNumbersListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn DefaultsNumbersListBuilder::length(Self) -> Int
+pub fn DefaultsNumbersListBuilder::set(Self, Int, UInt) -> Unit raise @capnp.CapnpError
+
+pub(all) struct DefaultsNumbersListReader {
+  inner : @capnp.ListReader
+}
+pub fn DefaultsNumbersListReader::get(Self, Int) -> UInt raise @capnp.CapnpError
+pub fn DefaultsNumbersListReader::length(Self) -> Int
+
+pub(all) struct DefaultsReader {
+  inner : @capnp.StructReader
+}
+pub fn DefaultsReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn DefaultsReader::get_infinity(Self) -> Double raise @capnp.CapnpError
+pub fn DefaultsReader::get_item(Self) -> ItemReader raise @capnp.CapnpError
+pub fn DefaultsReader::get_items(Self) -> DefaultsItemsListReader raise @capnp.CapnpError
+pub fn DefaultsReader::get_nan(Self) -> Float raise @capnp.CapnpError
+pub fn DefaultsReader::get_negative_zero(Self) -> Double raise @capnp.CapnpError
+pub fn DefaultsReader::get_nested(Self) -> DefaultsNestedListReader raise @capnp.CapnpError
+pub fn DefaultsReader::get_numbers(Self) -> DefaultsNumbersListReader raise @capnp.CapnpError
+
+pub(all) struct ItemBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn ItemBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn ItemBuilder::set_name(Self, String) -> Unit raise @capnp.CapnpError
+pub fn ItemBuilder::set_number(Self, Int) -> Unit raise @capnp.CapnpError
+
+pub(all) struct ItemReader {
+  inner : @capnp.StructReader
+}
+pub fn ItemReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn ItemReader::get_name(Self) -> String raise @capnp.CapnpError
+pub fn ItemReader::get_number(Self) -> Int raise @capnp.CapnpError
+
+pub(all) struct OtherListsBigListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn OtherListsBigListBuilder::length(Self) -> Int
+pub fn OtherListsBigListBuilder::set(Self, Int, UInt64) -> Unit raise @capnp.CapnpError
+
+pub(all) struct OtherListsBigListReader {
+  inner : @capnp.ListReader
+}
+pub fn OtherListsBigListReader::get(Self, Int) -> UInt64 raise @capnp.CapnpError
+pub fn OtherListsBigListReader::length(Self) -> Int
+
+pub(all) struct OtherListsBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn OtherListsBuilder::init_big(Self, Int) -> OtherListsBigListBuilder raise @capnp.CapnpError
+pub fn OtherListsBuilder::init_empties(Self, Int) -> OtherListsEmptiesListBuilder raise @capnp.CapnpError
+pub fn OtherListsBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn OtherListsBuilder::init_root_field(Self, Int) -> OtherListsRootListBuilder raise @capnp.CapnpError
+pub fn OtherListsBuilder::init_tiny(Self, Int) -> OtherListsTinyListBuilder raise @capnp.CapnpError
+pub fn OtherListsBuilder::init_words(Self, Int) -> OtherListsWordsListBuilder raise @capnp.CapnpError
+pub fn OtherListsBuilder::set_nothing(Self) -> Unit
+
+pub(all) struct OtherListsEmptiesListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn OtherListsEmptiesListBuilder::length(Self) -> Int
+pub fn OtherListsEmptiesListBuilder::set(Self, Int) -> Unit raise @capnp.CapnpError
+
+pub(all) struct OtherListsEmptiesListReader {
+  inner : @capnp.ListReader
+}
+pub fn OtherListsEmptiesListReader::get(Self, Int) -> Unit raise @capnp.CapnpError
+pub fn OtherListsEmptiesListReader::length(Self) -> Int
+
+pub(all) struct OtherListsReader {
+  inner : @capnp.StructReader
+}
+pub fn OtherListsReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn OtherListsReader::get_big(Self) -> OtherListsBigListReader raise @capnp.CapnpError
+pub fn OtherListsReader::get_empties(Self) -> OtherListsEmptiesListReader raise @capnp.CapnpError
+pub fn OtherListsReader::get_nothing(Self) -> Unit
+pub fn OtherListsReader::get_root_field(Self) -> OtherListsRootListReader raise @capnp.CapnpError
+pub fn OtherListsReader::get_tiny(Self) -> OtherListsTinyListReader raise @capnp.CapnpError
+pub fn OtherListsReader::get_words(Self) -> OtherListsWordsListReader raise @capnp.CapnpError
+
+pub(all) struct OtherListsRootListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn OtherListsRootListBuilder::length(Self) -> Int
+pub fn OtherListsRootListBuilder::set(Self, Int, UInt) -> Unit raise @capnp.CapnpError
+
+pub(all) struct OtherListsRootListReader {
+  inner : @capnp.ListReader
+}
+pub fn OtherListsRootListReader::get(Self, Int) -> UInt raise @capnp.CapnpError
+pub fn OtherListsRootListReader::length(Self) -> Int
+
+pub(all) struct OtherListsTinyListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn OtherListsTinyListBuilder::length(Self) -> Int
+pub fn OtherListsTinyListBuilder::set(Self, Int, Int) -> Unit raise @capnp.CapnpError
+
+pub(all) struct OtherListsTinyListReader {
+  inner : @capnp.ListReader
+}
+pub fn OtherListsTinyListReader::get(Self, Int) -> Int raise @capnp.CapnpError
+pub fn OtherListsTinyListReader::length(Self) -> Int
+
+pub(all) struct OtherListsWordsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn OtherListsWordsListBuilder::length(Self) -> Int
+pub fn OtherListsWordsListBuilder::set(Self, Int, UInt) -> Unit raise @capnp.CapnpError
+
+pub(all) struct OtherListsWordsListReader {
+  inner : @capnp.ListReader
+}
+pub fn OtherListsWordsListReader::get(Self, Int) -> UInt raise @capnp.CapnpError
+pub fn OtherListsWordsListReader::length(Self) -> Int
+
+pub(all) struct OuterBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn OuterBuilder::init_inner(Self) -> OuterInnerBuilder raise @capnp.CapnpError
+pub fn OuterBuilder::init_matrix(Self, Int) -> OuterMatrixListBuilder raise @capnp.CapnpError
+pub fn OuterBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+
+pub(all) struct OuterInnerBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn OuterInnerBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn OuterInnerBuilder::set_value(Self, UInt) -> Unit raise @capnp.CapnpError
+
+pub(all) struct OuterInnerReader {
+  inner : @capnp.StructReader
+}
+pub fn OuterInnerReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn OuterInnerReader::get_value(Self) -> UInt raise @capnp.CapnpError
+
+pub(all) struct OuterMatrixListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn OuterMatrixListBuilder::init(Self, Int, Int) -> OuterMatrixListItemBuilder raise @capnp.CapnpError
+pub fn OuterMatrixListBuilder::length(Self) -> Int
+
+pub(all) struct OuterMatrixListItemBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn OuterMatrixListItemBuilder::get(Self, Int) -> OuterInnerBuilder raise @capnp.CapnpError
+pub fn OuterMatrixListItemBuilder::length(Self) -> Int
+
+pub(all) struct OuterMatrixListItemReader {
+  inner : @capnp.ListReader
+}
+pub fn OuterMatrixListItemReader::get(Self, Int) -> OuterInnerReader raise @capnp.CapnpError
+pub fn OuterMatrixListItemReader::length(Self) -> Int
+
+pub(all) struct OuterMatrixListReader {
+  inner : @capnp.ListReader
+}
+pub fn OuterMatrixListReader::get(Self, Int) -> OuterMatrixListItemReader raise @capnp.CapnpError
+pub fn OuterMatrixListReader::length(Self) -> Int
+
+pub(all) struct OuterReader {
+  inner : @capnp.StructReader
+}
+pub fn OuterReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn OuterReader::get_inner(Self) -> OuterInnerReader raise @capnp.CapnpError
+pub fn OuterReader::get_matrix(Self) -> OuterMatrixListReader raise @capnp.CapnpError
+
+pub(all) struct SwitchingBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn SwitchingBuilder::init_configuration(Self) -> SwitchingConfigurationBuilder raise @capnp.CapnpError
+pub fn SwitchingBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn SwitchingBuilder::set_code(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn SwitchingBuilder::set_none(Self) -> Unit raise @capnp.CapnpError
+pub fn SwitchingBuilder::set_owner(Self, String) -> Unit raise @capnp.CapnpError
+pub fn SwitchingBuilder::set_preserved(Self, Bool) -> Unit raise @capnp.CapnpError
+
+pub(all) struct SwitchingConfigurationBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn SwitchingConfigurationBuilder::set_enabled(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn SwitchingConfigurationBuilder::set_label(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct SwitchingConfigurationReader {
+  inner : @capnp.StructReader
+}
+pub fn SwitchingConfigurationReader::get_enabled(Self) -> Bool raise @capnp.CapnpError
+pub fn SwitchingConfigurationReader::get_label(Self) -> String raise @capnp.CapnpError
+
+pub(all) struct SwitchingReader {
+  inner : @capnp.StructReader
+}
+pub fn SwitchingReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn SwitchingReader::get_code(Self) -> UInt64 raise @capnp.CapnpError
+pub fn SwitchingReader::get_configuration(Self) -> SwitchingConfigurationReader raise @capnp.CapnpError
+pub fn SwitchingReader::get_none(Self) -> Unit raise @capnp.CapnpError
+pub fn SwitchingReader::get_owner(Self) -> String raise @capnp.CapnpError
+pub fn SwitchingReader::get_preserved(Self) -> Bool raise @capnp.CapnpError
+pub fn SwitchingReader::is_code(Self) -> Bool raise @capnp.CapnpError
+pub fn SwitchingReader::is_configuration(Self) -> Bool raise @capnp.CapnpError
+pub fn SwitchingReader::is_none(Self) -> Bool raise @capnp.CapnpError
+pub fn SwitchingReader::which(Self) -> UInt raise @capnp.CapnpError
+
+// Type aliases
+
+// Traits

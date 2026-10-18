@@ -1,0 +1,11 @@
+import {
+  "Ridge-Lab/capnp/codegen",
+  "Ridge-Lab/capnp/internal/stdio",
+  "moonbitlang/x/fs",
+}
+
+pkgtype(kind: "executable")
+
+options(
+  link: { "js": { "format": "esm" } },
+)

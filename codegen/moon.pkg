@@ -1,0 +1,8 @@
+import {
+  "Ridge-Lab/capnp",
+  "moonbitlang/core/debug",
+}
+
+import {
+  "moonbitlang/x/fs",
+} for "test"

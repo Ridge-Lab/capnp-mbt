@@ -1,0 +1,283 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Ridge-Lab/capnp/tests/generated"
+
+import {
+  "Ridge-Lab/capnp",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub(all) struct ChildBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn ChildBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn ChildBuilder::set_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn ChildBuilder::set_name(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct ChildReader {
+  inner : @capnp.StructReader
+}
+pub fn ChildReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn ChildReader::get_id(Self) -> UInt64 raise @capnp.CapnpError
+pub fn ChildReader::get_name(Self) -> String raise @capnp.CapnpError
+
+pub(all) enum Color {
+  Red
+  Green
+  Blue
+  Unknown(UInt)
+}
+pub fn Color::from_raw(UInt) -> Self
+pub fn Color::to_raw(Self) -> UInt
+
+pub(all) struct FixtureBlobsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn FixtureBlobsListBuilder::length(Self) -> Int
+pub fn FixtureBlobsListBuilder::set(Self, Int, Bytes) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FixtureBlobsListReader {
+  inner : @capnp.ListReader
+}
+pub fn FixtureBlobsListReader::get(Self, Int) -> Bytes raise @capnp.CapnpError
+pub fn FixtureBlobsListReader::length(Self) -> Int
+
+pub(all) struct FixtureBoolsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn FixtureBoolsListBuilder::length(Self) -> Int
+pub fn FixtureBoolsListBuilder::set(Self, Int, Bool) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FixtureBoolsListReader {
+  inner : @capnp.ListReader
+}
+pub fn FixtureBoolsListReader::get(Self, Int) -> Bool raise @capnp.CapnpError
+pub fn FixtureBoolsListReader::length(Self) -> Int
+
+pub(all) struct FixtureBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn FixtureBuilder::get_metadata(Self) -> FixtureMetadataBuilder
+pub fn FixtureBuilder::init_blobs(Self, Int) -> FixtureBlobsListBuilder raise @capnp.CapnpError
+pub fn FixtureBuilder::init_bools(Self, Int) -> FixtureBoolsListBuilder raise @capnp.CapnpError
+pub fn FixtureBuilder::init_bytes(Self, Int) -> FixtureBytesListBuilder raise @capnp.CapnpError
+pub fn FixtureBuilder::init_child(Self) -> ChildBuilder raise @capnp.CapnpError
+pub fn FixtureBuilder::init_children(Self, Int) -> FixtureChildrenListBuilder raise @capnp.CapnpError
+pub fn FixtureBuilder::init_colors(Self, Int) -> FixtureColorsListBuilder raise @capnp.CapnpError
+pub fn FixtureBuilder::init_doubles(Self, Int) -> FixtureDoublesListBuilder raise @capnp.CapnpError
+pub fn FixtureBuilder::init_floats(Self, Int) -> FixtureFloatsListBuilder raise @capnp.CapnpError
+pub fn FixtureBuilder::init_ints(Self, Int) -> FixtureIntsListBuilder raise @capnp.CapnpError
+pub fn FixtureBuilder::init_longs(Self, Int) -> FixtureLongsListBuilder raise @capnp.CapnpError
+pub fn FixtureBuilder::init_metadata(Self) -> FixtureMetadataBuilder raise @capnp.CapnpError
+pub fn FixtureBuilder::init_nested(Self, Int) -> FixtureNestedListBuilder raise @capnp.CapnpError
+pub fn FixtureBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn FixtureBuilder::init_shorts(Self, Int) -> FixtureShortsListBuilder raise @capnp.CapnpError
+pub fn FixtureBuilder::init_texts(Self, Int) -> FixtureTextsListBuilder raise @capnp.CapnpError
+pub fn FixtureBuilder::set_boolean(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_code(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_color(Self, Color) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_data(Self, Bytes) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_f32(Self, Float) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_f64(Self, Double) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_i16(Self, Int) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_i32(Self, Int) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_i64(Self, Int64) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_i8(Self, Int) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_message(Self, String) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_none(Self) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_text(Self, String) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_u16(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_u32(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_u64(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_u8(Self, Byte) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FixtureBytesListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn FixtureBytesListBuilder::length(Self) -> Int
+pub fn FixtureBytesListBuilder::set(Self, Int, Byte) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FixtureBytesListReader {
+  inner : @capnp.ListReader
+}
+pub fn FixtureBytesListReader::get(Self, Int) -> Byte raise @capnp.CapnpError
+pub fn FixtureBytesListReader::length(Self) -> Int
+
+pub(all) struct FixtureChildrenListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn FixtureChildrenListBuilder::get(Self, Int) -> ChildBuilder raise @capnp.CapnpError
+pub fn FixtureChildrenListBuilder::length(Self) -> Int
+
+pub(all) struct FixtureChildrenListReader {
+  inner : @capnp.ListReader
+}
+pub fn FixtureChildrenListReader::get(Self, Int) -> ChildReader raise @capnp.CapnpError
+pub fn FixtureChildrenListReader::length(Self) -> Int
+
+pub(all) struct FixtureColorsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn FixtureColorsListBuilder::length(Self) -> Int
+pub fn FixtureColorsListBuilder::set(Self, Int, Color) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FixtureColorsListReader {
+  inner : @capnp.ListReader
+}
+pub fn FixtureColorsListReader::get(Self, Int) -> Color raise @capnp.CapnpError
+pub fn FixtureColorsListReader::length(Self) -> Int
+
+pub(all) struct FixtureDoublesListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn FixtureDoublesListBuilder::length(Self) -> Int
+pub fn FixtureDoublesListBuilder::set(Self, Int, Double) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FixtureDoublesListReader {
+  inner : @capnp.ListReader
+}
+pub fn FixtureDoublesListReader::get(Self, Int) -> Double raise @capnp.CapnpError
+pub fn FixtureDoublesListReader::length(Self) -> Int
+
+pub(all) struct FixtureFloatsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn FixtureFloatsListBuilder::length(Self) -> Int
+pub fn FixtureFloatsListBuilder::set(Self, Int, Float) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FixtureFloatsListReader {
+  inner : @capnp.ListReader
+}
+pub fn FixtureFloatsListReader::get(Self, Int) -> Float raise @capnp.CapnpError
+pub fn FixtureFloatsListReader::length(Self) -> Int
+
+pub(all) struct FixtureIntsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn FixtureIntsListBuilder::length(Self) -> Int
+pub fn FixtureIntsListBuilder::set(Self, Int, Int) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FixtureIntsListReader {
+  inner : @capnp.ListReader
+}
+pub fn FixtureIntsListReader::get(Self, Int) -> Int raise @capnp.CapnpError
+pub fn FixtureIntsListReader::length(Self) -> Int
+
+pub(all) struct FixtureLongsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn FixtureLongsListBuilder::length(Self) -> Int
+pub fn FixtureLongsListBuilder::set(Self, Int, Int64) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FixtureLongsListReader {
+  inner : @capnp.ListReader
+}
+pub fn FixtureLongsListReader::get(Self, Int) -> Int64 raise @capnp.CapnpError
+pub fn FixtureLongsListReader::length(Self) -> Int
+
+pub(all) struct FixtureMetadataBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn FixtureMetadataBuilder::set_author(Self, String) -> Unit raise @capnp.CapnpError
+pub fn FixtureMetadataBuilder::set_revision(Self, UInt) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FixtureMetadataReader {
+  inner : @capnp.StructReader
+}
+pub fn FixtureMetadataReader::get_author(Self) -> String raise @capnp.CapnpError
+pub fn FixtureMetadataReader::get_revision(Self) -> UInt raise @capnp.CapnpError
+
+pub(all) struct FixtureNestedListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn FixtureNestedListBuilder::init(Self, Int, Int) -> FixtureNestedListItemBuilder raise @capnp.CapnpError
+pub fn FixtureNestedListBuilder::length(Self) -> Int
+
+pub(all) struct FixtureNestedListItemBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn FixtureNestedListItemBuilder::length(Self) -> Int
+pub fn FixtureNestedListItemBuilder::set(Self, Int, UInt) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FixtureNestedListItemReader {
+  inner : @capnp.ListReader
+}
+pub fn FixtureNestedListItemReader::get(Self, Int) -> UInt raise @capnp.CapnpError
+pub fn FixtureNestedListItemReader::length(Self) -> Int
+
+pub(all) struct FixtureNestedListReader {
+  inner : @capnp.ListReader
+}
+pub fn FixtureNestedListReader::get(Self, Int) -> FixtureNestedListItemReader raise @capnp.CapnpError
+pub fn FixtureNestedListReader::length(Self) -> Int
+
+pub(all) struct FixtureReader {
+  inner : @capnp.StructReader
+}
+pub fn FixtureReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn FixtureReader::get_blobs(Self) -> FixtureBlobsListReader raise @capnp.CapnpError
+pub fn FixtureReader::get_boolean(Self) -> Bool raise @capnp.CapnpError
+pub fn FixtureReader::get_bools(Self) -> FixtureBoolsListReader raise @capnp.CapnpError
+pub fn FixtureReader::get_bytes(Self) -> FixtureBytesListReader raise @capnp.CapnpError
+pub fn FixtureReader::get_child(Self) -> ChildReader raise @capnp.CapnpError
+pub fn FixtureReader::get_children(Self) -> FixtureChildrenListReader raise @capnp.CapnpError
+pub fn FixtureReader::get_code(Self) -> UInt raise @capnp.CapnpError
+pub fn FixtureReader::get_color(Self) -> Color raise @capnp.CapnpError
+pub fn FixtureReader::get_colors(Self) -> FixtureColorsListReader raise @capnp.CapnpError
+pub fn FixtureReader::get_data(Self) -> Bytes raise @capnp.CapnpError
+pub fn FixtureReader::get_doubles(Self) -> FixtureDoublesListReader raise @capnp.CapnpError
+pub fn FixtureReader::get_f32(Self) -> Float raise @capnp.CapnpError
+pub fn FixtureReader::get_f64(Self) -> Double raise @capnp.CapnpError
+pub fn FixtureReader::get_floats(Self) -> FixtureFloatsListReader raise @capnp.CapnpError
+pub fn FixtureReader::get_i16(Self) -> Int raise @capnp.CapnpError
+pub fn FixtureReader::get_i32(Self) -> Int raise @capnp.CapnpError
+pub fn FixtureReader::get_i64(Self) -> Int64 raise @capnp.CapnpError
+pub fn FixtureReader::get_i8(Self) -> Int raise @capnp.CapnpError
+pub fn FixtureReader::get_ints(Self) -> FixtureIntsListReader raise @capnp.CapnpError
+pub fn FixtureReader::get_longs(Self) -> FixtureLongsListReader raise @capnp.CapnpError
+pub fn FixtureReader::get_message(Self) -> String raise @capnp.CapnpError
+pub fn FixtureReader::get_metadata(Self) -> FixtureMetadataReader
+pub fn FixtureReader::get_nested(Self) -> FixtureNestedListReader raise @capnp.CapnpError
+pub fn FixtureReader::get_none(Self) -> Unit raise @capnp.CapnpError
+pub fn FixtureReader::get_shorts(Self) -> FixtureShortsListReader raise @capnp.CapnpError
+pub fn FixtureReader::get_text(Self) -> String raise @capnp.CapnpError
+pub fn FixtureReader::get_texts(Self) -> FixtureTextsListReader raise @capnp.CapnpError
+pub fn FixtureReader::get_u16(Self) -> UInt raise @capnp.CapnpError
+pub fn FixtureReader::get_u32(Self) -> UInt raise @capnp.CapnpError
+pub fn FixtureReader::get_u64(Self) -> UInt64 raise @capnp.CapnpError
+pub fn FixtureReader::get_u8(Self) -> Byte raise @capnp.CapnpError
+pub fn FixtureReader::is_code(Self) -> Bool raise @capnp.CapnpError
+pub fn FixtureReader::is_message(Self) -> Bool raise @capnp.CapnpError
+pub fn FixtureReader::is_none(Self) -> Bool raise @capnp.CapnpError
+pub fn FixtureReader::which(Self) -> UInt raise @capnp.CapnpError
+
+pub(all) struct FixtureShortsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn FixtureShortsListBuilder::length(Self) -> Int
+pub fn FixtureShortsListBuilder::set(Self, Int, Int) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FixtureShortsListReader {
+  inner : @capnp.ListReader
+}
+pub fn FixtureShortsListReader::get(Self, Int) -> Int raise @capnp.CapnpError
+pub fn FixtureShortsListReader::length(Self) -> Int
+
+pub(all) struct FixtureTextsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn FixtureTextsListBuilder::length(Self) -> Int
+pub fn FixtureTextsListBuilder::set(Self, Int, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FixtureTextsListReader {
+  inner : @capnp.ListReader
+}
+pub fn FixtureTextsListReader::get(Self, Int) -> String raise @capnp.CapnpError
+pub fn FixtureTextsListReader::length(Self) -> Int
+
+// Type aliases
+
+// Traits

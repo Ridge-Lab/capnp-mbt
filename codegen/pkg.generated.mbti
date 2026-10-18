@@ -1,0 +1,27 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Ridge-Lab/capnp/codegen"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn generate(Bytes) -> Array[GeneratedFile] raise CodegenError
+
+// Errors
+pub(all) suberror CodegenError {
+  InvalidRequest(String)
+  UnsupportedSchema(String)
+} derive(@debug.Debug)
+pub fn CodegenError::to_repr(Self) -> @debug.Repr
+
+// Types and methods
+pub(all) struct GeneratedFile {
+  path : String
+  content : String
+} derive(@debug.Debug)
+pub fn GeneratedFile::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits

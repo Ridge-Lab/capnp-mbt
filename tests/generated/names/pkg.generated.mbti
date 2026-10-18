@@ -1,0 +1,54 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Ridge-Lab/capnp/tests/generated/names"
+
+import {
+  "Ridge-Lab/capnp",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub(all) struct NamesBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn NamesBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn NamesBuilder::set_status(Self, Status) -> Unit raise @capnp.CapnpError
+pub fn NamesBuilder::set_string(Self, SchemaString) -> Unit raise @capnp.CapnpError
+
+pub(all) struct NamesReader {
+  inner : @capnp.StructReader
+}
+pub fn NamesReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn NamesReader::get_status(Self) -> Status raise @capnp.CapnpError
+pub fn NamesReader::get_string(Self) -> SchemaString raise @capnp.CapnpError
+
+pub(all) enum SchemaError {
+  Invalid
+  Valid
+  Unknown(UInt)
+}
+pub fn SchemaError::from_raw(UInt) -> Self
+pub fn SchemaError::to_raw(Self) -> UInt
+
+pub(all) enum SchemaString {
+  Empty
+  Filled
+  Unknown(UInt)
+}
+pub fn SchemaString::from_raw(UInt) -> Self
+pub fn SchemaString::to_raw(Self) -> UInt
+
+pub(all) enum Status {
+  Unknown
+  Ok
+  UnknownValue1
+  UnknownValue2(UInt)
+}
+pub fn Status::from_raw(UInt) -> Self
+pub fn Status::to_raw(Self) -> UInt
+
+// Type aliases
+
+// Traits

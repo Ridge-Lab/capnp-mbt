@@ -1,0 +1,3 @@
+import {
+  "Ridge-Lab/capnp",
+}
