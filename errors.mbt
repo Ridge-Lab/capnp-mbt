@@ -1,5 +1,5 @@
 ///|
-pub suberror CapnpError {
+pub(all) suberror CapnpError {
   InvalidMessage(String)
   Bounds(String)
   Limit(String)
