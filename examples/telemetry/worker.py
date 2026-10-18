@@ -1,7 +1,7 @@
 """A pycapnp peer: compute statistics from a MoonBit-produced binary batch.
 
 This is an application example, not part of the MoonBit runtime or generator.
-The input values are decoded by pycapnp's independent C++ implementation.
+The input values are decoded by the official C++ implementation via pycapnp.
 """
 from __future__ import annotations
 

@@ -11,7 +11,7 @@
 [`examples/telemetry`](examples/telemetry) 演示一个数据处理任务：
 
 1. MoonBit 用生成的 API 写入任务 ID、纳秒时间戳、读数和质量标记。
-2. Python 使用 `pycapnp`（独立的 C++ Cap'n Proto 实现）读取数据，剔除缺失值和 NaN，计算统计结果。
+2. Python 使用 `pycapnp`（官方 C++ Cap'n Proto 实现的 Python 绑定）读取数据，剔除缺失值和 NaN，计算统计结果。
 3. MoonBit 读取 Python 写出的结果，核对数量、均值、极值和超过 JavaScript 安全整数范围的 64 位 ID。
 
 这是仓库提供的互操作示例，不代表已有外部用户部署。它说明该库如何用于实际的跨语言批处理；相同接口也可用于文件交换和消息队列的负载编解码。

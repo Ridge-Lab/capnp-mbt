@@ -1,8 +1,9 @@
 # MoonBit 与 Python 的数据批处理
 
-从仓库根目录执行。需要 MoonBit >= 0.10.14、Node.js 24、Python 3.12。生成代码已包含在仓库中。Python 端使用独立的 `pycapnp` C++ 实现。
+从仓库根目录执行。需要 MoonBit >= 0.10.14、Node.js 24、Python 3.12。生成代码已包含在仓库中。Python 端通过 `pycapnp` 调用官方 C++ Cap'n Proto 实现，独立于本项目的编解码代码。
 
 ```sh
+moon update
 python -m pip install -r examples/telemetry/requirements.txt
 mkdir -p work
 moon run --target js examples/telemetry -- produce work/batch.bin
