@@ -1,0 +1,12 @@
+import {
+  "moonbitlang/core/buffer",
+  "moonbitlang/core/env",
+}
+options(
+  "native-stub": [ "stdio.c" ],
+  targets: {
+    "native.mbt": [ "native" ],
+    "js.mbt": [ "js" ],
+    "wasm.mbt": [ "wasm", "wasm-gc" ],
+  },
+)

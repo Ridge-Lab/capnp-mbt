@@ -1,0 +1,7 @@
+import {
+  "Ridge-Lab/capnp",
+  "Ridge-Lab/capnp/internal/stdio",
+  "moonbitlang/x/fs",
+}
+pkgtype(kind: "executable")
+options(link: { "js": { "format": "esm" } })
