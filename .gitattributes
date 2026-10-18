@@ -1,0 +1,12 @@
+* text=auto
+*.mbt text eol=lf
+*.mbtx text eol=lf
+*.mbti text eol=lf
+*.capnp text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.bin binary
+*.pkg text eol=lf
+*.mod text eol=lf
+*.c text eol=lf
+*.py text eol=lf

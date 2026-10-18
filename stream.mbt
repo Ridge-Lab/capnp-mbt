@@ -14,16 +14,20 @@ pub fn frame_length(
   guard max_segments > 0 && max_message_bytes >= 8 else {
     raise Limit("invalid frame limits")
   }
-  if input.length() - offset < 4 { return None }
+  if input.length() - offset < 4 {
+    return None
+  }
   let count = stream_u32(input, offset) + 1UL
   guard count <= max_segments.to_uint64() else {
     raise Limit("segment count exceeds the configured limit")
   }
-  let header = ((count + 2UL) / 2UL) * 8UL
+  let header = (count + 2UL) / 2UL * 8UL
   guard header <= max_message_bytes.to_uint64() else {
     raise Limit("segment table exceeds the configured message limit")
   }
-  if header > (input.length() - offset).to_uint64() { return None }
+  if header > (input.length() - offset).to_uint64() {
+    return None
+  }
   let mut total = header
   for i in 0..<count.to_int() {
     total += stream_u32(input, offset + 4 + i * 4) * 8UL
@@ -31,12 +35,18 @@ pub fn frame_length(
       raise Limit("message exceeds the configured byte limit")
     }
   }
-  if total > (input.length() - offset).to_uint64() { None } else { Some(total.to_int()) }
+  if total > (input.length() - offset).to_uint64() {
+    None
+  } else {
+    Some(total.to_int())
+  }
 }
 
 ///|
 fn stream_u32(input : Bytes, offset : Int) -> UInt64 {
   let mut result = 0UL
-  for i in 0..<4 { result = result | (input[offset + i].to_uint64() << (i * 8)) }
+  for i in 0..<4 {
+    result = result | (input[offset + i].to_uint64() << (i * 8))
+  }
   result
 }

@@ -1,0 +1,77 @@
+name: Cap'n Proto checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [wasm, wasm-gc, js, native]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - uses: hustcer/setup-moonbit@v1.22
+        with:
+          version: "0.10.14+7d59c7ec9"
+          core-version: "0.10.14+7d59c7ec9"
+      - run: moon version --all
+      - run: moon update
+      - run: moon fmt --check
+      - run: moon check --target ${{ matrix.target }} --deny-warn
+      - run: moon test --target ${{ matrix.target }} --deny-warn
+      - run: moon build --target ${{ matrix.target }} --release
+      - run: moon run --target ${{ matrix.target }} examples/roundtrip
+  interoperability:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - uses: hustcer/setup-moonbit@v1.22
+        with:
+          version: "0.10.14+7d59c7ec9"
+          core-version: "0.10.14+7d59c7ec9"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get update && sudo apt-get install -y capnproto
+      - run: python -m pip install -r examples/telemetry/requirements.txt
+      - run: moon build --target native --release cmd/capnpc-moonbit
+      - name: Reproduce committed generated API fixtures
+        run: |
+          moon run --target native cmd/capnpc-moonbit -- --request fixtures/conformance.request.bin --out tests/generated
+          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/advanced.request.bin --out tests/generated/advanced
+          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/names.request.bin --out tests/generated/names
+          moon fmt
+          git diff --exit-code -- tests/generated
+      - name: Generate types using the actual compiler plugin protocol
+        run: capnp compile -o./_build/native/release/build/cmd/capnpc-moonbit/capnpc-moonbit.exe:examples/telemetry/generated examples/telemetry/schema/telemetry.capnp
+      - name: Check regenerated code and examples
+        run: moon check --target native --deny-warn
+      - name: MoonBit to independent Python/C++ peer
+        run: |
+          mkdir -p work
+          moon run --target native examples/telemetry -- produce work/batch.bin
+          python examples/telemetry/worker.py work/batch.bin work/report.bin
+          moon run --target native examples/telemetry -- verify work/report.bin
+      - name: Official compiler reads MoonBit packed output
+        run: |
+          moon run --target native cmd/packing -- pack work/batch.bin work/batch.packed.bin
+          capnp decode --packed examples/telemetry/schema/telemetry.capnp Batch < work/batch.packed.bin
+      - name: Check a real compiler request on Node.js
+        run: moon run --target js cmd/capnpc-moonbit -- --request fixtures/conformance.request.bin --out work/generated
+      - uses: actions/upload-artifact@v4
+        with:
+          name: interoperability-results
+          path: |
+            work/batch.bin
+            work/report.bin
+            work/batch.packed.bin

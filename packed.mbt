@@ -10,11 +10,15 @@ pub fn pack(input : Bytes) -> Bytes raise CapnpError {
   while pos < input.length() {
     let mut tag = 0
     for j in 0..<8 {
-      if input[pos + j] != 0 { tag = tag | (1 << j) }
+      if input[pos + j] != 0 {
+        tag = tag | (1 << j)
+      }
     }
     out.push(tag.to_byte())
     for j in 0..<8 {
-      if (tag & (1 << j)) != 0 { out.push(input[pos + j]) }
+      if (tag & (1 << j)) != 0 {
+        out.push(input[pos + j])
+      }
     }
     pos += 8
     if tag == 0 {
@@ -22,9 +26,13 @@ pub fn pack(input : Bytes) -> Bytes raise CapnpError {
       while count < 255 && pos < input.length() {
         let mut zero = true
         for j in 0..<8 {
-          if input[pos + j] != 0 { zero = false }
+          if input[pos + j] != 0 {
+            zero = false
+          }
         }
-        if !zero { break }
+        if !zero {
+          break
+        }
         count += 1
         pos += 8
       }
@@ -37,14 +45,20 @@ pub fn pack(input : Bytes) -> Bytes raise CapnpError {
       while count < 255 && pos < input.length() {
         let mut zeroes = 0
         for j in 0..<8 {
-          if input[pos + j] == 0 { zeroes += 1 }
+          if input[pos + j] == 0 {
+            zeroes += 1
+          }
         }
-        if zeroes >= 2 { break }
+        if zeroes >= 2 {
+          break
+        }
         count += 1
         pos += 8
       }
       out.push(count.to_byte())
-      for j in start..<pos { out.push(input[j]) }
+      for j in start..<pos {
+        out.push(input[j])
+      }
     }
   }
   Bytes::from_array(out[:])
@@ -87,12 +101,16 @@ pub fn unpack(
         raise Limit("unpacked run exceeds the configured byte limit")
       }
       if tag == 0 {
-        for _ in 0..<run_bytes { out.push(0) }
+        for _ in 0..<run_bytes {
+          out.push(0)
+        }
       } else {
         guard run_bytes <= input.length() - pos else {
           raise InvalidMessage("truncated raw run in packed data")
         }
-        for j in 0..<run_bytes { out.push(input[pos + j]) }
+        for j in 0..<run_bytes {
+          out.push(input[pos + j])
+        }
         pos += run_bytes
       }
     }

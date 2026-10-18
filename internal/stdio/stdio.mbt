@@ -11,7 +11,9 @@ pub fn read_stdin(max_bytes? : Int = 64 * 1024 * 1024) -> Bytes raise IOError {
   while true {
     let count = read_chunk(chunk, chunk.length())
     guard count >= 0 else { raise IOError("failed to read binary stdin") }
-    if count == 0 { break }
+    if count == 0 {
+      break
+    }
     guard count <= max_bytes - output.length() else {
       raise IOError("stdin exceeds the configured byte limit")
     }
@@ -34,8 +36,12 @@ pub fn exit(code : Int) -> Unit {
 
 ///|
 #cfg(target="js")
-pub fn args() -> Array[String] { @env.args()[1:].to_owned() }
+pub fn args() -> Array[String] {
+  @env.args()[1:].to_owned()
+}
 
 ///|
 #cfg(not(target="js"))
-pub fn args() -> Array[String] { @env.args() }
+pub fn args() -> Array[String] {
+  @env.args()
+}
