@@ -44,3 +44,11 @@ test "packing rejects partial words, truncated data and expansion limits" {
   assert_true(try { ignore(@capnp.unpack(b"\x00\x00", max_output_bytes=7)); false } catch { _ => true })
   assert_true(try { ignore(@capnp.unpack(b"", max_output_bytes=-1)); false } catch { _ => true })
 }
+
+///|
+test "official C++ packed fixture decodes exactly and re-encodes identically" {
+  let plain = @fs.read_file_to_bytes("fixtures/conformance.bin")
+  let packed = @fs.read_file_to_bytes("fixtures/conformance.packed.bin")
+  assert_eq(@capnp.unpack(packed), plain)
+  assert_eq(@capnp.pack(plain), packed)
+}
