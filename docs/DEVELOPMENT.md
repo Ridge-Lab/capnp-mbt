@@ -15,7 +15,7 @@ Review generated `.mbti` diffs when changing public APIs; do not edit them by ha
 
 ## External oracles
 
-Committed fixtures use official Cap'n Proto 1.5.0; see [regeneration](../fixtures/README.md). CI also uses Ubuntu's official `capnp` package, regenerates example types via stdin, and exchanges messages with `pycapnp==2.2.1` on Python 3.12. The Python peer performs the application calculation independently.
+Committed fixtures use official Cap'n Proto 1.5.0; see [regeneration](../fixtures/README.md). CI builds the same 1.5.0 compiler from its SHA-256-pinned source archive, regenerates the unchanged upstream test/compiler schemas, and exchanges messages with `pycapnp==2.2.1` on Python 3.12. The [schema compatibility peer](../examples/schema_compat) checks generic, dynamic and constant values; the telemetry peer performs the application calculation independently.
 
 The portable example requires no filesystem or host FFI:
 
@@ -34,10 +34,10 @@ Linux CI uses the system C compiler. On Windows, configure a C toolchain support
 
 ## Layout
 
-- Root `reader_*`, `builder_*`, `packed.mbt`, `stream.mbt`: serialization runtime.
+- Root `reader_*`, `builder_*`, `pointer_builder.mbt`, `copy.mbt`, `canonical.mbt`, `packed.mbt`, `stream.mbt`: serialization runtime.
 - `codegen/`: compiler request decoding and MoonBit source generation.
 - `cmd/`: compiler plugin and packing utilities.
 - `fixtures/`, `tests/`: independent fixtures, generated API tests and regressions.
-- `examples/`: portable roundtrip and cross-language batch processing.
+- `examples/`: portable roundtrip, cross-language batch processing, and unchanged-schema interoperability.
 
 Changes should include a reproducer or reference fixture where practical. Do not add performance or production-use claims without reproducible evidence.

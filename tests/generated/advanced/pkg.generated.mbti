@@ -19,8 +19,12 @@ pub fn DefaultsBuilder::init_nested(Self, Int) -> DefaultsNestedListBuilder rais
 pub fn DefaultsBuilder::init_numbers(Self, Int) -> DefaultsNumbersListBuilder raise @capnp.CapnpError
 pub fn DefaultsBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
 pub fn DefaultsBuilder::set_infinity(Self, Double) -> Unit raise @capnp.CapnpError
+pub fn DefaultsBuilder::set_item(Self, ItemReader) -> Unit raise @capnp.CapnpError
+pub fn DefaultsBuilder::set_items(Self, DefaultsItemsListReader) -> Unit raise @capnp.CapnpError
 pub fn DefaultsBuilder::set_nan(Self, Float) -> Unit raise @capnp.CapnpError
 pub fn DefaultsBuilder::set_negative_zero(Self, Double) -> Unit raise @capnp.CapnpError
+pub fn DefaultsBuilder::set_nested(Self, DefaultsNestedListReader) -> Unit raise @capnp.CapnpError
+pub fn DefaultsBuilder::set_numbers(Self, DefaultsNumbersListReader) -> Unit raise @capnp.CapnpError
 
 pub(all) struct DefaultsItemsListBuilder {
   inner : @capnp.ListBuilder
@@ -117,7 +121,12 @@ pub fn OtherListsBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpEr
 pub fn OtherListsBuilder::init_root_field(Self, Int) -> OtherListsRootListBuilder raise @capnp.CapnpError
 pub fn OtherListsBuilder::init_tiny(Self, Int) -> OtherListsTinyListBuilder raise @capnp.CapnpError
 pub fn OtherListsBuilder::init_words(Self, Int) -> OtherListsWordsListBuilder raise @capnp.CapnpError
+pub fn OtherListsBuilder::set_big(Self, OtherListsBigListReader) -> Unit raise @capnp.CapnpError
+pub fn OtherListsBuilder::set_empties(Self, OtherListsEmptiesListReader) -> Unit raise @capnp.CapnpError
 pub fn OtherListsBuilder::set_nothing(Self) -> Unit
+pub fn OtherListsBuilder::set_root_field(Self, OtherListsRootListReader) -> Unit raise @capnp.CapnpError
+pub fn OtherListsBuilder::set_tiny(Self, OtherListsTinyListReader) -> Unit raise @capnp.CapnpError
+pub fn OtherListsBuilder::set_words(Self, OtherListsWordsListReader) -> Unit raise @capnp.CapnpError
 
 pub(all) struct OtherListsEmptiesListBuilder {
   inner : @capnp.ListBuilder
@@ -184,6 +193,8 @@ pub(all) struct OuterBuilder {
 pub fn OuterBuilder::init_inner(Self) -> OuterInnerBuilder raise @capnp.CapnpError
 pub fn OuterBuilder::init_matrix(Self, Int) -> OuterMatrixListBuilder raise @capnp.CapnpError
 pub fn OuterBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn OuterBuilder::set_inner(Self, OuterInnerReader) -> Unit raise @capnp.CapnpError
+pub fn OuterBuilder::set_matrix(Self, OuterMatrixListReader) -> Unit raise @capnp.CapnpError
 
 pub(all) struct OuterInnerBuilder {
   inner : @capnp.StructBuilder

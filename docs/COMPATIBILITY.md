@@ -1,39 +1,103 @@
 # Compatibility and limits
 
-## Wire format
+Version 0.2.0 uses **Cap'n Proto 1.5.0** as its serialization baseline. The
+[standard target](SERIALIZATION-STANDARD.md) defines the endpoint; the
+[unchanged-schema example](../examples/schema_compat/README.md) records a
+reproducible interoperability case. This is not a claim that every schema or
+every feature of the C++ SDK has been tested.
 
-The runtime reads one standard framed message, with ordinary data/list pointers, single-far and double-far pointers. It validates pointers lazily when accessed. A successful `read_message` validates framing, not every object reachable from the root.
+## Messages and dynamic values
 
-`frame_length` returns `None` for a partial frame and a length for a complete one. Use its `offset` for concatenated frames. `read_message` rejects trailing bytes. Packed messages first pass through `unpack`; packing is not auto-detected.
+`read_message` accepts exactly one standard framed message, including ordinary,
+single-far and double-far pointers. It checks framing immediately and validates
+objects lazily on access. Success does not validate every reachable object.
+`frame_length` identifies partial and concatenated frames. Packed input must
+first pass through `unpack`; packing is not auto-detected.
 
-The writer emits one segment, including inline-composite struct lists. It does not emit far pointers, canonical messages, capabilities, or RPC envelopes. Its output can be consumed by the reference implementation.
+The writer emits one segment and inline-composite struct lists. `finish()`
+returns a snapshot with stream framing. `canonicalize(message)` instead returns
+an unpacked canonical **segment without the segment table**. Its root must be
+a struct; null roots normalize to empty structs and list roots are rejected.
+Canonicalization preserves pointer order, trims zero sections, clears unused
+list padding and rejects capabilities. Ordinary writer output is not promised
+to be canonical.
 
-## Schema generation
+`PointerReader`/`PointerBuilder` expose opaque values. Text and Data are byte
+lists on the wire; their intended meaning comes from the schema or caller.
+`set`, `set_struct` and `set_list` copy all on-wire fields and child objects,
+including fields unknown to the caller. Copies are independent; source aliases
+are duplicated. On `CapnpError`, the destination slot and new arena allocations
+are restored, while the source traversal budget remains consumed.
 
-The compiler plugin reads the official `CodeGeneratorRequest`. Supported declarations are structs, nested structs/enums, enums and groups. Fields support scalar and pointer defaults, lists, unions and named groups. Imports are flattened into one generated MoonBit package. Unknown enum ordinals remain available through the generated unknown-value variant.
+## Generated APIs
 
-RPC interfaces, generic parameters, AnyPointer fields and constant declarations fail with a diagnostic. Annotations have no generated runtime behavior. Unsupported declarations in a request can cause rejection even if an application does not use them. This is not a replacement for the official schema parser or layout engine.
+The plugin consumes the official compiler's `CodeGeneratorRequest`. It generates
+structs, enums, groups, unions, nested declarations, lists, scalar/pointer
+defaults, AnyPointer/AnyStruct/AnyList and constants. The official compiler
+resolves imports, aliases, constant expressions and embedded values. Imports
+are flattened into one MoonBit package. Foreign annotations have no generated
+runtime behavior. Interface declarations are accepted alongside data types;
+they do not produce RPC stubs.
 
-Identifiers are normalized to MoonBit spelling; ambiguous generated symbols are diagnosed. Renaming a schema declaration may require API changes in consumers even when its wire ID remains the same. Keep generated files and schema changes in the same review.
+Generic brands resolve explicit and inherited bindings, including parameters
+from enclosing scopes. Known bindings produce typed wrappers. Omitted bindings
+remain AnyPointer. When a recursive generic would require indefinitely growing
+specializations, that edge uses an unbound view with public `.inner` handles.
+Data remains accessible without changing the schema, but static type knowledge
+at that boundary must be supplied by the caller. Generation has request-size,
+scope/type-depth and specialization-count limits.
 
-Missing scalar fields return schema defaults using XOR encoding. Missing pointers use the declared default or an empty value. Extra fields are ignored. Compatible list-to-struct upgrades are supported; arbitrary incompatible schema changes are not. Unknown union alternatives cannot be accessed through an unrelated known member. This is not a schema compatibility checker.
+Top-level and nested constants are exposed through generated `const_*()`
+accessors. Pointer constants and non-empty defaults retain the compiler-resolved
+values. Generated files can therefore contain embedded compiler-request bytes;
+they are not an implementation of a runtime schema parser.
+
+Unknown enum ordinals remain available through the generated unknown-value
+variant. Missing fields return schema defaults; extra fields can be skipped or
+preserved by opaque copying. Compatible list-to-struct evolution is supported.
+Unknown union alternatives are not exposed as unrelated known members.
+Arbitrary incompatible schema changes are not repaired automatically.
+
+Identifiers are normalized to MoonBit spelling. Declaration collisions use
+schema IDs for disambiguation where possible; conflicting generated field
+names still produce diagnostics. Keep schema and generated API changes in the
+same review even when their wire IDs remain compatible.
+
+## Capability boundary
+
+Null interface/Capability fields are supported. The explicit low-level
+`capability_index` and `set_capability_index` APIs inspect/store a UInt32 index;
+they do not create, transport or authorize a capability. A non-null index needs
+an external capability table. Deep copy rejects it because no table remapping
+is available; canonicalization rejects it as well. RPC calls, servers, promise
+pipelining and distributed capability lifetime management are outside this SDK.
 
 ## Resource accounting
 
 | API | Default limit | Meaning |
 | --- | --- | --- |
-| `read_message` | 8,388,608 traversal words | Shared across readers; repeated dereferences consume budget |
-| `read_message` | depth 64 | Maximum nested pointer traversal |
-| `read_message` | 512 segments | Segment table limit |
+| `read_message` | 8,388,608 traversal words; depth 64; 512 segments | Shared across views; repeated dereferences and far-pointer inspection consume budget |
 | `frame_length` | 64 MiB | Maximum framed message size |
 | `unpack` | 64 MiB | Maximum decompressed bytes |
-| `Builder::new` | 8,388,608 words | Maximum arena allocation |
+| `Builder::new` | 8,388,608 words | Arena allocation, including the root pointer |
+| Opaque deep copy | 8,388,608 words; depth 64 | Independent copy budget, in addition to reader and destination limits |
+| `canonicalize` | 8,388,608 output words; depth 64 | Output allocation and recursive depth, in addition to reader limits |
 | `codegen.generate` | 16 MiB input | Maximum compiler request size |
 
-Set smaller limits when accepting untrusted input. `read_message` receives an already allocated `Bytes`: enforce a byte limit while reading from a transport, before allocating the buffer. CLI stdin is bounded to 64 MiB. The request-file path reads the file before checking the generator limit and is intended for trusted build inputs.
+Copy depth accepts 0..256; canonical depth accepts 1..256. Empty-list and
+zero-size-struct amplification is accounted for. These limits are not promises
+of a particular peak process memory use.
 
-Views retain backing bytes. Text validates UTF-8 and converts to a string; Text/Data access copies data. No allocation-free application-access claim is made. The writer is append-only: replacing a pointer retains unreachable arena data. Reuse field builders or build a fresh message when appropriate. `finish()` snapshots the frame without invalidating builders.
+Enforce a transport byte limit **before** allocating input `Bytes`.
+`read_message` receives an already allocated buffer. CLI stdin is bounded to
+64 MiB; the request-file path reads the file before checking the generator limit
+and is intended for trusted build inputs.
 
-Low-level struct numeric accessors use **byte offsets**; Bool uses **bit offsets**; pointer fields use **slot indexes**. Prefer generated APIs in application code.
+Views retain backing bytes. Text validates UTF-8; Text/Data access materializes
+values. The writer is append-only: replacing a pointer retains unreachable arena
+data. `finish()` does not invalidate builder handles. Received messages are not
+edited in place.
 
-Authentication, transport backpressure, framing policy, durable storage and application validation remain the caller's responsibility.
+Low-level numeric offsets are **bytes**, Bool offsets are **bits**, and pointer
+indexes are **slots**. Authentication, transport policy and application-level
+validation remain the caller's responsibility.

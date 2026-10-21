@@ -1,0 +1,71 @@
+import { "moonbitlang/x/fs" }
+
+// Independent wire vectors. No code from the project reader or builder is used.
+fn frame(segments : Array[Array[UInt64]]) -> Bytes {
+  let bytes : Array[Byte] = []
+  for i in 0..<4 {
+    bytes.push(((segments.length() - 1).reinterpret_as_uint() >> (8 * i)).to_byte())
+  }
+  for segment in segments {
+    for i in 0..<4 {
+      bytes.push((segment.length().reinterpret_as_uint() >> (8 * i)).to_byte())
+    }
+  }
+  if segments.length() % 2 == 0 {
+    for _ in 0..<4 { bytes.push(0) }
+  }
+  for segment in segments {
+    for word in segment {
+      for byte in word.to_le_bytes() { bytes.push(byte) }
+    }
+  }
+  Bytes::from_array(bytes)
+}
+
+fn main raise {
+  let cases : Array[(String, Array[Array[UInt64]])] = [
+    ("bool-padding", [[
+      0x0001000000000000UL, 0x0000004900000001UL, 0xffffffffffffffffUL,
+    ]]),
+    ("data-padding", [[
+      0x0001000000000000UL, 0x0000001a00000001UL, 0xffffffffff998877UL,
+    ]]),
+    ("inline-trim", [[
+      0x0001000000000000UL, 0x0000006700000001UL, 0x000200020000000cUL,
+      0UL, 42UL, 0UL, 0UL,
+      7UL, 0UL, 0UL, 0UL,
+      0UL, 0UL, 0x0000001200000005UL, 0UL,
+      120UL,
+    ]]),
+    ("inline-all-zero", [[
+      0x0001000000000000UL, 0x0000006700000001UL, 0x000200020000000cUL,
+      0UL, 0UL, 0UL, 0UL,
+      0UL, 0UL, 0UL, 0UL,
+      0UL, 0UL, 0UL, 0UL,
+    ]]),
+    ("empty-list-order", [[
+      0x0005000000000000UL,
+      0x0000000000000011UL, 0x000000010000000dUL,
+      0x0000000200000009UL, 0x0000000600000005UL,
+      0x0000000700000001UL, 0x0002000300000000UL,
+    ]]),
+    ("nested-far", [
+      [0x0000000100000002UL],
+      [0x0001000000000000UL, 0x0000000200000006UL],
+      [0x0000000300000002UL, 0x0001000100000000UL],
+      [42UL, 0x0000000200000001UL],
+    ]),
+    ("far-empty-child", [
+      [0x0001000000000000UL, 0x0000000100000002UL],
+      [0UL],
+    ]),
+    ("reverse-allocation", [[
+      0x0002000000000000UL, 0x000000010000000cUL, 0x0000000100000000UL,
+      22UL, 0xdeadbeefUL, 11UL,
+    ]]),
+  ]
+  for pair in cases {
+    let (name, segments) = pair
+    @fs.write_bytes_to_file("fixtures/upstream/oracle-1.5.0/\{name}.bin", frame(segments))
+  }
+}

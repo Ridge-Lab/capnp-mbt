@@ -42,7 +42,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: sudo apt-get update && sudo apt-get install -y capnproto
+      - name: Build the pinned Cap'n Proto 1.5.0 reference compiler
+        run: |
+          curl -L --fail --retry 3 https://capnproto.org/capnproto-c++-1.5.0.tar.gz -o "$RUNNER_TEMP/capnproto.tar.gz"
+          echo "77dbc13ca82d9c87ddb4581dd49559d45b63096433d3dadea08b7f31b360a5ba  $RUNNER_TEMP/capnproto.tar.gz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/capnproto.tar.gz" -C "$RUNNER_TEMP"
+          for file in c++.capnp schema.capnp stream.capnp test.capnp test-import.capnp test-import2.capnp testdata/binary testdata/packed testdata/short.txt; do
+            cmp "$RUNNER_TEMP/capnproto-c++-1.5.0/src/capnp/$file" "fixtures/upstream/capnproto-1.5.0/capnp/$file"
+          done
+          cmp "$RUNNER_TEMP/capnproto-c++-1.5.0/LICENSE.txt" fixtures/upstream/capnproto-1.5.0/LICENSE.txt
+          cmake -S "$RUNNER_TEMP/capnproto-c++-1.5.0" -B "$RUNNER_TEMP/capnp-build" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DWITH_OPENSSL=OFF -DWITH_ZLIB=OFF
+          cmake --build "$RUNNER_TEMP/capnp-build" --target capnp_tool --parallel 2
+          echo "$RUNNER_TEMP/capnp-build/src/capnp" >> "$GITHUB_PATH"
+      - run: capnp --version
       - run: python -m pip install -r examples/telemetry/requirements.txt
       - run: moon update
       - run: moon build --target native --release cmd/capnpc-moonbit
@@ -51,6 +63,11 @@ jobs:
           moon run --target native cmd/capnpc-moonbit -- --request fixtures/conformance.request.bin --out tests/generated
           moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/advanced.request.bin --out tests/generated/advanced
           moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/names.request.bin --out tests/generated/names
+          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/generic.request.bin --out tests/generated/generic
+          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/brands.request.bin --out tests/generated/brands
+          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/growing.request.bin --out tests/generated/growing
+          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/upstream.request.bin --out tests/generated/upstream
+          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/compiler.request.bin --out tests/generated/compiler
           moon fmt
           git diff --exit-code -- tests/generated
       - name: Generate types using the actual compiler plugin protocol
@@ -69,6 +86,26 @@ jobs:
           capnp decode --packed examples/telemetry/schema/telemetry.capnp Batch < work/batch.packed.bin
       - name: Check a real compiler request on Node.js
         run: moon run --target js cmd/capnpc-moonbit -- --request fixtures/conformance.request.bin --out work/generated
+      - name: Compile the unchanged upstream test and compiler schemas
+        run: |
+          capnp compile --no-standard-import -Ifixtures/upstream/capnproto-1.5.0 --src-prefix=fixtures/upstream/capnproto-1.5.0 -o./_build/native/release/build/cmd/capnpc-moonbit/capnpc-moonbit.exe:tests/generated/upstream fixtures/upstream/capnproto-1.5.0/capnp/test.capnp
+          capnp compile --no-standard-import -Ifixtures/upstream/capnproto-1.5.0 --src-prefix=fixtures/upstream/capnproto-1.5.0 -o./_build/native/release/build/cmd/capnpc-moonbit/capnpc-moonbit.exe:tests/generated/compiler fixtures/upstream/capnproto-1.5.0/capnp/schema.capnp
+          moon fmt
+          git diff --exit-code -- tests/generated/upstream tests/generated/compiler
+      - name: Bidirectional generics AnyPointer and constants interoperability
+        run: |
+          python examples/schema_compat/peer.py prepare work/schema-compat
+          moon run --target native examples/schema_compat -- work/schema-compat
+          python examples/schema_compat/peer.py verify work/schema-compat
+          moon run --target js examples/schema_compat -- work/schema-compat
+          python examples/schema_compat/peer.py verify work/schema-compat
+      - name: Reproduce canonical encoding with the official converter
+        run: |
+          for canonical in fixtures/upstream/oracle-1.5.0/*.canonical.bin; do
+            source="${canonical%.canonical.bin}.bin"
+            capnp convert binary:canonical < "$source" > work/canonical.bin
+            cmp "$canonical" work/canonical.bin
+          done
       - uses: actions/upload-artifact@v4
         with:
           name: interoperability-results
@@ -76,3 +113,4 @@ jobs:
             work/batch.bin
             work/report.bin
             work/batch.packed.bin
+            work/schema-compat/

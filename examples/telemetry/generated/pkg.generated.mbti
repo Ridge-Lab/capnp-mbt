@@ -16,6 +16,7 @@ pub(all) struct BatchBuilder {
 pub fn BatchBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
 pub fn BatchBuilder::init_samples(Self, Int) -> BatchSamplesListBuilder raise @capnp.CapnpError
 pub fn BatchBuilder::set_job_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn BatchBuilder::set_samples(Self, BatchSamplesListReader) -> Unit raise @capnp.CapnpError
 pub fn BatchBuilder::set_source(Self, String) -> Unit raise @capnp.CapnpError
 pub fn BatchBuilder::set_unit(Self, String) -> Unit raise @capnp.CapnpError
 

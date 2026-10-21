@@ -10,3 +10,8 @@
 *.mod text eol=lf
 *.c text eol=lf
 *.py text eol=lf
+.gitattributes text eol=lf
+.gitignore text eol=lf
+**/capnp_generated.mbt linguist-generated=true
+**/pkg.generated.mbti linguist-generated=true
+fixtures/upstream/capnproto-1.5.0/** linguist-vendored=true

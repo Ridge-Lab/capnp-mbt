@@ -1,0 +1,533 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Ridge-Lab/capnp/tests/generated/brands"
+
+import {
+  "Ridge-Lab/capnp",
+}
+
+// Values
+pub fn const_boxed() -> BoxAsSampleReader raise @capnp.CapnpError
+
+pub fn const_choice() -> Choice
+
+pub fn const_data() -> Bytes
+
+pub fn const_flag() -> Bool
+
+pub fn const_generic_boxes() -> GenericBoxesConstantListReader raise @capnp.CapnpError
+
+pub fn const_list() -> ListConstantListReader raise @capnp.CapnpError
+
+pub fn const_nested_list() -> NestedListConstantListReader raise @capnp.CapnpError
+
+pub fn const_opaque() -> @capnp.PointerReader raise @capnp.CapnpError
+
+pub fn const_opaque_list() -> @capnp.ListReader raise @capnp.CapnpError
+
+pub fn const_opaque_struct() -> @capnp.StructReader raise @capnp.CapnpError
+
+pub fn const_root() -> String
+
+pub fn const_root_field() -> String
+
+pub fn const_sample() -> SampleReader raise @capnp.CapnpError
+
+pub fn const_signed() -> Int64
+
+pub fn const_text() -> String
+
+pub fn const_unsigned() -> UInt64
+
+// Errors
+
+// Types and methods
+pub(all) struct BoxAsListOfUint32Builder {
+  inner : @capnp.StructBuilder
+}
+pub fn BoxAsListOfUint32Builder::get_details(Self) -> BoxDetailsAsListOfUint32Builder
+pub fn BoxAsListOfUint32Builder::init_details(Self) -> BoxDetailsAsListOfUint32Builder raise @capnp.CapnpError
+pub fn BoxAsListOfUint32Builder::init_next(Self) -> Self raise @capnp.CapnpError
+pub fn BoxAsListOfUint32Builder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn BoxAsListOfUint32Builder::init_value(Self, Int) -> BoxAsListOfUint32ValueListBuilder raise @capnp.CapnpError
+pub fn BoxAsListOfUint32Builder::init_values(Self, Int) -> BoxAsListOfUint32ValuesListBuilder raise @capnp.CapnpError
+pub fn BoxAsListOfUint32Builder::set_next(Self, BoxAsListOfUint32Reader) -> Unit raise @capnp.CapnpError
+pub fn BoxAsListOfUint32Builder::set_value(Self, BoxAsListOfUint32ValueListReader) -> Unit raise @capnp.CapnpError
+pub fn BoxAsListOfUint32Builder::set_values(Self, BoxAsListOfUint32ValuesListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BoxAsListOfUint32Reader {
+  inner : @capnp.StructReader
+}
+pub fn BoxAsListOfUint32Reader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn BoxAsListOfUint32Reader::get_details(Self) -> BoxDetailsAsListOfUint32Reader
+pub fn BoxAsListOfUint32Reader::get_next(Self) -> Self raise @capnp.CapnpError
+pub fn BoxAsListOfUint32Reader::get_value(Self) -> BoxAsListOfUint32ValueListReader raise @capnp.CapnpError
+pub fn BoxAsListOfUint32Reader::get_values(Self) -> BoxAsListOfUint32ValuesListReader raise @capnp.CapnpError
+
+pub(all) struct BoxAsListOfUint32ValueListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn BoxAsListOfUint32ValueListBuilder::length(Self) -> Int
+pub fn BoxAsListOfUint32ValueListBuilder::set(Self, Int, UInt) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BoxAsListOfUint32ValueListReader {
+  inner : @capnp.ListReader
+}
+pub fn BoxAsListOfUint32ValueListReader::get(Self, Int) -> UInt raise @capnp.CapnpError
+pub fn BoxAsListOfUint32ValueListReader::length(Self) -> Int
+
+pub(all) struct BoxAsListOfUint32ValuesListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn BoxAsListOfUint32ValuesListBuilder::get(Self, Int) -> BoxAsListOfUint32Builder raise @capnp.CapnpError
+pub fn BoxAsListOfUint32ValuesListBuilder::length(Self) -> Int
+
+pub(all) struct BoxAsListOfUint32ValuesListReader {
+  inner : @capnp.ListReader
+}
+pub fn BoxAsListOfUint32ValuesListReader::get(Self, Int) -> BoxAsListOfUint32Reader raise @capnp.CapnpError
+pub fn BoxAsListOfUint32ValuesListReader::length(Self) -> Int
+
+pub(all) struct BoxAsSampleBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BoxAsSampleBuilder::get_details(Self) -> BoxDetailsAsSampleBuilder
+pub fn BoxAsSampleBuilder::init_details(Self) -> BoxDetailsAsSampleBuilder raise @capnp.CapnpError
+pub fn BoxAsSampleBuilder::init_next(Self) -> Self raise @capnp.CapnpError
+pub fn BoxAsSampleBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn BoxAsSampleBuilder::init_value(Self) -> SampleBuilder raise @capnp.CapnpError
+pub fn BoxAsSampleBuilder::init_values(Self, Int) -> BoxAsSampleValuesListBuilder raise @capnp.CapnpError
+pub fn BoxAsSampleBuilder::set_next(Self, BoxAsSampleReader) -> Unit raise @capnp.CapnpError
+pub fn BoxAsSampleBuilder::set_value(Self, SampleReader) -> Unit raise @capnp.CapnpError
+pub fn BoxAsSampleBuilder::set_values(Self, BoxAsSampleValuesListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BoxAsSampleReader {
+  inner : @capnp.StructReader
+}
+pub fn BoxAsSampleReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn BoxAsSampleReader::get_details(Self) -> BoxDetailsAsSampleReader
+pub fn BoxAsSampleReader::get_next(Self) -> Self raise @capnp.CapnpError
+pub fn BoxAsSampleReader::get_value(Self) -> SampleReader raise @capnp.CapnpError
+pub fn BoxAsSampleReader::get_values(Self) -> BoxAsSampleValuesListReader raise @capnp.CapnpError
+
+pub(all) struct BoxAsSampleValuesListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn BoxAsSampleValuesListBuilder::get(Self, Int) -> BoxAsSampleBuilder raise @capnp.CapnpError
+pub fn BoxAsSampleValuesListBuilder::length(Self) -> Int
+
+pub(all) struct BoxAsSampleValuesListReader {
+  inner : @capnp.ListReader
+}
+pub fn BoxAsSampleValuesListReader::get(Self, Int) -> BoxAsSampleReader raise @capnp.CapnpError
+pub fn BoxAsSampleValuesListReader::length(Self) -> Int
+
+pub(all) struct BoxAsTextBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BoxAsTextBuilder::get_details(Self) -> BoxDetailsAsTextBuilder
+pub fn BoxAsTextBuilder::init_details(Self) -> BoxDetailsAsTextBuilder raise @capnp.CapnpError
+pub fn BoxAsTextBuilder::init_next(Self) -> Self raise @capnp.CapnpError
+pub fn BoxAsTextBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn BoxAsTextBuilder::init_values(Self, Int) -> BoxAsTextValuesListBuilder raise @capnp.CapnpError
+pub fn BoxAsTextBuilder::set_next(Self, BoxAsTextReader) -> Unit raise @capnp.CapnpError
+pub fn BoxAsTextBuilder::set_value(Self, String) -> Unit raise @capnp.CapnpError
+pub fn BoxAsTextBuilder::set_values(Self, BoxAsTextValuesListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BoxAsTextReader {
+  inner : @capnp.StructReader
+}
+pub fn BoxAsTextReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn BoxAsTextReader::get_details(Self) -> BoxDetailsAsTextReader
+pub fn BoxAsTextReader::get_next(Self) -> Self raise @capnp.CapnpError
+pub fn BoxAsTextReader::get_value(Self) -> String raise @capnp.CapnpError
+pub fn BoxAsTextReader::get_values(Self) -> BoxAsTextValuesListReader raise @capnp.CapnpError
+
+pub(all) struct BoxAsTextValuesListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn BoxAsTextValuesListBuilder::get(Self, Int) -> BoxAsTextBuilder raise @capnp.CapnpError
+pub fn BoxAsTextValuesListBuilder::length(Self) -> Int
+
+pub(all) struct BoxAsTextValuesListReader {
+  inner : @capnp.ListReader
+}
+pub fn BoxAsTextValuesListReader::get(Self, Int) -> BoxAsTextReader raise @capnp.CapnpError
+pub fn BoxAsTextValuesListReader::length(Self) -> Int
+
+pub(all) struct BoxBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BoxBuilder::get_details(Self) -> BoxDetailsBuilder
+pub fn BoxBuilder::get_value(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn BoxBuilder::init_details(Self) -> BoxDetailsBuilder raise @capnp.CapnpError
+pub fn BoxBuilder::init_next(Self) -> Self raise @capnp.CapnpError
+pub fn BoxBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn BoxBuilder::init_value(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn BoxBuilder::init_values(Self, Int) -> BoxValuesListBuilder raise @capnp.CapnpError
+pub fn BoxBuilder::set_next(Self, BoxReader) -> Unit raise @capnp.CapnpError
+pub fn BoxBuilder::set_value(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+pub fn BoxBuilder::set_values(Self, BoxValuesListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BoxDetailsAsListOfUint32Builder {
+  inner : @capnp.StructBuilder
+}
+pub fn BoxDetailsAsListOfUint32Builder::init_extra(Self, Int) -> BoxDetailsAsListOfUint32ExtraListBuilder raise @capnp.CapnpError
+pub fn BoxDetailsAsListOfUint32Builder::set_extra(Self, BoxDetailsAsListOfUint32ExtraListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BoxDetailsAsListOfUint32ExtraListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn BoxDetailsAsListOfUint32ExtraListBuilder::length(Self) -> Int
+pub fn BoxDetailsAsListOfUint32ExtraListBuilder::set(Self, Int, UInt) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BoxDetailsAsListOfUint32ExtraListReader {
+  inner : @capnp.ListReader
+}
+pub fn BoxDetailsAsListOfUint32ExtraListReader::get(Self, Int) -> UInt raise @capnp.CapnpError
+pub fn BoxDetailsAsListOfUint32ExtraListReader::length(Self) -> Int
+
+pub(all) struct BoxDetailsAsListOfUint32Reader {
+  inner : @capnp.StructReader
+}
+pub fn BoxDetailsAsListOfUint32Reader::get_extra(Self) -> BoxDetailsAsListOfUint32ExtraListReader raise @capnp.CapnpError
+
+pub(all) struct BoxDetailsAsSampleBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BoxDetailsAsSampleBuilder::init_extra(Self) -> SampleBuilder raise @capnp.CapnpError
+pub fn BoxDetailsAsSampleBuilder::set_extra(Self, SampleReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BoxDetailsAsSampleReader {
+  inner : @capnp.StructReader
+}
+pub fn BoxDetailsAsSampleReader::get_extra(Self) -> SampleReader raise @capnp.CapnpError
+
+pub(all) struct BoxDetailsAsTextBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BoxDetailsAsTextBuilder::set_extra(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BoxDetailsAsTextReader {
+  inner : @capnp.StructReader
+}
+pub fn BoxDetailsAsTextReader::get_extra(Self) -> String raise @capnp.CapnpError
+
+pub(all) struct BoxDetailsBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BoxDetailsBuilder::get_extra(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn BoxDetailsBuilder::init_extra(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn BoxDetailsBuilder::set_extra(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BoxDetailsReader {
+  inner : @capnp.StructReader
+}
+pub fn BoxDetailsReader::get_extra(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+
+pub(all) struct BoxReader {
+  inner : @capnp.StructReader
+}
+pub fn BoxReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn BoxReader::get_details(Self) -> BoxDetailsReader
+pub fn BoxReader::get_next(Self) -> Self raise @capnp.CapnpError
+pub fn BoxReader::get_value(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+pub fn BoxReader::get_values(Self) -> BoxValuesListReader raise @capnp.CapnpError
+
+pub(all) struct BoxValuesListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn BoxValuesListBuilder::get(Self, Int) -> BoxBuilder raise @capnp.CapnpError
+pub fn BoxValuesListBuilder::length(Self) -> Int
+
+pub(all) struct BoxValuesListReader {
+  inner : @capnp.ListReader
+}
+pub fn BoxValuesListReader::get(Self, Int) -> BoxReader raise @capnp.CapnpError
+pub fn BoxValuesListReader::length(Self) -> Int
+
+pub(all) enum Choice {
+  No
+  Yes
+  Unknown(UInt)
+}
+pub fn Choice::from_raw(UInt) -> Self
+pub fn Choice::to_raw(Self) -> UInt
+
+pub(all) struct GenericBoxesConstantListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn GenericBoxesConstantListBuilder::get(Self, Int) -> BoxAsTextBuilder raise @capnp.CapnpError
+pub fn GenericBoxesConstantListBuilder::length(Self) -> Int
+
+pub(all) struct GenericBoxesConstantListReader {
+  inner : @capnp.ListReader
+}
+pub fn GenericBoxesConstantListReader::get(Self, Int) -> BoxAsTextReader raise @capnp.CapnpError
+pub fn GenericBoxesConstantListReader::length(Self) -> Int
+
+pub(all) struct ListConstantListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn ListConstantListBuilder::length(Self) -> Int
+pub fn ListConstantListBuilder::set(Self, Int, UInt) -> Unit raise @capnp.CapnpError
+
+pub(all) struct ListConstantListReader {
+  inner : @capnp.ListReader
+}
+pub fn ListConstantListReader::get(Self, Int) -> UInt raise @capnp.CapnpError
+pub fn ListConstantListReader::length(Self) -> Int
+
+pub(all) struct MethodNamesBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn MethodNamesBuilder::get_foo(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn MethodNamesBuilder::init_foo(Self, Int, Int) -> @capnp.ListBuilder raise @capnp.CapnpError
+pub fn MethodNamesBuilder::init_foo_structs(Self) -> SampleBuilder raise @capnp.CapnpError
+pub fn MethodNamesBuilder::init_foo_structs_inline(Self, Int, Int, Int) -> @capnp.ListBuilder raise @capnp.CapnpError
+pub fn MethodNamesBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn MethodNamesBuilder::set_foo(Self, @capnp.ListReader) -> Unit raise @capnp.CapnpError
+pub fn MethodNamesBuilder::set_foo_structs(Self, SampleReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct MethodNamesReader {
+  inner : @capnp.StructReader
+}
+pub fn MethodNamesReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn MethodNamesReader::get_foo(Self) -> @capnp.ListReader raise @capnp.CapnpError
+pub fn MethodNamesReader::get_foo_structs(Self) -> SampleReader raise @capnp.CapnpError
+
+pub(all) struct NestedListConstantListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn NestedListConstantListBuilder::init(Self, Int, Int) -> NestedListConstantListItemBuilder raise @capnp.CapnpError
+pub fn NestedListConstantListBuilder::length(Self) -> Int
+
+pub(all) struct NestedListConstantListItemBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn NestedListConstantListItemBuilder::length(Self) -> Int
+pub fn NestedListConstantListItemBuilder::set(Self, Int, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct NestedListConstantListItemReader {
+  inner : @capnp.ListReader
+}
+pub fn NestedListConstantListItemReader::get(Self, Int) -> String raise @capnp.CapnpError
+pub fn NestedListConstantListItemReader::length(Self) -> Int
+
+pub(all) struct NestedListConstantListReader {
+  inner : @capnp.ListReader
+}
+pub fn NestedListConstantListReader::get(Self, Int) -> NestedListConstantListItemReader raise @capnp.CapnpError
+pub fn NestedListConstantListReader::length(Self) -> Int
+
+pub(all) struct OuterBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn OuterBuilder::init_child(Self) -> OuterInnerAsAnyPointerAndDataBuilder raise @capnp.CapnpError
+pub fn OuterBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn OuterBuilder::set_child(Self, OuterInnerAsAnyPointerAndDataReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct OuterInnerAsAnyPointerAndDataBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn OuterInnerAsAnyPointerAndDataBuilder::get_left(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn OuterInnerAsAnyPointerAndDataBuilder::init_left(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn OuterInnerAsAnyPointerAndDataBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn OuterInnerAsAnyPointerAndDataBuilder::init_same(Self) -> Self raise @capnp.CapnpError
+pub fn OuterInnerAsAnyPointerAndDataBuilder::set_left(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+pub fn OuterInnerAsAnyPointerAndDataBuilder::set_right(Self, Bytes) -> Unit raise @capnp.CapnpError
+pub fn OuterInnerAsAnyPointerAndDataBuilder::set_same(Self, OuterInnerAsAnyPointerAndDataReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct OuterInnerAsAnyPointerAndDataReader {
+  inner : @capnp.StructReader
+}
+pub fn OuterInnerAsAnyPointerAndDataReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn OuterInnerAsAnyPointerAndDataReader::get_left(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+pub fn OuterInnerAsAnyPointerAndDataReader::get_right(Self) -> Bytes raise @capnp.CapnpError
+pub fn OuterInnerAsAnyPointerAndDataReader::get_same(Self) -> Self raise @capnp.CapnpError
+
+pub(all) struct OuterInnerAsTextAndDataBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn OuterInnerAsTextAndDataBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn OuterInnerAsTextAndDataBuilder::init_same(Self) -> Self raise @capnp.CapnpError
+pub fn OuterInnerAsTextAndDataBuilder::set_left(Self, String) -> Unit raise @capnp.CapnpError
+pub fn OuterInnerAsTextAndDataBuilder::set_right(Self, Bytes) -> Unit raise @capnp.CapnpError
+pub fn OuterInnerAsTextAndDataBuilder::set_same(Self, OuterInnerAsTextAndDataReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct OuterInnerAsTextAndDataReader {
+  inner : @capnp.StructReader
+}
+pub fn OuterInnerAsTextAndDataReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn OuterInnerAsTextAndDataReader::get_left(Self) -> String raise @capnp.CapnpError
+pub fn OuterInnerAsTextAndDataReader::get_right(Self) -> Bytes raise @capnp.CapnpError
+pub fn OuterInnerAsTextAndDataReader::get_same(Self) -> Self raise @capnp.CapnpError
+
+pub(all) struct OuterInnerBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn OuterInnerBuilder::get_left(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn OuterInnerBuilder::get_right(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn OuterInnerBuilder::init_left(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn OuterInnerBuilder::init_right(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn OuterInnerBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn OuterInnerBuilder::init_same(Self) -> Self raise @capnp.CapnpError
+pub fn OuterInnerBuilder::set_left(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+pub fn OuterInnerBuilder::set_right(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+pub fn OuterInnerBuilder::set_same(Self, OuterInnerReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Builder {
+  inner : @capnp.StructBuilder
+}
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Builder::init_fourth(Self, Int) -> OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListBuilder raise @capnp.CapnpError
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Builder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Builder::init_third(Self) -> SampleBuilder raise @capnp.CapnpError
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Builder::set_first(Self, String) -> Unit raise @capnp.CapnpError
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Builder::set_fourth(Self, OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListReader) -> Unit raise @capnp.CapnpError
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Builder::set_second(Self, Bytes) -> Unit raise @capnp.CapnpError
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Builder::set_third(Self, SampleReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListBuilder::length(Self) -> Int
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListBuilder::set(Self, Int, UInt) -> Unit raise @capnp.CapnpError
+
+pub(all) struct OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListReader {
+  inner : @capnp.ListReader
+}
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListReader::get(Self, Int) -> UInt raise @capnp.CapnpError
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListReader::length(Self) -> Int
+
+pub(all) struct OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Reader {
+  inner : @capnp.StructReader
+}
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Reader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Reader::get_first(Self) -> String raise @capnp.CapnpError
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Reader::get_fourth(Self) -> OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListReader raise @capnp.CapnpError
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Reader::get_second(Self) -> Bytes raise @capnp.CapnpError
+pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Reader::get_third(Self) -> SampleReader raise @capnp.CapnpError
+
+pub(all) struct OuterInnerDeepBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn OuterInnerDeepBuilder::get_first(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn OuterInnerDeepBuilder::get_fourth(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn OuterInnerDeepBuilder::get_second(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn OuterInnerDeepBuilder::get_third(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn OuterInnerDeepBuilder::init_first(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn OuterInnerDeepBuilder::init_fourth(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn OuterInnerDeepBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn OuterInnerDeepBuilder::init_second(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn OuterInnerDeepBuilder::init_third(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn OuterInnerDeepBuilder::set_first(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+pub fn OuterInnerDeepBuilder::set_fourth(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+pub fn OuterInnerDeepBuilder::set_second(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+pub fn OuterInnerDeepBuilder::set_third(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct OuterInnerDeepReader {
+  inner : @capnp.StructReader
+}
+pub fn OuterInnerDeepReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn OuterInnerDeepReader::get_first(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+pub fn OuterInnerDeepReader::get_fourth(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+pub fn OuterInnerDeepReader::get_second(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+pub fn OuterInnerDeepReader::get_third(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+
+pub(all) struct OuterInnerReader {
+  inner : @capnp.StructReader
+}
+pub fn OuterInnerReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn OuterInnerReader::get_left(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+pub fn OuterInnerReader::get_right(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+pub fn OuterInnerReader::get_same(Self) -> Self raise @capnp.CapnpError
+
+pub(all) struct OuterReader {
+  inner : @capnp.StructReader
+}
+pub fn OuterReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn OuterReader::get_child(Self) -> OuterInnerAsAnyPointerAndDataReader raise @capnp.CapnpError
+
+pub(all) struct SampleBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn SampleBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn SampleBuilder::set_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn SampleBuilder::set_name(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct SampleReader {
+  inner : @capnp.StructReader
+}
+pub fn SampleReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn SampleReader::get_id(Self) -> UInt64 raise @capnp.CapnpError
+pub fn SampleReader::get_name(Self) -> String raise @capnp.CapnpError
+
+pub(all) struct TypeNe3e468a61524ec0dBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn TypeNe3e468a61524ec0dBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn TypeNe3e468a61524ec0dBuilder::set_message(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct TypeNe3e468a61524ec0dReader {
+  inner : @capnp.StructReader
+}
+pub fn TypeNe3e468a61524ec0dReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn TypeNe3e468a61524ec0dReader::get_message(Self) -> String raise @capnp.CapnpError
+
+pub(all) struct TypeNfac8c9203089f38aBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn TypeNfac8c9203089f38aBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+
+pub(all) struct TypeNfac8c9203089f38aReader {
+  inner : @capnp.StructReader
+}
+pub fn TypeNfac8c9203089f38aReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+
+pub(all) struct UsesBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn UsesBuilder::get_capability(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::get_list(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::get_pointer(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::get_structure(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::init_capability(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::init_deep(Self) -> OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Builder raise @capnp.CapnpError
+pub fn UsesBuilder::init_list(Self, Int, Int) -> @capnp.ListBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::init_list_box(Self) -> BoxAsListOfUint32Builder raise @capnp.CapnpError
+pub fn UsesBuilder::init_list_structs(Self, Int, Int, Int) -> @capnp.ListBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::init_nested(Self) -> OuterInnerAsTextAndDataBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::init_pointer(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn UsesBuilder::init_sample_box(Self) -> BoxAsSampleBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::init_structure(Self, Int, Int) -> @capnp.StructBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::init_text_box(Self) -> BoxAsTextBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::init_unbound(Self) -> BoxBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::set_capability(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+pub fn UsesBuilder::set_deep(Self, OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Reader) -> Unit raise @capnp.CapnpError
+pub fn UsesBuilder::set_list(Self, @capnp.ListReader) -> Unit raise @capnp.CapnpError
+pub fn UsesBuilder::set_list_box(Self, BoxAsListOfUint32Reader) -> Unit raise @capnp.CapnpError
+pub fn UsesBuilder::set_nested(Self, OuterInnerAsTextAndDataReader) -> Unit raise @capnp.CapnpError
+pub fn UsesBuilder::set_pointer(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+pub fn UsesBuilder::set_sample_box(Self, BoxAsSampleReader) -> Unit raise @capnp.CapnpError
+pub fn UsesBuilder::set_structure(Self, @capnp.StructReader) -> Unit raise @capnp.CapnpError
+pub fn UsesBuilder::set_text_box(Self, BoxAsTextReader) -> Unit raise @capnp.CapnpError
+pub fn UsesBuilder::set_unbound(Self, BoxReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct UsesReader {
+  inner : @capnp.StructReader
+}
+pub fn UsesReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn UsesReader::get_capability(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+pub fn UsesReader::get_deep(Self) -> OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Reader raise @capnp.CapnpError
+pub fn UsesReader::get_list(Self) -> @capnp.ListReader raise @capnp.CapnpError
+pub fn UsesReader::get_list_box(Self) -> BoxAsListOfUint32Reader raise @capnp.CapnpError
+pub fn UsesReader::get_nested(Self) -> OuterInnerAsTextAndDataReader raise @capnp.CapnpError
+pub fn UsesReader::get_pointer(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+pub fn UsesReader::get_sample_box(Self) -> BoxAsSampleReader raise @capnp.CapnpError
+pub fn UsesReader::get_structure(Self) -> @capnp.StructReader raise @capnp.CapnpError
+pub fn UsesReader::get_text_box(Self) -> BoxAsTextReader raise @capnp.CapnpError
+pub fn UsesReader::get_unbound(Self) -> BoxReader raise @capnp.CapnpError
+
+// Type aliases
+
+// Traits

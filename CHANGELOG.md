@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0
+
+- Target Cap'n Proto 1.5.0 serialization, including generic brands, ancestor bindings, aliases, unbound parameters, and generic defaults/constants. Recursively growing specializations retain an unbound view instead of requiring schema edits.
+- Generate AnyPointer, AnyStruct, AnyList and constant accessors. Accept interface declarations alongside data types without generating RPC clients or servers.
+- Add opaque pointer builders and bounded schema-free copying that preserves unknown fields and rolls back destination changes on failure. Non-null capabilities require external table mapping and are rejected by deep copy.
+- Add schema-independent canonicalization for struct-root messages, checked against reference-generated vectors for padding, list trimming, empty values, far pointers and preorder layout.
+- Vendor unchanged MIT-licensed 1.5.0 schemas and dependencies with hashes. Add a Python/C++ ↔ MoonBit example using the original generic/AnyPointer protocol and constant values.
+- Document the serialization completion target, tested cases, resource limits and capability/RPC boundary.
+
 ## 0.1.0
 
 - Framing, bounded readers, single-segment builders and packed encoding in MoonBit.
@@ -8,4 +17,4 @@
 - Portable roundtrip and MoonBit → Python/C++ → MoonBit batch-processing example.
 - Four-backend CI and separate interoperability checks.
 
-See [compatibility](docs/COMPATIBILITY.md) for the supported subset. RPC and canonical encoding are not included.
+The initial release did not include generics, AnyPointer, constants or canonicalization. See [compatibility](docs/COMPATIBILITY.md) for the current version's scope; RPC remains separate.

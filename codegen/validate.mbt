@@ -46,6 +46,11 @@ fn validate_names(nodes : Array[Node]) -> Unit raise CodegenError {
           _ => ()
         }
       }
+    } else if node.kind == 4 {
+      register_symbol(names, field_name("const" + node_name(node, nodes)))
+      if node.constant_type is Some(ListOf(element)) {
+        register_list(names, node_name(node, nodes) + "ConstantList", element)
+      }
     } else if node.kind == 2 {
       register_symbol(names, node_name(node, nodes))
       let variants : Map[String, Bool] = Map([])
@@ -73,7 +78,9 @@ fn validate_type(
         )
       }
     ListOf(element) => validate_type(element, nodes)
-    Scalar(_) => ()
+    Scalar(_) | AnyPointer(_) => ()
+    BrandedRef(_, _) | Parameter(_, _) =>
+      raise InvalidRequest("unresolved generic type after specialization")
   }
 }
 

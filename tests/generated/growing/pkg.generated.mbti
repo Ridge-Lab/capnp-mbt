@@ -1,0 +1,323 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Ridge-Lab/capnp/tests/generated/growing"
+
+import {
+  "Ridge-Lab/capnp",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub(all) struct BoxAsListOfBoxAsTextBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BoxAsListOfBoxAsTextBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn BoxAsListOfBoxAsTextBuilder::init_value(Self, Int) -> BoxAsListOfBoxAsTextValueListBuilder raise @capnp.CapnpError
+pub fn BoxAsListOfBoxAsTextBuilder::set_value(Self, BoxAsListOfBoxAsTextValueListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BoxAsListOfBoxAsTextReader {
+  inner : @capnp.StructReader
+}
+pub fn BoxAsListOfBoxAsTextReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn BoxAsListOfBoxAsTextReader::get_value(Self) -> BoxAsListOfBoxAsTextValueListReader raise @capnp.CapnpError
+
+pub(all) struct BoxAsListOfBoxAsTextValueListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn BoxAsListOfBoxAsTextValueListBuilder::get(Self, Int) -> BoxAsTextBuilder raise @capnp.CapnpError
+pub fn BoxAsListOfBoxAsTextValueListBuilder::length(Self) -> Int
+
+pub(all) struct BoxAsListOfBoxAsTextValueListReader {
+  inner : @capnp.ListReader
+}
+pub fn BoxAsListOfBoxAsTextValueListReader::get(Self, Int) -> BoxAsTextReader raise @capnp.CapnpError
+pub fn BoxAsListOfBoxAsTextValueListReader::length(Self) -> Int
+
+pub(all) struct BoxAsListOfBoxBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BoxAsListOfBoxBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn BoxAsListOfBoxBuilder::init_value(Self, Int) -> BoxAsListOfBoxValueListBuilder raise @capnp.CapnpError
+pub fn BoxAsListOfBoxBuilder::set_value(Self, BoxAsListOfBoxValueListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BoxAsListOfBoxReader {
+  inner : @capnp.StructReader
+}
+pub fn BoxAsListOfBoxReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn BoxAsListOfBoxReader::get_value(Self) -> BoxAsListOfBoxValueListReader raise @capnp.CapnpError
+
+pub(all) struct BoxAsListOfBoxValueListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn BoxAsListOfBoxValueListBuilder::get(Self, Int) -> BoxBuilder raise @capnp.CapnpError
+pub fn BoxAsListOfBoxValueListBuilder::length(Self) -> Int
+
+pub(all) struct BoxAsListOfBoxValueListReader {
+  inner : @capnp.ListReader
+}
+pub fn BoxAsListOfBoxValueListReader::get(Self, Int) -> BoxReader raise @capnp.CapnpError
+pub fn BoxAsListOfBoxValueListReader::length(Self) -> Int
+
+pub(all) struct BoxAsTextBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BoxAsTextBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn BoxAsTextBuilder::set_value(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BoxAsTextReader {
+  inner : @capnp.StructReader
+}
+pub fn BoxAsTextReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn BoxAsTextReader::get_value(Self) -> String raise @capnp.CapnpError
+
+pub(all) struct BoxBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BoxBuilder::get_value(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn BoxBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn BoxBuilder::init_value(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn BoxBuilder::set_value(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BoxReader {
+  inner : @capnp.StructReader
+}
+pub fn BoxReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn BoxReader::get_value(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+
+pub(all) struct GrowingAsListOfBoxAsTextBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn GrowingAsListOfBoxAsTextBuilder::init_next(Self) -> GrowingBuilder raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxAsTextBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxAsTextBuilder::init_value(Self, Int) -> GrowingAsListOfBoxAsTextValueListBuilder raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxAsTextBuilder::set_next(Self, GrowingReader) -> Unit raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxAsTextBuilder::set_value(Self, GrowingAsListOfBoxAsTextValueListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct GrowingAsListOfBoxAsTextReader {
+  inner : @capnp.StructReader
+}
+pub fn GrowingAsListOfBoxAsTextReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxAsTextReader::get_next(Self) -> GrowingReader raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxAsTextReader::get_value(Self) -> GrowingAsListOfBoxAsTextValueListReader raise @capnp.CapnpError
+
+pub(all) struct GrowingAsListOfBoxAsTextValueListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn GrowingAsListOfBoxAsTextValueListBuilder::get(Self, Int) -> BoxAsTextBuilder raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxAsTextValueListBuilder::length(Self) -> Int
+
+pub(all) struct GrowingAsListOfBoxAsTextValueListReader {
+  inner : @capnp.ListReader
+}
+pub fn GrowingAsListOfBoxAsTextValueListReader::get(Self, Int) -> BoxAsTextReader raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxAsTextValueListReader::length(Self) -> Int
+
+pub(all) struct GrowingAsListOfBoxBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn GrowingAsListOfBoxBuilder::init_next(Self) -> GrowingBuilder raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxBuilder::init_value(Self, Int) -> GrowingAsListOfBoxValueListBuilder raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxBuilder::set_next(Self, GrowingReader) -> Unit raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxBuilder::set_value(Self, GrowingAsListOfBoxValueListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct GrowingAsListOfBoxReader {
+  inner : @capnp.StructReader
+}
+pub fn GrowingAsListOfBoxReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxReader::get_next(Self) -> GrowingReader raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxReader::get_value(Self) -> GrowingAsListOfBoxValueListReader raise @capnp.CapnpError
+
+pub(all) struct GrowingAsListOfBoxValueListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn GrowingAsListOfBoxValueListBuilder::get(Self, Int) -> BoxBuilder raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxValueListBuilder::length(Self) -> Int
+
+pub(all) struct GrowingAsListOfBoxValueListReader {
+  inner : @capnp.ListReader
+}
+pub fn GrowingAsListOfBoxValueListReader::get(Self, Int) -> BoxReader raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxValueListReader::length(Self) -> Int
+
+pub(all) struct GrowingAsTextBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn GrowingAsTextBuilder::init_next(Self) -> GrowingAsListOfBoxAsTextBuilder raise @capnp.CapnpError
+pub fn GrowingAsTextBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn GrowingAsTextBuilder::set_next(Self, GrowingAsListOfBoxAsTextReader) -> Unit raise @capnp.CapnpError
+pub fn GrowingAsTextBuilder::set_value(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct GrowingAsTextReader {
+  inner : @capnp.StructReader
+}
+pub fn GrowingAsTextReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn GrowingAsTextReader::get_next(Self) -> GrowingAsListOfBoxAsTextReader raise @capnp.CapnpError
+pub fn GrowingAsTextReader::get_value(Self) -> String raise @capnp.CapnpError
+
+pub(all) struct GrowingBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn GrowingBuilder::get_value(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn GrowingBuilder::init_next(Self) -> GrowingAsListOfBoxBuilder raise @capnp.CapnpError
+pub fn GrowingBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn GrowingBuilder::init_value(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn GrowingBuilder::set_next(Self, GrowingAsListOfBoxReader) -> Unit raise @capnp.CapnpError
+pub fn GrowingBuilder::set_value(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct GrowingReader {
+  inner : @capnp.StructReader
+}
+pub fn GrowingReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn GrowingReader::get_next(Self) -> GrowingAsListOfBoxReader raise @capnp.CapnpError
+pub fn GrowingReader::get_value(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+
+pub(all) struct PairAsPairAndPairBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn PairAsPairAndPairBuilder::init_left(Self) -> PairBuilder raise @capnp.CapnpError
+pub fn PairAsPairAndPairBuilder::init_right(Self) -> PairBuilder raise @capnp.CapnpError
+pub fn PairAsPairAndPairBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn PairAsPairAndPairBuilder::set_left(Self, PairReader) -> Unit raise @capnp.CapnpError
+pub fn PairAsPairAndPairBuilder::set_right(Self, PairReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct PairAsPairAndPairReader {
+  inner : @capnp.StructReader
+}
+pub fn PairAsPairAndPairReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn PairAsPairAndPairReader::get_left(Self) -> PairReader raise @capnp.CapnpError
+pub fn PairAsPairAndPairReader::get_right(Self) -> PairReader raise @capnp.CapnpError
+
+pub(all) struct PairAsPairAsTextAndTextAndPairAsTextAndTextBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn PairAsPairAsTextAndTextAndPairAsTextAndTextBuilder::init_left(Self) -> PairAsTextAndTextBuilder raise @capnp.CapnpError
+pub fn PairAsPairAsTextAndTextAndPairAsTextAndTextBuilder::init_right(Self) -> PairAsTextAndTextBuilder raise @capnp.CapnpError
+pub fn PairAsPairAsTextAndTextAndPairAsTextAndTextBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn PairAsPairAsTextAndTextAndPairAsTextAndTextBuilder::set_left(Self, PairAsTextAndTextReader) -> Unit raise @capnp.CapnpError
+pub fn PairAsPairAsTextAndTextAndPairAsTextAndTextBuilder::set_right(Self, PairAsTextAndTextReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct PairAsPairAsTextAndTextAndPairAsTextAndTextReader {
+  inner : @capnp.StructReader
+}
+pub fn PairAsPairAsTextAndTextAndPairAsTextAndTextReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn PairAsPairAsTextAndTextAndPairAsTextAndTextReader::get_left(Self) -> PairAsTextAndTextReader raise @capnp.CapnpError
+pub fn PairAsPairAsTextAndTextAndPairAsTextAndTextReader::get_right(Self) -> PairAsTextAndTextReader raise @capnp.CapnpError
+
+pub(all) struct PairAsTextAndTextBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn PairAsTextAndTextBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn PairAsTextAndTextBuilder::set_left(Self, String) -> Unit raise @capnp.CapnpError
+pub fn PairAsTextAndTextBuilder::set_right(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct PairAsTextAndTextReader {
+  inner : @capnp.StructReader
+}
+pub fn PairAsTextAndTextReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn PairAsTextAndTextReader::get_left(Self) -> String raise @capnp.CapnpError
+pub fn PairAsTextAndTextReader::get_right(Self) -> String raise @capnp.CapnpError
+
+pub(all) struct PairBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn PairBuilder::get_left(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn PairBuilder::get_right(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn PairBuilder::init_left(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn PairBuilder::init_right(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn PairBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn PairBuilder::set_left(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+pub fn PairBuilder::set_right(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct PairReader {
+  inner : @capnp.StructReader
+}
+pub fn PairReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn PairReader::get_left(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+pub fn PairReader::get_right(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+
+pub(all) struct TreeAsPairAsTextAndTextBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn TreeAsPairAsTextAndTextBuilder::init_next(Self) -> TreeBuilder raise @capnp.CapnpError
+pub fn TreeAsPairAsTextAndTextBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn TreeAsPairAsTextAndTextBuilder::init_value(Self) -> PairAsTextAndTextBuilder raise @capnp.CapnpError
+pub fn TreeAsPairAsTextAndTextBuilder::set_next(Self, TreeReader) -> Unit raise @capnp.CapnpError
+pub fn TreeAsPairAsTextAndTextBuilder::set_value(Self, PairAsTextAndTextReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct TreeAsPairAsTextAndTextReader {
+  inner : @capnp.StructReader
+}
+pub fn TreeAsPairAsTextAndTextReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn TreeAsPairAsTextAndTextReader::get_next(Self) -> TreeReader raise @capnp.CapnpError
+pub fn TreeAsPairAsTextAndTextReader::get_value(Self) -> PairAsTextAndTextReader raise @capnp.CapnpError
+
+pub(all) struct TreeAsPairBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn TreeAsPairBuilder::init_next(Self) -> TreeBuilder raise @capnp.CapnpError
+pub fn TreeAsPairBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn TreeAsPairBuilder::init_value(Self) -> PairBuilder raise @capnp.CapnpError
+pub fn TreeAsPairBuilder::set_next(Self, TreeReader) -> Unit raise @capnp.CapnpError
+pub fn TreeAsPairBuilder::set_value(Self, PairReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct TreeAsPairReader {
+  inner : @capnp.StructReader
+}
+pub fn TreeAsPairReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn TreeAsPairReader::get_next(Self) -> TreeReader raise @capnp.CapnpError
+pub fn TreeAsPairReader::get_value(Self) -> PairReader raise @capnp.CapnpError
+
+pub(all) struct TreeAsTextBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn TreeAsTextBuilder::init_next(Self) -> TreeAsPairAsTextAndTextBuilder raise @capnp.CapnpError
+pub fn TreeAsTextBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn TreeAsTextBuilder::set_next(Self, TreeAsPairAsTextAndTextReader) -> Unit raise @capnp.CapnpError
+pub fn TreeAsTextBuilder::set_value(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct TreeAsTextReader {
+  inner : @capnp.StructReader
+}
+pub fn TreeAsTextReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn TreeAsTextReader::get_next(Self) -> TreeAsPairAsTextAndTextReader raise @capnp.CapnpError
+pub fn TreeAsTextReader::get_value(Self) -> String raise @capnp.CapnpError
+
+pub(all) struct TreeBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn TreeBuilder::get_value(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn TreeBuilder::init_next(Self) -> TreeAsPairBuilder raise @capnp.CapnpError
+pub fn TreeBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn TreeBuilder::init_value(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn TreeBuilder::set_next(Self, TreeAsPairReader) -> Unit raise @capnp.CapnpError
+pub fn TreeBuilder::set_value(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct TreeReader {
+  inner : @capnp.StructReader
+}
+pub fn TreeReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn TreeReader::get_next(Self) -> TreeAsPairReader raise @capnp.CapnpError
+pub fn TreeReader::get_value(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+
+pub(all) struct UsesBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn UsesBuilder::init_growing(Self) -> GrowingAsTextBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn UsesBuilder::init_tree(Self) -> TreeAsTextBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::set_growing(Self, GrowingAsTextReader) -> Unit raise @capnp.CapnpError
+pub fn UsesBuilder::set_tree(Self, TreeAsTextReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct UsesReader {
+  inner : @capnp.StructReader
+}
+pub fn UsesReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn UsesReader::get_growing(Self) -> GrowingAsTextReader raise @capnp.CapnpError
+pub fn UsesReader::get_tree(Self) -> TreeAsTextReader raise @capnp.CapnpError
+
+// Type aliases
+
+// Traits

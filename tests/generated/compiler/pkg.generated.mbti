@@ -1,0 +1,1037 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Ridge-Lab/capnp/tests/generated/compiler"
+
+import {
+  "Ridge-Lab/capnp",
+}
+
+// Values
+pub fn const_field_no_discriminant() -> UInt
+
+// Errors
+
+// Types and methods
+pub(all) struct AnnotationBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn AnnotationBuilder::init_brand(Self) -> BrandBuilder raise @capnp.CapnpError
+pub fn AnnotationBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn AnnotationBuilder::init_value(Self) -> ValueBuilder raise @capnp.CapnpError
+pub fn AnnotationBuilder::set_brand(Self, BrandReader) -> Unit raise @capnp.CapnpError
+pub fn AnnotationBuilder::set_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn AnnotationBuilder::set_value(Self, ValueReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct AnnotationReader {
+  inner : @capnp.StructReader
+}
+pub fn AnnotationReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn AnnotationReader::get_brand(Self) -> BrandReader raise @capnp.CapnpError
+pub fn AnnotationReader::get_id(Self) -> UInt64 raise @capnp.CapnpError
+pub fn AnnotationReader::get_value(Self) -> ValueReader raise @capnp.CapnpError
+
+pub(all) struct BrandBindingBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BrandBindingBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn BrandBindingBuilder::init_type(Self) -> TypeBuilder raise @capnp.CapnpError
+pub fn BrandBindingBuilder::set_type(Self, TypeReader) -> Unit raise @capnp.CapnpError
+pub fn BrandBindingBuilder::set_unbound(Self) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BrandBindingReader {
+  inner : @capnp.StructReader
+}
+pub fn BrandBindingReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn BrandBindingReader::get_type(Self) -> TypeReader raise @capnp.CapnpError
+pub fn BrandBindingReader::get_unbound(Self) -> Unit raise @capnp.CapnpError
+pub fn BrandBindingReader::is_type(Self) -> Bool raise @capnp.CapnpError
+pub fn BrandBindingReader::is_unbound(Self) -> Bool raise @capnp.CapnpError
+pub fn BrandBindingReader::which(Self) -> UInt raise @capnp.CapnpError
+
+pub(all) struct BrandBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BrandBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn BrandBuilder::init_scopes(Self, Int) -> BrandScopesListBuilder raise @capnp.CapnpError
+pub fn BrandBuilder::set_scopes(Self, BrandScopesListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BrandReader {
+  inner : @capnp.StructReader
+}
+pub fn BrandReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn BrandReader::get_scopes(Self) -> BrandScopesListReader raise @capnp.CapnpError
+
+pub(all) struct BrandScopeBindListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn BrandScopeBindListBuilder::get(Self, Int) -> BrandBindingBuilder raise @capnp.CapnpError
+pub fn BrandScopeBindListBuilder::length(Self) -> Int
+
+pub(all) struct BrandScopeBindListReader {
+  inner : @capnp.ListReader
+}
+pub fn BrandScopeBindListReader::get(Self, Int) -> BrandBindingReader raise @capnp.CapnpError
+pub fn BrandScopeBindListReader::length(Self) -> Int
+
+pub(all) struct BrandScopeBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BrandScopeBuilder::init_bind(Self, Int) -> BrandScopeBindListBuilder raise @capnp.CapnpError
+pub fn BrandScopeBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn BrandScopeBuilder::set_bind(Self, BrandScopeBindListReader) -> Unit raise @capnp.CapnpError
+pub fn BrandScopeBuilder::set_inherit(Self) -> Unit raise @capnp.CapnpError
+pub fn BrandScopeBuilder::set_scope_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BrandScopeReader {
+  inner : @capnp.StructReader
+}
+pub fn BrandScopeReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn BrandScopeReader::get_bind(Self) -> BrandScopeBindListReader raise @capnp.CapnpError
+pub fn BrandScopeReader::get_inherit(Self) -> Unit raise @capnp.CapnpError
+pub fn BrandScopeReader::get_scope_id(Self) -> UInt64 raise @capnp.CapnpError
+pub fn BrandScopeReader::is_bind(Self) -> Bool raise @capnp.CapnpError
+pub fn BrandScopeReader::is_inherit(Self) -> Bool raise @capnp.CapnpError
+pub fn BrandScopeReader::which(Self) -> UInt raise @capnp.CapnpError
+
+pub(all) struct BrandScopesListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn BrandScopesListBuilder::get(Self, Int) -> BrandScopeBuilder raise @capnp.CapnpError
+pub fn BrandScopesListBuilder::length(Self) -> Int
+
+pub(all) struct BrandScopesListReader {
+  inner : @capnp.ListReader
+}
+pub fn BrandScopesListReader::get(Self, Int) -> BrandScopeReader raise @capnp.CapnpError
+pub fn BrandScopesListReader::length(Self) -> Int
+
+pub(all) struct CapnpVersionBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn CapnpVersionBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn CapnpVersionBuilder::set_major(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn CapnpVersionBuilder::set_micro(Self, Byte) -> Unit raise @capnp.CapnpError
+pub fn CapnpVersionBuilder::set_minor(Self, Byte) -> Unit raise @capnp.CapnpError
+
+pub(all) struct CapnpVersionReader {
+  inner : @capnp.StructReader
+}
+pub fn CapnpVersionReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn CapnpVersionReader::get_major(Self) -> UInt raise @capnp.CapnpError
+pub fn CapnpVersionReader::get_micro(Self) -> Byte raise @capnp.CapnpError
+pub fn CapnpVersionReader::get_minor(Self) -> Byte raise @capnp.CapnpError
+
+pub(all) struct CodeGeneratorRequestBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn CodeGeneratorRequestBuilder::init_capnp_version(Self) -> CapnpVersionBuilder raise @capnp.CapnpError
+pub fn CodeGeneratorRequestBuilder::init_nodes(Self, Int) -> CodeGeneratorRequestNodesListBuilder raise @capnp.CapnpError
+pub fn CodeGeneratorRequestBuilder::init_requested_files(Self, Int) -> CodeGeneratorRequestRequestedFilesListBuilder raise @capnp.CapnpError
+pub fn CodeGeneratorRequestBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn CodeGeneratorRequestBuilder::init_source_info(Self, Int) -> CodeGeneratorRequestSourceInfoListBuilder raise @capnp.CapnpError
+pub fn CodeGeneratorRequestBuilder::set_capnp_version(Self, CapnpVersionReader) -> Unit raise @capnp.CapnpError
+pub fn CodeGeneratorRequestBuilder::set_nodes(Self, CodeGeneratorRequestNodesListReader) -> Unit raise @capnp.CapnpError
+pub fn CodeGeneratorRequestBuilder::set_requested_files(Self, CodeGeneratorRequestRequestedFilesListReader) -> Unit raise @capnp.CapnpError
+pub fn CodeGeneratorRequestBuilder::set_source_info(Self, CodeGeneratorRequestSourceInfoListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct CodeGeneratorRequestNodesListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn CodeGeneratorRequestNodesListBuilder::get(Self, Int) -> NodeBuilder raise @capnp.CapnpError
+pub fn CodeGeneratorRequestNodesListBuilder::length(Self) -> Int
+
+pub(all) struct CodeGeneratorRequestNodesListReader {
+  inner : @capnp.ListReader
+}
+pub fn CodeGeneratorRequestNodesListReader::get(Self, Int) -> NodeReader raise @capnp.CapnpError
+pub fn CodeGeneratorRequestNodesListReader::length(Self) -> Int
+
+pub(all) struct CodeGeneratorRequestReader {
+  inner : @capnp.StructReader
+}
+pub fn CodeGeneratorRequestReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn CodeGeneratorRequestReader::get_capnp_version(Self) -> CapnpVersionReader raise @capnp.CapnpError
+pub fn CodeGeneratorRequestReader::get_nodes(Self) -> CodeGeneratorRequestNodesListReader raise @capnp.CapnpError
+pub fn CodeGeneratorRequestReader::get_requested_files(Self) -> CodeGeneratorRequestRequestedFilesListReader raise @capnp.CapnpError
+pub fn CodeGeneratorRequestReader::get_source_info(Self) -> CodeGeneratorRequestSourceInfoListReader raise @capnp.CapnpError
+
+pub(all) struct CodeGeneratorRequestRequestedFileBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn CodeGeneratorRequestRequestedFileBuilder::init_file_source_info(Self) -> CodeGeneratorRequestRequestedFileFileSourceInfoBuilder raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileBuilder::init_imports(Self, Int) -> CodeGeneratorRequestRequestedFileImportsListBuilder raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileBuilder::set_file_source_info(Self, CodeGeneratorRequestRequestedFileFileSourceInfoReader) -> Unit raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileBuilder::set_filename(Self, String) -> Unit raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileBuilder::set_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileBuilder::set_imports(Self, CodeGeneratorRequestRequestedFileImportsListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct CodeGeneratorRequestRequestedFileFileSourceInfoBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoBuilder::init_identifiers(Self, Int) -> CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListBuilder raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoBuilder::set_identifiers(Self, CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierBuilder::init_member(Self) -> CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierMemberBuilder raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierBuilder::set_end_byte(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierBuilder::set_start_byte(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierBuilder::set_type_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+
+pub(all) struct CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierMemberBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierMemberBuilder::set_ordinal(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierMemberBuilder::set_parent_type_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+
+pub(all) struct CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierMemberReader {
+  inner : @capnp.StructReader
+}
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierMemberReader::get_ordinal(Self) -> UInt raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierMemberReader::get_parent_type_id(Self) -> UInt64 raise @capnp.CapnpError
+
+pub(all) struct CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader {
+  inner : @capnp.StructReader
+}
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::get_end_byte(Self) -> UInt raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::get_member(Self) -> CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierMemberReader raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::get_start_byte(Self) -> UInt raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::get_type_id(Self) -> UInt64 raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::is_member(Self) -> Bool raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::is_type_id(Self) -> Bool raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::which(Self) -> UInt raise @capnp.CapnpError
+
+pub(all) struct CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListBuilder::get(Self, Int) -> CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierBuilder raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListBuilder::length(Self) -> Int
+
+pub(all) struct CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListReader {
+  inner : @capnp.ListReader
+}
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListReader::get(Self, Int) -> CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListReader::length(Self) -> Int
+
+pub(all) struct CodeGeneratorRequestRequestedFileFileSourceInfoReader {
+  inner : @capnp.StructReader
+}
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoReader::get_identifiers(Self) -> CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListReader raise @capnp.CapnpError
+
+pub(all) struct CodeGeneratorRequestRequestedFileImportBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn CodeGeneratorRequestRequestedFileImportBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileImportBuilder::set_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileImportBuilder::set_name(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct CodeGeneratorRequestRequestedFileImportReader {
+  inner : @capnp.StructReader
+}
+pub fn CodeGeneratorRequestRequestedFileImportReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileImportReader::get_id(Self) -> UInt64 raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileImportReader::get_name(Self) -> String raise @capnp.CapnpError
+
+pub(all) struct CodeGeneratorRequestRequestedFileImportsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn CodeGeneratorRequestRequestedFileImportsListBuilder::get(Self, Int) -> CodeGeneratorRequestRequestedFileImportBuilder raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileImportsListBuilder::length(Self) -> Int
+
+pub(all) struct CodeGeneratorRequestRequestedFileImportsListReader {
+  inner : @capnp.ListReader
+}
+pub fn CodeGeneratorRequestRequestedFileImportsListReader::get(Self, Int) -> CodeGeneratorRequestRequestedFileImportReader raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileImportsListReader::length(Self) -> Int
+
+pub(all) struct CodeGeneratorRequestRequestedFileReader {
+  inner : @capnp.StructReader
+}
+pub fn CodeGeneratorRequestRequestedFileReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileReader::get_file_source_info(Self) -> CodeGeneratorRequestRequestedFileFileSourceInfoReader raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileReader::get_filename(Self) -> String raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileReader::get_id(Self) -> UInt64 raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileReader::get_imports(Self) -> CodeGeneratorRequestRequestedFileImportsListReader raise @capnp.CapnpError
+
+pub(all) struct CodeGeneratorRequestRequestedFilesListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn CodeGeneratorRequestRequestedFilesListBuilder::get(Self, Int) -> CodeGeneratorRequestRequestedFileBuilder raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFilesListBuilder::length(Self) -> Int
+
+pub(all) struct CodeGeneratorRequestRequestedFilesListReader {
+  inner : @capnp.ListReader
+}
+pub fn CodeGeneratorRequestRequestedFilesListReader::get(Self, Int) -> CodeGeneratorRequestRequestedFileReader raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFilesListReader::length(Self) -> Int
+
+pub(all) struct CodeGeneratorRequestSourceInfoListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn CodeGeneratorRequestSourceInfoListBuilder::get(Self, Int) -> NodeSourceInfoBuilder raise @capnp.CapnpError
+pub fn CodeGeneratorRequestSourceInfoListBuilder::length(Self) -> Int
+
+pub(all) struct CodeGeneratorRequestSourceInfoListReader {
+  inner : @capnp.ListReader
+}
+pub fn CodeGeneratorRequestSourceInfoListReader::get(Self, Int) -> NodeSourceInfoReader raise @capnp.CapnpError
+pub fn CodeGeneratorRequestSourceInfoListReader::length(Self) -> Int
+
+pub(all) enum ElementSize {
+  Empty
+  Bit
+  Byte
+  TwoBytes
+  FourBytes
+  EightBytes
+  Pointer
+  InlineComposite
+  Unknown(UInt)
+}
+pub fn ElementSize::from_raw(UInt) -> Self
+pub fn ElementSize::to_raw(Self) -> UInt
+
+pub(all) struct EnumerantAnnotationsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn EnumerantAnnotationsListBuilder::get(Self, Int) -> AnnotationBuilder raise @capnp.CapnpError
+pub fn EnumerantAnnotationsListBuilder::length(Self) -> Int
+
+pub(all) struct EnumerantAnnotationsListReader {
+  inner : @capnp.ListReader
+}
+pub fn EnumerantAnnotationsListReader::get(Self, Int) -> AnnotationReader raise @capnp.CapnpError
+pub fn EnumerantAnnotationsListReader::length(Self) -> Int
+
+pub(all) struct EnumerantBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn EnumerantBuilder::init_annotations(Self, Int) -> EnumerantAnnotationsListBuilder raise @capnp.CapnpError
+pub fn EnumerantBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn EnumerantBuilder::set_annotations(Self, EnumerantAnnotationsListReader) -> Unit raise @capnp.CapnpError
+pub fn EnumerantBuilder::set_code_order(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn EnumerantBuilder::set_name(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct EnumerantReader {
+  inner : @capnp.StructReader
+}
+pub fn EnumerantReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn EnumerantReader::get_annotations(Self) -> EnumerantAnnotationsListReader raise @capnp.CapnpError
+pub fn EnumerantReader::get_code_order(Self) -> UInt raise @capnp.CapnpError
+pub fn EnumerantReader::get_name(Self) -> String raise @capnp.CapnpError
+
+pub(all) struct FieldAnnotationsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn FieldAnnotationsListBuilder::get(Self, Int) -> AnnotationBuilder raise @capnp.CapnpError
+pub fn FieldAnnotationsListBuilder::length(Self) -> Int
+
+pub(all) struct FieldAnnotationsListReader {
+  inner : @capnp.ListReader
+}
+pub fn FieldAnnotationsListReader::get(Self, Int) -> AnnotationReader raise @capnp.CapnpError
+pub fn FieldAnnotationsListReader::length(Self) -> Int
+
+pub(all) struct FieldBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn FieldBuilder::get_ordinal(Self) -> FieldOrdinalBuilder
+pub fn FieldBuilder::init_annotations(Self, Int) -> FieldAnnotationsListBuilder raise @capnp.CapnpError
+pub fn FieldBuilder::init_group(Self) -> FieldGroupBuilder raise @capnp.CapnpError
+pub fn FieldBuilder::init_ordinal(Self) -> FieldOrdinalBuilder raise @capnp.CapnpError
+pub fn FieldBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn FieldBuilder::init_slot(Self) -> FieldSlotBuilder raise @capnp.CapnpError
+pub fn FieldBuilder::set_annotations(Self, FieldAnnotationsListReader) -> Unit raise @capnp.CapnpError
+pub fn FieldBuilder::set_code_order(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn FieldBuilder::set_discriminant_value(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn FieldBuilder::set_name(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FieldGroupBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn FieldGroupBuilder::set_type_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FieldGroupReader {
+  inner : @capnp.StructReader
+}
+pub fn FieldGroupReader::get_type_id(Self) -> UInt64 raise @capnp.CapnpError
+
+pub(all) struct FieldOrdinalBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn FieldOrdinalBuilder::set_explicit(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn FieldOrdinalBuilder::set_implicit(Self) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FieldOrdinalReader {
+  inner : @capnp.StructReader
+}
+pub fn FieldOrdinalReader::get_explicit(Self) -> UInt raise @capnp.CapnpError
+pub fn FieldOrdinalReader::get_implicit(Self) -> Unit raise @capnp.CapnpError
+pub fn FieldOrdinalReader::is_explicit(Self) -> Bool raise @capnp.CapnpError
+pub fn FieldOrdinalReader::is_implicit(Self) -> Bool raise @capnp.CapnpError
+pub fn FieldOrdinalReader::which(Self) -> UInt raise @capnp.CapnpError
+
+pub(all) struct FieldReader {
+  inner : @capnp.StructReader
+}
+pub fn FieldReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn FieldReader::get_annotations(Self) -> FieldAnnotationsListReader raise @capnp.CapnpError
+pub fn FieldReader::get_code_order(Self) -> UInt raise @capnp.CapnpError
+pub fn FieldReader::get_discriminant_value(Self) -> UInt raise @capnp.CapnpError
+pub fn FieldReader::get_group(Self) -> FieldGroupReader raise @capnp.CapnpError
+pub fn FieldReader::get_name(Self) -> String raise @capnp.CapnpError
+pub fn FieldReader::get_ordinal(Self) -> FieldOrdinalReader
+pub fn FieldReader::get_slot(Self) -> FieldSlotReader raise @capnp.CapnpError
+pub fn FieldReader::is_group(Self) -> Bool raise @capnp.CapnpError
+pub fn FieldReader::is_slot(Self) -> Bool raise @capnp.CapnpError
+pub fn FieldReader::which(Self) -> UInt raise @capnp.CapnpError
+
+pub(all) struct FieldSlotBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn FieldSlotBuilder::init_default_value(Self) -> ValueBuilder raise @capnp.CapnpError
+pub fn FieldSlotBuilder::init_type(Self) -> TypeBuilder raise @capnp.CapnpError
+pub fn FieldSlotBuilder::set_default_value(Self, ValueReader) -> Unit raise @capnp.CapnpError
+pub fn FieldSlotBuilder::set_had_explicit_default(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn FieldSlotBuilder::set_offset(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn FieldSlotBuilder::set_type(Self, TypeReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct FieldSlotReader {
+  inner : @capnp.StructReader
+}
+pub fn FieldSlotReader::get_default_value(Self) -> ValueReader raise @capnp.CapnpError
+pub fn FieldSlotReader::get_had_explicit_default(Self) -> Bool raise @capnp.CapnpError
+pub fn FieldSlotReader::get_offset(Self) -> UInt raise @capnp.CapnpError
+pub fn FieldSlotReader::get_type(Self) -> TypeReader raise @capnp.CapnpError
+
+pub(all) struct MethodAnnotationsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn MethodAnnotationsListBuilder::get(Self, Int) -> AnnotationBuilder raise @capnp.CapnpError
+pub fn MethodAnnotationsListBuilder::length(Self) -> Int
+
+pub(all) struct MethodAnnotationsListReader {
+  inner : @capnp.ListReader
+}
+pub fn MethodAnnotationsListReader::get(Self, Int) -> AnnotationReader raise @capnp.CapnpError
+pub fn MethodAnnotationsListReader::length(Self) -> Int
+
+pub(all) struct MethodBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn MethodBuilder::init_annotations(Self, Int) -> MethodAnnotationsListBuilder raise @capnp.CapnpError
+pub fn MethodBuilder::init_implicit_parameters(Self, Int) -> MethodImplicitParametersListBuilder raise @capnp.CapnpError
+pub fn MethodBuilder::init_param_brand(Self) -> BrandBuilder raise @capnp.CapnpError
+pub fn MethodBuilder::init_result_brand(Self) -> BrandBuilder raise @capnp.CapnpError
+pub fn MethodBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn MethodBuilder::set_annotations(Self, MethodAnnotationsListReader) -> Unit raise @capnp.CapnpError
+pub fn MethodBuilder::set_code_order(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn MethodBuilder::set_implicit_parameters(Self, MethodImplicitParametersListReader) -> Unit raise @capnp.CapnpError
+pub fn MethodBuilder::set_name(Self, String) -> Unit raise @capnp.CapnpError
+pub fn MethodBuilder::set_param_brand(Self, BrandReader) -> Unit raise @capnp.CapnpError
+pub fn MethodBuilder::set_param_struct_type(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn MethodBuilder::set_result_brand(Self, BrandReader) -> Unit raise @capnp.CapnpError
+pub fn MethodBuilder::set_result_struct_type(Self, UInt64) -> Unit raise @capnp.CapnpError
+
+pub(all) struct MethodImplicitParametersListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn MethodImplicitParametersListBuilder::get(Self, Int) -> NodeParameterBuilder raise @capnp.CapnpError
+pub fn MethodImplicitParametersListBuilder::length(Self) -> Int
+
+pub(all) struct MethodImplicitParametersListReader {
+  inner : @capnp.ListReader
+}
+pub fn MethodImplicitParametersListReader::get(Self, Int) -> NodeParameterReader raise @capnp.CapnpError
+pub fn MethodImplicitParametersListReader::length(Self) -> Int
+
+pub(all) struct MethodReader {
+  inner : @capnp.StructReader
+}
+pub fn MethodReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn MethodReader::get_annotations(Self) -> MethodAnnotationsListReader raise @capnp.CapnpError
+pub fn MethodReader::get_code_order(Self) -> UInt raise @capnp.CapnpError
+pub fn MethodReader::get_implicit_parameters(Self) -> MethodImplicitParametersListReader raise @capnp.CapnpError
+pub fn MethodReader::get_name(Self) -> String raise @capnp.CapnpError
+pub fn MethodReader::get_param_brand(Self) -> BrandReader raise @capnp.CapnpError
+pub fn MethodReader::get_param_struct_type(Self) -> UInt64 raise @capnp.CapnpError
+pub fn MethodReader::get_result_brand(Self) -> BrandReader raise @capnp.CapnpError
+pub fn MethodReader::get_result_struct_type(Self) -> UInt64 raise @capnp.CapnpError
+
+pub(all) struct NodeAnnotationBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn NodeAnnotationBuilder::init_type(Self) -> TypeBuilder raise @capnp.CapnpError
+pub fn NodeAnnotationBuilder::set_targets_annotation(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn NodeAnnotationBuilder::set_targets_const(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn NodeAnnotationBuilder::set_targets_enum(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn NodeAnnotationBuilder::set_targets_enumerant(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn NodeAnnotationBuilder::set_targets_field(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn NodeAnnotationBuilder::set_targets_file(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn NodeAnnotationBuilder::set_targets_group(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn NodeAnnotationBuilder::set_targets_interface(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn NodeAnnotationBuilder::set_targets_method(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn NodeAnnotationBuilder::set_targets_param(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn NodeAnnotationBuilder::set_targets_struct(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn NodeAnnotationBuilder::set_targets_union(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn NodeAnnotationBuilder::set_type(Self, TypeReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct NodeAnnotationReader {
+  inner : @capnp.StructReader
+}
+pub fn NodeAnnotationReader::get_targets_annotation(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeAnnotationReader::get_targets_const(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeAnnotationReader::get_targets_enum(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeAnnotationReader::get_targets_enumerant(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeAnnotationReader::get_targets_field(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeAnnotationReader::get_targets_file(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeAnnotationReader::get_targets_group(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeAnnotationReader::get_targets_interface(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeAnnotationReader::get_targets_method(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeAnnotationReader::get_targets_param(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeAnnotationReader::get_targets_struct(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeAnnotationReader::get_targets_union(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeAnnotationReader::get_type(Self) -> TypeReader raise @capnp.CapnpError
+
+pub(all) struct NodeAnnotationsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn NodeAnnotationsListBuilder::get(Self, Int) -> AnnotationBuilder raise @capnp.CapnpError
+pub fn NodeAnnotationsListBuilder::length(Self) -> Int
+
+pub(all) struct NodeAnnotationsListReader {
+  inner : @capnp.ListReader
+}
+pub fn NodeAnnotationsListReader::get(Self, Int) -> AnnotationReader raise @capnp.CapnpError
+pub fn NodeAnnotationsListReader::length(Self) -> Int
+
+pub(all) struct NodeBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn NodeBuilder::init_annotation(Self) -> NodeAnnotationBuilder raise @capnp.CapnpError
+pub fn NodeBuilder::init_annotations(Self, Int) -> NodeAnnotationsListBuilder raise @capnp.CapnpError
+pub fn NodeBuilder::init_const(Self) -> NodeConstBuilder raise @capnp.CapnpError
+pub fn NodeBuilder::init_enum(Self) -> NodeEnumBuilder raise @capnp.CapnpError
+pub fn NodeBuilder::init_interface(Self) -> NodeInterfaceBuilder raise @capnp.CapnpError
+pub fn NodeBuilder::init_nested_nodes(Self, Int) -> NodeNestedNodesListBuilder raise @capnp.CapnpError
+pub fn NodeBuilder::init_parameters(Self, Int) -> NodeParametersListBuilder raise @capnp.CapnpError
+pub fn NodeBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn NodeBuilder::init_struct(Self) -> NodeStructBuilder raise @capnp.CapnpError
+pub fn NodeBuilder::set_annotations(Self, NodeAnnotationsListReader) -> Unit raise @capnp.CapnpError
+pub fn NodeBuilder::set_display_name(Self, String) -> Unit raise @capnp.CapnpError
+pub fn NodeBuilder::set_display_name_prefix_length(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn NodeBuilder::set_end_byte(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn NodeBuilder::set_file(Self) -> Unit raise @capnp.CapnpError
+pub fn NodeBuilder::set_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn NodeBuilder::set_is_generic(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn NodeBuilder::set_nested_nodes(Self, NodeNestedNodesListReader) -> Unit raise @capnp.CapnpError
+pub fn NodeBuilder::set_parameters(Self, NodeParametersListReader) -> Unit raise @capnp.CapnpError
+pub fn NodeBuilder::set_scope_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn NodeBuilder::set_start_byte(Self, UInt) -> Unit raise @capnp.CapnpError
+
+pub(all) struct NodeConstBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn NodeConstBuilder::init_type(Self) -> TypeBuilder raise @capnp.CapnpError
+pub fn NodeConstBuilder::init_value(Self) -> ValueBuilder raise @capnp.CapnpError
+pub fn NodeConstBuilder::set_type(Self, TypeReader) -> Unit raise @capnp.CapnpError
+pub fn NodeConstBuilder::set_value(Self, ValueReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct NodeConstReader {
+  inner : @capnp.StructReader
+}
+pub fn NodeConstReader::get_type(Self) -> TypeReader raise @capnp.CapnpError
+pub fn NodeConstReader::get_value(Self) -> ValueReader raise @capnp.CapnpError
+
+pub(all) struct NodeEnumBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn NodeEnumBuilder::init_enumerants(Self, Int) -> NodeEnumEnumerantsListBuilder raise @capnp.CapnpError
+pub fn NodeEnumBuilder::set_enumerants(Self, NodeEnumEnumerantsListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct NodeEnumEnumerantsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn NodeEnumEnumerantsListBuilder::get(Self, Int) -> EnumerantBuilder raise @capnp.CapnpError
+pub fn NodeEnumEnumerantsListBuilder::length(Self) -> Int
+
+pub(all) struct NodeEnumEnumerantsListReader {
+  inner : @capnp.ListReader
+}
+pub fn NodeEnumEnumerantsListReader::get(Self, Int) -> EnumerantReader raise @capnp.CapnpError
+pub fn NodeEnumEnumerantsListReader::length(Self) -> Int
+
+pub(all) struct NodeEnumReader {
+  inner : @capnp.StructReader
+}
+pub fn NodeEnumReader::get_enumerants(Self) -> NodeEnumEnumerantsListReader raise @capnp.CapnpError
+
+pub(all) struct NodeInterfaceBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn NodeInterfaceBuilder::init_methods(Self, Int) -> NodeInterfaceMethodsListBuilder raise @capnp.CapnpError
+pub fn NodeInterfaceBuilder::init_superclasses(Self, Int) -> NodeInterfaceSuperclassesListBuilder raise @capnp.CapnpError
+pub fn NodeInterfaceBuilder::set_methods(Self, NodeInterfaceMethodsListReader) -> Unit raise @capnp.CapnpError
+pub fn NodeInterfaceBuilder::set_superclasses(Self, NodeInterfaceSuperclassesListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct NodeInterfaceMethodsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn NodeInterfaceMethodsListBuilder::get(Self, Int) -> MethodBuilder raise @capnp.CapnpError
+pub fn NodeInterfaceMethodsListBuilder::length(Self) -> Int
+
+pub(all) struct NodeInterfaceMethodsListReader {
+  inner : @capnp.ListReader
+}
+pub fn NodeInterfaceMethodsListReader::get(Self, Int) -> MethodReader raise @capnp.CapnpError
+pub fn NodeInterfaceMethodsListReader::length(Self) -> Int
+
+pub(all) struct NodeInterfaceReader {
+  inner : @capnp.StructReader
+}
+pub fn NodeInterfaceReader::get_methods(Self) -> NodeInterfaceMethodsListReader raise @capnp.CapnpError
+pub fn NodeInterfaceReader::get_superclasses(Self) -> NodeInterfaceSuperclassesListReader raise @capnp.CapnpError
+
+pub(all) struct NodeInterfaceSuperclassesListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn NodeInterfaceSuperclassesListBuilder::get(Self, Int) -> SuperclassBuilder raise @capnp.CapnpError
+pub fn NodeInterfaceSuperclassesListBuilder::length(Self) -> Int
+
+pub(all) struct NodeInterfaceSuperclassesListReader {
+  inner : @capnp.ListReader
+}
+pub fn NodeInterfaceSuperclassesListReader::get(Self, Int) -> SuperclassReader raise @capnp.CapnpError
+pub fn NodeInterfaceSuperclassesListReader::length(Self) -> Int
+
+pub(all) struct NodeNestedNodeBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn NodeNestedNodeBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn NodeNestedNodeBuilder::set_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn NodeNestedNodeBuilder::set_name(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct NodeNestedNodeReader {
+  inner : @capnp.StructReader
+}
+pub fn NodeNestedNodeReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn NodeNestedNodeReader::get_id(Self) -> UInt64 raise @capnp.CapnpError
+pub fn NodeNestedNodeReader::get_name(Self) -> String raise @capnp.CapnpError
+
+pub(all) struct NodeNestedNodesListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn NodeNestedNodesListBuilder::get(Self, Int) -> NodeNestedNodeBuilder raise @capnp.CapnpError
+pub fn NodeNestedNodesListBuilder::length(Self) -> Int
+
+pub(all) struct NodeNestedNodesListReader {
+  inner : @capnp.ListReader
+}
+pub fn NodeNestedNodesListReader::get(Self, Int) -> NodeNestedNodeReader raise @capnp.CapnpError
+pub fn NodeNestedNodesListReader::length(Self) -> Int
+
+pub(all) struct NodeParameterBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn NodeParameterBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn NodeParameterBuilder::set_name(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct NodeParameterReader {
+  inner : @capnp.StructReader
+}
+pub fn NodeParameterReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn NodeParameterReader::get_name(Self) -> String raise @capnp.CapnpError
+
+pub(all) struct NodeParametersListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn NodeParametersListBuilder::get(Self, Int) -> NodeParameterBuilder raise @capnp.CapnpError
+pub fn NodeParametersListBuilder::length(Self) -> Int
+
+pub(all) struct NodeParametersListReader {
+  inner : @capnp.ListReader
+}
+pub fn NodeParametersListReader::get(Self, Int) -> NodeParameterReader raise @capnp.CapnpError
+pub fn NodeParametersListReader::length(Self) -> Int
+
+pub(all) struct NodeReader {
+  inner : @capnp.StructReader
+}
+pub fn NodeReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn NodeReader::get_annotation(Self) -> NodeAnnotationReader raise @capnp.CapnpError
+pub fn NodeReader::get_annotations(Self) -> NodeAnnotationsListReader raise @capnp.CapnpError
+pub fn NodeReader::get_const(Self) -> NodeConstReader raise @capnp.CapnpError
+pub fn NodeReader::get_display_name(Self) -> String raise @capnp.CapnpError
+pub fn NodeReader::get_display_name_prefix_length(Self) -> UInt raise @capnp.CapnpError
+pub fn NodeReader::get_end_byte(Self) -> UInt raise @capnp.CapnpError
+pub fn NodeReader::get_enum(Self) -> NodeEnumReader raise @capnp.CapnpError
+pub fn NodeReader::get_file(Self) -> Unit raise @capnp.CapnpError
+pub fn NodeReader::get_id(Self) -> UInt64 raise @capnp.CapnpError
+pub fn NodeReader::get_interface(Self) -> NodeInterfaceReader raise @capnp.CapnpError
+pub fn NodeReader::get_is_generic(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeReader::get_nested_nodes(Self) -> NodeNestedNodesListReader raise @capnp.CapnpError
+pub fn NodeReader::get_parameters(Self) -> NodeParametersListReader raise @capnp.CapnpError
+pub fn NodeReader::get_scope_id(Self) -> UInt64 raise @capnp.CapnpError
+pub fn NodeReader::get_start_byte(Self) -> UInt raise @capnp.CapnpError
+pub fn NodeReader::get_struct(Self) -> NodeStructReader raise @capnp.CapnpError
+pub fn NodeReader::is_annotation(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeReader::is_const(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeReader::is_enum(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeReader::is_file(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeReader::is_interface(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeReader::is_struct(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeReader::which(Self) -> UInt raise @capnp.CapnpError
+
+pub(all) struct NodeSourceInfoBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn NodeSourceInfoBuilder::init_members(Self, Int) -> NodeSourceInfoMembersListBuilder raise @capnp.CapnpError
+pub fn NodeSourceInfoBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn NodeSourceInfoBuilder::set_doc_comment(Self, String) -> Unit raise @capnp.CapnpError
+pub fn NodeSourceInfoBuilder::set_end_byte(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn NodeSourceInfoBuilder::set_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn NodeSourceInfoBuilder::set_members(Self, NodeSourceInfoMembersListReader) -> Unit raise @capnp.CapnpError
+pub fn NodeSourceInfoBuilder::set_start_byte(Self, UInt) -> Unit raise @capnp.CapnpError
+
+pub(all) struct NodeSourceInfoMemberBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn NodeSourceInfoMemberBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn NodeSourceInfoMemberBuilder::set_doc_comment(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct NodeSourceInfoMemberReader {
+  inner : @capnp.StructReader
+}
+pub fn NodeSourceInfoMemberReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn NodeSourceInfoMemberReader::get_doc_comment(Self) -> String raise @capnp.CapnpError
+
+pub(all) struct NodeSourceInfoMembersListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn NodeSourceInfoMembersListBuilder::get(Self, Int) -> NodeSourceInfoMemberBuilder raise @capnp.CapnpError
+pub fn NodeSourceInfoMembersListBuilder::length(Self) -> Int
+
+pub(all) struct NodeSourceInfoMembersListReader {
+  inner : @capnp.ListReader
+}
+pub fn NodeSourceInfoMembersListReader::get(Self, Int) -> NodeSourceInfoMemberReader raise @capnp.CapnpError
+pub fn NodeSourceInfoMembersListReader::length(Self) -> Int
+
+pub(all) struct NodeSourceInfoReader {
+  inner : @capnp.StructReader
+}
+pub fn NodeSourceInfoReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn NodeSourceInfoReader::get_doc_comment(Self) -> String raise @capnp.CapnpError
+pub fn NodeSourceInfoReader::get_end_byte(Self) -> UInt raise @capnp.CapnpError
+pub fn NodeSourceInfoReader::get_id(Self) -> UInt64 raise @capnp.CapnpError
+pub fn NodeSourceInfoReader::get_members(Self) -> NodeSourceInfoMembersListReader raise @capnp.CapnpError
+pub fn NodeSourceInfoReader::get_start_byte(Self) -> UInt raise @capnp.CapnpError
+
+pub(all) struct NodeStructBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn NodeStructBuilder::init_fields(Self, Int) -> NodeStructFieldsListBuilder raise @capnp.CapnpError
+pub fn NodeStructBuilder::set_data_word_count(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn NodeStructBuilder::set_discriminant_count(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn NodeStructBuilder::set_discriminant_offset(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn NodeStructBuilder::set_fields(Self, NodeStructFieldsListReader) -> Unit raise @capnp.CapnpError
+pub fn NodeStructBuilder::set_is_group(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn NodeStructBuilder::set_pointer_count(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn NodeStructBuilder::set_preferred_list_encoding(Self, ElementSize) -> Unit raise @capnp.CapnpError
+
+pub(all) struct NodeStructFieldsListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn NodeStructFieldsListBuilder::get(Self, Int) -> FieldBuilder raise @capnp.CapnpError
+pub fn NodeStructFieldsListBuilder::length(Self) -> Int
+
+pub(all) struct NodeStructFieldsListReader {
+  inner : @capnp.ListReader
+}
+pub fn NodeStructFieldsListReader::get(Self, Int) -> FieldReader raise @capnp.CapnpError
+pub fn NodeStructFieldsListReader::length(Self) -> Int
+
+pub(all) struct NodeStructReader {
+  inner : @capnp.StructReader
+}
+pub fn NodeStructReader::get_data_word_count(Self) -> UInt raise @capnp.CapnpError
+pub fn NodeStructReader::get_discriminant_count(Self) -> UInt raise @capnp.CapnpError
+pub fn NodeStructReader::get_discriminant_offset(Self) -> UInt raise @capnp.CapnpError
+pub fn NodeStructReader::get_fields(Self) -> NodeStructFieldsListReader raise @capnp.CapnpError
+pub fn NodeStructReader::get_is_group(Self) -> Bool raise @capnp.CapnpError
+pub fn NodeStructReader::get_pointer_count(Self) -> UInt raise @capnp.CapnpError
+pub fn NodeStructReader::get_preferred_list_encoding(Self) -> ElementSize raise @capnp.CapnpError
+
+pub(all) struct SuperclassBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn SuperclassBuilder::init_brand(Self) -> BrandBuilder raise @capnp.CapnpError
+pub fn SuperclassBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn SuperclassBuilder::set_brand(Self, BrandReader) -> Unit raise @capnp.CapnpError
+pub fn SuperclassBuilder::set_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+
+pub(all) struct SuperclassReader {
+  inner : @capnp.StructReader
+}
+pub fn SuperclassReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn SuperclassReader::get_brand(Self) -> BrandReader raise @capnp.CapnpError
+pub fn SuperclassReader::get_id(Self) -> UInt64 raise @capnp.CapnpError
+
+pub(all) struct TypeAnyPointerBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn TypeAnyPointerBuilder::init_implicit_method_parameter(Self) -> TypeAnyPointerImplicitMethodParameterBuilder raise @capnp.CapnpError
+pub fn TypeAnyPointerBuilder::init_parameter(Self) -> TypeAnyPointerParameterBuilder raise @capnp.CapnpError
+pub fn TypeAnyPointerBuilder::init_unconstrained(Self) -> TypeAnyPointerUnconstrainedBuilder raise @capnp.CapnpError
+
+pub(all) struct TypeAnyPointerImplicitMethodParameterBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn TypeAnyPointerImplicitMethodParameterBuilder::set_parameter_index(Self, UInt) -> Unit raise @capnp.CapnpError
+
+pub(all) struct TypeAnyPointerImplicitMethodParameterReader {
+  inner : @capnp.StructReader
+}
+pub fn TypeAnyPointerImplicitMethodParameterReader::get_parameter_index(Self) -> UInt raise @capnp.CapnpError
+
+pub(all) struct TypeAnyPointerParameterBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn TypeAnyPointerParameterBuilder::set_parameter_index(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn TypeAnyPointerParameterBuilder::set_scope_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+
+pub(all) struct TypeAnyPointerParameterReader {
+  inner : @capnp.StructReader
+}
+pub fn TypeAnyPointerParameterReader::get_parameter_index(Self) -> UInt raise @capnp.CapnpError
+pub fn TypeAnyPointerParameterReader::get_scope_id(Self) -> UInt64 raise @capnp.CapnpError
+
+pub(all) struct TypeAnyPointerReader {
+  inner : @capnp.StructReader
+}
+pub fn TypeAnyPointerReader::get_implicit_method_parameter(Self) -> TypeAnyPointerImplicitMethodParameterReader raise @capnp.CapnpError
+pub fn TypeAnyPointerReader::get_parameter(Self) -> TypeAnyPointerParameterReader raise @capnp.CapnpError
+pub fn TypeAnyPointerReader::get_unconstrained(Self) -> TypeAnyPointerUnconstrainedReader raise @capnp.CapnpError
+pub fn TypeAnyPointerReader::is_implicit_method_parameter(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeAnyPointerReader::is_parameter(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeAnyPointerReader::is_unconstrained(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeAnyPointerReader::which(Self) -> UInt raise @capnp.CapnpError
+
+pub(all) struct TypeAnyPointerUnconstrainedBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn TypeAnyPointerUnconstrainedBuilder::set_any_kind(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeAnyPointerUnconstrainedBuilder::set_capability(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeAnyPointerUnconstrainedBuilder::set_list(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeAnyPointerUnconstrainedBuilder::set_struct(Self) -> Unit raise @capnp.CapnpError
+
+pub(all) struct TypeAnyPointerUnconstrainedReader {
+  inner : @capnp.StructReader
+}
+pub fn TypeAnyPointerUnconstrainedReader::get_any_kind(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeAnyPointerUnconstrainedReader::get_capability(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeAnyPointerUnconstrainedReader::get_list(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeAnyPointerUnconstrainedReader::get_struct(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeAnyPointerUnconstrainedReader::is_any_kind(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeAnyPointerUnconstrainedReader::is_capability(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeAnyPointerUnconstrainedReader::is_list(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeAnyPointerUnconstrainedReader::is_struct(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeAnyPointerUnconstrainedReader::which(Self) -> UInt raise @capnp.CapnpError
+
+pub(all) struct TypeBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn TypeBuilder::init_any_pointer(Self) -> TypeAnyPointerBuilder raise @capnp.CapnpError
+pub fn TypeBuilder::init_enum(Self) -> TypeEnumBuilder raise @capnp.CapnpError
+pub fn TypeBuilder::init_interface(Self) -> TypeInterfaceBuilder raise @capnp.CapnpError
+pub fn TypeBuilder::init_list(Self) -> TypeListBuilder raise @capnp.CapnpError
+pub fn TypeBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn TypeBuilder::init_struct(Self) -> TypeStructBuilder raise @capnp.CapnpError
+pub fn TypeBuilder::set_bool(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeBuilder::set_data(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeBuilder::set_float32(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeBuilder::set_float64(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeBuilder::set_int16(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeBuilder::set_int32(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeBuilder::set_int64(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeBuilder::set_int8(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeBuilder::set_text(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeBuilder::set_uint16(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeBuilder::set_uint32(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeBuilder::set_uint64(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeBuilder::set_uint8(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeBuilder::set_void(Self) -> Unit raise @capnp.CapnpError
+
+pub(all) struct TypeEnumBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn TypeEnumBuilder::init_brand(Self) -> BrandBuilder raise @capnp.CapnpError
+pub fn TypeEnumBuilder::set_brand(Self, BrandReader) -> Unit raise @capnp.CapnpError
+pub fn TypeEnumBuilder::set_type_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+
+pub(all) struct TypeEnumReader {
+  inner : @capnp.StructReader
+}
+pub fn TypeEnumReader::get_brand(Self) -> BrandReader raise @capnp.CapnpError
+pub fn TypeEnumReader::get_type_id(Self) -> UInt64 raise @capnp.CapnpError
+
+pub(all) struct TypeInterfaceBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn TypeInterfaceBuilder::init_brand(Self) -> BrandBuilder raise @capnp.CapnpError
+pub fn TypeInterfaceBuilder::set_brand(Self, BrandReader) -> Unit raise @capnp.CapnpError
+pub fn TypeInterfaceBuilder::set_type_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+
+pub(all) struct TypeInterfaceReader {
+  inner : @capnp.StructReader
+}
+pub fn TypeInterfaceReader::get_brand(Self) -> BrandReader raise @capnp.CapnpError
+pub fn TypeInterfaceReader::get_type_id(Self) -> UInt64 raise @capnp.CapnpError
+
+pub(all) struct TypeListBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn TypeListBuilder::init_element_type(Self) -> TypeBuilder raise @capnp.CapnpError
+pub fn TypeListBuilder::set_element_type(Self, TypeReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct TypeListReader {
+  inner : @capnp.StructReader
+}
+pub fn TypeListReader::get_element_type(Self) -> TypeReader raise @capnp.CapnpError
+
+pub(all) struct TypeReader {
+  inner : @capnp.StructReader
+}
+pub fn TypeReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn TypeReader::get_any_pointer(Self) -> TypeAnyPointerReader raise @capnp.CapnpError
+pub fn TypeReader::get_bool(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeReader::get_data(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeReader::get_enum(Self) -> TypeEnumReader raise @capnp.CapnpError
+pub fn TypeReader::get_float32(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeReader::get_float64(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeReader::get_int16(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeReader::get_int32(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeReader::get_int64(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeReader::get_int8(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeReader::get_interface(Self) -> TypeInterfaceReader raise @capnp.CapnpError
+pub fn TypeReader::get_list(Self) -> TypeListReader raise @capnp.CapnpError
+pub fn TypeReader::get_struct(Self) -> TypeStructReader raise @capnp.CapnpError
+pub fn TypeReader::get_text(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeReader::get_uint16(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeReader::get_uint32(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeReader::get_uint64(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeReader::get_uint8(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeReader::get_void(Self) -> Unit raise @capnp.CapnpError
+pub fn TypeReader::is_any_pointer(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_bool(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_data(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_enum(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_float32(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_float64(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_int16(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_int32(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_int64(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_int8(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_interface(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_list(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_struct(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_text(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_uint16(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_uint32(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_uint64(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_uint8(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::is_void(Self) -> Bool raise @capnp.CapnpError
+pub fn TypeReader::which(Self) -> UInt raise @capnp.CapnpError
+
+pub(all) struct TypeStructBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn TypeStructBuilder::init_brand(Self) -> BrandBuilder raise @capnp.CapnpError
+pub fn TypeStructBuilder::set_brand(Self, BrandReader) -> Unit raise @capnp.CapnpError
+pub fn TypeStructBuilder::set_type_id(Self, UInt64) -> Unit raise @capnp.CapnpError
+
+pub(all) struct TypeStructReader {
+  inner : @capnp.StructReader
+}
+pub fn TypeStructReader::get_brand(Self) -> BrandReader raise @capnp.CapnpError
+pub fn TypeStructReader::get_type_id(Self) -> UInt64 raise @capnp.CapnpError
+
+pub(all) struct ValueBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn ValueBuilder::init_any_pointer(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn ValueBuilder::init_list(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn ValueBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn ValueBuilder::init_struct(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn ValueBuilder::set_any_pointer(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_bool(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_data(Self, Bytes) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_enum(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_float32(Self, Float) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_float64(Self, Double) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_int16(Self, Int) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_int32(Self, Int) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_int64(Self, Int64) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_int8(Self, Int) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_interface(Self) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_list(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_struct(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_text(Self, String) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_uint16(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_uint32(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_uint64(Self, UInt64) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_uint8(Self, Byte) -> Unit raise @capnp.CapnpError
+pub fn ValueBuilder::set_void(Self) -> Unit raise @capnp.CapnpError
+
+pub(all) struct ValueReader {
+  inner : @capnp.StructReader
+}
+pub fn ValueReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn ValueReader::get_any_pointer(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+pub fn ValueReader::get_bool(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::get_data(Self) -> Bytes raise @capnp.CapnpError
+pub fn ValueReader::get_enum(Self) -> UInt raise @capnp.CapnpError
+pub fn ValueReader::get_float32(Self) -> Float raise @capnp.CapnpError
+pub fn ValueReader::get_float64(Self) -> Double raise @capnp.CapnpError
+pub fn ValueReader::get_int16(Self) -> Int raise @capnp.CapnpError
+pub fn ValueReader::get_int32(Self) -> Int raise @capnp.CapnpError
+pub fn ValueReader::get_int64(Self) -> Int64 raise @capnp.CapnpError
+pub fn ValueReader::get_int8(Self) -> Int raise @capnp.CapnpError
+pub fn ValueReader::get_interface(Self) -> Unit raise @capnp.CapnpError
+pub fn ValueReader::get_list(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+pub fn ValueReader::get_struct(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+pub fn ValueReader::get_text(Self) -> String raise @capnp.CapnpError
+pub fn ValueReader::get_uint16(Self) -> UInt raise @capnp.CapnpError
+pub fn ValueReader::get_uint32(Self) -> UInt raise @capnp.CapnpError
+pub fn ValueReader::get_uint64(Self) -> UInt64 raise @capnp.CapnpError
+pub fn ValueReader::get_uint8(Self) -> Byte raise @capnp.CapnpError
+pub fn ValueReader::get_void(Self) -> Unit raise @capnp.CapnpError
+pub fn ValueReader::is_any_pointer(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_bool(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_data(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_enum(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_float32(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_float64(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_int16(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_int32(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_int64(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_int8(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_interface(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_list(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_struct(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_text(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_uint16(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_uint32(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_uint64(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_uint8(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::is_void(Self) -> Bool raise @capnp.CapnpError
+pub fn ValueReader::which(Self) -> UInt raise @capnp.CapnpError
+
+// Type aliases
+
+// Traits

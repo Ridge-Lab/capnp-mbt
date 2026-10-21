@@ -22,17 +22,13 @@ test "malformed compiler input is rejected before producing files" {
 }
 
 ///|
-test "RPC declarations report unsupported instead of generating an empty shell" {
+test "interface declarations coexist with serialization without RPC stubs" {
   let request = @fs.read_file_to_bytes(
     "codegen/fixtures/unsupported.request.bin",
   )
-  try @codegen.generate(request) catch {
-    @codegen.UnsupportedSchema(message) =>
-      assert_true(message.contains("RPC/interface"))
-    _ => fail("unexpected diagnostic")
-  } noraise {
-    _ => fail("unsupported RPC declaration accepted")
-  }
+  let files = @codegen.generate(request)
+  assert_eq(files.length(), 1)
+  assert_true(files[0].content.contains("no RPC transport is generated"))
 }
 
 ///|
@@ -48,13 +44,38 @@ test "runtime wrapper naming collisions fail before writing invalid source" {
 }
 
 ///|
-test "generic schema requests produce an explicit unsupported diagnostic" {
+test "unbound generic schema exposes lossless dynamic pointer views" {
   let request = @fs.read_file_to_bytes("codegen/fixtures/generic.request.bin")
-  try @codegen.generate(request) catch {
-    @codegen.UnsupportedSchema(message) =>
-      assert_true(message.contains("generic"))
-    _ => fail("unexpected diagnostic")
-  } noraise {
-    _ => fail("generic declaration accepted")
-  }
+  let output = @codegen.generate(request)[0].content
+  assert_true(output.contains("struct BoxReader"))
+  assert_true(output.contains("-> @capnp.PointerReader"))
+  assert_true(output.contains("-> @capnp.PointerBuilder"))
+}
+
+///|
+test "recursive generic growth terminates without rejecting the schema" {
+  let request = @fs.read_file_to_bytes("codegen/fixtures/growing.request.bin")
+  let output = @codegen.generate(request)[0].content
+  assert_true(output.contains("GrowingAsTextReader"))
+  assert_true(output.contains("TreeAsPairAsTextAndTextReader"))
+  assert_true(output.length() < 100000)
+  assert_eq(output, @codegen.generate(request)[0].content)
+}
+
+///|
+test "unchanged upstream schema compiler protocol and conformance declarations generate" {
+  let protocol = @codegen.generate(
+      @fs.read_file_to_bytes("codegen/fixtures/compiler.request.bin"),
+    )[0].content
+  assert_true(protocol.contains("CodeGeneratorRequestReader"))
+  let upstream = @codegen.generate(
+      @fs.read_file_to_bytes("codegen/fixtures/upstream.request.bin"),
+    )[0].content
+  assert_true(upstream.contains("TestUseGenericsReader"))
+  assert_true(
+    upstream.contains(
+      "const_generic_constant() -> TestGenericsAsTestAllTypesAndTextReader",
+    ),
+  )
+  assert_true(upstream.contains("const_any_pointer_constants()"))
 }

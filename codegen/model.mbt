@@ -22,6 +22,21 @@ priv enum SchemaType {
   EnumRef(UInt64)
   StructRef(UInt64)
   ListOf(SchemaType)
+  BrandedRef(UInt64, Array[BrandScope])
+  Parameter(UInt64, Int)
+  AnyPointer(Int)
+}
+
+///|
+priv enum BrandBinding {
+  Bind(Array[SchemaType])
+  Inherit
+}
+
+///|
+priv struct BrandScope {
+  id : UInt64
+  binding : BrandBinding
 }
 
 ///|
@@ -52,6 +67,9 @@ priv struct Node {
   index : Int
   mut base_symbol : String?
   mut generated_symbol : String?
+  parameters : Array[String]
+  constant_type : SchemaType?
+  constant_value : @capnp.StructReader
 }
 
 ///|
@@ -64,14 +82,55 @@ fn read_type(raw : @capnp.StructReader, depth : Int) -> SchemaType raise {
     0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 => Scalar(tag)
     14 => ListOf(read_type(raw.get_struct(0), depth + 1))
     15 => EnumRef(raw.get_uint64(8))
-    16 => StructRef(raw.get_uint64(8))
-    17 => raise UnsupportedSchema("RPC/interface types are not supported")
+    16 =>
+      BrandedRef(raw.get_uint64(8), read_brand(raw.get_struct(0), depth + 1))
+    17 => AnyPointer(3) // Capability reference; RPC dispatch is outside serialization.
     18 =>
-      raise UnsupportedSchema(
-        "AnyPointer and generic parameters are not supported",
-      )
+      match raw.get_uint16(8) {
+        0U => AnyPointer(raw.get_uint16(10).reinterpret_as_int())
+        1U =>
+          Parameter(raw.get_uint64(16), raw.get_uint16(10).reinterpret_as_int())
+        2U => AnyPointer(0) // Implicit RPC method parameter, opaque outside the RPC API.
+        _ => raise InvalidRequest("unknown AnyPointer constraint")
+      }
     _ => raise InvalidRequest("unknown schema Type tag \{tag}")
   }
+}
+
+///|
+fn read_brand(
+  raw : @capnp.StructReader,
+  depth : Int,
+) -> Array[BrandScope] raise {
+  if depth > 64 {
+    raise InvalidRequest("generic brand nesting exceeds 64")
+  }
+  let scopes = raw.get_list(0)
+  let result : Array[BrandScope] = []
+  for i in 0..<scopes.length() {
+    let scope = scopes.get_struct(i)
+    let binding = match scope.get_uint16(8) {
+      0U => {
+        let bindings = scope.get_list(0)
+        let values : Array[SchemaType] = []
+        for j in 0..<bindings.length() {
+          let value = bindings.get_struct(j)
+          values.push(
+            match value.get_uint16(0) {
+              0U => AnyPointer(0)
+              1U => read_type(value.get_struct(0), depth + 1)
+              _ => raise InvalidRequest("unknown Brand.Binding tag")
+            },
+          )
+        }
+        Bind(values)
+      }
+      1U => Inherit
+      _ => raise InvalidRequest("unknown Brand.Scope tag")
+    }
+    result.push({ id: scope.get_uint64(0), binding, })
+  }
+  result
 }
 
 ///|
@@ -86,15 +145,10 @@ fn read_nodes(root : @capnp.StructReader) -> Array[Node] raise {
   for index in 0..<raw_nodes.length() {
     let raw = raw_nodes.get_struct(index)
     let kind = raw.get_uint16(12).reinterpret_as_int()
-    if raw.get_bool(288) {
-      raise UnsupportedSchema(
-        "generic schemas are not supported: \{raw.get_text(0)}",
-      )
-    }
-    if kind == 3 {
-      raise UnsupportedSchema(
-        "RPC/interface declarations are not supported: \{raw.get_text(0)}",
-      )
+    let parameters : Array[String] = []
+    let ps = raw.get_list(5)
+    for j in 0..<ps.length() {
+      parameters.push(ps.get_struct(j).get_text(0))
     }
     let nested : Array[(String, UInt64)] = []
     let ns = raw.get_list(1)
@@ -146,6 +200,17 @@ fn read_nodes(root : @capnp.StructReader) -> Array[Node] raise {
       index,
       base_symbol: None,
       generated_symbol: None,
+      parameters,
+      constant_type: if kind == 4 {
+        Some(read_type(raw.get_struct(3), 0))
+      } else {
+        None
+      },
+      constant_value: if kind == 4 {
+        raw.get_struct(4)
+      } else {
+        raw
+      },
     })
   }
   result
@@ -284,7 +349,10 @@ fn node_name(node : Node, nodes : Array[Node]) -> String raise CodegenError {
   let base = base_node_name(node, nodes, 0)
   for other in nodes {
     if other.id != node.id &&
-      other.kind != 0 &&
+      (
+        (node.kind == 4 && other.kind == 4) ||
+        (node.kind != 4 && other.kind != 0 && other.kind != 4)
+      ) &&
       base_node_name(other, nodes, 0) == base {
       let name = base + "N" + node.id.to_string(radix=16)
       node.generated_symbol = Some(name)

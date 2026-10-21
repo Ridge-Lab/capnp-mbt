@@ -1,6 +1,23 @@
 ///|
 fn bytes_literal(bytes : Bytes) -> String {
   let out = StringBuilder()
+  if bytes.length() > 4096 {
+    out.write_string("{\n  let chunks : Array[Bytes] = [\n")
+    for start = 0; start < bytes.length(); start = start + 4096 {
+      let end = if start + 4096 < bytes.length() {
+        start + 4096
+      } else {
+        bytes.length()
+      }
+      out.write_string(
+        "    " + bytes_literal(bytes[start:end].to_owned()) + ",\n",
+      )
+    }
+    out.write_string(
+      "  ]\n  Bytes::makei(\{bytes.length()}, i => chunks[i / 4096][i % 4096])\n}",
+    )
+    return out.to_string()
+  }
   out.write_string("b\"")
   for b in bytes {
     out.write_string("\\x" + b.to_hex())
@@ -171,6 +188,27 @@ fn emit_list(
         "pub fn \{builder}::init(self : \{builder}, index : Int, length : Int) -> \{subname}Builder raise @capnp.CapnpError { { inner: \{init} } }",
       )
     }
+    AnyPointer(kind) => {
+      let pointer = "self.inner.get_pointer(index)"
+      emit_block(
+        out,
+        "pub fn \{reader}::get(self : \{reader}, index : Int) -> \{any_reader_type(kind)} raise @capnp.CapnpError { \{any_read_expression(pointer, kind)} }",
+      )
+      let validate = if kind == 3 {
+        "if !value.is_null() { ignore(value.capability_index()) }; "
+      } else {
+        ""
+      }
+      emit_block(
+        out,
+        "pub fn \{builder}::set(self : \{builder}, index : Int, value : \{any_reader_type(kind)}) -> Unit raise @capnp.CapnpError { \{validate}self.inner.get_pointer(index).\{any_set_method(kind)}(value) }",
+      )
+      emit_block(
+        out,
+        "pub fn \{builder}::get(self : \{builder}, index : Int) -> @capnp.PointerBuilder raise @capnp.CapnpError { self.inner.get_pointer(index) }",
+      )
+    }
+    _ => raise InvalidRequest("unresolved generic list element")
   }
 }
 
@@ -384,6 +422,12 @@ fn emit_struct(
           out,
           "pub fn \{builder}::init_\{suffix}(self : \{builder}) -> \{typ}Builder\{init_effect} {\n\{activate}\{group_reset.to_string()}  { inner: \{init} }\n}",
         )
+        if !field.group {
+          emit_block(
+            out,
+            "pub fn \{builder}::set_\{suffix}(self : \{builder}, value : \{typ}Reader) -> Unit raise @capnp.CapnpError {\n\{activate}  self.inner.get_pointer(\{field.offset}).set_struct(value.inner)\n}",
+          )
+        }
       }
       ListOf(element) => {
         let typ = list_name(name, field)
@@ -405,7 +449,60 @@ fn emit_struct(
           out,
           "pub fn \{builder}::init_\{suffix}(self : \{builder}, length : Int) -> \{typ}Builder raise @capnp.CapnpError {\n\{activate}  { inner: \{init} }\n}",
         )
+        emit_block(
+          out,
+          "pub fn \{builder}::set_\{suffix}(self : \{builder}, value : \{typ}Reader) -> Unit raise @capnp.CapnpError {\n\{activate}  self.inner.get_pointer(\{field.offset}).set_list(value.inner)\n}",
+        )
       }
+      AnyPointer(kind) => {
+        let pointer = pointer_expr(node, field)
+        emit_block(
+          out,
+          "pub fn \{reader}::\{accessor}(self : \{reader}) -> \{any_reader_type(kind)} raise @capnp.CapnpError {\n\{check}  \{any_read_expression(pointer, kind)}\n}",
+        )
+        let validate = if kind == 3 {
+          "  if !value.is_null() { ignore(value.capability_index()) }\n"
+        } else {
+          ""
+        }
+        emit_block(
+          out,
+          "pub fn \{builder}::set_\{suffix}(self : \{builder}, value : \{any_reader_type(kind)}) -> Unit raise @capnp.CapnpError {\n\{validate}\{activate}  self.inner.get_pointer(\{field.offset}).\{any_set_method(kind)}(value)\n}",
+        )
+        match kind {
+          1 =>
+            emit_block(
+              out,
+              "pub fn \{builder}::init_\{suffix}(self : \{builder}, data_words : Int, pointer_count : Int) -> @capnp.StructBuilder raise @capnp.CapnpError {\n\{activate}  self.inner.init_struct(\{field.offset}, data_words, pointer_count)\n}",
+            )
+          2 => {
+            emit_block(
+              out,
+              "pub fn \{builder}::init_\{suffix}(self : \{builder}, element_size : Int, length : Int) -> @capnp.ListBuilder raise @capnp.CapnpError {\n\{activate}  self.inner.init_list(\{field.offset}, element_size, length)\n}",
+            )
+            let mut extra = suffix + "_structs"
+            while node.fields.any(f => field_name(f.name) == extra) {
+              extra += "_inline"
+            }
+            emit_block(
+              out,
+              "pub fn \{builder}::init_\{extra}(self : \{builder}, length : Int, data_words : Int, pointer_count : Int) -> @capnp.ListBuilder raise @capnp.CapnpError {\n\{activate}  self.inner.init_struct_list(\{field.offset}, length, data_words, pointer_count)\n}",
+            )
+          }
+          _ =>
+            emit_block(
+              out,
+              "pub fn \{builder}::init_\{suffix}(self : \{builder}) -> @capnp.PointerBuilder raise @capnp.CapnpError {\n\{activate}  let pointer = self.inner.get_pointer(\{field.offset})\n  pointer.clear()\n  pointer\n}",
+            )
+        }
+        if field.discriminant == 65535 {
+          emit_block(
+            out,
+            "pub fn \{builder}::get_\{suffix}(self : \{builder}) -> @capnp.PointerBuilder raise @capnp.CapnpError { self.inner.get_pointer(\{field.offset}) }",
+          )
+        }
+      }
+      _ => raise InvalidRequest("unresolved generic field type")
     }
   }
 }

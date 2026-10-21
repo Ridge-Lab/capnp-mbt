@@ -12,8 +12,10 @@ The protocol definition is maintained by the [Cap'n Proto project](https://githu
 
 Generated APIs include scalar fields, exact 64-bit integers, text/data, enums,
 structs, every scalar list encoding, nested lists, lists of structs, nested
-declarations, imported declarations, groups, unions and field defaults. Enum
-values unknown to the schema retain their numeric representation.
+declarations, imported declarations, groups, unions, field defaults, generic
+brands, AnyPointer constraints and constants. Enum values unknown to the schema
+retain their numeric representation. `using` aliases are resolved by the official
+compiler, so callers can use existing schema sources directly.
 
 - A struct `Person` produces `PersonReader` and `PersonBuilder`.
 - `PersonReader::from_message(message)` reads a root view.
@@ -21,6 +23,11 @@ values unknown to the schema retain their numeric representation.
 - Fields use `get_display_name`, `set_display_name` and `init_children(length)`.
 - List views expose `length()` and `get(index)`; list builders expose scalar
   `set(index, value)`, struct `get(index)` or nested-list `init(index, length)`.
+- Struct and list pointer fields also expose `set_field(reader)` to deep-copy a
+  value from another message, including fields unknown to the generated schema.
+- `const name :Type = ...` produces `const_name()`. Scalar, enum, text/data,
+  struct, list, generic and AnyPointer constant values come from the official
+  compiler's evaluated `Value`, including imported references and embedded data.
 - Union readers provide `which()` and `is_member()`. Reading an inactive member
   fails. A builder setter or initializer selects the member and clears overlapping
   storage without clearing adjacent non-union fields.
@@ -40,13 +47,45 @@ default. This implementation prioritizes correct default semantics; large
 schema requests containing pointer defaults can produce large generated files,
 and repeatedly reading an absent pointer default reparses its embedded request.
 
-Unsupported declarations fail explicitly: RPC interfaces, generic types,
-AnyPointer fields and constant declarations. Annotations are accepted as metadata
-and do not alter the wire layout. Request size is limited to 16 MiB, node count
-to 10,000, and nested list/group/scope depth to 32; the binary reader's traversal
-and nesting limits apply as well. This is not a full Cap'n Proto RPC system.
+`Box(Text)` generates `BoxAsTextReader` and `BoxAsTextBuilder`, whose field
+accessors use `String`; `Box(List(UInt32))` has a typed list accessor. Brand
+bindings include enclosing scopes, inherited bindings, nested generic types and
+recursive permutations. An omitted binding produces the unbound prototype:
+its parameter fields expose `PointerReader`/`PointerBuilder` rather than guessing
+a concrete type. Generic lists of a known struct use inline-composite encoding.
+
+Some legal schemas expand without a finite set of static specializations, such
+as `Tree(T)` containing `Tree(Pair(T, T))`. At an edge with repeated parameter
+growth, the generated accessor returns the target's unbound prototype. The
+entire object remains readable and writable through its public `.inner` handle;
+only static type information at that edge becomes dynamic. The tests write,
+read and deep-copy three levels beyond such boundaries. This is a finite typed
+view API over the complete wire value, not infinite static monomorphization.
+Long specialized type names use deterministic internal ID suffixes.
+
+AnyPointer fields expose pointer handles. AnyStruct and AnyList readers check
+the pointer kind and return `StructReader` or `ListReader`; their setters copy
+the matching object. Builders can initialize dynamic structs and scalar,
+pointer or inline-composite lists. Capability/interface fields expose an opaque
+capability index only. Non-null capabilities require a capability table, so
+generic deep-copy operations reject them instead of transferring an index into
+an unrelated message. Explicit index access does not provide RPC dispatch or
+capability-table remapping. Interface declarations and their serialization
+parameter structs can coexist with ordinary data schemas; no RPC stubs or
+transport are generated. Annotations remain layout-neutral metadata.
+
+Request size is limited to 16 MiB, node count to 10,000, and nested list/group/
+scope depth to 32. Generic expansion has a depth limit of 128 and an additional
+1,024-instance budget; recursive growth falls back to dynamic views before
+exhausting these limits. The binary reader's traversal and nesting limits also
+apply. Malformed requests and unrepresentable generated-name collisions produce
+diagnostics before output is returned.
 
 The project-authored `.capnp` fixtures in `fixtures/` are compiled with official
 Cap'n Proto 1.5.0. Their `.request.bin` files are compiler outputs, not handcrafted
 wire layouts. The generated bindings under `tests/generated/` are compiled and
 executed against independent official binary fixtures and runtime builders.
+In addition, `tests/generated/upstream` is generated from the complete unchanged
+upstream `capnp/test.capnp`, and `tests/generated/compiler` from the unchanged
+`capnp/schema.capnp`. These compile the real generic, constant and compiler
+protocol declarations, rather than a hand-written approximation of their layout.

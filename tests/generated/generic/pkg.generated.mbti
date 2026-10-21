@@ -1,0 +1,29 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Ridge-Lab/capnp/tests/generated/generic"
+
+import {
+  "Ridge-Lab/capnp",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub(all) struct BoxBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BoxBuilder::get_value(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn BoxBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn BoxBuilder::init_value(Self) -> @capnp.PointerBuilder raise @capnp.CapnpError
+pub fn BoxBuilder::set_value(Self, @capnp.PointerReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BoxReader {
+  inner : @capnp.StructReader
+}
+pub fn BoxReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn BoxReader::get_value(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+
+// Type aliases
+
+// Traits

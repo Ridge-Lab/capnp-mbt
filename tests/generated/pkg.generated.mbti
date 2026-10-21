@@ -76,19 +76,32 @@ pub fn FixtureBuilder::init_nested(Self, Int) -> FixtureNestedListBuilder raise 
 pub fn FixtureBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
 pub fn FixtureBuilder::init_shorts(Self, Int) -> FixtureShortsListBuilder raise @capnp.CapnpError
 pub fn FixtureBuilder::init_texts(Self, Int) -> FixtureTextsListBuilder raise @capnp.CapnpError
+pub fn FixtureBuilder::set_blobs(Self, FixtureBlobsListReader) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_boolean(Self, Bool) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_bools(Self, FixtureBoolsListReader) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_bytes(Self, FixtureBytesListReader) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_child(Self, ChildReader) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_children(Self, FixtureChildrenListReader) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_code(Self, UInt) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_color(Self, Color) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_colors(Self, FixtureColorsListReader) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_data(Self, Bytes) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_doubles(Self, FixtureDoublesListReader) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_f32(Self, Float) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_f64(Self, Double) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_floats(Self, FixtureFloatsListReader) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_i16(Self, Int) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_i32(Self, Int) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_i64(Self, Int64) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_i8(Self, Int) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_ints(Self, FixtureIntsListReader) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_longs(Self, FixtureLongsListReader) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_message(Self, String) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_nested(Self, FixtureNestedListReader) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_none(Self) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_shorts(Self, FixtureShortsListReader) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_text(Self, String) -> Unit raise @capnp.CapnpError
+pub fn FixtureBuilder::set_texts(Self, FixtureTextsListReader) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_u16(Self, UInt) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_u32(Self, UInt) -> Unit raise @capnp.CapnpError
 pub fn FixtureBuilder::set_u64(Self, UInt64) -> Unit raise @capnp.CapnpError

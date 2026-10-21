@@ -6,6 +6,8 @@ import {
 }
 
 // Values
+pub fn canonicalize(Message, max_words? : Int, max_depth? : Int) -> Bytes raise CapnpError
+
 pub fn frame_length(Bytes, offset? : Int, max_segments? : Int, max_message_bytes? : Int) -> Int? raise CapnpError
 
 pub fn pack(Bytes) -> Bytes raise CapnpError
@@ -32,12 +34,14 @@ pub fn Builder::allocated_words(Self) -> Int
 pub fn Builder::finish(Self) -> Bytes
 pub fn Builder::init_root(Self, Int, Int) -> StructBuilder raise CapnpError
 pub fn Builder::new(max_words? : Int) -> Self raise CapnpError
+pub fn Builder::root_pointer(Self) -> PointerBuilder
 
 pub struct ListBuilder {
   // private fields
 }
 pub fn ListBuilder::clear_pointer(Self, Int) -> Unit raise CapnpError
 pub fn ListBuilder::element_size(Self) -> Int
+pub fn ListBuilder::get_pointer(Self, Int) -> PointerBuilder raise CapnpError
 pub fn ListBuilder::init_list(Self, Int, Int, Int) -> Self raise CapnpError
 pub fn ListBuilder::init_struct(Self, Int, Int, Int) -> StructBuilder raise CapnpError
 pub fn ListBuilder::init_struct_list(Self, Int, Int, Int, Int) -> Self raise CapnpError
@@ -88,6 +92,31 @@ pub fn Message::root(Self) -> StructReader raise CapnpError
 pub fn Message::root_pointer(Self) -> PointerReader
 pub fn Message::segment_count(Self) -> Int
 
+pub struct PointerBuilder {
+  // private fields
+}
+pub fn PointerBuilder::clear(Self) -> Unit
+pub fn PointerBuilder::init_list(Self, Int, Int) -> ListBuilder raise CapnpError
+pub fn PointerBuilder::init_struct(Self, Int, Int) -> StructBuilder raise CapnpError
+pub fn PointerBuilder::init_struct_list(Self, Int, Int, Int) -> ListBuilder raise CapnpError
+pub fn PointerBuilder::is_null(Self) -> Bool
+pub fn PointerBuilder::set(Self, PointerReader, max_depth? : Int, max_words? : Int) -> Unit raise CapnpError
+pub fn PointerBuilder::set_capability_index(Self, UInt) -> Unit
+pub fn PointerBuilder::set_data(Self, Bytes) -> Unit raise CapnpError
+pub fn PointerBuilder::set_list(Self, ListReader, max_depth? : Int, max_words? : Int) -> Unit raise CapnpError
+pub fn PointerBuilder::set_struct(Self, StructReader, max_depth? : Int, max_words? : Int) -> Unit raise CapnpError
+pub fn PointerBuilder::set_text(Self, String) -> Unit raise CapnpError
+
+pub(all) enum PointerKind {
+  Null
+  Struct
+  List
+  Capability
+} derive(Eq, @debug.Debug)
+pub fn PointerKind::equal(Self, Self) -> Bool
+pub fn PointerKind::not_equal(Self, Self) -> Bool
+pub fn PointerKind::to_repr(Self) -> @debug.Repr
+
 pub struct PointerReader {
   // private fields
 }
@@ -95,13 +124,16 @@ pub fn PointerReader::as_data(Self, default? : Bytes) -> Bytes raise CapnpError
 pub fn PointerReader::as_list(Self) -> ListReader raise CapnpError
 pub fn PointerReader::as_struct(Self) -> StructReader raise CapnpError
 pub fn PointerReader::as_text(Self, default? : String) -> String raise CapnpError
+pub fn PointerReader::capability_index(Self) -> UInt raise CapnpError
 pub fn PointerReader::is_null(Self) -> Bool
+pub fn PointerReader::kind(Self) -> PointerKind raise CapnpError
 
 pub struct StructBuilder {
   // private fields
 }
 pub fn StructBuilder::clear_data(Self, Int, Int) -> Unit raise CapnpError
 pub fn StructBuilder::clear_pointer(Self, Int) -> Unit raise CapnpError
+pub fn StructBuilder::get_pointer(Self, Int) -> PointerBuilder raise CapnpError
 pub fn StructBuilder::init_list(Self, Int, Int, Int) -> ListBuilder raise CapnpError
 pub fn StructBuilder::init_struct(Self, Int, Int, Int) -> Self raise CapnpError
 pub fn StructBuilder::init_struct_list(Self, Int, Int, Int, Int) -> ListBuilder raise CapnpError
