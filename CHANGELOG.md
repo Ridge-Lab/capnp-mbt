@@ -7,6 +7,7 @@
 - Add opaque pointer builders and bounded schema-free copying that preserves unknown fields and rolls back destination changes on failure. Non-null capabilities require external table mapping and are rejected by deep copy.
 - Add schema-independent canonicalization for struct-root messages, checked against reference-generated vectors for padding, list trimming, empty values, far pointers and preorder layout.
 - Vendor unchanged MIT-licensed 1.5.0 schemas and dependencies with hashes. Add a Python/C++ ↔ MoonBit example using the original generic/AnyPointer protocol and constant values.
+- Embed only canonicalized pointer defaults and constants in generated code, so unrelated compiler source metadata does not change the generated API across platforms.
 - Document the serialization completion target, tested cases, resource limits and capability/RPC boundary.
 
 ## 0.1.0

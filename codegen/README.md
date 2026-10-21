@@ -40,12 +40,14 @@ compiler, so callers can use existing schema sources directly.
   any output is returned.
 
 Scalar defaults use the wire format's XOR semantics, including floating-point
-bit patterns. Nonempty struct/list defaults are retained from the compiler
-request, embedded once in the generated file and read when the actual pointer
-is null. An explicitly initialized empty list therefore overrides a nonempty
-default. This implementation prioritizes correct default semantics; large
-schema requests containing pointer defaults can produce large generated files,
-and repeatedly reading an absent pointer default reparses its embedded request.
+bit patterns. Pointer defaults and constants are copied from the compiler
+request into a compact canonical payload, embedded once in the generated file.
+Only the referenced values and their lookup indices are retained; source-info
+order, documentation, annotations and compiler metadata cannot affect this
+payload. Defaults are read when the actual pointer is null. An explicitly
+initialized empty list therefore overrides a nonempty default. Large default
+values can still produce large generated files, and repeatedly reading an
+absent pointer default reparses the compact payload.
 
 `Box(Text)` generates `BoxAsTextReader` and `BoxAsTextBuilder`, whose field
 accessors use `String`; `Box(List(UInt32))` has a typed list accessor. Brand

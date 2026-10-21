@@ -49,8 +49,9 @@ scope/type-depth and specialization-count limits.
 
 Top-level and nested constants are exposed through generated `const_*()`
 accessors. Pointer constants and non-empty defaults retain the compiler-resolved
-values. Generated files can therefore contain embedded compiler-request bytes;
-they are not an implementation of a runtime schema parser.
+values in a compact embedded value table. Source positions, annotations and
+other unrelated compiler metadata are omitted from that table. Generated files
+do not implement a runtime schema parser.
 
 Unknown enum ordinals remain available through the generated unknown-value
 variant. Missing fields return schema defaults; extra fields can be skipped or

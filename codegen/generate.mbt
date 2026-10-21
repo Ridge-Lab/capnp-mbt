@@ -15,7 +15,8 @@ fn generate_impl(request : Bytes) -> Array[GeneratedFile] raise {
     raise InvalidRequest("schema request exceeds 16 MiB")
   }
   let root = @capnp.read_message(request).root()
-  let nodes = specialize_nodes(read_nodes(root))
+  let raw_nodes = read_nodes(root)
+  let nodes = specialize_nodes(raw_nodes)
   validate_names(nodes)
   let requested = root.get_list(1)
   if requested.length() == 0 {
@@ -45,13 +46,9 @@ fn generate_impl(request : Bytes) -> Array[GeneratedFile] raise {
           )
         }
         names[name] = true
-        match field.typ {
-          StructRef(_) | ListOf(_) | AnyPointer(_) =>
-            if !field.group && !field.default_value.get_pointer(0).is_null() {
-              needs_default = true
-              needs_field_default = true
-            }
-          _ => ()
+        if field_uses_pointer_default(field) {
+          needs_default = true
+          needs_field_default = true
         }
       }
     }
@@ -60,9 +57,10 @@ fn generate_impl(request : Bytes) -> Array[GeneratedFile] raise {
     }
   }
   if needs_default {
+    let payload = pointer_default_payload(raw_nodes)
     emit_block(
       out,
-      "fn capnp_schema_node(node : Int) -> @capnp.StructReader raise @capnp.CapnpError {\n  let request : Bytes = \{bytes_literal(request)}\n  @capnp.read_message(request).root().get_list(0).get_struct(node)\n}",
+      "fn capnp_schema_node(node : Int) -> @capnp.StructReader raise @capnp.CapnpError {\n  let payload : Bytes = \{bytes_literal(payload)}\n  @capnp.read_message(payload).root().get_list(0).get_struct(node)\n}",
     )
     // Emit this only when used: scalar-only constant schemas need no pointer helper.
     if needs_field_default {

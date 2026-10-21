@@ -1,7 +1,7 @@
 ///|
 fn constant_uses_pointer(node : Node) -> Bool {
   match node.constant_type {
-    Some(StructRef(_) | ListOf(_) | AnyPointer(_)) => true
+    Some(StructRef(_) | BrandedRef(_, _) | ListOf(_) | AnyPointer(_)) => true
     _ => false
   }
 }
