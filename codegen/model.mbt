@@ -48,6 +48,7 @@ priv struct Field {
   group : Bool
   default_value : @capnp.StructReader
   index : Int
+  mut generated_name : String?
 }
 
 ///|
@@ -176,6 +177,7 @@ fn read_nodes(root : @capnp.StructReader) -> Array[Node] raise {
           group,
           default_value: f.get_struct(3),
           index: j,
+          generated_name: None,
         })
       }
     } else if kind == 2 {

@@ -1,6 +1,6 @@
 # Compatibility and limits
 
-Version 0.2.0 uses **Cap'n Proto 1.5.0** as its serialization baseline. The
+Version 0.2.1 uses **Cap'n Proto 1.5.0** as its serialization baseline. The
 [standard target](SERIALIZATION-STANDARD.md) defines the endpoint; the
 [unchanged-schema example](../examples/schema_compat/README.md) records a
 reproducible interoperability case. This is not a claim that every schema or
@@ -56,13 +56,21 @@ do not implement a runtime schema parser.
 Unknown enum ordinals remain available through the generated unknown-value
 variant. Missing fields return schema defaults; extra fields can be skipped or
 preserved by opaque copying. Compatible list-to-struct evolution is supported.
+Scalar or pointer views of an inline-composite list require the corresponding
+data or pointer section, matching the reference implementation; absent sections
+are not silently treated as valid values of an incompatible list type. Struct
+views still supply defaults for missing fields. Bit lists cannot evolve into
+struct lists under the encoding specification.
 Unknown union alternatives are not exposed as unrelated known members.
 Arbitrary incompatible schema changes are not repaired automatically.
 
-Identifiers are normalized to MoonBit spelling. Declaration collisions use
-schema IDs for disambiguation where possible; conflicting generated field
-names still produce diagnostics. Keep schema and generated API changes in the
-same review even when their wire IDs remain compatible.
+Identifiers are normalized to MoonBit spelling. Name allocation includes
+Reader/Builder types, generated list wrappers, concrete generic instances and
+constant accessors. Conflicts use deterministic declaration-ID or field/enum
+ordinal suffixes, so a valid source schema does not need renaming to avoid a
+MoonBit symbol collision. Ordinary non-conflicting API names are preserved.
+Keep schema and generated API changes in the same review even when their wire
+IDs remain compatible.
 
 ## Capability boundary
 

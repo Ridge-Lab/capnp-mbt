@@ -2,7 +2,7 @@
 
 ## Fixed baseline
 
-Version 0.2.0 targets the serialization and data-declaration semantics of
+Version 0.2.1 targets the serialization and data-declaration semantics of
 **Cap'n Proto 1.5.0**, using its tagged
 [encoding specification](https://github.com/capnproto/capnproto/blob/v1.5.0/doc/encoding.md),
 [schema language](https://github.com/capnproto/capnproto/blob/v1.5.0/doc/language.md),
@@ -18,6 +18,10 @@ expressions and `embed`; the MoonBit plugin consumes `CodeGeneratorRequest`.
 
 The following is the compatibility surface to maintain, not a claim that
 every possible schema has been exhaustively tested.
+
+The [conformance matrix](CONFORMANCE.md) maps this surface to executable checks
+and distinguishes reference-implementation evidence from project-authored
+regressions.
 
 | Surface | Required behavior |
 | --- | --- |

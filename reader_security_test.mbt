@@ -283,3 +283,42 @@ test "reader schema evolution preserves old fields and supplies new field defaul
   assert_eq(new_as_old.get_uint32(0), 123)
   assert_eq(new_as_old.get_uint64(8), 456UL)
 }
+
+///|
+test "reader rejects incompatible primitive views without losing struct defaults" {
+  // Independent pycapnp/C++ output using unchanged upstream test.capnp:
+  // TestAnyPointer.anyPointerField = List(TestAnyPointer), one Text payload.
+  // The reference reader rejects interpreting its pointer-only elements as
+  // UInt32. Missing fields on a genuine struct view still use schema defaults.
+  let pointer_only = @capnp.read_message(
+      reader_frame([
+        [
+          0x0001000000000000UL, 0x0000000f00000001UL, 0x0001000000000004UL, 0x0000003200000001UL,
+          0x00000065756c6176UL,
+        ],
+      ]),
+    )
+    .root()
+    .get_list(0)
+  assert_eq(pointer_only.get_text(0), "value")
+  reader_error("type", () => ignore(pointer_only.get_uint32(0)))
+  assert_eq(pointer_only.get_struct(0).get_uint32(0, default=99), 99)
+  // Likewise, List(TestEmptyStruct) cannot be viewed as List(Text), while
+  // fields added to the empty struct remain legal and read their defaults.
+  let empty_structs = @capnp.read_message(
+      reader_frame([[0x0001000000000000UL, 0x0000000700000001UL, 4UL]]),
+    )
+    .root()
+    .get_list(0)
+  reader_error("type", () => ignore(empty_structs.get_pointer(0)))
+  reader_error("type", () => ignore(empty_structs.get_uint8(0)))
+  assert_eq(
+    empty_structs.get_struct(0).get_text(0, default="new field"),
+    "new field",
+  )
+  assert_eq(empty_structs.get_struct(0).get_uint64(0, default=42UL), 42UL)
+  let voids = @capnp.read_message(reader_frame([[0x0000000800000001UL]]))
+    .root_pointer()
+    .as_list()
+  assert_eq(voids.get_struct(0).get_uint32(0, default=7), 7)
+}

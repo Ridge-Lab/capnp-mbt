@@ -18,6 +18,7 @@ SCHEMA = capnp.load(str(UPSTREAM / "capnp" / "test.capnp"), imports=[str(UPSTREA
 INT32_LIST = capnp._ListSchema(capnp.types.Int32)
 UINT32_LIST = capnp._ListSchema(capnp.types.UInt32)
 UINT8_LIST = capnp._ListSchema(capnp.types.UInt8)
+UINT16_LIST = capnp._ListSchema(capnp.types.UInt16)
 
 
 def prepare(directory: Path) -> None:
@@ -45,7 +46,17 @@ def prepare(directory: Path) -> None:
     inner.init("innerBound").init("foo").int16Field = 6789
     inner.init("innerUnbound").foo.set_as_text("unbound ancestor")
     message.init("unspecified").foo.set_as_text("unbound parameter")
-    message.init("bindEnumList").foo = ["foo", "garply"]
+    # pycapnp's enum-list setter accepts named values, not an unknown integer.
+    # Populate the unchanged generic's unbound view with the standard UInt16
+    # representation, then read the same object with the original bound schema.
+    # This uses C++ builders throughout, without editing schema or wire bytes.
+    enum_message = capnp._MallocMessageBuilder()
+    enum_values = enum_message.init_root(SCHEMA.TestGenerics).foo.init_as_list(UINT16_LIST, 3)
+    for index, ordinal in enumerate([0, 7, 40000]):
+        enum_values[index] = ordinal
+    enum_schema = SCHEMA.TestUseGenerics.schema.fields["bindEnumList"].schema
+    message.bindEnumList = enum_message.get_root(enum_schema)
+    assert [item.raw for item in message.bindEnumList.foo] == [0, 7, 40000]
     plain = message.to_bytes()
     assert int.from_bytes(plain[:4], "little") > 0, "expected multiple segments"
     (directory / "python-generics.bin").write_bytes(plain)
@@ -76,6 +87,12 @@ def prepare(directory: Path) -> None:
     values = constrained.anyListField.init_as_list(INT32_LIST, 2)
     values[0], values[1] = 123, -456
     (directory / "python-constrained.bin").write_bytes(constrained.to_bytes())
+    embedded_data = bytes(SCHEMA.embeddedData)
+    embedded_text = SCHEMA.embeddedText.encode("utf-8")
+    assert embedded_data == (UPSTREAM / "capnp/testdata/packed").read_bytes()
+    assert embedded_text == (UPSTREAM / "capnp/testdata/short.txt").read_bytes()
+    (directory / "python-embedded-data.bin").write_bytes(embedded_data)
+    (directory / "python-embedded-text.bin").write_bytes(embedded_text)
     print(f"pycapnp {capnp.__version__}: wrote segmented generic and AnyPointer inputs")
 
 
@@ -92,7 +109,7 @@ def verify(directory: Path) -> None:
         assert value.inner2.innerBound.foo.int16Field == 6789
         assert value.inner2.innerUnbound.foo.as_text() == "unbound ancestor"
         assert value.unspecified.foo.as_text() == "unbound parameter"
-        assert [str(item) for item in value.bindEnumList.foo] == ["foo", "garply"]
+        assert [item.raw for item in value.bindEnumList.foo] == [0, 7, 40000]
         # Absent pointers must retain the original schema's generic defaults.
         assert value.default.foo.int16Field == 123
         assert value.default.rev.foo == "text"
@@ -133,16 +150,40 @@ def verify(directory: Path) -> None:
         assert value.uInt64Field == 12345678901234567890
         assert value.structField.textField == "baz"
         assert list(value.int32List) == [111111111, -111111111]
+    assert (directory / "moon-embedded-data.bin").read_bytes() == bytes(SCHEMA.embeddedData)
+    assert (directory / "moon-embedded-data.bin").read_bytes() == (UPSTREAM / "capnp/testdata/packed").read_bytes()
+    assert (directory / "moon-embedded-text.bin").read_bytes() == SCHEMA.embeddedText.encode("utf-8")
+    assert (directory / "moon-embedded-text.bin").read_bytes() == (UPSTREAM / "capnp/testdata/short.txt").read_bytes()
+    verify_compiler_request(directory / "moon-compiler-request.bin")
+    print("Verified MoonBit output: bound/nested/unbound generics, AnyPointer kinds, defaults and constants")
+
+
+def verify_compiler_request(path: Path) -> None:
     compiler = capnp.load(str(UPSTREAM / "capnp" / "schema.capnp"), imports=[str(UPSTREAM)])
-    with compiler.CodeGeneratorRequest.from_bytes((directory / "moon-compiler-request.bin").read_bytes()) as request:
+    with compiler.CodeGeneratorRequest.from_bytes(path.read_bytes()) as request:
         assert (request.capnpVersion.major, request.capnpVersion.minor) == (1, 5)
         assert request.requestedFiles[0].filename == "capnp/test.capnp"
         nodes = {node.displayName: node for node in request.nodes}
         generic = nodes["capnp/test.capnp:TestGenerics"]
         assert generic.isGeneric and len(generic.parameters) == 2
+        assert generic.id == SCHEMA.TestGenerics.schema.node.id
+        assert [parameter.name for parameter in generic.parameters] == ["Foo", "Bar"]
+        use_generics = nodes["capnp/test.capnp:TestUseGenerics"]
+        basic = next(field for field in use_generics.struct.fields if field.name == "basic")
+        assert basic.which() == "slot" and basic.slot.type.which() == "struct"
+        bound_type = basic.slot.type.struct
+        assert bound_type.typeId == SCHEMA.TestGenerics.schema.node.id
+        assert len(bound_type.brand.scopes) == 1
+        scope = bound_type.brand.scopes[0]
+        assert scope.scopeId == SCHEMA.TestGenerics.schema.node.id and scope.which() == "bind"
+        assert len(scope.bind) == 2
+        expected_ids = [SCHEMA.TestAllTypes.schema.node.id, SCHEMA.TestAnyPointer.schema.node.id]
+        for binding, expected_id in zip(scope.bind, expected_ids):
+            assert binding.which() == "type" and binding.type.which() == "struct"
+            assert binding.type.struct.typeId == expected_id
+            assert len(binding.type.struct.brand.scopes) == 0
         constant = nodes["capnp/test.capnp:genericConstant"].const.value.struct
         assert constant.as_struct(SCHEMA.TestGenerics).foo.as_struct(SCHEMA.TestAllTypes).int16Field == 123
-    print("Verified MoonBit output: bound/nested/unbound generics, AnyPointer kinds, defaults and constants")
 
 
 if __name__ == "__main__":

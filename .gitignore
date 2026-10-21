@@ -8,3 +8,5 @@
 *.obj
 *.o
 /work/
+__pycache__/
+*.pyc

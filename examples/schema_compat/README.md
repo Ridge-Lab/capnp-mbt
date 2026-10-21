@@ -39,17 +39,22 @@ Generated bindings are committed in `tests/generated/upstream` and
 | --- | --- |
 | `TestUseGenerics.basic` | `TestGenerics(TestAllTypes, TestAnyPointer)` retains concrete field types; reversed bindings and a list of nested generic structs round-trip |
 | `TestUseGenerics.inner2` | Ancestor `Bar` binding, local `Baz=Text`, bound inner scope and unbound inner scope keep their distinct meanings |
-| `unspecified`, `bindEnumList` | Unbound parameter carries Text through AnyPointer; a bound enum list preserves its ordinals |
+| `unspecified`, `bindEnumList` | Unbound parameter carries Text through AnyPointer; a bound enum list preserves known ordinals `0`/`7` and unknown ordinal `40000` in both directions |
 | Generic defaults and aliases | Unwritten fields expose `123`, `"text"`, `321`, `[12,34]` and `[12,34,56]` from the original schema |
 | `TestAnyPointer` | Struct, Int32 list, UTF-8 Text, arbitrary Data and null are interpreted and copied without dropping unknown content |
 | `TestAnyOthers` | AnyStruct and AnyList use their constrained views; a null capability remains null |
 | `genericConstant`, `anyPointerConstants`, `embeddedStruct` | Generated constant functions produce real messages that Python/C++ decodes and checks |
-| `CodeGeneratorRequest` | Bindings generated from `schema.capnp` read an actual 1.5.0 compiler request, inspect `Node`, `Brand` and AnyPointer-backed `Value`, and serialize it for Python/C++ verification |
+| `embeddedData`, `embeddedText` | Generated values match Python/C++ constants and original embedded files byte for byte, including the Text file's final newline |
+| `CodeGeneratorRequest` | Both peers check `Node`, `Brand.scopeId`, each bound `Type.typeId`, and AnyPointer-backed `Value` against the original schema declarations |
 
 Python deliberately uses a small initial segment, forcing multi-segment input.
 MoonBit verifies both the ordinary frame and the packed frame. The reply uses
 generated builders for new values and schema-free deep copy for open payloads.
 Assertions check decoded values; merely exiting the generator is insufficient.
+For an unknown enum ordinal, the Python peer uses the original generic's
+unbound view to populate a UInt16 list with the C++ builder, then interprets it
+through the original bound enum-list schema. It does not patch message bytes or
+add an enum declaration to the source schema.
 
 ## Regenerate from the original schema files
 

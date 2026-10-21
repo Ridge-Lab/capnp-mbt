@@ -17,6 +17,7 @@ fn generate_impl(request : Bytes) -> Array[GeneratedFile] raise {
   let root = @capnp.read_message(request).root()
   let raw_nodes = read_nodes(root)
   let nodes = specialize_nodes(raw_nodes)
+  allocate_names(nodes)
   validate_names(nodes)
   let requested = root.get_list(1)
   if requested.length() == 0 {
@@ -39,7 +40,7 @@ fn generate_impl(request : Bytes) -> Array[GeneratedFile] raise {
     if node.kind == 1 {
       let names : Map[String, Bool] = Map([])
       for field in node.fields {
-        let name = field_name(field.name)
+        let name = generated_field_name(field)
         if name == "" || names.contains(name) {
           raise UnsupportedSchema(
             "field names collide after MoonBit normalization: \{node.name}.\{field.name}",

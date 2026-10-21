@@ -32,15 +32,12 @@ test "interface declarations coexist with serialization without RPC stubs" {
 }
 
 ///|
-test "runtime wrapper naming collisions fail before writing invalid source" {
+test "runtime wrapper naming collisions allocate distinct symbols without schema edits" {
   let request = @fs.read_file_to_bytes("codegen/fixtures/collision.request.bin")
-  try @codegen.generate(request) catch {
-    @codegen.UnsupportedSchema(message) =>
-      assert_true(message.contains("collision: FooReader"))
-    _ => fail("unexpected diagnostic")
-  } noraise {
-    _ => fail("generated type collision accepted")
-  }
+  let output = @codegen.generate(request)[0].content
+  assert_true(output.contains("enum FooReader"))
+  assert_true(output.contains("struct FooN"))
+  assert_eq(output, @codegen.generate(request)[0].content)
 }
 
 ///|

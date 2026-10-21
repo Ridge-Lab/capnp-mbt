@@ -36,8 +36,12 @@ compiler, so callers can use existing schema sources directly.
 - Nested declaration names concatenate their enclosing declaration names.
   Imported same-name declarations receive a schema ID suffix. Built-in type
   names receive a `Schema` prefix; a field named `root` becomes `root_field`.
-  Remaining generated-name collisions are rejected with a diagnostic before
-  any output is returned.
+  A final allocation pass includes every generated Reader/Builder, list wrapper,
+  generic specialization and constant accessor. Collisions receive a stable
+  schema or specialization ID suffix, leaving ordinary names unchanged. Field
+  name collisions receive `_f` plus their schema field index, with another suffix
+  if that name is also occupied. Existing schemas therefore do not need to be
+  renamed just because a declaration resembles a generated type or method.
 
 Scalar defaults use the wire format's XOR semantics, including floating-point
 bit patterns. Pointer defaults and constants are copied from the compiler
@@ -80,8 +84,7 @@ Request size is limited to 16 MiB, node count to 10,000, and nested list/group/
 scope depth to 32. Generic expansion has a depth limit of 128 and an additional
 1,024-instance budget; recursive growth falls back to dynamic views before
 exhausting these limits. The binary reader's traversal and nesting limits also
-apply. Malformed requests and unrepresentable generated-name collisions produce
-diagnostics before output is returned.
+apply. Malformed requests produce diagnostics before output is returned.
 
 The project-authored `.capnp` fixtures in `fixtures/` are compiled with official
 Cap'n Proto 1.5.0. Their `.request.bin` files are compiler outputs, not handcrafted

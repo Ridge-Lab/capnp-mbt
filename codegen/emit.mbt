@@ -63,8 +63,7 @@ fn emit_enum(
   let cases = StringBuilder()
   let decode = StringBuilder()
   let encode = StringBuilder()
-  for i, item in node.enumerants {
-    let variant = symbol(item, true)
+  for i, variant in enum_variants(node) {
     cases.write_string("  " + variant + "\n")
     decode.write_string("    \{i}U => \{variant}\n")
     encode.write_string("    \{variant} => \{i}U\n")
@@ -85,7 +84,7 @@ fn emit_enum(
 
 ///|
 fn enum_fallback(node : Node) -> String {
-  let names = node.enumerants.map(name => symbol(name, true))
+  let names = enum_variants(node)
   let mut suffix = 0
   let mut candidate = "Unknown"
   while names.contains(candidate) {
@@ -97,12 +96,12 @@ fn enum_fallback(node : Node) -> String {
 
 ///|
 fn field_method(field : Field) -> String {
-  "get_" + field_name(field.name)
+  "get_" + generated_field_name(field)
 }
 
 ///|
 fn list_name(owner : String, field : Field) -> String {
-  owner + symbol(field.name, true) + "List"
+  owner + symbol(field.generated_name.unwrap_or(field.name), true) + "List"
 }
 
 ///|
@@ -319,7 +318,7 @@ fn emit_struct(
   }
   for field in node.fields {
     let accessor = field_method(field)
-    let suffix = field_name(field.name)
+    let suffix = generated_field_name(field)
     let check = union_check(node, field)
     let activate = union_set(node, field, nodes)
     if field.discriminant != 65535 {
@@ -481,7 +480,7 @@ fn emit_struct(
               "pub fn \{builder}::init_\{suffix}(self : \{builder}, element_size : Int, length : Int) -> @capnp.ListBuilder raise @capnp.CapnpError {\n\{activate}  self.inner.init_list(\{field.offset}, element_size, length)\n}",
             )
             let mut extra = suffix + "_structs"
-            while node.fields.any(f => field_name(f.name) == extra) {
+            while node.fields.any(f => generated_field_name(f) == extra) {
               extra += "_inline"
             }
             emit_block(

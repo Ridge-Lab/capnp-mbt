@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1
+
+- Allocate generated type, list-wrapper, constant and field names without requiring edits to valid schemas that collide after MoonBit name normalization. Add a real compiler fixture covering wrapper names, generic specializations, flattened declarations and repeated field-name suffixes.
+- Reject incompatible scalar/pointer views of inline-composite lists whose elements lack the corresponding section, matching the C++ reader while preserving valid struct-field defaults and list evolution.
+- Extend the unchanged-schema peer to exchange unknown generic enum ordinal `40000`, compare embedded Text/Data with original bytes, and verify exact generic Brand scope and binding type IDs.
+- Add a feature-to-evidence conformance matrix and a CI check that recompiles the collision fixture with official Cap'n Proto 1.5.0.
+
 ## 0.2.0
 
 - Target Cap'n Proto 1.5.0 serialization, including generic brands, ancestor bindings, aliases, unbound parameters, and generic defaults/constants. Recursively growing specializations retain an unbound view instead of requiring schema edits.

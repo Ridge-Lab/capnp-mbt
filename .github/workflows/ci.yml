@@ -66,6 +66,7 @@ jobs:
           moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/generic.request.bin --out tests/generated/generic
           moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/brands.request.bin --out tests/generated/brands
           moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/growing.request.bin --out tests/generated/growing
+          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/collision-compat.request.bin --out tests/generated/collision_compat
           moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/upstream.request.bin --out tests/generated/upstream
           moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/compiler.request.bin --out tests/generated/compiler
           moon fmt
@@ -92,6 +93,11 @@ jobs:
           capnp compile --no-standard-import -Ifixtures/upstream/capnproto-1.5.0 --src-prefix=fixtures/upstream/capnproto-1.5.0 -o./_build/native/release/build/cmd/capnpc-moonbit/capnpc-moonbit.exe:tests/generated/compiler fixtures/upstream/capnproto-1.5.0/capnp/schema.capnp
           moon fmt
           git diff --exit-code -- tests/generated/upstream tests/generated/compiler
+      - name: Compile valid schemas with colliding generated names
+        run: |
+          capnp compile -o./_build/native/release/build/cmd/capnpc-moonbit/capnpc-moonbit.exe:tests/generated/collision_compat codegen/fixtures/collision-compat.capnp
+          moon fmt
+          git diff --exit-code -- tests/generated/collision_compat
       - name: Bidirectional generics AnyPointer and constants interoperability
         run: |
           python examples/schema_compat/peer.py prepare work/schema-compat

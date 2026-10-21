@@ -74,14 +74,14 @@ acceptable workaround.
 | `TestUseGenerics.inner2` | `bar` uses the ancestor `Bar` binding; `baz` is `Text`; `innerBound` inherits and `innerUnbound` erases outer arguments |
 | `TestUseGenerics.unspecified` | Unspecified generic arguments remain usable as AnyPointer, not rejected or silently dropped |
 | `TestUseGenerics.aliasInner2Bind` | Bound `List(UInt32)` parameter reads `[12, 34]` from its declared default |
-| `TestUseGenerics.bindEnumList` | A generic parameter bound to `List(TestEnum)` preserves known and unknown enum ordinals |
+| `TestUseGenerics.bindEnumList` | A generic parameter bound to `List(TestEnum)` preserves known ordinals `0`/`7` and unknown ordinal `40000` in both directions |
 | `TestAnyPointer.anyPointerField` | Struct, list, Text, Data, and null payloads can be read, written, and copied with explicit interpretation |
 | `TestAnyOthers` | AnyStruct/AnyList enforce their target kinds; non-null capabilities have an explicit unsupported/context policy |
 | `TestConstants` | All scalar, blob, list, enum, and nested struct constants are exposed and match `capnp eval` |
 | `genericConstant` | `foo.int16Field=123`, `rev.foo="text"`, `rev.rev.foo.int16Field=321` |
 | `anyPointerConstants` | Its two struct payloads and two Int32-list payloads can be inspected and copied without a handwritten replacement schema |
-| `embeddedData`, `embeddedText`, `embeddedStruct` | Compiler-resolved `embed` values are reproduced by the generator |
-| `schema.capnp:CodeGeneratorRequest` | Generate bindings for this file and inspect a real request containing `Node`, `Type`, `Brand`, and `Value` |
+| `embeddedData`, `embeddedText`, `embeddedStruct` | Compiler-resolved `embed` values are reproduced; Data and UTF-8 Text output match the original embedded files byte for byte, while Python/C++ checks the struct values |
+| `schema.capnp:CodeGeneratorRequest` | Generate bindings and inspect a real request containing `Node`, `Type`, `Brand`, and `Value`; both peers check the generic's scope ID and the concrete bound type IDs |
 
 Passing a selected case does not establish exhaustive compatibility with the
 whole upstream test suite. Record the executed cases and implementations in the

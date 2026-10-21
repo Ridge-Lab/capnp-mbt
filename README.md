@@ -6,7 +6,7 @@
 
 适合已有 Cap'n Proto 协议的服务、数据采集程序、离线处理工具和二进制文件消费者接入 MoonBit。协议定义、字段布局和已有数据格式可以继续使用，业务代码无需手写偏移或经 JSON 中转。这里实现的是序列化层；网络传输和 RPC 不在本版本范围内。
 
-**0.2.0 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer 和常量均纳入序列化支持，使用未经删改的官方 `test.capnp` 验证。[标准目标与证据](docs/SERIALIZATION-STANDARD.md)说明完成标准及已测试范围，不以少数样例推断所有协议均兼容。
+**0.2.1 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer 和常量均纳入序列化支持，使用未经删改的官方 `test.capnp` 验证。[标准目标](docs/SERIALIZATION-STANDARD.md)与[验证矩阵](docs/CONFORMANCE.md)将兼容承诺对应到测试、独立参考实现和复现步骤。
 
 ## 可运行的完整流程
 
@@ -27,7 +27,7 @@
 在自己的 MoonBit 项目中添加依赖：
 
 ```sh
-moon add Ridge-Lab/capnp@0.2.0
+moon add Ridge-Lab/capnp@0.2.1
 ```
 
 包的 `moon.pkg` 中导入：
@@ -106,7 +106,7 @@ assert_eq(received.get_samples().get(0).get_value(), 21.5)
 
 已知泛型绑定生成具体类型；未绑定参数和递归增长的泛型边界保留动态视图，业务代码可通过公开的 `.inner` 继续访问，无需改写 schema。接口声明不会阻止同文件中的数据类型生成，但不生成 RPC 调用代码。低层 capability index API 只表示数字索引；跨消息深拷贝拒绝未提供表映射的非空 capability。
 
-`finish()` 返回普通标准帧；需要 canonical 数据时单独调用 `canonicalize`，其结果不含帧头，不能直接交给 `read_message`。运行库错误使用 `CapnpError`，生成器对无效请求、无法消解的命名冲突或资源限制返回 `CodegenError`。
+合法 schema 与自动生成的类型、列表包装器或字段名称冲突时，生成器使用稳定后缀消歧，无需修改协议。`finish()` 返回普通标准帧；需要 canonical 数据时单独调用 `canonicalize`，其结果不含帧头，不能直接交给 `read_message`。运行库错误使用 `CapnpError`，生成器对无效请求或资源限制返回 `CodegenError`。
 
 默认 reader 遍历预算为 8,388,608 words，嵌套深度 64，最多 512 段；`unpack` 默认最多输出 64 MiB。reader 的预算会被重复访问消耗，按需缓存已取得的视图。`read_message` 要求恰好一帧，流式输入先用 `frame_length` 划分。builder 使用追加式 arena，替换指针不会回收旧对象，`finish()` 返回快照。详见[兼容性和资源限制](docs/COMPATIBILITY.md)。
 

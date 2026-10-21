@@ -28,6 +28,9 @@ fn ListReader::read_list_bits(
 ) -> UInt64 raise CapnpError {
   ListReader::read_list_index(self, index)
   if self.code == 7 {
+    if self.data_words == 0 {
+      raise TypeMismatch("expected a data field in an evolved struct list")
+    }
     return StructReader::read_struct_bits(self.get_struct(index), 0, width)
   }
   if self.code != code {
@@ -195,6 +198,9 @@ pub fn ListReader::get_pointer(
 ) -> PointerReader raise CapnpError {
   ListReader::read_list_index(self, index)
   if self.code == 7 {
+    if self.pointer_count == 0 {
+      raise TypeMismatch("expected a pointer field in an evolved struct list")
+    }
     return self.get_struct(index).get_pointer(0)
   }
   if self.code != 6 {

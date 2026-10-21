@@ -30,6 +30,8 @@ fn verify_generic(value : @upstream.TestUseGenericsReader) -> Unit raise {
   assert_eq(value.get_unspecified().get_foo().as_text(), "unbound parameter")
   assert_eq(value.get_bind_enum_list().get_foo().get(0).to_raw(), 0U)
   assert_eq(value.get_bind_enum_list().get_foo().get(1).to_raw(), 7U)
+  assert_eq(value.get_bind_enum_list().get_foo().length(), 3)
+  assert_eq(value.get_bind_enum_list().get_foo().get(2).to_raw(), 40000U)
   let defaults = value.get_default()
   assert_eq(defaults.get_foo().get_int16_field(), 123)
   assert_eq(defaults.get_rev().get_foo(), "text")
@@ -66,9 +68,10 @@ fn generic_reply(source : @upstream.TestUseGenericsReader) -> Bytes raise {
   inner.init_inner_bound().init_foo().set_int16_field(6789)
   inner.init_inner_unbound().init_foo().set_text("unbound ancestor")
   root.init_unspecified().init_foo().set_text("unbound parameter")
-  let enums = root.init_bind_enum_list().init_foo(2)
+  let enums = root.init_bind_enum_list().init_foo(3)
   enums.set(0, @upstream.TestEnum::from_raw(0U))
   enums.set(1, @upstream.TestEnum::from_raw(7U))
+  enums.set(2, @upstream.TestEnum::from_raw(40000U))
   message.finish()
 }
 
@@ -124,6 +127,19 @@ fn verify_compiler(directory : String) -> Unit raise {
     "capnp/test.capnp",
   )
   let nodes = request.get_nodes()
+  let mut generic_id = 0UL
+  let mut all_types_id = 0UL
+  let mut any_pointer_id = 0UL
+  for i in 0..<nodes.length() {
+    let node = nodes.get(i)
+    match node.get_display_name() {
+      "capnp/test.capnp:TestGenerics" => generic_id = node.get_id()
+      "capnp/test.capnp:TestAllTypes" => all_types_id = node.get_id()
+      "capnp/test.capnp:TestAnyPointer" => any_pointer_id = node.get_id()
+      _ => ()
+    }
+  }
+  assert_true(generic_id != 0UL && all_types_id != 0UL && any_pointer_id != 0UL)
   let mut saw_generic = false
   let mut saw_brand = false
   let mut saw_constant = false
@@ -133,15 +149,53 @@ fn verify_compiler(directory : String) -> Unit raise {
     if name.has_suffix(":TestGenerics") {
       assert_true(node.get_is_generic())
       assert_eq(node.get_parameters().length(), 2)
+      assert_eq(node.get_parameters().get(0).get_name(), "Foo")
+      assert_eq(node.get_parameters().get(1).get_name(), "Bar")
       saw_generic = true
     }
     if name.has_suffix(":TestUseGenerics") {
       let fields = node.get_struct().get_fields()
       let bound_type = fields.get(0).get_slot().get_type().get_struct()
-      let bindings = bound_type.get_brand().get_scopes().get(0).get_bind()
+      assert_eq(fields.get(0).get_name(), "basic")
+      assert_eq(bound_type.get_type_id(), generic_id)
+      let scopes = bound_type.get_brand().get_scopes()
+      assert_eq(scopes.length(), 1)
+      let scope = scopes.get(0)
+      assert_eq(scope.get_scope_id(), generic_id)
+      assert_true(scope.is_bind())
+      let bindings = scope.get_bind()
       assert_eq(bindings.length(), 2)
+      assert_true(bindings.get(0).is_type() && bindings.get(1).is_type())
       assert_true(bindings.get(0).get_type().is_struct())
       assert_true(bindings.get(1).get_type().is_struct())
+      assert_eq(
+        bindings.get(0).get_type().get_struct().get_type_id(),
+        all_types_id,
+      )
+      assert_eq(
+        bindings.get(1).get_type().get_struct().get_type_id(),
+        any_pointer_id,
+      )
+      assert_eq(
+        bindings
+        .get(0)
+        .get_type()
+        .get_struct()
+        .get_brand()
+        .get_scopes()
+        .length(),
+        0,
+      )
+      assert_eq(
+        bindings
+        .get(1)
+        .get_type()
+        .get_struct()
+        .get_brand()
+        .get_scopes()
+        .length(),
+        0,
+      )
       saw_brand = true
     }
     if name.has_suffix(":genericConstant") {
@@ -224,6 +278,18 @@ fn main raise {
     directory + "/moon-embedded-constant.bin",
     @upstream.const_embedded_struct().inner,
   )
+  let embedded_data = @upstream.const_embedded_data()
+  let embedded_text = @upstream.const_embedded_text()
+  assert_eq(
+    embedded_data,
+    @fs.read_file_to_bytes(directory + "/python-embedded-data.bin"),
+  )
+  assert_eq(
+    embedded_text,
+    @fs.read_file_to_string(directory + "/python-embedded-text.bin"),
+  )
+  @fs.write_bytes_to_file(directory + "/moon-embedded-data.bin", embedded_data)
+  @fs.write_string_to_file(directory + "/moon-embedded-text.bin", embedded_text)
   verify_compiler(directory)
   println(
     "Verified unchanged upstream schema values; wrote typed reply and constants",

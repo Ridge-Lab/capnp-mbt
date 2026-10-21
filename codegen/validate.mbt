@@ -4,9 +4,7 @@ fn register_symbol(
   name : String,
 ) -> Unit raise CodegenError {
   if names.contains(name) {
-    raise UnsupportedSchema(
-      "generated MoonBit type name collision: \{name}; rename the conflicting schema declaration",
-    )
+    raise InvalidRequest("unallocated generated symbol collision: \{name}")
   }
   names[name] = true
 }
@@ -54,8 +52,8 @@ fn validate_names(nodes : Array[Node]) -> Unit raise CodegenError {
     } else if node.kind == 2 {
       register_symbol(names, node_name(node, nodes))
       let variants : Map[String, Bool] = Map([])
-      for variant in node.enumerants {
-        register_symbol(variants, symbol(variant, true))
+      for variant in enum_variants(node) {
+        register_symbol(variants, variant)
       }
     }
   }
