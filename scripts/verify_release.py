@@ -59,7 +59,13 @@ CONSUMER = """fn main raise {
     @capnp.canonicalize(@capnp.read_message(bytes)),
     @capnp.canonicalize(@capnp.read_message(copied.finish())),
   )
-  println("Verified installed runtime: generics, AnyPointer, constants, packing and canonical copy")
+  let decoder = @capnp.FrameDecoder::new(max_message_bytes=bytes.length())
+  assert_eq(decoder.feed(bytes[:3].to_owned()), [])
+  let frames = decoder.feed(bytes[3:].to_owned() + bytes)
+  decoder.finish()
+  assert_eq(frames, [bytes, bytes])
+  assert_eq(decoder.buffered_bytes(), 0)
+  println("Verified installed runtime: generics, AnyPointer, constants, packing, canonical copy and incremental framing")
 }
 """
 
@@ -83,6 +89,8 @@ def verify_distribution(installed: Path) -> None:
         "cmd/capnpc-moonbit/main.mbt", "cmd/packing/main.mbt",
         "examples/roundtrip/main.mbt", "examples/schema_compat/main.mbt",
         "examples/schema_compat/peer.py", "examples/telemetry/worker.py",
+        "examples/streaming/main.mbt", "examples/streaming/peer.py",
+        "benchmarks/main.mbt", "scripts/run_benchmarks.py",
         "fixtures/conformance.bin", "fixtures/conformance.packed.bin",
     )
     for name in required:

@@ -1,0 +1,17 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Ridge-Lab/capnp/benchmarks"
+
+// Values
+
+// Errors
+
+// Types and methods
+type Fixture
+
+type Operation
+
+type SampleInput
+
+// Type aliases
+
+// Traits

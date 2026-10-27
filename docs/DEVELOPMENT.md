@@ -42,18 +42,26 @@ Linux CI uses the system C compiler. On Windows, configure a C toolchain support
 
 Changes should include a reproducer or reference fixture where practical. Do not add performance or production-use claims without reproducible evidence.
 
+CI also checks the JS target and binary stream example on Windows. The Linux
+interoperability job runs native/JS stream processing and a short benchmark
+execution check. That short run validates workload/checksum/timing output; it
+is not a performance regression threshold. See [streaming](../examples/streaming)
+and [benchmark methodology](../benchmarks/README.md) for full reproductions.
+
 ## Published package verification
 
 After publishing to Mooncakes, run this from the matching release checkout:
 
 ```sh
-python scripts/verify_release.py --release-tag v0.2.2
+python scripts/verify_release.py --release-tag v0.3.0
 ```
 
 The script requires Python 3.12, MoonBit 0.10.14, Node.js 24, a native C compiler,
 and the official `capnp` 1.5.0 executable. `--moon` and `--capnp` accept explicit
-tool paths. `--version` can select an older published package for comparison;
-when `--release-tag` is supplied, it must match both the checkout and package.
+tool paths. `--version` may select another package only if it provides the APIs
+exercised by this checkout's script. To verify an older release, use its matching
+checkout and script. When `--release-tag` is supplied, it must match both the
+checkout and package.
 
 A temporary module under `work/` installs the registry package, generates an
 unchanged schema containing a name collision, generic container, AnyPointer and

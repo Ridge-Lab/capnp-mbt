@@ -1,0 +1,9 @@
+import {
+  "Ridge-Lab/capnp",
+  "Ridge-Lab/capnp/examples/telemetry/generated" @telemetry,
+  "moonbitlang/core/bigint",
+}
+
+import {
+  "Ridge-Lab/capnp/examples/telemetry/sample",
+} for "test"

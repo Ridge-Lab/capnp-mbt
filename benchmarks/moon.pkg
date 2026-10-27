@@ -1,0 +1,12 @@
+import {
+  "Ridge-Lab/capnp",
+  "Ridge-Lab/capnp/examples/telemetry/generated" @telemetry,
+  "Ridge-Lab/capnp/internal/stdio",
+  "moonbitlang/core/bench",
+}
+
+pkgtype(kind: "executable")
+
+options(
+  link: { "js": { "format": "esm" } },
+)

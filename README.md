@@ -6,7 +6,7 @@
 
 适合已有 Cap'n Proto 协议的服务、数据采集程序、离线处理工具和二进制文件消费者接入 MoonBit。协议定义、字段布局和已有数据格式可以继续使用，业务代码无需手写偏移或经 JSON 中转。这里实现的是序列化层；网络传输和 RPC 不在本版本范围内。
 
-**0.2.2 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer 和常量均纳入序列化支持，使用未经删改的官方 `test.capnp` 验证。[标准目标](docs/SERIALIZATION-STANDARD.md)与[验证矩阵](docs/CONFORMANCE.md)将兼容承诺对应到测试、独立参考实现和复现步骤。
+**0.3.0 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer 和常量均纳入序列化支持，使用未经删改的官方 `test.capnp` 验证。[标准目标](docs/SERIALIZATION-STANDARD.md)与[验证矩阵](docs/CONFORMANCE.md)将兼容承诺对应到测试、独立参考实现和复现步骤。
 
 ## 可运行的完整流程
 
@@ -20,6 +20,8 @@
 
 [`examples/schema_compat`](examples/schema_compat/README.md) 验证接入既有协议：两端直接使用官方 1.5.0 `test.capnp`，Python/C++ 写入分段及 packed 数据，MoonBit 读取嵌套泛型与五种 AnyPointer 负载，再用生成的 builder 写回；Python 核对泛型绑定、默认值、常量及未知负载的内容。原文件中的接口、常量、别名和嵌入数据均保留，复现步骤见示例文档。
 
+0.3.0 新增 [`FrameDecoder`](stream.mbt) 和[流式采集处理示例](examples/streaming/README.md)。示例从管道分块读取多条消息，逐条生成统计结果，由独立 Python/C++ 端核验；本地已处理 8,192 条消息、135,036,992 字节输入，每次读取最多 8 KiB，单帧上限 1 MiB。这个例子不需要把完整输入流放进内存。端到端检查覆盖交互回复、极端浮点值、截断和恶意长度声明。
+
 ## 安装与快速运行
 
 需要 MoonBit **0.10.14 或更新版本**。CI 固定验证 `0.10.14+7d59c7ec9`。运行库支持 `wasm`、`wasm-gc`、`js`、`native`，无需 C++ Cap'n Proto 动态库。
@@ -27,7 +29,7 @@
 在自己的 MoonBit 项目中添加依赖：
 
 ```sh
-moon add Ridge-Lab/capnp@0.2.2
+moon add Ridge-Lab/capnp@0.3.0
 ```
 
 包的 `moon.pkg` 中导入：
@@ -41,7 +43,7 @@ import {
 直接运行本仓库的例子：
 
 ```sh
-git clone --branch v0.2.2 https://github.com/Ridge-Lab/capnp-mbt
+git clone --branch v0.3.0 https://github.com/Ridge-Lab/capnp-mbt
 cd capnp-mbt
 moon update
 moon run --target js examples/roundtrip
@@ -98,7 +100,7 @@ assert_eq(received.get_samples().get(0).get_value(), 21.5)
 | 泛型与常量 | 显式及祖先作用域绑定、嵌套泛型、别名、未绑定参数；标量、列表、结构体及泛型常量 |
 | 动态负载 | AnyPointer / AnyStruct / AnyList 视图与写入；保留未知字段的深拷贝，失败时回滚目标 |
 | 帧和指针 | 标准分段帧、近指针、单跳和双跳 far pointer 的读取；writer 生成单段帧 |
-| 压缩与流 | 标准 packed 编解码；`frame_length` 识别部分输入和串联帧边界 |
+| 压缩与流 | 标准 packed 编解码；`frame_length` 判断边界，`FrameDecoder` 增量处理碎片输入与串联标准帧 |
 | Canonical 格式 | `canonicalize` 生成无 segment table 的 canonical segment，与官方转换器输出比较 |
 | 防护 | 指针越界检查、共享遍历预算、嵌套深度限制、段数限制、解包和 writer 分配上限 |
 | 演进 | 缺失字段默认值、额外字段跳过、未知 enum 值保留、兼容的 list / struct 扩展 |
@@ -108,7 +110,9 @@ assert_eq(received.get_samples().get(0).get_value(), 21.5)
 
 合法 schema 与自动生成的类型、列表包装器或字段名称冲突时，生成器使用稳定后缀消歧，无需修改协议。`finish()` 返回普通标准帧；需要 canonical 数据时单独调用 `canonicalize`，其结果不含帧头，不能直接交给 `read_message`。运行库错误使用 `CapnpError`，生成器对无效请求或资源限制返回 `CodegenError`。
 
-默认 reader 遍历预算为 8,388,608 words，嵌套深度 64，最多 512 段；`unpack` 默认最多输出 64 MiB。reader 的预算会被重复访问消耗，按需缓存已取得的视图。`read_message` 要求恰好一帧，流式输入先用 `frame_length` 划分。builder 使用追加式 arena，替换指针不会回收旧对象，`finish()` 返回快照。详见[兼容性和资源限制](docs/COMPATIBILITY.md)。
+默认 reader 遍历预算为 8,388,608 words，嵌套深度 64，最多 512 段；`unpack` 默认最多输出 64 MiB。reader 的预算会被重复访问消耗，按需缓存已取得的视图。`read_message` 要求恰好一帧，流式输入使用 `FrameDecoder` 或自行按 `frame_length` 划分。builder 使用追加式 arena，替换指针不会回收旧对象，`finish()` 返回快照。详见[兼容性和资源限制](docs/COMPATIBILITY.md)。
+
+处理网络或文件分块时，可以将每块 `Bytes` 交给 `FrameDecoder::feed`，再将返回的完整帧交给 `read_message`。结束时必须调用 `finish()` 检查截断。解码器只保留未完成的尾帧，错误后需 `reset()`；一次 feed 失败不会返回该次已识别的帧。它处理标准未压缩帧，不能直接输入 packed 数据。[设计说明](docs/DESIGN.md)解释边界检查、内存与生成器的取舍。
 
 ## 验证
 
@@ -122,6 +126,12 @@ moon build --target all --release
 测试覆盖官方编译器样例、packed 对照、多段与 double-far 指针、泛型及常量、AnyPointer 深拷贝、canonical 输出、截断和恶意输入。CI 工作流覆盖四个后端的检查、构建和测试，并安排独立的跨语言验证；具体执行结果以工作流记录为准。[基础样例](fixtures/README.md)、[原样上游协议](fixtures/upstream/capnproto-1.5.0/README.md)和[官方 oracle 数据](fixtures/upstream/oracle-1.5.0/README.md)均附来源或再生方法。本项目尚未进行生产负载验证，不宣称优于其他实现的性能。
 
 发布验收还运行 `python scripts/verify_release.py`：新建独立项目，从 Mooncakes 安装该版本，使用包内生成器处理泛型、AnyPointer、常量和名称冲突，在四后端运行生成接口；同时核验分发文件、许可证和上游哈希，并运行已安装包的 native/Node.js CLI。详见[开发与发布检查](docs/DEVELOPMENT.md)。
+
+## 性能与维护
+
+[基准脚本](benchmarks/README.md)在进程内测量编码、选读、完整扫描、packed 编解码和未知结构复制，提供原始轮次、预热、环境、源码哈希和中位数。基准包含真实分配、GC 和校验成本；选读结果不能解释成整条消息解码吞吐，也没有用 Python 包装层时间冒充 C++ 引擎性能。CI 仅检查基准能够运行及结果可校验，不以不稳定的耗时阈值决定正确性。
+
+CI 在 Linux 验证四个后端，在 Windows 验证 Node.js 检查、测试与二进制流示例。跨语言用例还覆盖官方旧新版本的默认值与未知字段转发，以及嵌套 union、交错 group 和未知标签。尚无外部生产采用证明，欢迎提供真实协议和可复现的问题；维护和回归方法见[开发文档](docs/DEVELOPMENT.md)。
 
 ## 来源与许可证
 

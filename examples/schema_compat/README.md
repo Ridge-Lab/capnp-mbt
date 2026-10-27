@@ -26,7 +26,7 @@ python examples/schema_compat/peer.py verify work/schema-compat
 The last command prints:
 
 ```text
-Verified MoonBit output: bound/nested/unbound generics, AnyPointer kinds, defaults and constants
+Verified MoonBit output: generics, AnyPointer, constants, schema evolution and union/group transitions
 ```
 
 Use `--target native` to run the same MoonBit peer as a native executable.
@@ -46,6 +46,10 @@ Generated bindings are committed in `tests/generated/upstream` and
 | `genericConstant`, `anyPointerConstants`, `embeddedStruct` | Generated constant functions produce real messages that Python/C++ decodes and checks |
 | `embeddedData`, `embeddedText` | Generated values match Python/C++ constants and original embedded files byte for byte, including the Text file's final newline |
 | `CodeGeneratorRequest` | Both peers check `Node`, `Brand.scopeId`, each bound `Type.typeId`, and AnyPointer-backed `Value` against the original schema declarations |
+| `TestOldVersion`, `TestNewVersion` | An old writer is read with new recursive defaults (`987`, `"baz"`) in both languages; MoonBit forwards a new message through the older typed view, and Python verifies the unknown root and child extension fields survive |
+| `TestOldUnionVersion`, `TestNewUnionVersion` | Existing `a`/`b` alternatives retain their meanings when `a` becomes a nested union group; Python reads the MoonBit nested alternative through both old and new views |
+| `TestUnionInUnion`, `TestInterleavedGroups` | Nested union reinitialization resets its tag and value; switching or clearing one interleaved group preserves the other group's data, pointers and tag |
+| `TestUnion` viewed through `TestOldUnionVersion` | A legal C++-built tag `4` is unknown to the smaller view: both implementations reject its known members, MoonBit exposes the raw tag and forwards the complete payload without loss |
 
 Python deliberately uses a small initial segment, forcing multi-segment input.
 MoonBit verifies both the ordinary frame and the packed frame. The reply uses
@@ -55,6 +59,13 @@ For an unknown enum ordinal, the Python peer uses the original generic's
 unbound view to populate a UInt16 list with the C++ builder, then interprets it
 through the original bound enum-list schema. It does not patch message bytes or
 add an enum declaration to the source schema.
+
+The unknown-union case deliberately uses two existing layout-test declarations
+whose discriminants share an offset. It tests the unknown-tag guard and opaque
+forwarding, not a protocol-evolution relationship between those two types.
+Python checks the original schema offsets and constructs the payload with the
+C++ builder; no wire bytes are patched. Actual old/new-version compatibility is
+tested separately with upstream's explicitly paired version declarations.
 
 ## Regenerate from the original schema files
 

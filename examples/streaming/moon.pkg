@@ -1,0 +1,11 @@
+import {
+  "Ridge-Lab/capnp",
+  "Ridge-Lab/capnp/examples/streaming/process",
+  "Ridge-Lab/capnp/internal/stdio",
+}
+
+pkgtype(kind: "executable")
+
+options(
+  link: { "js": { "format": "esm" } },
+)

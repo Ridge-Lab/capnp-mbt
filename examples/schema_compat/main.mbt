@@ -222,6 +222,164 @@ fn verify_compiler(directory : String) -> Unit raise {
 }
 
 ///|
+fn expect_inactive(action : () -> Unit raise @capnp.CapnpError) -> Unit raise {
+  try action() catch {
+    @capnp.CapnpError::TypeMismatch(_) => ()
+    _ => fail("unexpected error for inactive union member")
+  } noraise {
+    _ => fail("unknown discriminant exposed a known union member")
+  }
+}
+
+///|
+fn verify_evolution(directory : String) -> Unit raise {
+  let old_as_new = @upstream.TestNewVersionReader::from_message(
+    @capnp.read_message(
+      @fs.read_file_to_bytes(directory + "/python-old-version.bin"),
+    ),
+  )
+  assert_eq(old_as_new.get_old1(), 123L)
+  assert_eq(old_as_new.get_old2(), "old root")
+  assert_eq(old_as_new.get_new1(), 987L)
+  assert_eq(old_as_new.get_new2(), "baz")
+  assert_eq(old_as_new.get_old3().get_old1(), -456L)
+  assert_eq(old_as_new.get_old3().get_old2(), "old child")
+  assert_eq(old_as_new.get_old3().get_new1(), 987L)
+  assert_eq(old_as_new.get_old3().get_new2(), "baz")
+  let old_reply = @capnp.Builder::new()
+  let old = @upstream.TestOldVersionBuilder::init_root(old_reply)
+  old.set_old1(777L)
+  old.set_old2("MoonBit old root")
+  let child = old.init_old3()
+  child.set_old1(-777L)
+  child.set_old2("MoonBit old child")
+  @fs.write_bytes_to_file(
+    directory + "/moon-old-version.bin",
+    old_reply.finish(),
+  )
+  let new_as_old = @upstream.TestOldVersionReader::from_message(
+    @capnp.read_message(
+      @fs.read_file_to_bytes(directory + "/python-new-version.bin"),
+    ),
+  )
+  assert_eq(new_as_old.get_old1(), 123L)
+  assert_eq(new_as_old.get_old2(), "new root")
+  assert_eq(new_as_old.get_old3().get_old1(), -456L)
+  assert_eq(new_as_old.get_old3().get_old2(), "new child")
+  // Forward through an older typed view without enumerating its known fields.
+  write_struct(directory + "/moon-new-via-old.bin", new_as_old.inner)
+  for alternative in ["a", "b"] {
+    let upgraded = @upstream.TestNewUnionVersionReader::from_message(
+      @capnp.read_message(
+        @fs.read_file_to_bytes(
+          directory + "/python-old-union-" + alternative + ".bin",
+        ),
+      ),
+    )
+    if alternative == "a" {
+      assert_true(upgraded.is_a())
+      assert_true(upgraded.get_a().is_a0())
+      upgraded.get_a().get_a0()
+    } else {
+      assert_true(upgraded.is_b())
+      assert_eq(upgraded.get_b(), 9007199254740993UL)
+    }
+  }
+  let union_reply = @capnp.Builder::new()
+  @upstream.TestNewUnionVersionBuilder::init_root(union_reply)
+  .init_a()
+  .set_a1(18446744073709551615UL)
+  @fs.write_bytes_to_file(
+    directory + "/moon-new-union.bin",
+    union_reply.finish(),
+  )
+  let unknown = @upstream.TestOldUnionVersionReader::from_message(
+    @capnp.read_message(
+      @fs.read_file_to_bytes(directory + "/python-unknown-union.bin"),
+    ),
+  )
+  assert_eq(unknown.which(), 4U)
+  assert_false(unknown.is_a())
+  assert_false(unknown.is_b())
+  expect_inactive(() => unknown.get_a())
+  expect_inactive(() => ignore(unknown.get_b()))
+  write_struct(directory + "/moon-unknown-union.bin", unknown.inner)
+}
+
+///|
+fn verify_union_groups(directory : String) -> Unit raise {
+  let nested = @upstream.TestUnionInUnionReader::from_message(
+    @capnp.read_message(
+      @fs.read_file_to_bytes(directory + "/python-nested-union.bin"),
+    ),
+  )
+  assert_true(nested.get_outer().is_inner())
+  assert_true(nested.get_outer().get_inner().is_bar())
+  assert_eq(nested.get_outer().get_inner().get_bar(), -234)
+  let nested_reply = @capnp.Builder::new()
+  let outer = @upstream.TestUnionInUnionBuilder::init_root(nested_reply).get_outer()
+  outer.init_inner().set_bar(-234)
+  outer.set_baz(123456)
+  @fs.write_bytes_to_file(
+    directory + "/moon-nested-baz.bin",
+    nested_reply.finish(),
+  )
+  ignore(outer.init_inner())
+  @fs.write_bytes_to_file(
+    directory + "/moon-nested-reset.bin",
+    nested_reply.finish(),
+  )
+  let input = @upstream.TestInterleavedGroupsReader::from_message(
+    @capnp.read_message(
+      @fs.read_file_to_bytes(directory + "/python-interleaved.bin"),
+    ),
+  )
+  let first = input.get_group1()
+  let second = input.get_group2()
+  assert_eq(first.get_foo(), 100U)
+  assert_eq(first.get_bar(), 1000UL)
+  assert_eq(first.get_waldo(), "group-1")
+  assert_eq(first.get_corge().get_grault(), 10000UL)
+  assert_eq(first.get_corge().get_garply(), 10U)
+  assert_eq(first.get_corge().get_plugh(), "plugh-1")
+  assert_eq(first.get_corge().get_xyzzy(), "xyzzy-1")
+  assert_eq(second.get_foo(), 200U)
+  assert_eq(second.get_bar(), 2000UL)
+  assert_eq(second.get_waldo(), "group-2")
+  assert_eq(second.get_corge().get_grault(), 20000UL)
+  assert_eq(second.get_corge().get_garply(), 20U)
+  assert_eq(second.get_corge().get_plugh(), "plugh-2")
+  assert_eq(second.get_corge().get_xyzzy(), "xyzzy-2")
+  let reply = @capnp.Builder::new()
+  let root = @upstream.TestInterleavedGroupsBuilder::init_root(reply)
+  let group1 = root.get_group1()
+  group1.set_foo(first.get_foo())
+  group1.set_bar(first.get_bar())
+  group1.set_waldo(first.get_waldo())
+  let corge1 = group1.init_corge()
+  corge1.set_grault(first.get_corge().get_grault())
+  corge1.set_garply(first.get_corge().get_garply())
+  corge1.set_plugh(first.get_corge().get_plugh())
+  corge1.set_xyzzy(first.get_corge().get_xyzzy())
+  let group2 = root.get_group2()
+  group2.set_foo(second.get_foo())
+  group2.set_bar(second.get_bar())
+  group2.set_waldo(second.get_waldo())
+  let corge2 = group2.init_corge()
+  corge2.set_grault(second.get_corge().get_grault())
+  corge2.set_garply(second.get_corge().get_garply())
+  corge2.set_plugh(second.get_corge().get_plugh())
+  corge2.set_xyzzy(second.get_corge().get_xyzzy())
+  group1.set_fred("replacement")
+  @fs.write_bytes_to_file(directory + "/moon-interleaved.bin", reply.finish())
+  ignore(root.init_group1())
+  @fs.write_bytes_to_file(
+    directory + "/moon-interleaved-reset.bin",
+    reply.finish(),
+  )
+}
+
+///|
 fn main raise {
   let args = @stdio.args()
   guard args.length() == 2 else {
@@ -232,6 +390,8 @@ fn main raise {
     return
   }
   let directory = args[1]
+  verify_evolution(directory)
+  verify_union_groups(directory)
   let raw = @fs.read_file_to_bytes(directory + "/python-generics.bin")
   let message = @capnp.read_message(raw)
   assert_true(message.segment_count() > 1)

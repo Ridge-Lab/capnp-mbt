@@ -8,6 +8,8 @@ pub fn exit(Int) -> Unit
 
 pub fn read_stdin(max_bytes? : Int) -> Bytes raise IOError
 
+pub fn read_stdin_chunk(chunk_bytes? : Int) -> Bytes raise IOError
+
 pub fn write_stdout(Bytes) -> Unit raise IOError
 
 // Errors

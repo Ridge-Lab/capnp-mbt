@@ -36,6 +36,15 @@ pub fn Builder::init_root(Self, Int, Int) -> StructBuilder raise CapnpError
 pub fn Builder::new(max_words? : Int) -> Self raise CapnpError
 pub fn Builder::root_pointer(Self) -> PointerBuilder
 
+pub struct FrameDecoder {
+  // private fields
+}
+pub fn FrameDecoder::buffered_bytes(Self) -> Int
+pub fn FrameDecoder::feed(Self, Bytes) -> Array[Bytes] raise CapnpError
+pub fn FrameDecoder::finish(Self) -> Unit raise CapnpError
+pub fn FrameDecoder::new(max_segments? : Int, max_message_bytes? : Int) -> Self raise CapnpError
+pub fn FrameDecoder::reset(Self) -> Unit
+
 pub struct ListBuilder {
   // private fields
 }

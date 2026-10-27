@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0
+
+- Add bounded `FrameDecoder` incremental standard-frame decoding, explicit EOF validation, failure/finished states and reset. Test arbitrary splits, concatenated frames, hostile lengths and a 65,552-byte frame arriving one byte at a time.
+- Add a pipe-based telemetry application using bounded stdin chunks. Python/C++ produces and verifies the unchanged protocol; MoonBit filters invalid readings and computes each report without retaining the entire stream. Exact binary64 accumulation preserves cancellation residuals and rounds the mean once, including subnormal ties. Check empty/all-invalid batches, 64-bit IDs, Unicode, overflowing intermediate sums and error exits.
+- Read native stdin chunks with a single operating-system read, so an interactive sender can receive a reply before closing its input. Verify successive request/reply exchanges on native and Node.js.
+- Verify original upstream old/new protocol evolution, unknown-field forwarding, nested unions, interleaved groups and unknown discriminant guards with independent Python/C++ peers.
+- Add reproducible native/JS benchmarks with calibrated loops, warmup, raw rounds, checksums, environment and source hashes; publish measurements with their workload and noise limitations.
+- Add Windows Node.js CI and Linux stream/benchmark checks. Extend installed-package verification to the new incremental API and distribution files; document the implementation and maintenance boundaries.
+
 ## 0.2.2
 
 - Fix generation of large Text constants and defaults: escaped Unicode strings are split into bounded chunks rather than exceeding MoonBit's source-line limit. Add an official-compiler embed fixture and regression covering Unicode, escapes and explicit empty-value overrides.

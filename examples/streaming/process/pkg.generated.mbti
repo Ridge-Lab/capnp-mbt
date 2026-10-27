@@ -1,0 +1,17 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Ridge-Lab/capnp/examples/streaming/process"
+
+import {
+  "Ridge-Lab/capnp",
+}
+
+// Values
+pub fn summarize(Bytes) -> Bytes raise @capnp.CapnpError
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

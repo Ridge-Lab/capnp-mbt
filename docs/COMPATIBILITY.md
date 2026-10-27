@@ -1,6 +1,6 @@
 # Compatibility and limits
 
-Version 0.2.2 uses **Cap'n Proto 1.5.0** as its serialization baseline. The
+Version 0.3.0 uses **Cap'n Proto 1.5.0** as its serialization baseline. The
 [standard target](SERIALIZATION-STANDARD.md) defines the endpoint; the
 [unchanged-schema example](../examples/schema_compat/README.md) records a
 reproducible interoperability case. This is not a claim that every schema or
@@ -13,6 +13,18 @@ single-far and double-far pointers. It checks framing immediately and validates
 objects lazily on access. Success does not validate every reachable object.
 `frame_length` identifies partial and concatenated frames. Packed input must
 first pass through `unpack`; packing is not auto-detected.
+
+`FrameDecoder` accepts arbitrary chunks of standard unpacked frames. `feed`
+returns complete frames and retains only the unfinished tail. Segment counts,
+table size and declared frame length are checked before waiting for the body.
+`finish` detects truncated EOF; a successful finish is idempotent and closes
+feeding. Any framing error clears the tail and enters a failed state. Call
+`reset` to reuse a failed or finished decoder. If a feed call fails, none of
+that call's frames are returned; frames returned by earlier calls remain valid.
+The limit applies to each frame and logical tail-buffer length, not the total
+size of a returned batch or peak process memory. Framing alone does not validate
+object pointers. The implementation scans each table once and appends body
+bytes once, avoiding repeated parsing or shifting of a growing prefix.
 
 The writer emits one segment and inline-composite struct lists. `finish()`
 returns a snapshot with stream framing. `canonicalize(message)` instead returns
@@ -89,6 +101,7 @@ pipelining and distributed capability lifetime management are outside this SDK.
 | --- | --- | --- |
 | `read_message` | 8,388,608 traversal words; depth 64; 512 segments | Shared across views; repeated dereferences and far-pointer inspection consume budget |
 | `frame_length` | 64 MiB | Maximum framed message size |
+| `FrameDecoder::new` | 64 MiB/frame; 512 segments | Unfinished frame retained between feed calls; returned batches are controlled by the caller's chunk size |
 | `unpack` | 64 MiB | Maximum decompressed bytes |
 | `Builder::new` | 8,388,608 words | Arena allocation, including the root pointer |
 | Opaque deep copy | 8,388,608 words; depth 64 | Independent copy budget, in addition to reader and destination limits |
@@ -100,9 +113,11 @@ zero-size-struct amplification is accounted for. These limits are not promises
 of a particular peak process memory use.
 
 Enforce a transport byte limit **before** allocating input `Bytes`.
-`read_message` receives an already allocated buffer. CLI stdin is bounded to
-64 MiB; the request-file path reads the file before checking the generator limit
-and is intended for trusted build inputs.
+`read_message` receives an already allocated buffer. The compiler and packing
+CLIs' whole-input stdin adapter is bounded to 64 MiB. The streaming example
+instead reads at most 8 KiB at a time and limits each frame to 1 MiB, without
+limiting the cumulative stream length. The request-file path reads the file
+before checking the generator limit and is intended for trusted build inputs.
 
 Views retain backing bytes. Text validates UTF-8; Text/Data access materializes
 values. The writer is append-only: replacing a pointer retains unreachable arena

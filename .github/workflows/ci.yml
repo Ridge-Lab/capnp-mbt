@@ -30,6 +30,27 @@ jobs:
       - run: moon test --target ${{ matrix.target }} --deny-warn
       - run: moon build --target ${{ matrix.target }} --release
       - run: moon run --target ${{ matrix.target }} examples/roundtrip
+  windows-node:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - uses: hustcer/setup-moonbit@v1.22
+        with:
+          version: "0.10.14+7d59c7ec9"
+          core-version: "0.10.14+7d59c7ec9"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: moon update
+      - run: moon fmt --check
+      - run: moon check --target js --deny-warn
+      - run: moon test --target js --deny-warn
+      - run: moon build --target js --release
+      - run: python -m pip install -r examples/telemetry/requirements.txt
+      - run: python examples/streaming/peer.py --jobs 128 --output work/stream-windows -- node _build/js/release/build/examples/streaming/streaming.js
   interoperability:
     runs-on: ubuntu-latest
     steps:
@@ -113,6 +134,14 @@ jobs:
           python examples/schema_compat/peer.py verify work/schema-compat
           moon run --target js examples/schema_compat -- work/schema-compat
           python examples/schema_compat/peer.py verify work/schema-compat
+      - name: Process fragmented multi-message streams with independent verification
+        run: |
+          moon build --target native --release examples/streaming
+          moon build --target js --release examples/streaming
+          python examples/streaming/peer.py --jobs 128 --output work/stream-native -- _build/native/release/build/examples/streaming/streaming.exe
+          python examples/streaming/peer.py --jobs 128 --output work/stream-js -- node _build/js/release/build/examples/streaming/streaming.js
+      - name: Check benchmark execution and raw timing validation
+        run: python scripts/run_benchmarks.py --targets native js --samples 1 32 --round-ms 5 --warmup-ms 5 --rounds 3 --output work/benchmark-smoke.json
       - name: Reproduce canonical encoding with the official converter
         run: |
           for source in fixtures/conformance.bin fixtures/conformance.segmented.bin; do
@@ -137,3 +166,6 @@ jobs:
             work/report.bin
             work/batch.packed.bin
             work/schema-compat/
+            work/stream-native/
+            work/stream-js/
+            work/benchmark-smoke.json
