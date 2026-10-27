@@ -46,3 +46,7 @@ The JSON contains the OS/architecture/CPU description, toolchain and Node versio
 Comparisons require the same workload, source/toolchain, settings and machine conditions. JIT, GC, CPU frequency, power policy and other processes can change results. The benchmark is single-threaded and in-memory; it does not establish network throughput, cold-start latency, arbitrary schema performance, or superiority over another implementation. The recorded native compiler candidates are tools available on `PATH`, not a claim that every candidate was used by MoonBit.
 
 The executable also builds for the repository's Wasm targets through the SDK monotonic-clock implementation. The runner intentionally reports only native and Node.js measurements. A direct invocation accepts `SAMPLE_COUNT ROUND_MS WARMUP_MS ODD_ROUNDS`; sample count is bounded to 1–65536, durations to 1–60000 ms, and rounds to odd integers from 3–99.
+
+## Published local run
+
+The [0.3.0 Windows measurement](results/README.md) retains all 36 cases, raw rounds, source hashes and observed variability. Several selected-read cases are noisy; the report makes no cross-language superiority claim.
