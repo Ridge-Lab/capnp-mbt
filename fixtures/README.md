@@ -12,6 +12,7 @@ capnp encode fixtures/conformance.capnp Fixture < fixtures/conformance.txt > fix
 capnp encode --packed fixtures/conformance.capnp Fixture < fixtures/conformance.txt > fixtures/conformance.packed.bin
 capnp encode --segment-size=2 fixtures/conformance.capnp Fixture < fixtures/conformance.txt > fixtures/conformance.segmented.bin
 capnp encode fixtures/conformance.capnp Fixture < fixtures/defaults.txt > fixtures/defaults.bin
+capnp convert binary:canonical < fixtures/conformance.bin > fixtures/conformance.canonical.bin
 ```
 
 Use a shell that preserves binary redirection, such as Bash or `cmd.exe`.

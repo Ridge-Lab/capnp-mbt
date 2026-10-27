@@ -15,6 +15,7 @@ percentage-complete estimate or an assertion of exhaustive protocol coverage.
 | Unbound parameters and recursively growing generic types | [growing tests](../tests/generated/growing/growing_test.mbt), [generator tests](../codegen/codegen_test.mbt) | Schemas accepted by official 1.5.0; project regressions access three levels beyond a dynamic boundary; unbound Text also crosses the Python/C++ peer |
 | AnyPointer struct/list/Text/Data/null, AnyStruct and AnyList | [opaque-copy tests](../copy_test.mbt), [brands tests](../tests/generated/brands/brands_test.mbt) | Original `TestAnyPointer` and `TestAnyOthers` payloads independently checked in Python/C++ |
 | Scalar, blob, enum, list, struct, generic and embedded constants | [upstream constant tests](../tests/generated/upstream/upstream_test.mbt) | Compiler-evaluated values; generic/AnyPointer/embedded struct constants independently decoded by Python/C++; embedded Text/Data compared byte-for-byte with original files |
+| Large Unicode Text constants and defaults | [large Text tests](../tests/generated/long_text/long_text_test.mbt) | Official 1.5.0 compiles an embedded Text file with quotes, backslashes, newlines, CJK, Greek and emoji; generated values match the original file, and explicit empty Text overrides its non-empty default |
 | Real compiler protocol containing Brand and AnyPointer-backed Value | [compiler tests](../tests/generated/compiler/compiler_test.mbt), [both peers](../examples/schema_compat) | Actual 1.5.0 request is read and rewritten; peers verify parameter names, Brand scope ID, binding type IDs and constant values |
 | Multiple segments, near/single-far/double-far pointers | [reader oracle tests](../reader_oracle_test.mbt), [pointer checks](../reader_security_test.mbt), [opaque copy](../copy_test.mbt) | Official segmented fixture; Python/C++ creates small-segment messages; double-far boundary vectors are project-authored |
 | Packed encoding and partial/concatenated frames | [packed tests](../packed_test.mbt), [stream tests](../stream_test.mbt) | Official packed fixture is decoded and re-encoded identically; CI uses `capnp decode --packed` on MoonBit output |
@@ -50,6 +51,14 @@ bindings, runs both application peers and compares canonical output. The
 [unchanged-schema example](../examples/schema_compat/README.md) gives the exact
 compiler commands. Generated source size and self-roundtrips alone are not the
 independent compatibility evidence.
+
+Published releases additionally run [the fresh-consumer check](../scripts/verify_release.py).
+It installs the declared version from Mooncakes without a local source override,
+generates new bindings and runs the consumer on all four backends. The check
+verifies required distribution files and upstream hashes, builds the installed
+native/Node.js CLIs, compares binary stdin/stdout packing with the official
+fixture, and checks that an invalid compiler request cannot replace existing
+output. Release tag, checkout manifest and installed package versions must agree.
 
 ## Explicit boundaries
 

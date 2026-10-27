@@ -1,6 +1,6 @@
 # Compatibility and limits
 
-Version 0.2.1 uses **Cap'n Proto 1.5.0** as its serialization baseline. The
+Version 0.2.2 uses **Cap'n Proto 1.5.0** as its serialization baseline. The
 [standard target](SERIALIZATION-STANDARD.md) defines the endpoint; the
 [unchanged-schema example](../examples/schema_compat/README.md) records a
 reproducible interoperability case. This is not a claim that every schema or
@@ -52,6 +52,8 @@ accessors. Pointer constants and non-empty defaults retain the compiler-resolved
 values in a compact embedded value table. Source positions, annotations and
 other unrelated compiler metadata are omitted from that table. Generated files
 do not implement a runtime schema parser.
+Large Text constants and defaults are emitted as bounded, escaped string chunks
+joined at runtime, so Unicode content does not exceed MoonBit's source-line limit.
 
 Unknown enum ordinals remain available through the generated unknown-value
 variant. Missing fields return schema defaults; extra fields can be skipped or

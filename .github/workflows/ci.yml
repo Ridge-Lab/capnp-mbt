@@ -3,6 +3,8 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+  release:
+    types: [published]
 permissions:
   contents: read
 jobs:
@@ -67,6 +69,7 @@ jobs:
           moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/brands.request.bin --out tests/generated/brands
           moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/growing.request.bin --out tests/generated/growing
           moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/collision-compat.request.bin --out tests/generated/collision_compat
+          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/long-text.request.bin --out tests/generated/long_text
           moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/upstream.request.bin --out tests/generated/upstream
           moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/compiler.request.bin --out tests/generated/compiler
           moon fmt
@@ -98,6 +101,11 @@ jobs:
           capnp compile -o./_build/native/release/build/cmd/capnpc-moonbit/capnpc-moonbit.exe:tests/generated/collision_compat codegen/fixtures/collision-compat.capnp
           moon fmt
           git diff --exit-code -- tests/generated/collision_compat
+      - name: Compile large Unicode Text constants and defaults
+        run: |
+          capnp compile -o./_build/native/release/build/cmd/capnpc-moonbit/capnpc-moonbit.exe:tests/generated/long_text codegen/fixtures/long-text.capnp
+          moon fmt
+          git diff --exit-code -- tests/generated/long_text
       - name: Bidirectional generics AnyPointer and constants interoperability
         run: |
           python examples/schema_compat/peer.py prepare work/schema-compat
@@ -107,11 +115,20 @@ jobs:
           python examples/schema_compat/peer.py verify work/schema-compat
       - name: Reproduce canonical encoding with the official converter
         run: |
+          for source in fixtures/conformance.bin fixtures/conformance.segmented.bin; do
+            capnp convert binary:canonical < "$source" > work/canonical.bin
+            cmp fixtures/conformance.canonical.bin work/canonical.bin
+          done
           for canonical in fixtures/upstream/oracle-1.5.0/*.canonical.bin; do
             source="${canonical%.canonical.bin}.bin"
             capnp convert binary:canonical < "$source" > work/canonical.bin
             cmp "$canonical" work/canonical.bin
           done
+      - name: Install the published package in a fresh consumer
+        if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: python scripts/verify_release.py
       - uses: actions/upload-artifact@v4
         with:
           name: interoperability-results

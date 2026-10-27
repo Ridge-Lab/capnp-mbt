@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Ridge-Lab/capnp/tests/generated/long_text"
+
+import {
+  "Ridge-Lab/capnp",
+}
+
+// Values
+pub fn const_document() -> String
+
+// Errors
+
+// Types and methods
+pub(all) struct DocumentBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn DocumentBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn DocumentBuilder::set_text(Self, String) -> Unit raise @capnp.CapnpError
+
+pub(all) struct DocumentReader {
+  inner : @capnp.StructReader
+}
+pub fn DocumentReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn DocumentReader::get_text(Self) -> String raise @capnp.CapnpError
+
+// Type aliases
+
+// Traits

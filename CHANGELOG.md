@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.2
+
+- Fix generation of large Text constants and defaults: escaped Unicode strings are split into bounded chunks rather than exceeding MoonBit's source-line limit. Add an official-compiler embed fixture and regression covering Unicode, escapes and explicit empty-value overrides.
+- Reproduce both ordinary and segmented conformance canonical output in CI, in addition to the existing canonical boundary vectors.
+- Verify published packages in a fresh Mooncakes consumer on all four backends. Check required distribution files, MIT notices, upstream hashes, installed native/Node.js compiler plugins, binary packing and preservation of existing output on invalid input.
+- Run the published-package check on GitHub releases and manual workflow runs; require the release tag, manifest, CLI and installed package versions to agree. Pin README reproduction to this release and Cap'n Proto 1.5.0.
+
 ## 0.2.1
 
 - Allocate generated type, list-wrapper, constant and field names without requiring edits to valid schemas that collide after MoonBit name normalization. Add a real compiler fixture covering wrapper names, generic specializations, flattened declarations and repeated field-name suffixes.

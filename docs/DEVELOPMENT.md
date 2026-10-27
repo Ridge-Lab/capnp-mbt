@@ -41,3 +41,28 @@ Linux CI uses the system C compiler. On Windows, configure a C toolchain support
 - `examples/`: portable roundtrip, cross-language batch processing, and unchanged-schema interoperability.
 
 Changes should include a reproducer or reference fixture where practical. Do not add performance or production-use claims without reproducible evidence.
+
+## Published package verification
+
+After publishing to Mooncakes, run this from the matching release checkout:
+
+```sh
+python scripts/verify_release.py --release-tag v0.2.2
+```
+
+The script requires Python 3.12, MoonBit 0.10.14, Node.js 24, a native C compiler,
+and the official `capnp` 1.5.0 executable. `--moon` and `--capnp` accept explicit
+tool paths. `--version` can select an older published package for comparison;
+when `--release-tag` is supplied, it must match both the checkout and package.
+
+A temporary module under `work/` installs the registry package, generates an
+unchanged schema containing a name collision, generic container, AnyPointer and
+constants, and runs the resulting API on all four targets. It also checks the
+package's required files, MIT notices and original upstream hashes; compiles
+its native/Node.js host adapters; exercises binary stdin/stdout and invalid
+request handling. It removes only its own temporary directory when finished.
+
+CI runs this check for published releases and manual workflow runs. Push/PR
+checks do not require an unreleased package to exist in the registry. Publish
+the Mooncakes package before publishing its GitHub release; the release check
+binds the tag, manifest, CLI and installed package to the same version.

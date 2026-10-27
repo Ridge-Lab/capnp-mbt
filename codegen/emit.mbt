@@ -27,6 +27,33 @@ fn bytes_literal(bytes : Bytes) -> String {
 }
 
 ///|
+fn text_literal(value : String) -> String {
+  if value.length() <= 4096 {
+    return value.escape(quote=true)
+  }
+  let out = StringBuilder()
+  out.write_string("{\n  let chunks : Array[String] = [\n")
+  let mut chunk = StringBuilder()
+  let mut count = 0
+  // Split characters before escaping, so no Unicode scalar or escape sequence
+  // is divided between literals. Every source line stays below Moon's limit.
+  for character in value.iter() {
+    chunk.write_char(character)
+    count += 1
+    if count == 1024 {
+      out.write_string("    " + chunk.to_string().escape(quote=true) + ",\n")
+      chunk = StringBuilder()
+      count = 0
+    }
+  }
+  if count > 0 {
+    out.write_string("    " + chunk.to_string().escape(quote=true) + ",\n")
+  }
+  out.write_string("  ]\n  chunks.join(\"\")\n}")
+  out.to_string()
+}
+
+///|
 fn scalar_default(tag : Int, value : @capnp.StructReader) -> String raise {
   match tag {
     0 => "()"
@@ -42,7 +69,7 @@ fn scalar_default(tag : Int, value : @capnp.StructReader) -> String raise {
     10 =>
       "Float::reinterpret_from_uint(" + value.get_uint32(4).to_string() + "U)"
     11 => "(" + value.get_uint64(8).to_string() + "UL).reinterpret_as_double()"
-    12 => value.get_text(0).escape(quote=true)
+    12 => text_literal(value.get_text(0))
     _ => bytes_literal(value.get_data(0))
   }
 }

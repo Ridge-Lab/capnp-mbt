@@ -6,7 +6,7 @@
 
 适合已有 Cap'n Proto 协议的服务、数据采集程序、离线处理工具和二进制文件消费者接入 MoonBit。协议定义、字段布局和已有数据格式可以继续使用，业务代码无需手写偏移或经 JSON 中转。这里实现的是序列化层；网络传输和 RPC 不在本版本范围内。
 
-**0.2.1 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer 和常量均纳入序列化支持，使用未经删改的官方 `test.capnp` 验证。[标准目标](docs/SERIALIZATION-STANDARD.md)与[验证矩阵](docs/CONFORMANCE.md)将兼容承诺对应到测试、独立参考实现和复现步骤。
+**0.2.2 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer 和常量均纳入序列化支持，使用未经删改的官方 `test.capnp` 验证。[标准目标](docs/SERIALIZATION-STANDARD.md)与[验证矩阵](docs/CONFORMANCE.md)将兼容承诺对应到测试、独立参考实现和复现步骤。
 
 ## 可运行的完整流程
 
@@ -27,7 +27,7 @@
 在自己的 MoonBit 项目中添加依赖：
 
 ```sh
-moon add Ridge-Lab/capnp@0.2.1
+moon add Ridge-Lab/capnp@0.2.2
 ```
 
 包的 `moon.pkg` 中导入：
@@ -41,7 +41,7 @@ import {
 直接运行本仓库的例子：
 
 ```sh
-git clone https://github.com/Ridge-Lab/capnp-mbt
+git clone --branch v0.2.2 https://github.com/Ridge-Lab/capnp-mbt
 cd capnp-mbt
 moon update
 moon run --target js examples/roundtrip
@@ -51,7 +51,7 @@ moon run --target js examples/roundtrip
 
 ## 从 schema 生成 MoonBit API
 
-先安装[官方 Cap'n Proto 编译器](https://capnproto.org/install.html)及 native 后端所需 C 编译器。在本仓库根目录执行：
+先安装[官方 Cap'n Proto 编译器 1.5.0](https://capnproto.org/install.html)及 native 后端所需 C 编译器，用 `capnp --version` 确认版本。在本仓库根目录执行：
 
 ```sh
 moon build --target native --release cmd/capnpc-moonbit
@@ -120,6 +120,8 @@ moon build --target all --release
 ```
 
 测试覆盖官方编译器样例、packed 对照、多段与 double-far 指针、泛型及常量、AnyPointer 深拷贝、canonical 输出、截断和恶意输入。CI 工作流覆盖四个后端的检查、构建和测试，并安排独立的跨语言验证；具体执行结果以工作流记录为准。[基础样例](fixtures/README.md)、[原样上游协议](fixtures/upstream/capnproto-1.5.0/README.md)和[官方 oracle 数据](fixtures/upstream/oracle-1.5.0/README.md)均附来源或再生方法。本项目尚未进行生产负载验证，不宣称优于其他实现的性能。
+
+发布验收还运行 `python scripts/verify_release.py`：新建独立项目，从 Mooncakes 安装该版本，使用包内生成器处理泛型、AnyPointer、常量和名称冲突，在四后端运行生成接口；同时核验分发文件、许可证和上游哈希，并运行已安装包的 native/Node.js CLI。详见[开发与发布检查](docs/DEVELOPMENT.md)。
 
 ## 来源与许可证
 
