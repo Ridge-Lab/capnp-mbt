@@ -173,21 +173,21 @@ pub(all) struct GrowingAsListOfBoxValueListBuilder {
 ///|
 pub fn GrowingAsListOfBoxValueListReader::length(
   self : GrowingAsListOfBoxValueListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn GrowingAsListOfBoxValueListBuilder::length(
   self : GrowingAsListOfBoxValueListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn GrowingAsListOfBoxValueListReader::get(
   self : GrowingAsListOfBoxValueListReader,
-  index : Int,
+  index : Int32,
 ) -> BoxReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -195,7 +195,7 @@ pub fn GrowingAsListOfBoxValueListReader::get(
 ///|
 pub fn GrowingAsListOfBoxValueListBuilder::get(
   self : GrowingAsListOfBoxValueListBuilder,
-  index : Int,
+  index : Int32,
 ) -> BoxBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -210,7 +210,7 @@ pub fn GrowingAsListOfBoxReader::get_value(
 ///|
 pub fn GrowingAsListOfBoxBuilder::init_value(
   self : GrowingAsListOfBoxBuilder,
-  length : Int,
+  length : Int32,
 ) -> GrowingAsListOfBoxValueListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(0, length, 0, 1), }
 }
@@ -282,21 +282,21 @@ pub(all) struct BoxAsListOfBoxValueListBuilder {
 ///|
 pub fn BoxAsListOfBoxValueListReader::length(
   self : BoxAsListOfBoxValueListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BoxAsListOfBoxValueListBuilder::length(
   self : BoxAsListOfBoxValueListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BoxAsListOfBoxValueListReader::get(
   self : BoxAsListOfBoxValueListReader,
-  index : Int,
+  index : Int32,
 ) -> BoxReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -304,7 +304,7 @@ pub fn BoxAsListOfBoxValueListReader::get(
 ///|
 pub fn BoxAsListOfBoxValueListBuilder::get(
   self : BoxAsListOfBoxValueListBuilder,
-  index : Int,
+  index : Int32,
 ) -> BoxBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -319,7 +319,7 @@ pub fn BoxAsListOfBoxReader::get_value(
 ///|
 pub fn BoxAsListOfBoxBuilder::init_value(
   self : BoxAsListOfBoxBuilder,
-  length : Int,
+  length : Int32,
 ) -> BoxAsListOfBoxValueListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(0, length, 0, 1), }
 }
@@ -836,21 +836,21 @@ pub(all) struct GrowingAsListOfBoxAsTextValueListBuilder {
 ///|
 pub fn GrowingAsListOfBoxAsTextValueListReader::length(
   self : GrowingAsListOfBoxAsTextValueListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn GrowingAsListOfBoxAsTextValueListBuilder::length(
   self : GrowingAsListOfBoxAsTextValueListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn GrowingAsListOfBoxAsTextValueListReader::get(
   self : GrowingAsListOfBoxAsTextValueListReader,
-  index : Int,
+  index : Int32,
 ) -> BoxAsTextReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -858,7 +858,7 @@ pub fn GrowingAsListOfBoxAsTextValueListReader::get(
 ///|
 pub fn GrowingAsListOfBoxAsTextValueListBuilder::get(
   self : GrowingAsListOfBoxAsTextValueListBuilder,
-  index : Int,
+  index : Int32,
 ) -> BoxAsTextBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -873,7 +873,7 @@ pub fn GrowingAsListOfBoxAsTextReader::get_value(
 ///|
 pub fn GrowingAsListOfBoxAsTextBuilder::init_value(
   self : GrowingAsListOfBoxAsTextBuilder,
-  length : Int,
+  length : Int32,
 ) -> GrowingAsListOfBoxAsTextValueListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(0, length, 0, 1), }
 }
@@ -945,21 +945,21 @@ pub(all) struct BoxAsListOfBoxAsTextValueListBuilder {
 ///|
 pub fn BoxAsListOfBoxAsTextValueListReader::length(
   self : BoxAsListOfBoxAsTextValueListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BoxAsListOfBoxAsTextValueListBuilder::length(
   self : BoxAsListOfBoxAsTextValueListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BoxAsListOfBoxAsTextValueListReader::get(
   self : BoxAsListOfBoxAsTextValueListReader,
-  index : Int,
+  index : Int32,
 ) -> BoxAsTextReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -967,7 +967,7 @@ pub fn BoxAsListOfBoxAsTextValueListReader::get(
 ///|
 pub fn BoxAsListOfBoxAsTextValueListBuilder::get(
   self : BoxAsListOfBoxAsTextValueListBuilder,
-  index : Int,
+  index : Int32,
 ) -> BoxAsTextBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -982,7 +982,7 @@ pub fn BoxAsListOfBoxAsTextReader::get_value(
 ///|
 pub fn BoxAsListOfBoxAsTextBuilder::init_value(
   self : BoxAsListOfBoxAsTextBuilder,
-  length : Int,
+  length : Int32,
 ) -> BoxAsListOfBoxAsTextValueListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(0, length, 0, 1), }
 }

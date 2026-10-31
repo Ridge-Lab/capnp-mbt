@@ -18,13 +18,13 @@ pub extend GeneratedFile with @debug.Debug::{to_repr}
 
 ///|
 priv enum SchemaType {
-  Scalar(Int)
+  Scalar(Int32)
   EnumRef(UInt64)
   StructRef(UInt64)
   ListOf(SchemaType)
   BrandedRef(UInt64, Array[BrandScope])
-  Parameter(UInt64, Int)
-  AnyPointer(Int)
+  Parameter(UInt64, Int32)
+  AnyPointer(Int32)
 }
 
 ///|
@@ -42,12 +42,12 @@ priv struct BrandScope {
 ///|
 priv struct Field {
   name : String
-  offset : Int
+  offset : Int32
   typ : SchemaType
-  discriminant : Int
+  discriminant : Int32
   group : Bool
   default_value : @capnp.StructReader
-  index : Int
+  index : Int32
   mut generated_name : String?
 }
 
@@ -55,17 +55,17 @@ priv struct Field {
 priv struct Node {
   id : UInt64
   scope : UInt64
-  kind : Int
+  kind : Int32
   name : String
   nested : Array[(String, UInt64)]
   fields : Array[Field]
   enumerants : Array[String]
-  data_words : Int
-  pointers : Int
+  data_words : Int32
+  pointers : Int32
   group : Bool
-  discriminant_offset : Int
-  discriminant_count : Int
-  index : Int
+  discriminant_offset : Int32
+  discriminant_count : Int32
+  index : Int32
   mut base_symbol : String?
   mut generated_symbol : String?
   parameters : Array[String]
@@ -74,7 +74,7 @@ priv struct Node {
 }
 
 ///|
-fn read_type(raw : @capnp.StructReader, depth : Int) -> SchemaType raise {
+fn read_type(raw : @capnp.StructReader, depth : Int32) -> SchemaType raise {
   if depth > 32 {
     raise UnsupportedSchema("nested list type exceeds depth 32")
   }
@@ -101,7 +101,7 @@ fn read_type(raw : @capnp.StructReader, depth : Int) -> SchemaType raise {
 ///|
 fn read_brand(
   raw : @capnp.StructReader,
-  depth : Int,
+  depth : Int32,
 ) -> Array[BrandScope] raise {
   if depth > 64 {
     raise InvalidRequest("generic brand nesting exceeds 64")
@@ -284,7 +284,7 @@ fn field_name(raw : String) -> String {
 fn base_node_name(
   node : Node,
   nodes : Array[Node],
-  depth : Int,
+  depth : Int32,
 ) -> String raise CodegenError {
   if node.base_symbol is Some(name) {
     return name
@@ -366,7 +366,7 @@ fn node_name(node : Node, nodes : Array[Node]) -> String raise CodegenError {
 }
 
 ///|
-fn scalar_method(tag : Int) -> String {
+fn scalar_method(tag : Int32) -> String {
   match tag {
     0 => "void"
     1 => "bool"
@@ -386,7 +386,7 @@ fn scalar_method(tag : Int) -> String {
 }
 
 ///|
-fn scalar_type(tag : Int) -> String {
+fn scalar_type(tag : Int32) -> String {
   match tag {
     0 => "Unit"
     1 => "Bool"
@@ -403,7 +403,7 @@ fn scalar_type(tag : Int) -> String {
 }
 
 ///|
-fn scalar_width(tag : Int) -> Int {
+fn scalar_width(tag : Int32) -> Int32 {
   match tag {
     2 | 6 => 1
     3 | 7 => 2
@@ -414,7 +414,7 @@ fn scalar_width(tag : Int) -> Int {
 }
 
 ///|
-fn element_size(typ : SchemaType) -> Int {
+fn element_size(typ : SchemaType) -> Int32 {
   match typ {
     Scalar(0) => 0
     Scalar(1) => 1

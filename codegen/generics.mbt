@@ -3,22 +3,22 @@ priv struct Specializer {
   original : Array[Node]
   output : Array[Node]
   instances : Map[String, UInt64]
-  active : Map[UInt64, Array[Int]]
-  weights : Map[UInt64, Int]
+  active : Map[UInt64, Array[Int32]]
+  weights : Map[UInt64, Int32]
   mut next_id : UInt64
 }
 
 ///|
-fn binding_weight(state : Specializer, typ : SchemaType) -> Int {
+fn binding_weight(state : Specializer, typ : SchemaType) -> Int32 {
   match typ {
-    ListOf(child) => Int::min(1000000, 1 + binding_weight(state, child))
+    ListOf(child) => Int32::min(1000000, 1 + binding_weight(state, child))
     StructRef(id) => state.weights.get(id).unwrap_or(1)
     _ => 1
   }
 }
 
 ///|
-fn parameter_key(scope : UInt64, index : Int) -> String {
+fn parameter_key(scope : UInt64, index : Int32) -> String {
   "\{scope}:\{index}"
 }
 
@@ -26,7 +26,7 @@ fn parameter_key(scope : UInt64, index : Int) -> String {
 fn parameter_scopes(
   nodes : Array[Node],
   node : Node,
-  depth : Int,
+  depth : Int32,
 ) -> Array[Node] raise CodegenError {
   if depth > 64 {
     raise InvalidRequest("generic scope chain exceeds 64")
@@ -107,7 +107,7 @@ fn resolve_brand(
   node : Node,
   brand : Array[BrandScope],
   current : Map[String, SchemaType],
-  depth : Int,
+  depth : Int32,
 ) -> Map[String, SchemaType] raise {
   let scopes = parameter_scopes(state.original, node, 0)
   let env = default_env(scopes)
@@ -151,7 +151,7 @@ fn resolve_type(
   state : Specializer,
   typ : SchemaType,
   env : Map[String, SchemaType],
-  depth : Int,
+  depth : Int32,
 ) -> SchemaType raise {
   if depth > 128 {
     raise InvalidRequest("type specialization nesting exceeds 128")
@@ -222,7 +222,7 @@ fn instantiate(
   node : Node,
   env : Map[String, SchemaType],
   parent_id : UInt64?,
-  depth : Int,
+  depth : Int32,
 ) -> UInt64 raise {
   if node.kind != 1 {
     raise InvalidRequest("struct brand does not reference a struct")
@@ -239,7 +239,7 @@ fn instantiate(
   let mut weight = 0
   for scope in scopes {
     for i in 0..<scope.parameters.length() {
-      weight = Int::min(
+      weight = Int32::min(
         1000000,
         weight +
         binding_weight(
@@ -282,7 +282,7 @@ fn instantiate(
           env.get(parameter_key(scope.id, i)).unwrap_or(AnyPointer(0)),
           state.output,
         )
-        name_length = Int::min(1024, name_length + arg.length() + 3)
+        name_length = Int32::min(1024, name_length + arg.length() + 3)
         if name_length <= 512 {
           args.push(arg)
         }

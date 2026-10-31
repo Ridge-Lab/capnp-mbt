@@ -51,7 +51,7 @@ fn main raise {
   let mut i = 1
   while i < args.length() {
     if args[i] == "--help" {
-      println("capnpc-moonbit 0.3.0 — Cap'n Proto compiler plugin")
+      println("capnpc-moonbit 0.3.1 — Cap'n Proto compiler plugin")
       println(
         "Usage: capnp compile -o/path/to/capnpc-moonbit[:OUTPUT] schema.capnp",
       )
@@ -59,7 +59,7 @@ fn main raise {
       return
     }
     if args[i] == "--version" {
-      println("capnpc-moonbit 0.3.0")
+      println("capnpc-moonbit 0.3.1")
       return
     }
     guard i + 1 < args.length() else {

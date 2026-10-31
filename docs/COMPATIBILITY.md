@@ -1,6 +1,6 @@
 # Compatibility and limits
 
-Version 0.3.0 uses **Cap'n Proto 1.5.0** as its serialization baseline. The
+Version 0.3.1 uses **Cap'n Proto 1.5.0** as its serialization baseline. The
 [standard target](SERIALIZATION-STANDARD.md) defines the endpoint; the
 [unchanged-schema example](../examples/schema_compat/README.md) records a
 reproducible interoperability case. This is not a claim that every schema or

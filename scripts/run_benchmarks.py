@@ -1,6 +1,6 @@
 """Build and measure the actual Capnp-MBT runtime, without timing process startup.
 
-Requires MoonBit 0.10.14+, Node.js for JS, and MoonBit's native C toolchain.
+Requires MoonBit 0.10.16+, Node.js for JS, and MoonBit's native C toolchain.
 The benchmark executable uses the SDK monotonic clock (microseconds).
 Results describe this workload on this machine; they are not a language ranking.
 """

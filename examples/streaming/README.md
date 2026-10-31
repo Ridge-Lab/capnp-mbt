@@ -12,7 +12,7 @@ buffering its body. Complete frames are processed and released as chunks arrive;
 the entire input stream is never collected by the filter. The output is binary
 stdout with no status text mixed in. Native and Node.js CLI adapters are supported.
 
-From the repository root, with MoonBit 0.10.14, Node.js 24 and Python 3.12:
+From the repository root, with MoonBit `0.10.16+b1a0e846e`, Node.js 24 and Python 3.12:
 
 ```sh
 python -m pip install -r examples/telemetry/requirements.txt

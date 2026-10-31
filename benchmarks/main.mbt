@@ -2,8 +2,8 @@
 fn run_iterations(
   fixture : Fixture,
   operation : Operation,
-  iterations : Int,
-) -> UInt raise @capnp.CapnpError {
+  iterations : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   let mut checksum = 0U
   for i in 0..<iterations {
     checksum += run_one(fixture, operation, i % 2)
@@ -12,7 +12,11 @@ fn run_iterations(
 }
 
 ///|
-fn expected_checksum(first : UInt, second : UInt, iterations : Int) -> UInt {
+fn expected_checksum(
+  first : UInt32,
+  second : UInt32,
+  iterations : Int32,
+) -> UInt32 {
   first * ((iterations + 1) / 2).reinterpret_as_uint() +
   second * (iterations / 2).reinterpret_as_uint()
 }
@@ -21,10 +25,10 @@ fn expected_checksum(first : UInt, second : UInt, iterations : Int) -> UInt {
 fn measured_batch(
   fixture : Fixture,
   operation : Operation,
-  iterations : Int,
-  first : UInt,
-  second : UInt,
-) -> (Double, UInt) raise {
+  iterations : Int32,
+  first : UInt32,
+  second : UInt32,
+) -> (Double, UInt32) raise {
   let start = @bench.monotonic_clock_start()
   let checksum = run_iterations(fixture, operation, iterations)
   let elapsed_us = @bench.monotonic_clock_end(start)
@@ -37,9 +41,9 @@ fn measured_batch(
 fn measure(
   fixture : Fixture,
   operation : Operation,
-  round_ms : Int,
-  warmup_ms : Int,
-  rounds : Int,
+  round_ms : Int32,
+  warmup_ms : Int32,
+  rounds : Int32,
 ) -> Unit raise {
   let first = run_one(fixture, operation, 0)
   let second = run_one(fixture, operation, 1)
@@ -80,7 +84,7 @@ fn measure(
     iterations *= 2
   }
   let times : Array[Double] = []
-  let checksums : Array[UInt] = []
+  let checksums : Array[UInt32] = []
   for _ in 0..<rounds {
     let (elapsed, checksum) = measured_batch(
       fixture, operation, iterations, first, second,
@@ -110,7 +114,7 @@ fn measure(
 }
 
 ///|
-fn parse_positive(text : String, maximum : Int) -> Int? {
+fn parse_positive(text : String, maximum : Int32) -> Int32? {
   if text.length() == 0 {
     return None
   }

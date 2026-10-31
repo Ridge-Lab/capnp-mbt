@@ -9,11 +9,11 @@ pub(all) enum Color {
   Red
   Green
   Blue
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
-pub fn Color::from_raw(value : UInt) -> Color {
+pub fn Color::from_raw(value : UInt32) -> Color {
   match value {
     0U => Red
     1U => Green
@@ -23,7 +23,7 @@ pub fn Color::from_raw(value : UInt) -> Color {
 }
 
 ///|
-pub fn Color::to_raw(self : Color) -> UInt {
+pub fn Color::to_raw(self : Color) -> UInt32 {
   match self {
     Red => 0U
     Green => 1U
@@ -113,7 +113,7 @@ pub fn FixtureBuilder::init_root(
 ///|
 pub fn FixtureReader::which(
   self : FixtureReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(38)
 }
 
@@ -135,14 +135,14 @@ pub fn FixtureBuilder::set_boolean(
 ///|
 pub fn FixtureReader::get_i8(
   self : FixtureReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int8(1, default=-12)
 }
 
 ///|
 pub fn FixtureBuilder::set_i8(
   self : FixtureBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int8(1, value, default=-12)
 }
@@ -150,14 +150,14 @@ pub fn FixtureBuilder::set_i8(
 ///|
 pub fn FixtureReader::get_i16(
   self : FixtureReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int16(2, default=-300)
 }
 
 ///|
 pub fn FixtureBuilder::set_i16(
   self : FixtureBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int16(2, value, default=-300)
 }
@@ -165,14 +165,14 @@ pub fn FixtureBuilder::set_i16(
 ///|
 pub fn FixtureReader::get_i32(
   self : FixtureReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(4, default=-70000)
 }
 
 ///|
 pub fn FixtureBuilder::set_i32(
   self : FixtureBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(4, value, default=-70000)
 }
@@ -214,14 +214,14 @@ pub fn FixtureBuilder::set_u8(
 ///|
 pub fn FixtureReader::get_u16(
   self : FixtureReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(18, default=60000U)
 }
 
 ///|
 pub fn FixtureBuilder::set_u16(
   self : FixtureBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(18, value, default=60000U)
 }
@@ -229,14 +229,14 @@ pub fn FixtureBuilder::set_u16(
 ///|
 pub fn FixtureReader::get_u32(
   self : FixtureReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(20, default=4000000000U)
 }
 
 ///|
 pub fn FixtureBuilder::set_u32(
   self : FixtureBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(20, value, default=4000000000U)
 }
@@ -377,21 +377,21 @@ pub(all) struct FixtureChildrenListBuilder {
 ///|
 pub fn FixtureChildrenListReader::length(
   self : FixtureChildrenListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FixtureChildrenListBuilder::length(
   self : FixtureChildrenListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FixtureChildrenListReader::get(
   self : FixtureChildrenListReader,
-  index : Int,
+  index : Int32,
 ) -> ChildReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -399,7 +399,7 @@ pub fn FixtureChildrenListReader::get(
 ///|
 pub fn FixtureChildrenListBuilder::get(
   self : FixtureChildrenListBuilder,
-  index : Int,
+  index : Int32,
 ) -> ChildBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -414,7 +414,7 @@ pub fn FixtureReader::get_children(
 ///|
 pub fn FixtureBuilder::init_children(
   self : FixtureBuilder,
-  length : Int,
+  length : Int32,
 ) -> FixtureChildrenListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(3, length, 1, 1), }
 }
@@ -438,19 +438,19 @@ pub(all) struct FixtureBoolsListBuilder {
 }
 
 ///|
-pub fn FixtureBoolsListReader::length(self : FixtureBoolsListReader) -> Int {
+pub fn FixtureBoolsListReader::length(self : FixtureBoolsListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn FixtureBoolsListBuilder::length(self : FixtureBoolsListBuilder) -> Int {
+pub fn FixtureBoolsListBuilder::length(self : FixtureBoolsListBuilder) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FixtureBoolsListReader::get(
   self : FixtureBoolsListReader,
-  index : Int,
+  index : Int32,
 ) -> Bool raise @capnp.CapnpError {
   self.inner.get_bool(index)
 }
@@ -458,7 +458,7 @@ pub fn FixtureBoolsListReader::get(
 ///|
 pub fn FixtureBoolsListBuilder::set(
   self : FixtureBoolsListBuilder,
-  index : Int,
+  index : Int32,
   value : Bool,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(index, value)
@@ -474,7 +474,7 @@ pub fn FixtureReader::get_bools(
 ///|
 pub fn FixtureBuilder::init_bools(
   self : FixtureBuilder,
-  length : Int,
+  length : Int32,
 ) -> FixtureBoolsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(4, 1, length), }
 }
@@ -498,19 +498,19 @@ pub(all) struct FixtureBytesListBuilder {
 }
 
 ///|
-pub fn FixtureBytesListReader::length(self : FixtureBytesListReader) -> Int {
+pub fn FixtureBytesListReader::length(self : FixtureBytesListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn FixtureBytesListBuilder::length(self : FixtureBytesListBuilder) -> Int {
+pub fn FixtureBytesListBuilder::length(self : FixtureBytesListBuilder) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FixtureBytesListReader::get(
   self : FixtureBytesListReader,
-  index : Int,
+  index : Int32,
 ) -> Byte raise @capnp.CapnpError {
   self.inner.get_uint8(index)
 }
@@ -518,7 +518,7 @@ pub fn FixtureBytesListReader::get(
 ///|
 pub fn FixtureBytesListBuilder::set(
   self : FixtureBytesListBuilder,
-  index : Int,
+  index : Int32,
   value : Byte,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint8(index, value)
@@ -534,7 +534,7 @@ pub fn FixtureReader::get_bytes(
 ///|
 pub fn FixtureBuilder::init_bytes(
   self : FixtureBuilder,
-  length : Int,
+  length : Int32,
 ) -> FixtureBytesListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(5, 2, length), }
 }
@@ -558,28 +558,30 @@ pub(all) struct FixtureShortsListBuilder {
 }
 
 ///|
-pub fn FixtureShortsListReader::length(self : FixtureShortsListReader) -> Int {
+pub fn FixtureShortsListReader::length(self : FixtureShortsListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn FixtureShortsListBuilder::length(self : FixtureShortsListBuilder) -> Int {
+pub fn FixtureShortsListBuilder::length(
+  self : FixtureShortsListBuilder,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FixtureShortsListReader::get(
   self : FixtureShortsListReader,
-  index : Int,
-) -> Int raise @capnp.CapnpError {
+  index : Int32,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int16(index)
 }
 
 ///|
 pub fn FixtureShortsListBuilder::set(
   self : FixtureShortsListBuilder,
-  index : Int,
-  value : Int,
+  index : Int32,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int16(index, value)
 }
@@ -594,7 +596,7 @@ pub fn FixtureReader::get_shorts(
 ///|
 pub fn FixtureBuilder::init_shorts(
   self : FixtureBuilder,
-  length : Int,
+  length : Int32,
 ) -> FixtureShortsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(6, 3, length), }
 }
@@ -618,28 +620,28 @@ pub(all) struct FixtureIntsListBuilder {
 }
 
 ///|
-pub fn FixtureIntsListReader::length(self : FixtureIntsListReader) -> Int {
+pub fn FixtureIntsListReader::length(self : FixtureIntsListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn FixtureIntsListBuilder::length(self : FixtureIntsListBuilder) -> Int {
+pub fn FixtureIntsListBuilder::length(self : FixtureIntsListBuilder) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FixtureIntsListReader::get(
   self : FixtureIntsListReader,
-  index : Int,
-) -> Int raise @capnp.CapnpError {
+  index : Int32,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(index)
 }
 
 ///|
 pub fn FixtureIntsListBuilder::set(
   self : FixtureIntsListBuilder,
-  index : Int,
-  value : Int,
+  index : Int32,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(index, value)
 }
@@ -654,7 +656,7 @@ pub fn FixtureReader::get_ints(
 ///|
 pub fn FixtureBuilder::init_ints(
   self : FixtureBuilder,
-  length : Int,
+  length : Int32,
 ) -> FixtureIntsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(7, 4, length), }
 }
@@ -678,19 +680,19 @@ pub(all) struct FixtureLongsListBuilder {
 }
 
 ///|
-pub fn FixtureLongsListReader::length(self : FixtureLongsListReader) -> Int {
+pub fn FixtureLongsListReader::length(self : FixtureLongsListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn FixtureLongsListBuilder::length(self : FixtureLongsListBuilder) -> Int {
+pub fn FixtureLongsListBuilder::length(self : FixtureLongsListBuilder) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FixtureLongsListReader::get(
   self : FixtureLongsListReader,
-  index : Int,
+  index : Int32,
 ) -> Int64 raise @capnp.CapnpError {
   self.inner.get_int64(index)
 }
@@ -698,7 +700,7 @@ pub fn FixtureLongsListReader::get(
 ///|
 pub fn FixtureLongsListBuilder::set(
   self : FixtureLongsListBuilder,
-  index : Int,
+  index : Int32,
   value : Int64,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int64(index, value)
@@ -714,7 +716,7 @@ pub fn FixtureReader::get_longs(
 ///|
 pub fn FixtureBuilder::init_longs(
   self : FixtureBuilder,
-  length : Int,
+  length : Int32,
 ) -> FixtureLongsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(8, 5, length), }
 }
@@ -738,19 +740,21 @@ pub(all) struct FixtureFloatsListBuilder {
 }
 
 ///|
-pub fn FixtureFloatsListReader::length(self : FixtureFloatsListReader) -> Int {
+pub fn FixtureFloatsListReader::length(self : FixtureFloatsListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn FixtureFloatsListBuilder::length(self : FixtureFloatsListBuilder) -> Int {
+pub fn FixtureFloatsListBuilder::length(
+  self : FixtureFloatsListBuilder,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FixtureFloatsListReader::get(
   self : FixtureFloatsListReader,
-  index : Int,
+  index : Int32,
 ) -> Float raise @capnp.CapnpError {
   self.inner.get_float32(index)
 }
@@ -758,7 +762,7 @@ pub fn FixtureFloatsListReader::get(
 ///|
 pub fn FixtureFloatsListBuilder::set(
   self : FixtureFloatsListBuilder,
-  index : Int,
+  index : Int32,
   value : Float,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_float32(index, value)
@@ -774,7 +778,7 @@ pub fn FixtureReader::get_floats(
 ///|
 pub fn FixtureBuilder::init_floats(
   self : FixtureBuilder,
-  length : Int,
+  length : Int32,
 ) -> FixtureFloatsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(9, 4, length), }
 }
@@ -798,21 +802,23 @@ pub(all) struct FixtureDoublesListBuilder {
 }
 
 ///|
-pub fn FixtureDoublesListReader::length(self : FixtureDoublesListReader) -> Int {
+pub fn FixtureDoublesListReader::length(
+  self : FixtureDoublesListReader,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FixtureDoublesListBuilder::length(
   self : FixtureDoublesListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FixtureDoublesListReader::get(
   self : FixtureDoublesListReader,
-  index : Int,
+  index : Int32,
 ) -> Double raise @capnp.CapnpError {
   self.inner.get_float64(index)
 }
@@ -820,7 +826,7 @@ pub fn FixtureDoublesListReader::get(
 ///|
 pub fn FixtureDoublesListBuilder::set(
   self : FixtureDoublesListBuilder,
-  index : Int,
+  index : Int32,
   value : Double,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_float64(index, value)
@@ -836,7 +842,7 @@ pub fn FixtureReader::get_doubles(
 ///|
 pub fn FixtureBuilder::init_doubles(
   self : FixtureBuilder,
-  length : Int,
+  length : Int32,
 ) -> FixtureDoublesListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(10, 5, length), }
 }
@@ -860,19 +866,19 @@ pub(all) struct FixtureTextsListBuilder {
 }
 
 ///|
-pub fn FixtureTextsListReader::length(self : FixtureTextsListReader) -> Int {
+pub fn FixtureTextsListReader::length(self : FixtureTextsListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn FixtureTextsListBuilder::length(self : FixtureTextsListBuilder) -> Int {
+pub fn FixtureTextsListBuilder::length(self : FixtureTextsListBuilder) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FixtureTextsListReader::get(
   self : FixtureTextsListReader,
-  index : Int,
+  index : Int32,
 ) -> String raise @capnp.CapnpError {
   self.inner.get_text(index)
 }
@@ -880,7 +886,7 @@ pub fn FixtureTextsListReader::get(
 ///|
 pub fn FixtureTextsListBuilder::set(
   self : FixtureTextsListBuilder,
-  index : Int,
+  index : Int32,
   value : String,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_text(index, value)
@@ -896,7 +902,7 @@ pub fn FixtureReader::get_texts(
 ///|
 pub fn FixtureBuilder::init_texts(
   self : FixtureBuilder,
-  length : Int,
+  length : Int32,
 ) -> FixtureTextsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(11, 6, length), }
 }
@@ -920,19 +926,19 @@ pub(all) struct FixtureBlobsListBuilder {
 }
 
 ///|
-pub fn FixtureBlobsListReader::length(self : FixtureBlobsListReader) -> Int {
+pub fn FixtureBlobsListReader::length(self : FixtureBlobsListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn FixtureBlobsListBuilder::length(self : FixtureBlobsListBuilder) -> Int {
+pub fn FixtureBlobsListBuilder::length(self : FixtureBlobsListBuilder) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FixtureBlobsListReader::get(
   self : FixtureBlobsListReader,
-  index : Int,
+  index : Int32,
 ) -> Bytes raise @capnp.CapnpError {
   self.inner.get_data(index)
 }
@@ -940,7 +946,7 @@ pub fn FixtureBlobsListReader::get(
 ///|
 pub fn FixtureBlobsListBuilder::set(
   self : FixtureBlobsListBuilder,
-  index : Int,
+  index : Int32,
   value : Bytes,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_data(index, value)
@@ -956,7 +962,7 @@ pub fn FixtureReader::get_blobs(
 ///|
 pub fn FixtureBuilder::init_blobs(
   self : FixtureBuilder,
-  length : Int,
+  length : Int32,
 ) -> FixtureBlobsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(12, 6, length), }
 }
@@ -980,12 +986,14 @@ pub(all) struct FixtureNestedListBuilder {
 }
 
 ///|
-pub fn FixtureNestedListReader::length(self : FixtureNestedListReader) -> Int {
+pub fn FixtureNestedListReader::length(self : FixtureNestedListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn FixtureNestedListBuilder::length(self : FixtureNestedListBuilder) -> Int {
+pub fn FixtureNestedListBuilder::length(
+  self : FixtureNestedListBuilder,
+) -> Int32 {
   self.inner.length()
 }
 
@@ -1002,30 +1010,30 @@ pub(all) struct FixtureNestedListItemBuilder {
 ///|
 pub fn FixtureNestedListItemReader::length(
   self : FixtureNestedListItemReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FixtureNestedListItemBuilder::length(
   self : FixtureNestedListItemBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FixtureNestedListItemReader::get(
   self : FixtureNestedListItemReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(index)
 }
 
 ///|
 pub fn FixtureNestedListItemBuilder::set(
   self : FixtureNestedListItemBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(index, value)
 }
@@ -1033,7 +1041,7 @@ pub fn FixtureNestedListItemBuilder::set(
 ///|
 pub fn FixtureNestedListReader::get(
   self : FixtureNestedListReader,
-  index : Int,
+  index : Int32,
 ) -> FixtureNestedListItemReader raise @capnp.CapnpError {
   { inner: self.inner.get_list(index), }
 }
@@ -1041,8 +1049,8 @@ pub fn FixtureNestedListReader::get(
 ///|
 pub fn FixtureNestedListBuilder::init(
   self : FixtureNestedListBuilder,
-  index : Int,
-  length : Int,
+  index : Int32,
+  length : Int32,
 ) -> FixtureNestedListItemBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(index, 3, length), }
 }
@@ -1057,7 +1065,7 @@ pub fn FixtureReader::get_nested(
 ///|
 pub fn FixtureBuilder::init_nested(
   self : FixtureBuilder,
-  length : Int,
+  length : Int32,
 ) -> FixtureNestedListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(13, 6, length), }
 }
@@ -1081,19 +1089,21 @@ pub(all) struct FixtureColorsListBuilder {
 }
 
 ///|
-pub fn FixtureColorsListReader::length(self : FixtureColorsListReader) -> Int {
+pub fn FixtureColorsListReader::length(self : FixtureColorsListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn FixtureColorsListBuilder::length(self : FixtureColorsListBuilder) -> Int {
+pub fn FixtureColorsListBuilder::length(
+  self : FixtureColorsListBuilder,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FixtureColorsListReader::get(
   self : FixtureColorsListReader,
-  index : Int,
+  index : Int32,
 ) -> Color raise @capnp.CapnpError {
   Color::from_raw(self.inner.get_uint16(index))
 }
@@ -1101,7 +1111,7 @@ pub fn FixtureColorsListReader::get(
 ///|
 pub fn FixtureColorsListBuilder::set(
   self : FixtureColorsListBuilder,
-  index : Int,
+  index : Int32,
   value : Color,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(index, value.to_raw())
@@ -1117,7 +1127,7 @@ pub fn FixtureReader::get_colors(
 ///|
 pub fn FixtureBuilder::init_colors(
   self : FixtureBuilder,
-  length : Int,
+  length : Int32,
 ) -> FixtureColorsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(14, 3, length), }
 }
@@ -1196,7 +1206,7 @@ pub fn FixtureReader::is_code(
 ///|
 pub fn FixtureReader::get_code(
   self : FixtureReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   if self.inner.get_uint16(38) != 2U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -1206,7 +1216,7 @@ pub fn FixtureReader::get_code(
 ///|
 pub fn FixtureBuilder::set_code(
   self : FixtureBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.clear_pointer(15)
   self.inner.set_uint32(48, 0U)
@@ -1250,14 +1260,14 @@ pub(all) struct FixtureMetadataBuilder {
 ///|
 pub fn FixtureMetadataReader::get_revision(
   self : FixtureMetadataReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(52, default=0U)
 }
 
 ///|
 pub fn FixtureMetadataBuilder::set_revision(
   self : FixtureMetadataBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(52, value, default=0U)
 }

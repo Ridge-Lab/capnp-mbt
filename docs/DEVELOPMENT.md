@@ -1,6 +1,8 @@
 # Development
 
-CI pins MoonBit `0.10.14+7d59c7ec9` with matching core. From the repository root:
+The 0.3.1 reproduction toolchain and CI configuration pin MoonBit
+`0.10.16+b1a0e846e` with matching core. Check the workflow for the relevant
+commit's execution results. From the repository root:
 
 ```sh
 moon update
@@ -30,7 +32,9 @@ moon run --target native examples/roundtrip
 
 `internal/stdio` is a host adapter. C handles binary stdin/stdout; JS uses Node's `node:fs`. Protocol parsing, generation and packing remain MoonBit code. Standard input/output is supported on native and Node.js. Wasm users can use file-based commands where the host filesystem package is available, or call the library directly.
 
-Linux CI uses the system C compiler. On Windows, configure a C toolchain supported by the installed MoonBit version. Initial local verification used LLVM-MinGW 20261006 and MoonBit 0.10.14. This combination needed `_CRT_RAND_S` defined for the MoonBit runtime; LLVM-MinGW's Clang accepted the temporary environment setting `CCC_OVERRIDE_OPTIONS=+-D_CRT_RAND_S`. This is a toolchain detail, not a library flag. The Node.js request-file path needs no C compiler.
+Linux CI uses the system C compiler. MoonBit `0.10.16+b1a0e846e` requires an MSVC-compatible compiler/linker and Windows SDK for Windows native builds; run native commands from an x64 Visual Studio developer shell with the C++ build tools installed. The Node.js request-file path and JS/Wasm tests do not need a C compiler.
+
+The 0.3.0 local benchmark used MoonBit 0.10.14 with LLVM-MinGW 20261006 and `CCC_OVERRIDE_OPTIONS=+-D_CRT_RAND_S`. That is a historical environment record, not the Windows native setup for 0.3.1.
 
 ## Layout
 
@@ -42,7 +46,7 @@ Linux CI uses the system C compiler. On Windows, configure a C toolchain support
 
 Changes should include a reproducer or reference fixture where practical. Do not add performance or production-use claims without reproducible evidence.
 
-CI also checks the JS target and binary stream example on Windows. The Linux
+CI also checks JS and MSVC native targets and the binary stream example on Windows. The Linux
 interoperability job runs native/JS stream processing and a short benchmark
 execution check. That short run validates workload/checksum/timing output; it
 is not a performance regression threshold. See [streaming](../examples/streaming)
@@ -53,10 +57,10 @@ and [benchmark methodology](../benchmarks/README.md) for full reproductions.
 After publishing to Mooncakes, run this from the matching release checkout:
 
 ```sh
-python scripts/verify_release.py --release-tag v0.3.0
+python scripts/verify_release.py --release-tag v0.3.1
 ```
 
-The script requires Python 3.12, MoonBit 0.10.14, Node.js 24, a native C compiler,
+The script requires Python 3.12, MoonBit `0.10.16+b1a0e846e`, Node.js 24, a native C compiler,
 and the official `capnp` 1.5.0 executable. `--moon` and `--capnp` accept explicit
 tool paths. `--version` may select another package only if it provides the APIs
 exercised by this checkout's script. To verify an older release, use its matching

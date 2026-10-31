@@ -5,15 +5,17 @@
 // Interface fields expose opaque capability indices; no RPC transport is generated.
 
 ///|
-fn capnp_schema_node(node : Int) -> @capnp.StructReader raise @capnp.CapnpError {
+fn capnp_schema_node(
+  node : Int32,
+) -> @capnp.StructReader raise @capnp.CapnpError {
   let payload : Bytes = b"\x00\x00\x00\x00\x55\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x00\x07\x01\x00\x00\x20\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x51\x00\x00\x00\xe7\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x1c\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x60\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x64\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x64\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x5c\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x0b\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x4a\x00\x00\x00\x65\x78\x70\x6c\x69\x63\x69\x74\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x17\x00\x00\x00\x08\x00\x00\x00\x01\x00\x00\x00\x06\x00\x00\x00\x00\x00\x00\x00\x05\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x13\x00\x00\x00\x01\x00\xff\xff\x00\x00\x00\x00\x01\x00\x00\x00\x1e\x00\x00\x00\x09\x00\x00\x00\x0e\x00\x00\x00\x0d\x00\x00\x00\x06\x00\x00\x00\x09\x00\x00\x00\x16\x00\x00\x00\x01\x00\x00\x00\x32\x00\x00\x00\x68\x65\x6c\x6c\x6f\x00\x00\x00\x05\x00\x00\x00\x12\x00\x00\x00\x05\x00\x00\x00\x12\x00\x00\x00\x61\x00\x00\x00\x00\x00\x00\x00\x62\x00\x00\x00\x00\x00\x00\x00"
   @capnp.read_message(payload).root().get_list(0).get_struct(node)
 }
 
 ///|
 fn capnp_schema_default(
-  node : Int,
-  field : Int,
+  node : Int32,
+  field : Int32,
 ) -> @capnp.PointerReader raise @capnp.CapnpError {
   capnp_schema_node(node)
   .get_list(3)
@@ -47,14 +49,16 @@ pub fn ItemBuilder::init_root(
 }
 
 ///|
-pub fn ItemReader::get_number(self : ItemReader) -> Int raise @capnp.CapnpError {
+pub fn ItemReader::get_number(
+  self : ItemReader,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(0, default=7)
 }
 
 ///|
 pub fn ItemBuilder::set_number(
   self : ItemBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(0, value, default=7)
 }
@@ -140,19 +144,21 @@ pub(all) struct DefaultsItemsListBuilder {
 }
 
 ///|
-pub fn DefaultsItemsListReader::length(self : DefaultsItemsListReader) -> Int {
+pub fn DefaultsItemsListReader::length(self : DefaultsItemsListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn DefaultsItemsListBuilder::length(self : DefaultsItemsListBuilder) -> Int {
+pub fn DefaultsItemsListBuilder::length(
+  self : DefaultsItemsListBuilder,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn DefaultsItemsListReader::get(
   self : DefaultsItemsListReader,
-  index : Int,
+  index : Int32,
 ) -> ItemReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -160,7 +166,7 @@ pub fn DefaultsItemsListReader::get(
 ///|
 pub fn DefaultsItemsListBuilder::get(
   self : DefaultsItemsListBuilder,
-  index : Int,
+  index : Int32,
 ) -> ItemBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -184,7 +190,7 @@ pub fn DefaultsReader::get_items(
 ///|
 pub fn DefaultsBuilder::init_items(
   self : DefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> DefaultsItemsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 1, 1), }
 }
@@ -210,30 +216,30 @@ pub(all) struct DefaultsNumbersListBuilder {
 ///|
 pub fn DefaultsNumbersListReader::length(
   self : DefaultsNumbersListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn DefaultsNumbersListBuilder::length(
   self : DefaultsNumbersListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn DefaultsNumbersListReader::get(
   self : DefaultsNumbersListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(index)
 }
 
 ///|
 pub fn DefaultsNumbersListBuilder::set(
   self : DefaultsNumbersListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(index, value)
 }
@@ -257,7 +263,7 @@ pub fn DefaultsReader::get_numbers(
 ///|
 pub fn DefaultsBuilder::init_numbers(
   self : DefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> DefaultsNumbersListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(2, 3, length), }
 }
@@ -281,14 +287,16 @@ pub(all) struct DefaultsNestedListBuilder {
 }
 
 ///|
-pub fn DefaultsNestedListReader::length(self : DefaultsNestedListReader) -> Int {
+pub fn DefaultsNestedListReader::length(
+  self : DefaultsNestedListReader,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn DefaultsNestedListBuilder::length(
   self : DefaultsNestedListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
@@ -305,21 +313,21 @@ pub(all) struct DefaultsNestedListItemBuilder {
 ///|
 pub fn DefaultsNestedListItemReader::length(
   self : DefaultsNestedListItemReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn DefaultsNestedListItemBuilder::length(
   self : DefaultsNestedListItemBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn DefaultsNestedListItemReader::get(
   self : DefaultsNestedListItemReader,
-  index : Int,
+  index : Int32,
 ) -> String raise @capnp.CapnpError {
   self.inner.get_text(index)
 }
@@ -327,7 +335,7 @@ pub fn DefaultsNestedListItemReader::get(
 ///|
 pub fn DefaultsNestedListItemBuilder::set(
   self : DefaultsNestedListItemBuilder,
-  index : Int,
+  index : Int32,
   value : String,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_text(index, value)
@@ -336,7 +344,7 @@ pub fn DefaultsNestedListItemBuilder::set(
 ///|
 pub fn DefaultsNestedListReader::get(
   self : DefaultsNestedListReader,
-  index : Int,
+  index : Int32,
 ) -> DefaultsNestedListItemReader raise @capnp.CapnpError {
   { inner: self.inner.get_list(index), }
 }
@@ -344,8 +352,8 @@ pub fn DefaultsNestedListReader::get(
 ///|
 pub fn DefaultsNestedListBuilder::init(
   self : DefaultsNestedListBuilder,
-  index : Int,
-  length : Int,
+  index : Int32,
+  length : Int32,
 ) -> DefaultsNestedListItemBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(index, 6, length), }
 }
@@ -369,7 +377,7 @@ pub fn DefaultsReader::get_nested(
 ///|
 pub fn DefaultsBuilder::init_nested(
   self : DefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> DefaultsNestedListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(3, 6, length), }
 }
@@ -472,7 +480,7 @@ pub fn SwitchingBuilder::init_root(
 ///|
 pub fn SwitchingReader::which(
   self : SwitchingReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(2)
 }
 
@@ -659,14 +667,14 @@ pub fn OuterInnerBuilder::init_root(
 ///|
 pub fn OuterInnerReader::get_value(
   self : OuterInnerReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn OuterInnerBuilder::set_value(
   self : OuterInnerBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -728,12 +736,12 @@ pub(all) struct OuterMatrixListBuilder {
 }
 
 ///|
-pub fn OuterMatrixListReader::length(self : OuterMatrixListReader) -> Int {
+pub fn OuterMatrixListReader::length(self : OuterMatrixListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn OuterMatrixListBuilder::length(self : OuterMatrixListBuilder) -> Int {
+pub fn OuterMatrixListBuilder::length(self : OuterMatrixListBuilder) -> Int32 {
   self.inner.length()
 }
 
@@ -750,21 +758,21 @@ pub(all) struct OuterMatrixListItemBuilder {
 ///|
 pub fn OuterMatrixListItemReader::length(
   self : OuterMatrixListItemReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn OuterMatrixListItemBuilder::length(
   self : OuterMatrixListItemBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn OuterMatrixListItemReader::get(
   self : OuterMatrixListItemReader,
-  index : Int,
+  index : Int32,
 ) -> OuterInnerReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -772,7 +780,7 @@ pub fn OuterMatrixListItemReader::get(
 ///|
 pub fn OuterMatrixListItemBuilder::get(
   self : OuterMatrixListItemBuilder,
-  index : Int,
+  index : Int32,
 ) -> OuterInnerBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -780,7 +788,7 @@ pub fn OuterMatrixListItemBuilder::get(
 ///|
 pub fn OuterMatrixListReader::get(
   self : OuterMatrixListReader,
-  index : Int,
+  index : Int32,
 ) -> OuterMatrixListItemReader raise @capnp.CapnpError {
   { inner: self.inner.get_list(index), }
 }
@@ -788,8 +796,8 @@ pub fn OuterMatrixListReader::get(
 ///|
 pub fn OuterMatrixListBuilder::init(
   self : OuterMatrixListBuilder,
-  index : Int,
-  length : Int,
+  index : Int32,
+  length : Int32,
 ) -> OuterMatrixListItemBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(index, length, 1, 0), }
 }
@@ -804,7 +812,7 @@ pub fn OuterReader::get_matrix(
 ///|
 pub fn OuterBuilder::init_matrix(
   self : OuterBuilder,
-  length : Int,
+  length : Int32,
 ) -> OuterMatrixListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(1, 6, length), }
 }
@@ -865,21 +873,21 @@ pub(all) struct OtherListsEmptiesListBuilder {
 ///|
 pub fn OtherListsEmptiesListReader::length(
   self : OtherListsEmptiesListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn OtherListsEmptiesListBuilder::length(
   self : OtherListsEmptiesListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn OtherListsEmptiesListReader::get(
   self : OtherListsEmptiesListReader,
-  index : Int,
+  index : Int32,
 ) -> Unit raise @capnp.CapnpError {
   if index < 0 || index >= self.inner.length() {
     raise @capnp.CapnpError::Bounds("void list index")
@@ -889,7 +897,7 @@ pub fn OtherListsEmptiesListReader::get(
 ///|
 pub fn OtherListsEmptiesListBuilder::set(
   self : OtherListsEmptiesListBuilder,
-  index : Int,
+  index : Int32,
 ) -> Unit raise @capnp.CapnpError {
   if index < 0 || index >= self.inner.length() {
     raise @capnp.CapnpError::Bounds("void list index")
@@ -906,7 +914,7 @@ pub fn OtherListsReader::get_empties(
 ///|
 pub fn OtherListsBuilder::init_empties(
   self : OtherListsBuilder,
-  length : Int,
+  length : Int32,
 ) -> OtherListsEmptiesListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(0, 0, length), }
 }
@@ -930,30 +938,32 @@ pub(all) struct OtherListsTinyListBuilder {
 }
 
 ///|
-pub fn OtherListsTinyListReader::length(self : OtherListsTinyListReader) -> Int {
+pub fn OtherListsTinyListReader::length(
+  self : OtherListsTinyListReader,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn OtherListsTinyListBuilder::length(
   self : OtherListsTinyListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn OtherListsTinyListReader::get(
   self : OtherListsTinyListReader,
-  index : Int,
-) -> Int raise @capnp.CapnpError {
+  index : Int32,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int8(index)
 }
 
 ///|
 pub fn OtherListsTinyListBuilder::set(
   self : OtherListsTinyListBuilder,
-  index : Int,
-  value : Int,
+  index : Int32,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int8(index, value)
 }
@@ -968,7 +978,7 @@ pub fn OtherListsReader::get_tiny(
 ///|
 pub fn OtherListsBuilder::init_tiny(
   self : OtherListsBuilder,
-  length : Int,
+  length : Int32,
 ) -> OtherListsTinyListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(1, 2, length), }
 }
@@ -994,30 +1004,30 @@ pub(all) struct OtherListsWordsListBuilder {
 ///|
 pub fn OtherListsWordsListReader::length(
   self : OtherListsWordsListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn OtherListsWordsListBuilder::length(
   self : OtherListsWordsListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn OtherListsWordsListReader::get(
   self : OtherListsWordsListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn OtherListsWordsListBuilder::set(
   self : OtherListsWordsListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -1032,7 +1042,7 @@ pub fn OtherListsReader::get_words(
 ///|
 pub fn OtherListsBuilder::init_words(
   self : OtherListsBuilder,
-  length : Int,
+  length : Int32,
 ) -> OtherListsWordsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(2, 4, length), }
 }
@@ -1056,19 +1066,21 @@ pub(all) struct OtherListsBigListBuilder {
 }
 
 ///|
-pub fn OtherListsBigListReader::length(self : OtherListsBigListReader) -> Int {
+pub fn OtherListsBigListReader::length(self : OtherListsBigListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn OtherListsBigListBuilder::length(self : OtherListsBigListBuilder) -> Int {
+pub fn OtherListsBigListBuilder::length(
+  self : OtherListsBigListBuilder,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn OtherListsBigListReader::get(
   self : OtherListsBigListReader,
-  index : Int,
+  index : Int32,
 ) -> UInt64 raise @capnp.CapnpError {
   self.inner.get_uint64(index)
 }
@@ -1076,7 +1088,7 @@ pub fn OtherListsBigListReader::get(
 ///|
 pub fn OtherListsBigListBuilder::set(
   self : OtherListsBigListBuilder,
-  index : Int,
+  index : Int32,
   value : UInt64,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint64(index, value)
@@ -1092,7 +1104,7 @@ pub fn OtherListsReader::get_big(
 ///|
 pub fn OtherListsBuilder::init_big(
   self : OtherListsBuilder,
-  length : Int,
+  length : Int32,
 ) -> OtherListsBigListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(3, 5, length), }
 }
@@ -1116,30 +1128,32 @@ pub(all) struct OtherListsRootListBuilder {
 }
 
 ///|
-pub fn OtherListsRootListReader::length(self : OtherListsRootListReader) -> Int {
+pub fn OtherListsRootListReader::length(
+  self : OtherListsRootListReader,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn OtherListsRootListBuilder::length(
   self : OtherListsRootListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn OtherListsRootListReader::get(
   self : OtherListsRootListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(index)
 }
 
 ///|
 pub fn OtherListsRootListBuilder::set(
   self : OtherListsRootListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(index, value)
 }
@@ -1154,7 +1168,7 @@ pub fn OtherListsReader::get_root_field(
 ///|
 pub fn OtherListsBuilder::init_root_field(
   self : OtherListsBuilder,
-  length : Int,
+  length : Int32,
 ) -> OtherListsRootListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(4, 3, length), }
 }

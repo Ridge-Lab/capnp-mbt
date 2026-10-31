@@ -1,8 +1,8 @@
 ///|
 fn StructReader::read_struct_bits(
   self : StructReader,
-  offset : Int,
-  width : Int,
+  offset : Int32,
+  width : Int32,
 ) -> UInt64 raise CapnpError {
   if offset < 0 {
     raise Bounds("negative struct data offset")
@@ -21,8 +21,8 @@ fn StructReader::read_struct_bits(
 ///|
 pub fn StructReader::get_bool(
   self : StructReader,
-  bit_offset : Int,
-  default? : Bool = false,
+  bit_offset : Int32,
+  default~ : Bool = false,
 ) -> Bool raise CapnpError {
   if bit_offset < 0 {
     raise Bounds("negative struct bit offset")
@@ -34,8 +34,8 @@ pub fn StructReader::get_bool(
 ///|
 pub fn StructReader::get_uint8(
   self : StructReader,
-  byte_offset : Int,
-  default? : Byte = 0,
+  byte_offset : Int32,
+  default~ : Byte = 0,
 ) -> Byte raise CapnpError {
   (StructReader::read_struct_bits(self, byte_offset, 1) ^ default.to_uint64()).to_byte()
 }
@@ -43,9 +43,9 @@ pub fn StructReader::get_uint8(
 ///|
 pub fn StructReader::get_uint16(
   self : StructReader,
-  byte_offset : Int,
-  default? : UInt = 0,
-) -> UInt raise CapnpError {
+  byte_offset : Int32,
+  default~ : UInt32 = 0,
+) -> UInt32 raise CapnpError {
   if default > 65535 {
     raise Bounds("UInt16 default exceeds 16 bits")
   }
@@ -55,17 +55,17 @@ pub fn StructReader::get_uint16(
 ///|
 pub fn StructReader::get_uint32(
   self : StructReader,
-  byte_offset : Int,
-  default? : UInt = 0,
-) -> UInt raise CapnpError {
+  byte_offset : Int32,
+  default~ : UInt32 = 0,
+) -> UInt32 raise CapnpError {
   StructReader::read_struct_bits(self, byte_offset, 4).to_uint() ^ default
 }
 
 ///|
 pub fn StructReader::get_uint64(
   self : StructReader,
-  byte_offset : Int,
-  default? : UInt64 = 0,
+  byte_offset : Int32,
+  default~ : UInt64 = 0,
 ) -> UInt64 raise CapnpError {
   StructReader::read_struct_bits(self, byte_offset, 8) ^ default
 }
@@ -73,9 +73,9 @@ pub fn StructReader::get_uint64(
 ///|
 pub fn StructReader::get_int8(
   self : StructReader,
-  byte_offset : Int,
-  default? : Int = 0,
-) -> Int raise CapnpError {
+  byte_offset : Int32,
+  default~ : Int32 = 0,
+) -> Int32 raise CapnpError {
   if default < -128 || default > 127 {
     raise Bounds("Int8 default exceeds 8 bits")
   }
@@ -91,9 +91,9 @@ pub fn StructReader::get_int8(
 ///|
 pub fn StructReader::get_int16(
   self : StructReader,
-  byte_offset : Int,
-  default? : Int = 0,
-) -> Int raise CapnpError {
+  byte_offset : Int32,
+  default~ : Int32 = 0,
+) -> Int32 raise CapnpError {
   if default < -32768 || default > 32767 {
     raise Bounds("Int16 default exceeds 16 bits")
   }
@@ -109,9 +109,9 @@ pub fn StructReader::get_int16(
 ///|
 pub fn StructReader::get_int32(
   self : StructReader,
-  byte_offset : Int,
-  default? : Int = 0,
-) -> Int raise CapnpError {
+  byte_offset : Int32,
+  default~ : Int32 = 0,
+) -> Int32 raise CapnpError {
   StructReader::read_struct_bits(self, byte_offset, 4)
   .to_uint()
   .reinterpret_as_int() ^
@@ -121,8 +121,8 @@ pub fn StructReader::get_int32(
 ///|
 pub fn StructReader::get_int64(
   self : StructReader,
-  byte_offset : Int,
-  default? : Int64 = 0,
+  byte_offset : Int32,
+  default~ : Int64 = 0,
 ) -> Int64 raise CapnpError {
   StructReader::read_struct_bits(self, byte_offset, 8).reinterpret_as_int64() ^
   default
@@ -131,8 +131,8 @@ pub fn StructReader::get_int64(
 ///|
 pub fn StructReader::get_float32(
   self : StructReader,
-  byte_offset : Int,
-  default? : Float = 0.0,
+  byte_offset : Int32,
+  default~ : Float = 0.0,
 ) -> Float raise CapnpError {
   Float::reinterpret_from_uint(
     StructReader::read_struct_bits(self, byte_offset, 4).to_uint() ^
@@ -143,8 +143,8 @@ pub fn StructReader::get_float32(
 ///|
 pub fn StructReader::get_float64(
   self : StructReader,
-  byte_offset : Int,
-  default? : Double = 0.0,
+  byte_offset : Int32,
+  default~ : Double = 0.0,
 ) -> Double raise CapnpError {
   (StructReader::read_struct_bits(self, byte_offset, 8) ^
   default.reinterpret_as_uint64()).reinterpret_as_double()

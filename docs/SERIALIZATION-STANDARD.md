@@ -2,7 +2,7 @@
 
 ## Fixed baseline
 
-Version 0.3.0 targets the serialization and data-declaration semantics of
+Version 0.3.1 targets the serialization and data-declaration semantics of
 **Cap'n Proto 1.5.0**, using its tagged
 [encoding specification](https://github.com/capnproto/capnproto/blob/v1.5.0/doc/encoding.md),
 [schema language](https://github.com/capnproto/capnproto/blob/v1.5.0/doc/language.md),

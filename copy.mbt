@@ -1,10 +1,10 @@
 ///|
 priv struct CopyBudget {
-  mut words : Int
+  mut words : Int32
 }
 
 ///|
-fn copy_charge(budget : CopyBudget, words : Int) -> Unit raise CapnpError {
+fn copy_charge(budget : CopyBudget, words : Int32) -> Unit raise CapnpError {
   if words < 0 || words > budget.words {
     raise Limit("deep-copy traversal limit exceeded")
   }
@@ -12,7 +12,10 @@ fn copy_charge(budget : CopyBudget, words : Int) -> Unit raise CapnpError {
 }
 
 ///|
-fn copy_limits(max_depth : Int, max_words : Int) -> CopyBudget raise CapnpError {
+fn copy_limits(
+  max_depth : Int32,
+  max_words : Int32,
+) -> CopyBudget raise CapnpError {
   // Bound recursive call-stack use even if a source reader permits deeper input.
   if max_depth < 0 || max_depth > 256 || max_words < 0 {
     raise Limit("copy limits require depth 0..256 and nonnegative words")
@@ -41,7 +44,7 @@ fn copy_transaction(
 fn copy_struct_contents(
   target : StructBuilder,
   source : StructReader,
-  depth : Int,
+  depth : Int32,
   budget : CopyBudget,
 ) -> Unit raise CapnpError {
   let start = source.state.offsets[source.segment] + source.start
@@ -57,14 +60,14 @@ fn copy_struct_contents(
 fn copy_struct(
   target : PointerBuilder,
   source : StructReader,
-  depth : Int,
+  depth : Int32,
   budget : CopyBudget,
 ) -> Unit raise CapnpError {
   if depth <= 0 {
     raise Limit("deep-copy nesting limit exceeded")
   }
   let data_words = (source.data_bytes + 7) / 8
-  copy_charge(budget, Int::max(1, data_words + source.pointer_count))
+  copy_charge(budget, Int32::max(1, data_words + source.pointer_count))
   let result = target.init_struct(data_words, source.pointer_count)
   copy_struct_contents(result, source, depth - 1, budget)
 }
@@ -73,7 +76,7 @@ fn copy_struct(
 fn copy_list(
   target : PointerBuilder,
   source : ListReader,
-  depth : Int,
+  depth : Int32,
   budget : CopyBudget,
 ) -> Unit raise CapnpError {
   if depth <= 0 {
@@ -139,7 +142,7 @@ fn copy_list(
 fn copy_pointer(
   target : PointerBuilder,
   source : PointerReader,
-  depth : Int,
+  depth : Int32,
   budget : CopyBudget,
 ) -> Unit raise CapnpError {
   if source.is_null() {
@@ -169,8 +172,8 @@ fn copy_pointer(
 pub fn PointerBuilder::set(
   self : PointerBuilder,
   source : PointerReader,
-  max_depth? : Int = 64,
-  max_words? : Int = 8388608,
+  max_depth~ : Int32 = 64,
+  max_words~ : Int32 = 8388608,
 ) -> Unit raise CapnpError {
   let budget = copy_limits(max_depth, max_words)
   copy_transaction(self, () => copy_pointer(self, source, max_depth, budget))
@@ -181,8 +184,8 @@ pub fn PointerBuilder::set(
 pub fn PointerBuilder::set_struct(
   self : PointerBuilder,
   source : StructReader,
-  max_depth? : Int = 64,
-  max_words? : Int = 8388608,
+  max_depth~ : Int32 = 64,
+  max_words~ : Int32 = 8388608,
 ) -> Unit raise CapnpError {
   let budget = copy_limits(max_depth, max_words)
   copy_transaction(self, () => copy_struct(self, source, max_depth, budget))
@@ -193,8 +196,8 @@ pub fn PointerBuilder::set_struct(
 pub fn PointerBuilder::set_list(
   self : PointerBuilder,
   source : ListReader,
-  max_depth? : Int = 64,
-  max_words? : Int = 8388608,
+  max_depth~ : Int32 = 64,
+  max_words~ : Int32 = 8388608,
 ) -> Unit raise CapnpError {
   let budget = copy_limits(max_depth, max_words)
   copy_transaction(self, () => copy_list(self, source, max_depth, budget))

@@ -1,55 +1,55 @@
 ///|
 priv struct ReadState {
   bytes : Bytes
-  offsets : Array[Int]
-  sizes : Array[Int]
-  mut remaining_words : Int
+  offsets : Array[Int32]
+  sizes : Array[Int32]
+  mut remaining_words : Int32
 }
 
 ///|
 /// An immutable, framed Cap'n Proto message. Readers share its traversal budget.
 pub struct Message {
   priv state : ReadState
-  priv nesting_limit : Int
+  priv nesting_limit : Int32
 }
 
 ///|
 /// A lazy pointer. Its target is validated when it is dereferenced.
 pub struct PointerReader {
   priv state : ReadState
-  priv segment : Int
-  priv word : Int
-  priv depth : Int
+  priv segment : Int32
+  priv word : Int32
+  priv depth : Int32
 }
 
 ///|
 /// A view of a struct's data and pointer sections.
 pub struct StructReader {
   priv state : ReadState
-  priv segment : Int
-  priv start : Int
-  priv data_bytes : Int
-  priv pointer_start : Int
-  priv pointer_count : Int
-  priv depth : Int
+  priv segment : Int32
+  priv start : Int32
+  priv data_bytes : Int32
+  priv pointer_start : Int32
+  priv pointer_count : Int32
+  priv depth : Int32
 }
 
 ///|
 /// A lazy list view, including lists of inline composite structs.
 pub struct ListReader {
   priv state : ReadState
-  priv segment : Int
-  priv start : Int
-  priv count : Int
-  priv code : Int
-  priv stride : Int
-  priv data_words : Int
-  priv pointer_count : Int
-  priv depth : Int
+  priv segment : Int32
+  priv start : Int32
+  priv count : Int32
+  priv code : Int32
+  priv stride : Int32
+  priv data_words : Int32
+  priv pointer_count : Int32
+  priv depth : Int32
 }
 
 ///|
-fn read_u32(bytes : Bytes, pos : Int) -> UInt {
+fn read_u32(bytes : Bytes, pos : Int32) -> UInt32 {
   bytes[pos].to_uint() |
   (bytes[pos + 1].to_uint() << 8) |
   (bytes[pos + 2].to_uint() << 16) |
@@ -57,13 +57,13 @@ fn read_u32(bytes : Bytes, pos : Int) -> UInt {
 }
 
 ///|
-fn read_u64(bytes : Bytes, pos : Int) -> UInt64 {
+fn read_u64(bytes : Bytes, pos : Int32) -> UInt64 {
   read_u32(bytes, pos).to_uint64() |
   (read_u32(bytes, pos + 4).to_uint64() << 32)
 }
 
 ///|
-fn read_charge(state : ReadState, words : Int) -> Unit raise CapnpError {
+fn read_charge(state : ReadState, words : Int32) -> Unit raise CapnpError {
   if words < 0 || words > state.remaining_words {
     raise Limit("message traversal limit exceeded")
   }
@@ -73,9 +73,9 @@ fn read_charge(state : ReadState, words : Int) -> Unit raise CapnpError {
 ///|
 fn read_extent(
   state : ReadState,
-  segment : Int,
-  word : Int,
-  count : Int,
+  segment : Int32,
+  word : Int32,
+  count : Int32,
 ) -> Unit raise CapnpError {
   if segment < 0 || segment >= state.sizes.length() {
     raise Bounds("segment index outside message")
@@ -89,8 +89,8 @@ fn read_extent(
 ///|
 fn read_word(
   state : ReadState,
-  segment : Int,
-  word : Int,
+  segment : Int32,
+  word : Int32,
 ) -> UInt64 raise CapnpError {
   read_extent(state, segment, word, 1)
   read_u64(state.bytes, state.offsets[segment] + word * 8)
@@ -101,9 +101,9 @@ fn read_word(
 /// Trailing bytes are rejected; use frame_length to select a frame from a stream.
 pub fn read_message(
   bytes : Bytes,
-  traversal_limit_words? : Int = 8388608,
-  nesting_limit? : Int = 64,
-  max_segments? : Int = 512,
+  traversal_limit_words~ : Int32 = 8388608,
+  nesting_limit~ : Int32 = 64,
+  max_segments~ : Int32 = 512,
 ) -> Message raise CapnpError {
   if traversal_limit_words < 0 || nesting_limit < 0 || max_segments < 1 {
     raise Limit("invalid reader limit")
@@ -124,8 +124,8 @@ pub fn read_message(
     raise InvalidMessage("truncated segment table padding")
   }
   let header = header64.to_int()
-  let offsets : Array[Int] = []
-  let sizes : Array[Int] = []
+  let offsets : Array[Int32] = []
+  let sizes : Array[Int32] = []
   let mut cursor = header
   for i in 0..<count {
     let size = read_u32(bytes, 4 + 4 * i)
@@ -159,17 +159,17 @@ pub fn Message::root(self : Message) -> StructReader raise CapnpError {
 }
 
 ///|
-pub fn Message::segment_count(self : Message) -> Int {
+pub fn Message::segment_count(self : Message) -> Int32 {
   self.state.sizes.length()
 }
 
 ///|
-pub fn Message::remaining_traversal_words(self : Message) -> Int {
+pub fn Message::remaining_traversal_words(self : Message) -> Int32 {
   self.state.remaining_words
 }
 
 ///|
-fn read_null(state : ReadState, depth : Int) -> PointerReader {
+fn read_null(state : ReadState, depth : Int32) -> PointerReader {
   { state, segment: 0, word: -1, depth, }
 }
 
@@ -181,7 +181,7 @@ pub fn PointerReader::is_null(self : PointerReader) -> Bool {
 }
 
 ///|
-fn read_empty_struct(state : ReadState, depth : Int) -> StructReader {
+fn read_empty_struct(state : ReadState, depth : Int32) -> StructReader {
   {
     state,
     segment: 0,
@@ -194,7 +194,7 @@ fn read_empty_struct(state : ReadState, depth : Int) -> StructReader {
 }
 
 ///|
-fn read_empty_list(state : ReadState, depth : Int) -> ListReader {
+fn read_empty_list(state : ReadState, depth : Int32) -> ListReader {
   {
     state,
     segment: 0,

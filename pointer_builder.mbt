@@ -41,7 +41,7 @@ pub fn PointerReader::kind(
 /// Copying an index preserves its bits, not the remote object it might identify.
 pub fn PointerReader::capability_index(
   self : PointerReader,
-) -> UInt raise CapnpError {
+) -> UInt32 raise CapnpError {
   if self.is_null() {
     raise TypeMismatch("expected capability pointer")
   }
@@ -56,7 +56,7 @@ pub fn PointerReader::capability_index(
 /// A mutable pointer slot in a bounded builder arena.
 pub struct PointerBuilder {
   priv owner : Builder
-  priv slot : Int
+  priv slot : Int32
 }
 
 ///|
@@ -67,7 +67,7 @@ pub fn Builder::root_pointer(self : Builder) -> PointerBuilder {
 ///|
 pub fn StructBuilder::get_pointer(
   self : StructBuilder,
-  slot : Int,
+  slot : Int32,
 ) -> PointerBuilder raise CapnpError {
   { owner: self.owner, slot: b_pointer(self, slot), }
 }
@@ -75,7 +75,7 @@ pub fn StructBuilder::get_pointer(
 ///|
 pub fn ListBuilder::get_pointer(
   self : ListBuilder,
-  index : Int,
+  index : Int32,
 ) -> PointerBuilder raise CapnpError {
   { owner: self.owner, slot: b_list_slot(self, index), }
 }
@@ -98,8 +98,8 @@ pub fn PointerBuilder::clear(self : PointerBuilder) -> Unit {
 ///|
 pub fn PointerBuilder::init_struct(
   self : PointerBuilder,
-  data_words : Int,
-  pointer_count : Int,
+  data_words : Int32,
+  pointer_count : Int32,
 ) -> StructBuilder raise CapnpError {
   b_init_struct(self.owner, self.slot, data_words, pointer_count)
 }
@@ -107,8 +107,8 @@ pub fn PointerBuilder::init_struct(
 ///|
 pub fn PointerBuilder::init_list(
   self : PointerBuilder,
-  element_size : Int,
-  length : Int,
+  element_size : Int32,
+  length : Int32,
 ) -> ListBuilder raise CapnpError {
   b_init_list(self.owner, self.slot, element_size, length)
 }
@@ -116,9 +116,9 @@ pub fn PointerBuilder::init_list(
 ///|
 pub fn PointerBuilder::init_struct_list(
   self : PointerBuilder,
-  length : Int,
-  data_words : Int,
-  pointer_count : Int,
+  length : Int32,
+  data_words : Int32,
+  pointer_count : Int32,
 ) -> ListBuilder raise CapnpError {
   b_init_struct_list(self.owner, self.slot, length, data_words, pointer_count)
 }
@@ -143,7 +143,7 @@ pub fn PointerBuilder::set_data(
 /// Store only the opaque table index. No RPC table is created or transferred.
 pub fn PointerBuilder::set_capability_index(
   self : PointerBuilder,
-  index : UInt,
+  index : UInt32,
 ) -> Unit {
   b_write(self.owner, self.slot, 3UL | (index.to_uint64() << 32), 8)
 }

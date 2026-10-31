@@ -9,11 +9,11 @@ pub(all) enum Status {
   Unknown
   Ok
   UnknownValue1
-  UnknownValue2(UInt)
+  UnknownValue2(UInt32)
 }
 
 ///|
-pub fn Status::from_raw(value : UInt) -> Status {
+pub fn Status::from_raw(value : UInt32) -> Status {
   match value {
     0U => Unknown
     1U => Ok
@@ -23,7 +23,7 @@ pub fn Status::from_raw(value : UInt) -> Status {
 }
 
 ///|
-pub fn Status::to_raw(self : Status) -> UInt {
+pub fn Status::to_raw(self : Status) -> UInt32 {
   match self {
     Unknown => 0U
     Ok => 1U
@@ -36,11 +36,11 @@ pub fn Status::to_raw(self : Status) -> UInt {
 pub(all) enum SchemaString {
   Empty
   Filled
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
-pub fn SchemaString::from_raw(value : UInt) -> SchemaString {
+pub fn SchemaString::from_raw(value : UInt32) -> SchemaString {
   match value {
     0U => Empty
     1U => Filled
@@ -49,7 +49,7 @@ pub fn SchemaString::from_raw(value : UInt) -> SchemaString {
 }
 
 ///|
-pub fn SchemaString::to_raw(self : SchemaString) -> UInt {
+pub fn SchemaString::to_raw(self : SchemaString) -> UInt32 {
   match self {
     Empty => 0U
     Filled => 1U
@@ -61,11 +61,11 @@ pub fn SchemaString::to_raw(self : SchemaString) -> UInt {
 pub(all) enum SchemaError {
   Invalid
   Valid
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
-pub fn SchemaError::from_raw(value : UInt) -> SchemaError {
+pub fn SchemaError::from_raw(value : UInt32) -> SchemaError {
   match value {
     0U => Invalid
     1U => Valid
@@ -74,7 +74,7 @@ pub fn SchemaError::from_raw(value : UInt) -> SchemaError {
 }
 
 ///|
-pub fn SchemaError::to_raw(self : SchemaError) -> UInt {
+pub fn SchemaError::to_raw(self : SchemaError) -> UInt32 {
   match self {
     Invalid => 0U
     Valid => 1U

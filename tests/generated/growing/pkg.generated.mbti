@@ -14,7 +14,7 @@ pub(all) struct BoxAsListOfBoxAsTextBuilder {
   inner : @capnp.StructBuilder
 }
 pub fn BoxAsListOfBoxAsTextBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
-pub fn BoxAsListOfBoxAsTextBuilder::init_value(Self, Int) -> BoxAsListOfBoxAsTextValueListBuilder raise @capnp.CapnpError
+pub fn BoxAsListOfBoxAsTextBuilder::init_value(Self, Int32) -> BoxAsListOfBoxAsTextValueListBuilder raise @capnp.CapnpError
 pub fn BoxAsListOfBoxAsTextBuilder::set_value(Self, BoxAsListOfBoxAsTextValueListReader) -> Unit raise @capnp.CapnpError
 
 pub(all) struct BoxAsListOfBoxAsTextReader {
@@ -26,20 +26,20 @@ pub fn BoxAsListOfBoxAsTextReader::get_value(Self) -> BoxAsListOfBoxAsTextValueL
 pub(all) struct BoxAsListOfBoxAsTextValueListBuilder {
   inner : @capnp.ListBuilder
 }
-pub fn BoxAsListOfBoxAsTextValueListBuilder::get(Self, Int) -> BoxAsTextBuilder raise @capnp.CapnpError
-pub fn BoxAsListOfBoxAsTextValueListBuilder::length(Self) -> Int
+pub fn BoxAsListOfBoxAsTextValueListBuilder::get(Self, Int32) -> BoxAsTextBuilder raise @capnp.CapnpError
+pub fn BoxAsListOfBoxAsTextValueListBuilder::length(Self) -> Int32
 
 pub(all) struct BoxAsListOfBoxAsTextValueListReader {
   inner : @capnp.ListReader
 }
-pub fn BoxAsListOfBoxAsTextValueListReader::get(Self, Int) -> BoxAsTextReader raise @capnp.CapnpError
-pub fn BoxAsListOfBoxAsTextValueListReader::length(Self) -> Int
+pub fn BoxAsListOfBoxAsTextValueListReader::get(Self, Int32) -> BoxAsTextReader raise @capnp.CapnpError
+pub fn BoxAsListOfBoxAsTextValueListReader::length(Self) -> Int32
 
 pub(all) struct BoxAsListOfBoxBuilder {
   inner : @capnp.StructBuilder
 }
 pub fn BoxAsListOfBoxBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
-pub fn BoxAsListOfBoxBuilder::init_value(Self, Int) -> BoxAsListOfBoxValueListBuilder raise @capnp.CapnpError
+pub fn BoxAsListOfBoxBuilder::init_value(Self, Int32) -> BoxAsListOfBoxValueListBuilder raise @capnp.CapnpError
 pub fn BoxAsListOfBoxBuilder::set_value(Self, BoxAsListOfBoxValueListReader) -> Unit raise @capnp.CapnpError
 
 pub(all) struct BoxAsListOfBoxReader {
@@ -51,14 +51,14 @@ pub fn BoxAsListOfBoxReader::get_value(Self) -> BoxAsListOfBoxValueListReader ra
 pub(all) struct BoxAsListOfBoxValueListBuilder {
   inner : @capnp.ListBuilder
 }
-pub fn BoxAsListOfBoxValueListBuilder::get(Self, Int) -> BoxBuilder raise @capnp.CapnpError
-pub fn BoxAsListOfBoxValueListBuilder::length(Self) -> Int
+pub fn BoxAsListOfBoxValueListBuilder::get(Self, Int32) -> BoxBuilder raise @capnp.CapnpError
+pub fn BoxAsListOfBoxValueListBuilder::length(Self) -> Int32
 
 pub(all) struct BoxAsListOfBoxValueListReader {
   inner : @capnp.ListReader
 }
-pub fn BoxAsListOfBoxValueListReader::get(Self, Int) -> BoxReader raise @capnp.CapnpError
-pub fn BoxAsListOfBoxValueListReader::length(Self) -> Int
+pub fn BoxAsListOfBoxValueListReader::get(Self, Int32) -> BoxReader raise @capnp.CapnpError
+pub fn BoxAsListOfBoxValueListReader::length(Self) -> Int32
 
 pub(all) struct BoxAsTextBuilder {
   inner : @capnp.StructBuilder
@@ -91,7 +91,7 @@ pub(all) struct GrowingAsListOfBoxAsTextBuilder {
 }
 pub fn GrowingAsListOfBoxAsTextBuilder::init_next(Self) -> GrowingBuilder raise @capnp.CapnpError
 pub fn GrowingAsListOfBoxAsTextBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
-pub fn GrowingAsListOfBoxAsTextBuilder::init_value(Self, Int) -> GrowingAsListOfBoxAsTextValueListBuilder raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxAsTextBuilder::init_value(Self, Int32) -> GrowingAsListOfBoxAsTextValueListBuilder raise @capnp.CapnpError
 pub fn GrowingAsListOfBoxAsTextBuilder::set_next(Self, GrowingReader) -> Unit raise @capnp.CapnpError
 pub fn GrowingAsListOfBoxAsTextBuilder::set_value(Self, GrowingAsListOfBoxAsTextValueListReader) -> Unit raise @capnp.CapnpError
 
@@ -105,21 +105,21 @@ pub fn GrowingAsListOfBoxAsTextReader::get_value(Self) -> GrowingAsListOfBoxAsTe
 pub(all) struct GrowingAsListOfBoxAsTextValueListBuilder {
   inner : @capnp.ListBuilder
 }
-pub fn GrowingAsListOfBoxAsTextValueListBuilder::get(Self, Int) -> BoxAsTextBuilder raise @capnp.CapnpError
-pub fn GrowingAsListOfBoxAsTextValueListBuilder::length(Self) -> Int
+pub fn GrowingAsListOfBoxAsTextValueListBuilder::get(Self, Int32) -> BoxAsTextBuilder raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxAsTextValueListBuilder::length(Self) -> Int32
 
 pub(all) struct GrowingAsListOfBoxAsTextValueListReader {
   inner : @capnp.ListReader
 }
-pub fn GrowingAsListOfBoxAsTextValueListReader::get(Self, Int) -> BoxAsTextReader raise @capnp.CapnpError
-pub fn GrowingAsListOfBoxAsTextValueListReader::length(Self) -> Int
+pub fn GrowingAsListOfBoxAsTextValueListReader::get(Self, Int32) -> BoxAsTextReader raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxAsTextValueListReader::length(Self) -> Int32
 
 pub(all) struct GrowingAsListOfBoxBuilder {
   inner : @capnp.StructBuilder
 }
 pub fn GrowingAsListOfBoxBuilder::init_next(Self) -> GrowingBuilder raise @capnp.CapnpError
 pub fn GrowingAsListOfBoxBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
-pub fn GrowingAsListOfBoxBuilder::init_value(Self, Int) -> GrowingAsListOfBoxValueListBuilder raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxBuilder::init_value(Self, Int32) -> GrowingAsListOfBoxValueListBuilder raise @capnp.CapnpError
 pub fn GrowingAsListOfBoxBuilder::set_next(Self, GrowingReader) -> Unit raise @capnp.CapnpError
 pub fn GrowingAsListOfBoxBuilder::set_value(Self, GrowingAsListOfBoxValueListReader) -> Unit raise @capnp.CapnpError
 
@@ -133,14 +133,14 @@ pub fn GrowingAsListOfBoxReader::get_value(Self) -> GrowingAsListOfBoxValueListR
 pub(all) struct GrowingAsListOfBoxValueListBuilder {
   inner : @capnp.ListBuilder
 }
-pub fn GrowingAsListOfBoxValueListBuilder::get(Self, Int) -> BoxBuilder raise @capnp.CapnpError
-pub fn GrowingAsListOfBoxValueListBuilder::length(Self) -> Int
+pub fn GrowingAsListOfBoxValueListBuilder::get(Self, Int32) -> BoxBuilder raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxValueListBuilder::length(Self) -> Int32
 
 pub(all) struct GrowingAsListOfBoxValueListReader {
   inner : @capnp.ListReader
 }
-pub fn GrowingAsListOfBoxValueListReader::get(Self, Int) -> BoxReader raise @capnp.CapnpError
-pub fn GrowingAsListOfBoxValueListReader::length(Self) -> Int
+pub fn GrowingAsListOfBoxValueListReader::get(Self, Int32) -> BoxReader raise @capnp.CapnpError
+pub fn GrowingAsListOfBoxValueListReader::length(Self) -> Int32
 
 pub(all) struct GrowingAsTextBuilder {
   inner : @capnp.StructBuilder

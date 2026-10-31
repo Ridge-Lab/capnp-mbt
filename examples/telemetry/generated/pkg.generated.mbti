@@ -14,7 +14,7 @@ pub(all) struct BatchBuilder {
   inner : @capnp.StructBuilder
 }
 pub fn BatchBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
-pub fn BatchBuilder::init_samples(Self, Int) -> BatchSamplesListBuilder raise @capnp.CapnpError
+pub fn BatchBuilder::init_samples(Self, Int32) -> BatchSamplesListBuilder raise @capnp.CapnpError
 pub fn BatchBuilder::set_job_id(Self, UInt64) -> Unit raise @capnp.CapnpError
 pub fn BatchBuilder::set_samples(Self, BatchSamplesListReader) -> Unit raise @capnp.CapnpError
 pub fn BatchBuilder::set_source(Self, String) -> Unit raise @capnp.CapnpError
@@ -32,50 +32,50 @@ pub fn BatchReader::get_unit(Self) -> String raise @capnp.CapnpError
 pub(all) struct BatchSamplesListBuilder {
   inner : @capnp.ListBuilder
 }
-pub fn BatchSamplesListBuilder::get(Self, Int) -> SampleBuilder raise @capnp.CapnpError
-pub fn BatchSamplesListBuilder::length(Self) -> Int
+pub fn BatchSamplesListBuilder::get(Self, Int32) -> SampleBuilder raise @capnp.CapnpError
+pub fn BatchSamplesListBuilder::length(Self) -> Int32
 
 pub(all) struct BatchSamplesListReader {
   inner : @capnp.ListReader
 }
-pub fn BatchSamplesListReader::get(Self, Int) -> SampleReader raise @capnp.CapnpError
-pub fn BatchSamplesListReader::length(Self) -> Int
+pub fn BatchSamplesListReader::get(Self, Int32) -> SampleReader raise @capnp.CapnpError
+pub fn BatchSamplesListReader::length(Self) -> Int32
 
 pub(all) enum Quality {
   Valid
   Missing
   SensorFault
-  Unknown(UInt)
+  Unknown(UInt32)
 }
-pub fn Quality::from_raw(UInt) -> Self
-pub fn Quality::to_raw(Self) -> UInt
+pub fn Quality::from_raw(UInt32) -> Self
+pub fn Quality::to_raw(Self) -> UInt32
 
 pub(all) struct ReportBuilder {
   inner : @capnp.StructBuilder
 }
 pub fn ReportBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
 pub fn ReportBuilder::init_statistics(Self) -> ReportStatisticsBuilder raise @capnp.CapnpError
-pub fn ReportBuilder::set_accepted(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn ReportBuilder::set_accepted(Self, UInt32) -> Unit raise @capnp.CapnpError
 pub fn ReportBuilder::set_empty(Self) -> Unit raise @capnp.CapnpError
 pub fn ReportBuilder::set_job_id(Self, UInt64) -> Unit raise @capnp.CapnpError
-pub fn ReportBuilder::set_rejected(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn ReportBuilder::set_rejected(Self, UInt32) -> Unit raise @capnp.CapnpError
 pub fn ReportBuilder::set_source(Self, String) -> Unit raise @capnp.CapnpError
-pub fn ReportBuilder::set_total(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn ReportBuilder::set_total(Self, UInt32) -> Unit raise @capnp.CapnpError
 
 pub(all) struct ReportReader {
   inner : @capnp.StructReader
 }
 pub fn ReportReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
-pub fn ReportReader::get_accepted(Self) -> UInt raise @capnp.CapnpError
+pub fn ReportReader::get_accepted(Self) -> UInt32 raise @capnp.CapnpError
 pub fn ReportReader::get_empty(Self) -> Unit raise @capnp.CapnpError
 pub fn ReportReader::get_job_id(Self) -> UInt64 raise @capnp.CapnpError
-pub fn ReportReader::get_rejected(Self) -> UInt raise @capnp.CapnpError
+pub fn ReportReader::get_rejected(Self) -> UInt32 raise @capnp.CapnpError
 pub fn ReportReader::get_source(Self) -> String raise @capnp.CapnpError
 pub fn ReportReader::get_statistics(Self) -> ReportStatisticsReader raise @capnp.CapnpError
-pub fn ReportReader::get_total(Self) -> UInt raise @capnp.CapnpError
+pub fn ReportReader::get_total(Self) -> UInt32 raise @capnp.CapnpError
 pub fn ReportReader::is_empty(Self) -> Bool raise @capnp.CapnpError
 pub fn ReportReader::is_statistics(Self) -> Bool raise @capnp.CapnpError
-pub fn ReportReader::which(Self) -> UInt raise @capnp.CapnpError
+pub fn ReportReader::which(Self) -> UInt32 raise @capnp.CapnpError
 
 pub(all) struct ReportStatisticsBuilder {
   inner : @capnp.StructBuilder

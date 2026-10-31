@@ -28,7 +28,7 @@ test "incremental framing separates concatenated frames across small chunks" {
     let decoder = @capnp.FrameDecoder::new()
     let frames : Array[Bytes] = []
     for offset = 0; offset < stream.length(); offset = offset + size {
-      let end = Int::min(offset + size, stream.length())
+      let end = Int32::min(offset + size, stream.length())
       frames.append(decoder.feed(stream[offset:end].to_owned()))
     }
     decoder.finish()

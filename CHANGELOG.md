@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.1
+
+- Migrate formatted sources and generated interfaces to the 0.10.16 formatter's explicit `Int32`/`UInt32` spelling. Wire widths and serialization behavior are unchanged.
+- Refuse published-package verification with moonc older than 0.10.16, before fetching dependencies or compiling a consumer.
+- Raise the MoonBit toolchain baseline to 0.10.16 for the updated acceptance requirements, pinning compiler and core to `0.10.16+b1a0e846e`.
+- Add Windows native CI with MSVC and the Windows SDK, alongside Windows Node.js and Linux's four backends. Document the changed native toolchain requirement.
+- Update installation and reproduction instructions for 0.3.1. Preserve the 0.3.0 benchmark results with their original source and toolchain metadata.
+
 ## 0.3.0
 
 - Add bounded `FrameDecoder` incremental standard-frame decoding, explicit EOF validation, failure/finished states and reset. Test arbitrary splits, concatenated frames, hostile lengths and a 65,552-byte frame arriving one byte at a time.

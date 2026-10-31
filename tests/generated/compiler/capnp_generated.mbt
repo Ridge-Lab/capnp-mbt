@@ -14,11 +14,11 @@ pub(all) enum ElementSize {
   EightBytes
   Pointer
   InlineComposite
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
-pub fn ElementSize::from_raw(value : UInt) -> ElementSize {
+pub fn ElementSize::from_raw(value : UInt32) -> ElementSize {
   match value {
     0U => Empty
     1U => Bit
@@ -33,7 +33,7 @@ pub fn ElementSize::from_raw(value : UInt) -> ElementSize {
 }
 
 ///|
-pub fn ElementSize::to_raw(self : ElementSize) -> UInt {
+pub fn ElementSize::to_raw(self : ElementSize) -> UInt32 {
   match self {
     Empty => 0U
     Bit => 1U
@@ -48,7 +48,7 @@ pub fn ElementSize::to_raw(self : ElementSize) -> UInt {
 }
 
 ///|
-pub fn const_field_no_discriminant() -> UInt {
+pub fn const_field_no_discriminant() -> UInt32 {
   65535U
 }
 
@@ -77,7 +77,7 @@ pub fn FieldBuilder::init_root(
 }
 
 ///|
-pub fn FieldReader::which(self : FieldReader) -> UInt raise @capnp.CapnpError {
+pub fn FieldReader::which(self : FieldReader) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(8)
 }
 
@@ -99,14 +99,14 @@ pub fn FieldBuilder::set_name(
 ///|
 pub fn FieldReader::get_code_order(
   self : FieldReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0, default=0U)
 }
 
 ///|
 pub fn FieldBuilder::set_code_order(
   self : FieldBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(0, value, default=0U)
 }
@@ -124,21 +124,21 @@ pub(all) struct FieldAnnotationsListBuilder {
 ///|
 pub fn FieldAnnotationsListReader::length(
   self : FieldAnnotationsListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FieldAnnotationsListBuilder::length(
   self : FieldAnnotationsListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn FieldAnnotationsListReader::get(
   self : FieldAnnotationsListReader,
-  index : Int,
+  index : Int32,
 ) -> AnnotationReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -146,7 +146,7 @@ pub fn FieldAnnotationsListReader::get(
 ///|
 pub fn FieldAnnotationsListBuilder::get(
   self : FieldAnnotationsListBuilder,
-  index : Int,
+  index : Int32,
 ) -> AnnotationBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -161,7 +161,7 @@ pub fn FieldReader::get_annotations(
 ///|
 pub fn FieldBuilder::init_annotations(
   self : FieldBuilder,
-  length : Int,
+  length : Int32,
 ) -> FieldAnnotationsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 1, 2), }
 }
@@ -177,14 +177,14 @@ pub fn FieldBuilder::set_annotations(
 ///|
 pub fn FieldReader::get_discriminant_value(
   self : FieldReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(2, default=65535U)
 }
 
 ///|
 pub fn FieldBuilder::set_discriminant_value(
   self : FieldBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(2, value, default=65535U)
 }
@@ -374,7 +374,7 @@ pub fn ValueBuilder::init_root(
 }
 
 ///|
-pub fn ValueReader::which(self : ValueReader) -> UInt raise @capnp.CapnpError {
+pub fn ValueReader::which(self : ValueReader) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -466,7 +466,9 @@ pub fn ValueReader::is_int8(self : ValueReader) -> Bool raise @capnp.CapnpError 
 }
 
 ///|
-pub fn ValueReader::get_int8(self : ValueReader) -> Int raise @capnp.CapnpError {
+pub fn ValueReader::get_int8(
+  self : ValueReader,
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(0) != 2U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -476,7 +478,7 @@ pub fn ValueReader::get_int8(self : ValueReader) -> Int raise @capnp.CapnpError 
 ///|
 pub fn ValueBuilder::set_int8(
   self : ValueBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(16, false)
   self.inner.set_uint8(2, 0)
@@ -509,7 +511,7 @@ pub fn ValueReader::is_int16(
 ///|
 pub fn ValueReader::get_int16(
   self : ValueReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(0) != 3U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -519,7 +521,7 @@ pub fn ValueReader::get_int16(
 ///|
 pub fn ValueBuilder::set_int16(
   self : ValueBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(16, false)
   self.inner.set_uint8(2, 0)
@@ -552,7 +554,7 @@ pub fn ValueReader::is_int32(
 ///|
 pub fn ValueReader::get_int32(
   self : ValueReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(0) != 4U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -562,7 +564,7 @@ pub fn ValueReader::get_int32(
 ///|
 pub fn ValueBuilder::set_int32(
   self : ValueBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(16, false)
   self.inner.set_uint8(2, 0)
@@ -681,7 +683,7 @@ pub fn ValueReader::is_uint16(
 ///|
 pub fn ValueReader::get_uint16(
   self : ValueReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   if self.inner.get_uint16(0) != 7U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -691,7 +693,7 @@ pub fn ValueReader::get_uint16(
 ///|
 pub fn ValueBuilder::set_uint16(
   self : ValueBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(16, false)
   self.inner.set_uint8(2, 0)
@@ -724,7 +726,7 @@ pub fn ValueReader::is_uint32(
 ///|
 pub fn ValueReader::get_uint32(
   self : ValueReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   if self.inner.get_uint16(0) != 8U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -734,7 +736,7 @@ pub fn ValueReader::get_uint32(
 ///|
 pub fn ValueBuilder::set_uint32(
   self : ValueBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(16, false)
   self.inner.set_uint8(2, 0)
@@ -1044,7 +1046,7 @@ pub fn ValueReader::is_enum(self : ValueReader) -> Bool raise @capnp.CapnpError 
 ///|
 pub fn ValueReader::get_enum(
   self : ValueReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   if self.inner.get_uint16(0) != 15U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -1054,7 +1056,7 @@ pub fn ValueReader::get_enum(
 ///|
 pub fn ValueBuilder::set_enum(
   self : ValueBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(16, false)
   self.inner.set_uint8(2, 0)
@@ -1295,19 +1297,19 @@ pub(all) struct BrandScopesListBuilder {
 }
 
 ///|
-pub fn BrandScopesListReader::length(self : BrandScopesListReader) -> Int {
+pub fn BrandScopesListReader::length(self : BrandScopesListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn BrandScopesListBuilder::length(self : BrandScopesListBuilder) -> Int {
+pub fn BrandScopesListBuilder::length(self : BrandScopesListBuilder) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BrandScopesListReader::get(
   self : BrandScopesListReader,
-  index : Int,
+  index : Int32,
 ) -> BrandScopeReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -1315,7 +1317,7 @@ pub fn BrandScopesListReader::get(
 ///|
 pub fn BrandScopesListBuilder::get(
   self : BrandScopesListBuilder,
-  index : Int,
+  index : Int32,
 ) -> BrandScopeBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -1330,7 +1332,7 @@ pub fn BrandReader::get_scopes(
 ///|
 pub fn BrandBuilder::init_scopes(
   self : BrandBuilder,
-  length : Int,
+  length : Int32,
 ) -> BrandScopesListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(0, length, 2, 1), }
 }
@@ -1370,7 +1372,7 @@ pub fn BrandScopeBuilder::init_root(
 ///|
 pub fn BrandScopeReader::which(
   self : BrandScopeReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(8)
 }
 
@@ -1407,21 +1409,23 @@ pub(all) struct BrandScopeBindListBuilder {
 }
 
 ///|
-pub fn BrandScopeBindListReader::length(self : BrandScopeBindListReader) -> Int {
+pub fn BrandScopeBindListReader::length(
+  self : BrandScopeBindListReader,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BrandScopeBindListBuilder::length(
   self : BrandScopeBindListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BrandScopeBindListReader::get(
   self : BrandScopeBindListReader,
-  index : Int,
+  index : Int32,
 ) -> BrandBindingReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -1429,7 +1433,7 @@ pub fn BrandScopeBindListReader::get(
 ///|
 pub fn BrandScopeBindListBuilder::get(
   self : BrandScopeBindListBuilder,
-  index : Int,
+  index : Int32,
 ) -> BrandBindingBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -1447,7 +1451,7 @@ pub fn BrandScopeReader::get_bind(
 ///|
 pub fn BrandScopeBuilder::init_bind(
   self : BrandScopeBuilder,
-  length : Int,
+  length : Int32,
 ) -> BrandScopeBindListBuilder raise @capnp.CapnpError {
   self.inner.clear_pointer(0)
   self.inner.set_uint16(8, 0U)
@@ -1518,7 +1522,7 @@ pub fn BrandBindingBuilder::init_root(
 ///|
 pub fn BrandBindingReader::which(
   self : BrandBindingReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -1610,7 +1614,7 @@ pub fn TypeBuilder::init_root(
 }
 
 ///|
-pub fn TypeReader::which(self : TypeReader) -> UInt raise @capnp.CapnpError {
+pub fn TypeReader::which(self : TypeReader) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -2469,7 +2473,7 @@ pub(all) struct TypeAnyPointerBuilder {
 ///|
 pub fn TypeAnyPointerReader::which(
   self : TypeAnyPointerReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(8)
 }
 
@@ -2573,7 +2577,7 @@ pub(all) struct TypeAnyPointerUnconstrainedBuilder {
 ///|
 pub fn TypeAnyPointerUnconstrainedReader::which(
   self : TypeAnyPointerUnconstrainedReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(10)
 }
 
@@ -2709,14 +2713,14 @@ pub fn TypeAnyPointerParameterBuilder::set_scope_id(
 ///|
 pub fn TypeAnyPointerParameterReader::get_parameter_index(
   self : TypeAnyPointerParameterReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(10, default=0U)
 }
 
 ///|
 pub fn TypeAnyPointerParameterBuilder::set_parameter_index(
   self : TypeAnyPointerParameterBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(10, value, default=0U)
 }
@@ -2734,14 +2738,14 @@ pub(all) struct TypeAnyPointerImplicitMethodParameterBuilder {
 ///|
 pub fn TypeAnyPointerImplicitMethodParameterReader::get_parameter_index(
   self : TypeAnyPointerImplicitMethodParameterReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(10, default=0U)
 }
 
 ///|
 pub fn TypeAnyPointerImplicitMethodParameterBuilder::set_parameter_index(
   self : TypeAnyPointerImplicitMethodParameterBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(10, value, default=0U)
 }
@@ -2759,14 +2763,14 @@ pub(all) struct FieldSlotBuilder {
 ///|
 pub fn FieldSlotReader::get_offset(
   self : FieldSlotReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(4, default=0U)
 }
 
 ///|
 pub fn FieldSlotBuilder::set_offset(
   self : FieldSlotBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(4, value, default=0U)
 }
@@ -2868,7 +2872,7 @@ pub(all) struct FieldOrdinalBuilder {
 ///|
 pub fn FieldOrdinalReader::which(
   self : FieldOrdinalReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(10)
 }
 
@@ -2909,7 +2913,7 @@ pub fn FieldOrdinalReader::is_explicit(
 ///|
 pub fn FieldOrdinalReader::get_explicit(
   self : FieldOrdinalReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   if self.inner.get_uint16(10) != 1U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -2919,7 +2923,7 @@ pub fn FieldOrdinalReader::get_explicit(
 ///|
 pub fn FieldOrdinalBuilder::set_explicit(
   self : FieldOrdinalBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(12, 0U)
   self.inner.set_uint16(10, 1U)
@@ -2951,7 +2955,7 @@ pub fn NodeBuilder::init_root(
 }
 
 ///|
-pub fn NodeReader::which(self : NodeReader) -> UInt raise @capnp.CapnpError {
+pub fn NodeReader::which(self : NodeReader) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(12)
 }
 
@@ -2986,14 +2990,14 @@ pub fn NodeBuilder::set_display_name(
 ///|
 pub fn NodeReader::get_display_name_prefix_length(
   self : NodeReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(8, default=0U)
 }
 
 ///|
 pub fn NodeBuilder::set_display_name_prefix_length(
   self : NodeBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(8, value, default=0U)
 }
@@ -3026,21 +3030,21 @@ pub(all) struct NodeNestedNodesListBuilder {
 ///|
 pub fn NodeNestedNodesListReader::length(
   self : NodeNestedNodesListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeNestedNodesListBuilder::length(
   self : NodeNestedNodesListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeNestedNodesListReader::get(
   self : NodeNestedNodesListReader,
-  index : Int,
+  index : Int32,
 ) -> NodeNestedNodeReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -3048,7 +3052,7 @@ pub fn NodeNestedNodesListReader::get(
 ///|
 pub fn NodeNestedNodesListBuilder::get(
   self : NodeNestedNodesListBuilder,
-  index : Int,
+  index : Int32,
 ) -> NodeNestedNodeBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -3063,7 +3067,7 @@ pub fn NodeReader::get_nested_nodes(
 ///|
 pub fn NodeBuilder::init_nested_nodes(
   self : NodeBuilder,
-  length : Int,
+  length : Int32,
 ) -> NodeNestedNodesListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 1, 1), }
 }
@@ -3089,21 +3093,21 @@ pub(all) struct NodeAnnotationsListBuilder {
 ///|
 pub fn NodeAnnotationsListReader::length(
   self : NodeAnnotationsListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeAnnotationsListBuilder::length(
   self : NodeAnnotationsListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeAnnotationsListReader::get(
   self : NodeAnnotationsListReader,
-  index : Int,
+  index : Int32,
 ) -> AnnotationReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -3111,7 +3115,7 @@ pub fn NodeAnnotationsListReader::get(
 ///|
 pub fn NodeAnnotationsListBuilder::get(
   self : NodeAnnotationsListBuilder,
-  index : Int,
+  index : Int32,
 ) -> AnnotationBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -3126,7 +3130,7 @@ pub fn NodeReader::get_annotations(
 ///|
 pub fn NodeBuilder::init_annotations(
   self : NodeBuilder,
-  length : Int,
+  length : Int32,
 ) -> NodeAnnotationsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(2, length, 1, 2), }
 }
@@ -3441,21 +3445,23 @@ pub(all) struct NodeParametersListBuilder {
 }
 
 ///|
-pub fn NodeParametersListReader::length(self : NodeParametersListReader) -> Int {
+pub fn NodeParametersListReader::length(
+  self : NodeParametersListReader,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeParametersListBuilder::length(
   self : NodeParametersListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeParametersListReader::get(
   self : NodeParametersListReader,
-  index : Int,
+  index : Int32,
 ) -> NodeParameterReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -3463,7 +3469,7 @@ pub fn NodeParametersListReader::get(
 ///|
 pub fn NodeParametersListBuilder::get(
   self : NodeParametersListBuilder,
-  index : Int,
+  index : Int32,
 ) -> NodeParameterBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -3478,7 +3484,7 @@ pub fn NodeReader::get_parameters(
 ///|
 pub fn NodeBuilder::init_parameters(
   self : NodeBuilder,
-  length : Int,
+  length : Int32,
 ) -> NodeParametersListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(5, length, 0, 1), }
 }
@@ -3509,14 +3515,14 @@ pub fn NodeBuilder::set_is_generic(
 ///|
 pub fn NodeReader::get_start_byte(
   self : NodeReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(40, default=0U)
 }
 
 ///|
 pub fn NodeBuilder::set_start_byte(
   self : NodeBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(40, value, default=0U)
 }
@@ -3524,14 +3530,14 @@ pub fn NodeBuilder::set_start_byte(
 ///|
 pub fn NodeReader::get_end_byte(
   self : NodeReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(44, default=0U)
 }
 
 ///|
 pub fn NodeBuilder::set_end_byte(
   self : NodeBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(44, value, default=0U)
 }
@@ -3603,14 +3609,14 @@ pub(all) struct NodeStructBuilder {
 ///|
 pub fn NodeStructReader::get_data_word_count(
   self : NodeStructReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(14, default=0U)
 }
 
 ///|
 pub fn NodeStructBuilder::set_data_word_count(
   self : NodeStructBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(14, value, default=0U)
 }
@@ -3618,14 +3624,14 @@ pub fn NodeStructBuilder::set_data_word_count(
 ///|
 pub fn NodeStructReader::get_pointer_count(
   self : NodeStructReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(24, default=0U)
 }
 
 ///|
 pub fn NodeStructBuilder::set_pointer_count(
   self : NodeStructBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(24, value, default=0U)
 }
@@ -3663,14 +3669,14 @@ pub fn NodeStructBuilder::set_is_group(
 ///|
 pub fn NodeStructReader::get_discriminant_count(
   self : NodeStructReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(30, default=0U)
 }
 
 ///|
 pub fn NodeStructBuilder::set_discriminant_count(
   self : NodeStructBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(30, value, default=0U)
 }
@@ -3678,14 +3684,14 @@ pub fn NodeStructBuilder::set_discriminant_count(
 ///|
 pub fn NodeStructReader::get_discriminant_offset(
   self : NodeStructReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(32, default=0U)
 }
 
 ///|
 pub fn NodeStructBuilder::set_discriminant_offset(
   self : NodeStructBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(32, value, default=0U)
 }
@@ -3703,21 +3709,21 @@ pub(all) struct NodeStructFieldsListBuilder {
 ///|
 pub fn NodeStructFieldsListReader::length(
   self : NodeStructFieldsListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeStructFieldsListBuilder::length(
   self : NodeStructFieldsListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeStructFieldsListReader::get(
   self : NodeStructFieldsListReader,
-  index : Int,
+  index : Int32,
 ) -> FieldReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -3725,7 +3731,7 @@ pub fn NodeStructFieldsListReader::get(
 ///|
 pub fn NodeStructFieldsListBuilder::get(
   self : NodeStructFieldsListBuilder,
-  index : Int,
+  index : Int32,
 ) -> FieldBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -3740,7 +3746,7 @@ pub fn NodeStructReader::get_fields(
 ///|
 pub fn NodeStructBuilder::init_fields(
   self : NodeStructBuilder,
-  length : Int,
+  length : Int32,
 ) -> NodeStructFieldsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(3, length, 3, 4), }
 }
@@ -3776,21 +3782,21 @@ pub(all) struct NodeEnumEnumerantsListBuilder {
 ///|
 pub fn NodeEnumEnumerantsListReader::length(
   self : NodeEnumEnumerantsListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeEnumEnumerantsListBuilder::length(
   self : NodeEnumEnumerantsListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeEnumEnumerantsListReader::get(
   self : NodeEnumEnumerantsListReader,
-  index : Int,
+  index : Int32,
 ) -> EnumerantReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -3798,7 +3804,7 @@ pub fn NodeEnumEnumerantsListReader::get(
 ///|
 pub fn NodeEnumEnumerantsListBuilder::get(
   self : NodeEnumEnumerantsListBuilder,
-  index : Int,
+  index : Int32,
 ) -> EnumerantBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -3813,7 +3819,7 @@ pub fn NodeEnumReader::get_enumerants(
 ///|
 pub fn NodeEnumBuilder::init_enumerants(
   self : NodeEnumBuilder,
-  length : Int,
+  length : Int32,
 ) -> NodeEnumEnumerantsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(3, length, 1, 2), }
 }
@@ -3868,14 +3874,14 @@ pub fn EnumerantBuilder::set_name(
 ///|
 pub fn EnumerantReader::get_code_order(
   self : EnumerantReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0, default=0U)
 }
 
 ///|
 pub fn EnumerantBuilder::set_code_order(
   self : EnumerantBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(0, value, default=0U)
 }
@@ -3893,21 +3899,21 @@ pub(all) struct EnumerantAnnotationsListBuilder {
 ///|
 pub fn EnumerantAnnotationsListReader::length(
   self : EnumerantAnnotationsListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn EnumerantAnnotationsListBuilder::length(
   self : EnumerantAnnotationsListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn EnumerantAnnotationsListReader::get(
   self : EnumerantAnnotationsListReader,
-  index : Int,
+  index : Int32,
 ) -> AnnotationReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -3915,7 +3921,7 @@ pub fn EnumerantAnnotationsListReader::get(
 ///|
 pub fn EnumerantAnnotationsListBuilder::get(
   self : EnumerantAnnotationsListBuilder,
-  index : Int,
+  index : Int32,
 ) -> AnnotationBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -3930,7 +3936,7 @@ pub fn EnumerantReader::get_annotations(
 ///|
 pub fn EnumerantBuilder::init_annotations(
   self : EnumerantBuilder,
-  length : Int,
+  length : Int32,
 ) -> EnumerantAnnotationsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 1, 2), }
 }
@@ -3966,21 +3972,21 @@ pub(all) struct NodeInterfaceMethodsListBuilder {
 ///|
 pub fn NodeInterfaceMethodsListReader::length(
   self : NodeInterfaceMethodsListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeInterfaceMethodsListBuilder::length(
   self : NodeInterfaceMethodsListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeInterfaceMethodsListReader::get(
   self : NodeInterfaceMethodsListReader,
-  index : Int,
+  index : Int32,
 ) -> MethodReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -3988,7 +3994,7 @@ pub fn NodeInterfaceMethodsListReader::get(
 ///|
 pub fn NodeInterfaceMethodsListBuilder::get(
   self : NodeInterfaceMethodsListBuilder,
-  index : Int,
+  index : Int32,
 ) -> MethodBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -4003,7 +4009,7 @@ pub fn NodeInterfaceReader::get_methods(
 ///|
 pub fn NodeInterfaceBuilder::init_methods(
   self : NodeInterfaceBuilder,
-  length : Int,
+  length : Int32,
 ) -> NodeInterfaceMethodsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(3, length, 3, 5), }
 }
@@ -4029,21 +4035,21 @@ pub(all) struct NodeInterfaceSuperclassesListBuilder {
 ///|
 pub fn NodeInterfaceSuperclassesListReader::length(
   self : NodeInterfaceSuperclassesListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeInterfaceSuperclassesListBuilder::length(
   self : NodeInterfaceSuperclassesListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeInterfaceSuperclassesListReader::get(
   self : NodeInterfaceSuperclassesListReader,
-  index : Int,
+  index : Int32,
 ) -> SuperclassReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -4051,7 +4057,7 @@ pub fn NodeInterfaceSuperclassesListReader::get(
 ///|
 pub fn NodeInterfaceSuperclassesListBuilder::get(
   self : NodeInterfaceSuperclassesListBuilder,
-  index : Int,
+  index : Int32,
 ) -> SuperclassBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -4066,7 +4072,7 @@ pub fn NodeInterfaceReader::get_superclasses(
 ///|
 pub fn NodeInterfaceBuilder::init_superclasses(
   self : NodeInterfaceBuilder,
-  length : Int,
+  length : Int32,
 ) -> NodeInterfaceSuperclassesListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(4, length, 1, 1), }
 }
@@ -4121,14 +4127,14 @@ pub fn MethodBuilder::set_name(
 ///|
 pub fn MethodReader::get_code_order(
   self : MethodReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0, default=0U)
 }
 
 ///|
 pub fn MethodBuilder::set_code_order(
   self : MethodBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(0, value, default=0U)
 }
@@ -4176,21 +4182,21 @@ pub(all) struct MethodAnnotationsListBuilder {
 ///|
 pub fn MethodAnnotationsListReader::length(
   self : MethodAnnotationsListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn MethodAnnotationsListBuilder::length(
   self : MethodAnnotationsListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn MethodAnnotationsListReader::get(
   self : MethodAnnotationsListReader,
-  index : Int,
+  index : Int32,
 ) -> AnnotationReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -4198,7 +4204,7 @@ pub fn MethodAnnotationsListReader::get(
 ///|
 pub fn MethodAnnotationsListBuilder::get(
   self : MethodAnnotationsListBuilder,
-  index : Int,
+  index : Int32,
 ) -> AnnotationBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -4213,7 +4219,7 @@ pub fn MethodReader::get_annotations(
 ///|
 pub fn MethodBuilder::init_annotations(
   self : MethodBuilder,
-  length : Int,
+  length : Int32,
 ) -> MethodAnnotationsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 1, 2), }
 }
@@ -4283,21 +4289,21 @@ pub(all) struct MethodImplicitParametersListBuilder {
 ///|
 pub fn MethodImplicitParametersListReader::length(
   self : MethodImplicitParametersListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn MethodImplicitParametersListBuilder::length(
   self : MethodImplicitParametersListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn MethodImplicitParametersListReader::get(
   self : MethodImplicitParametersListReader,
-  index : Int,
+  index : Int32,
 ) -> NodeParameterReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -4305,7 +4311,7 @@ pub fn MethodImplicitParametersListReader::get(
 ///|
 pub fn MethodImplicitParametersListBuilder::get(
   self : MethodImplicitParametersListBuilder,
-  index : Int,
+  index : Int32,
 ) -> NodeParameterBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -4320,7 +4326,7 @@ pub fn MethodReader::get_implicit_parameters(
 ///|
 pub fn MethodBuilder::init_implicit_parameters(
   self : MethodBuilder,
-  length : Int,
+  length : Int32,
 ) -> MethodImplicitParametersListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(4, length, 0, 1), }
 }
@@ -4805,21 +4811,21 @@ pub(all) struct NodeSourceInfoMembersListBuilder {
 ///|
 pub fn NodeSourceInfoMembersListReader::length(
   self : NodeSourceInfoMembersListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeSourceInfoMembersListBuilder::length(
   self : NodeSourceInfoMembersListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NodeSourceInfoMembersListReader::get(
   self : NodeSourceInfoMembersListReader,
-  index : Int,
+  index : Int32,
 ) -> NodeSourceInfoMemberReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -4827,7 +4833,7 @@ pub fn NodeSourceInfoMembersListReader::get(
 ///|
 pub fn NodeSourceInfoMembersListBuilder::get(
   self : NodeSourceInfoMembersListBuilder,
-  index : Int,
+  index : Int32,
 ) -> NodeSourceInfoMemberBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -4842,7 +4848,7 @@ pub fn NodeSourceInfoReader::get_members(
 ///|
 pub fn NodeSourceInfoBuilder::init_members(
   self : NodeSourceInfoBuilder,
-  length : Int,
+  length : Int32,
 ) -> NodeSourceInfoMembersListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 0, 1), }
 }
@@ -4858,14 +4864,14 @@ pub fn NodeSourceInfoBuilder::set_members(
 ///|
 pub fn NodeSourceInfoReader::get_start_byte(
   self : NodeSourceInfoReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(8, default=0U)
 }
 
 ///|
 pub fn NodeSourceInfoBuilder::set_start_byte(
   self : NodeSourceInfoBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(8, value, default=0U)
 }
@@ -4873,14 +4879,14 @@ pub fn NodeSourceInfoBuilder::set_start_byte(
 ///|
 pub fn NodeSourceInfoReader::get_end_byte(
   self : NodeSourceInfoReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(12, default=0U)
 }
 
 ///|
 pub fn NodeSourceInfoBuilder::set_end_byte(
   self : NodeSourceInfoBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(12, value, default=0U)
 }
@@ -4912,14 +4918,14 @@ pub fn CapnpVersionBuilder::init_root(
 ///|
 pub fn CapnpVersionReader::get_major(
   self : CapnpVersionReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0, default=0U)
 }
 
 ///|
 pub fn CapnpVersionBuilder::set_major(
   self : CapnpVersionBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(0, value, default=0U)
 }
@@ -5021,21 +5027,21 @@ pub(all) struct CodeGeneratorRequestRequestedFileImportsListBuilder {
 ///|
 pub fn CodeGeneratorRequestRequestedFileImportsListReader::length(
   self : CodeGeneratorRequestRequestedFileImportsListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn CodeGeneratorRequestRequestedFileImportsListBuilder::length(
   self : CodeGeneratorRequestRequestedFileImportsListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn CodeGeneratorRequestRequestedFileImportsListReader::get(
   self : CodeGeneratorRequestRequestedFileImportsListReader,
-  index : Int,
+  index : Int32,
 ) -> CodeGeneratorRequestRequestedFileImportReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -5043,7 +5049,7 @@ pub fn CodeGeneratorRequestRequestedFileImportsListReader::get(
 ///|
 pub fn CodeGeneratorRequestRequestedFileImportsListBuilder::get(
   self : CodeGeneratorRequestRequestedFileImportsListBuilder,
-  index : Int,
+  index : Int32,
 ) -> CodeGeneratorRequestRequestedFileImportBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -5058,7 +5064,7 @@ pub fn CodeGeneratorRequestRequestedFileReader::get_imports(
 ///|
 pub fn CodeGeneratorRequestRequestedFileBuilder::init_imports(
   self : CodeGeneratorRequestRequestedFileBuilder,
-  length : Int,
+  length : Int32,
 ) -> CodeGeneratorRequestRequestedFileImportsListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 1, 1), }
 }
@@ -5184,21 +5190,21 @@ pub(all) struct CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListBu
 ///|
 pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListReader::length(
   self : CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListBuilder::length(
   self : CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListReader::get(
   self : CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListReader,
-  index : Int,
+  index : Int32,
 ) -> CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -5206,7 +5212,7 @@ pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListReader::get
 ///|
 pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListBuilder::get(
   self : CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListBuilder,
-  index : Int,
+  index : Int32,
 ) -> CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -5221,7 +5227,7 @@ pub fn CodeGeneratorRequestRequestedFileFileSourceInfoReader::get_identifiers(
 ///|
 pub fn CodeGeneratorRequestRequestedFileFileSourceInfoBuilder::init_identifiers(
   self : CodeGeneratorRequestRequestedFileFileSourceInfoBuilder,
-  length : Int,
+  length : Int32,
 ) -> CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(0, length, 3, 0), }
 }
@@ -5261,21 +5267,21 @@ pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierBuilder::init_ro
 ///|
 pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::which(
   self : CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(16)
 }
 
 ///|
 pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::get_start_byte(
   self : CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierBuilder::set_start_byte(
   self : CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -5283,14 +5289,14 @@ pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierBuilder::set_sta
 ///|
 pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::get_end_byte(
   self : CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(4, default=0U)
 }
 
 ///|
 pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierBuilder::set_end_byte(
   self : CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(4, value, default=0U)
 }
@@ -5380,14 +5386,14 @@ pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierMemberBuilder::s
 ///|
 pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierMemberReader::get_ordinal(
   self : CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierMemberReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(18, default=0U)
 }
 
 ///|
 pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierMemberBuilder::set_ordinal(
   self : CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierMemberBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(18, value, default=0U)
 }
@@ -5429,21 +5435,21 @@ pub(all) struct CodeGeneratorRequestNodesListBuilder {
 ///|
 pub fn CodeGeneratorRequestNodesListReader::length(
   self : CodeGeneratorRequestNodesListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn CodeGeneratorRequestNodesListBuilder::length(
   self : CodeGeneratorRequestNodesListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn CodeGeneratorRequestNodesListReader::get(
   self : CodeGeneratorRequestNodesListReader,
-  index : Int,
+  index : Int32,
 ) -> NodeReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -5451,7 +5457,7 @@ pub fn CodeGeneratorRequestNodesListReader::get(
 ///|
 pub fn CodeGeneratorRequestNodesListBuilder::get(
   self : CodeGeneratorRequestNodesListBuilder,
-  index : Int,
+  index : Int32,
 ) -> NodeBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -5466,7 +5472,7 @@ pub fn CodeGeneratorRequestReader::get_nodes(
 ///|
 pub fn CodeGeneratorRequestBuilder::init_nodes(
   self : CodeGeneratorRequestBuilder,
-  length : Int,
+  length : Int32,
 ) -> CodeGeneratorRequestNodesListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(0, length, 6, 6), }
 }
@@ -5492,21 +5498,21 @@ pub(all) struct CodeGeneratorRequestRequestedFilesListBuilder {
 ///|
 pub fn CodeGeneratorRequestRequestedFilesListReader::length(
   self : CodeGeneratorRequestRequestedFilesListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn CodeGeneratorRequestRequestedFilesListBuilder::length(
   self : CodeGeneratorRequestRequestedFilesListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn CodeGeneratorRequestRequestedFilesListReader::get(
   self : CodeGeneratorRequestRequestedFilesListReader,
-  index : Int,
+  index : Int32,
 ) -> CodeGeneratorRequestRequestedFileReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -5514,7 +5520,7 @@ pub fn CodeGeneratorRequestRequestedFilesListReader::get(
 ///|
 pub fn CodeGeneratorRequestRequestedFilesListBuilder::get(
   self : CodeGeneratorRequestRequestedFilesListBuilder,
-  index : Int,
+  index : Int32,
 ) -> CodeGeneratorRequestRequestedFileBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -5529,7 +5535,7 @@ pub fn CodeGeneratorRequestReader::get_requested_files(
 ///|
 pub fn CodeGeneratorRequestBuilder::init_requested_files(
   self : CodeGeneratorRequestBuilder,
-  length : Int,
+  length : Int32,
 ) -> CodeGeneratorRequestRequestedFilesListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 1, 3), }
 }
@@ -5577,21 +5583,21 @@ pub(all) struct CodeGeneratorRequestSourceInfoListBuilder {
 ///|
 pub fn CodeGeneratorRequestSourceInfoListReader::length(
   self : CodeGeneratorRequestSourceInfoListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn CodeGeneratorRequestSourceInfoListBuilder::length(
   self : CodeGeneratorRequestSourceInfoListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn CodeGeneratorRequestSourceInfoListReader::get(
   self : CodeGeneratorRequestSourceInfoListReader,
-  index : Int,
+  index : Int32,
 ) -> NodeSourceInfoReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -5599,7 +5605,7 @@ pub fn CodeGeneratorRequestSourceInfoListReader::get(
 ///|
 pub fn CodeGeneratorRequestSourceInfoListBuilder::get(
   self : CodeGeneratorRequestSourceInfoListBuilder,
-  index : Int,
+  index : Int32,
 ) -> NodeSourceInfoBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -5614,7 +5620,7 @@ pub fn CodeGeneratorRequestReader::get_source_info(
 ///|
 pub fn CodeGeneratorRequestBuilder::init_source_info(
   self : CodeGeneratorRequestBuilder,
-  length : Int,
+  length : Int32,
 ) -> CodeGeneratorRequestSourceInfoListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(3, length, 2, 2), }
 }

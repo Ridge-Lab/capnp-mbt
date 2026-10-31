@@ -1,5 +1,5 @@
 ///|
-fn canonical_word(bytes : Bytes, offset : Int) -> UInt64 {
+fn canonical_word(bytes : Bytes, offset : Int32) -> UInt64 {
   let mut value = 0UL
   for i in 0..<8 {
     value = value | (bytes[offset + i].to_uint64() << (i * 8))

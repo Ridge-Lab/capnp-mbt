@@ -4,10 +4,10 @@
 /// header before waiting for, or copying, the declared payload.
 pub fn frame_length(
   input : Bytes,
-  offset? : Int = 0,
-  max_segments? : Int = 512,
-  max_message_bytes? : Int = 64 * 1024 * 1024,
-) -> Int? raise CapnpError {
+  offset~ : Int32 = 0,
+  max_segments~ : Int32 = 512,
+  max_message_bytes~ : Int32 = 64 * 1024 * 1024,
+) -> Int32? raise CapnpError {
   guard offset >= 0 && offset <= input.length() else {
     raise Bounds("frame offset is outside input")
   }
@@ -43,7 +43,7 @@ pub fn frame_length(
 }
 
 ///|
-fn stream_u32(input : Bytes, offset : Int) -> UInt64 {
+fn stream_u32(input : Bytes, offset : Int32) -> UInt64 {
   let mut result = 0UL
   for i in 0..<4 {
     result = result | (input[offset + i].to_uint64() << (i * 8))
@@ -54,7 +54,7 @@ fn stream_u32(input : Bytes, offset : Int) -> UInt64 {
 ///|
 priv enum FrameStage {
   SegmentCount
-  SegmentTable(Int)
+  SegmentTable(Int32)
   Payload
 }
 
@@ -71,18 +71,18 @@ priv enum FrameStatus {
 /// to each frame and this buffer, not the combined frames returned by one feed.
 /// Framing does not validate object pointers; pass completed frames to read_message.
 pub struct FrameDecoder {
-  priv max_segments : Int
-  priv max_message_bytes : Int
+  priv max_segments : Int32
+  priv max_message_bytes : Int32
   priv mut buffer : Array[Byte]
-  priv mut expected : Int
+  priv mut expected : Int32
   priv mut stage : FrameStage
   priv mut status : FrameStatus
 }
 
 ///|
 pub fn FrameDecoder::new(
-  max_segments? : Int = 512,
-  max_message_bytes? : Int = 64 * 1024 * 1024,
+  max_segments~ : Int32 = 512,
+  max_message_bytes~ : Int32 = 64 * 1024 * 1024,
 ) -> FrameDecoder raise CapnpError {
   if max_segments < 1 || max_message_bytes < 8 {
     raise Limit("invalid frame decoder limits")
@@ -106,7 +106,7 @@ fn FrameDecoder::clear_buffer(self : FrameDecoder) -> Unit {
 }
 
 ///|
-fn FrameDecoder::buffer_u32(self : FrameDecoder, offset : Int) -> UInt64 {
+fn FrameDecoder::buffer_u32(self : FrameDecoder, offset : Int32) -> UInt64 {
   let mut value = 0UL
   for i in 0..<4 {
     value = value | (self.buffer[offset + i].to_uint64() << (i * 8))
@@ -140,7 +140,7 @@ pub fn FrameDecoder::feed(
   // are appended once and copied once when handed to the caller, independently
   // of how many chunks split a frame. No consumed prefix needs to be shifted.
   while pos < chunk.length() || self.buffer.length() == self.expected {
-    let take = Int::min(
+    let take = Int32::min(
       self.expected - self.buffer.length(),
       chunk.length() - pos,
     )
@@ -211,6 +211,6 @@ pub fn FrameDecoder::reset(self : FrameDecoder) -> Unit {
 }
 
 ///|
-pub fn FrameDecoder::buffered_bytes(self : FrameDecoder) -> Int {
+pub fn FrameDecoder::buffered_bytes(self : FrameDecoder) -> Int32 {
   self.buffer.length()
 }

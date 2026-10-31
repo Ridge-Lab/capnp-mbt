@@ -9,11 +9,11 @@ pub(all) enum Quality {
   Valid
   Missing
   SensorFault
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
-pub fn Quality::from_raw(value : UInt) -> Quality {
+pub fn Quality::from_raw(value : UInt32) -> Quality {
   match value {
     0U => Valid
     1U => Missing
@@ -23,7 +23,7 @@ pub fn Quality::from_raw(value : UInt) -> Quality {
 }
 
 ///|
-pub fn Quality::to_raw(self : Quality) -> UInt {
+pub fn Quality::to_raw(self : Quality) -> UInt32 {
   match self {
     Valid => 0U
     Missing => 1U
@@ -166,19 +166,19 @@ pub(all) struct BatchSamplesListBuilder {
 }
 
 ///|
-pub fn BatchSamplesListReader::length(self : BatchSamplesListReader) -> Int {
+pub fn BatchSamplesListReader::length(self : BatchSamplesListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn BatchSamplesListBuilder::length(self : BatchSamplesListBuilder) -> Int {
+pub fn BatchSamplesListBuilder::length(self : BatchSamplesListBuilder) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BatchSamplesListReader::get(
   self : BatchSamplesListReader,
-  index : Int,
+  index : Int32,
 ) -> SampleReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -186,7 +186,7 @@ pub fn BatchSamplesListReader::get(
 ///|
 pub fn BatchSamplesListBuilder::get(
   self : BatchSamplesListBuilder,
-  index : Int,
+  index : Int32,
 ) -> SampleBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -201,7 +201,7 @@ pub fn BatchReader::get_samples(
 ///|
 pub fn BatchBuilder::init_samples(
   self : BatchBuilder,
-  length : Int,
+  length : Int32,
 ) -> BatchSamplesListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 3, 0), }
 }
@@ -254,7 +254,9 @@ pub fn ReportBuilder::init_root(
 }
 
 ///|
-pub fn ReportReader::which(self : ReportReader) -> UInt raise @capnp.CapnpError {
+pub fn ReportReader::which(
+  self : ReportReader,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(20)
 }
 
@@ -291,14 +293,14 @@ pub fn ReportBuilder::set_source(
 ///|
 pub fn ReportReader::get_total(
   self : ReportReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(8, default=0U)
 }
 
 ///|
 pub fn ReportBuilder::set_total(
   self : ReportBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(8, value, default=0U)
 }
@@ -306,14 +308,14 @@ pub fn ReportBuilder::set_total(
 ///|
 pub fn ReportReader::get_accepted(
   self : ReportReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(12, default=0U)
 }
 
 ///|
 pub fn ReportBuilder::set_accepted(
   self : ReportBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(12, value, default=0U)
 }
@@ -321,14 +323,14 @@ pub fn ReportBuilder::set_accepted(
 ///|
 pub fn ReportReader::get_rejected(
   self : ReportReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(16, default=0U)
 }
 
 ///|
 pub fn ReportBuilder::set_rejected(
   self : ReportBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(16, value, default=0U)
 }

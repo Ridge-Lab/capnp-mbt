@@ -27,13 +27,13 @@ pub(all) struct ABNf91221f15702f516Builder {
   inner : @capnp.StructBuilder
 }
 pub fn ABNf91221f15702f516Builder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
-pub fn ABNf91221f15702f516Builder::set_value(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn ABNf91221f15702f516Builder::set_value(Self, UInt32) -> Unit raise @capnp.CapnpError
 
 pub(all) struct ABNf91221f15702f516Reader {
   inner : @capnp.StructReader
 }
 pub fn ABNf91221f15702f516Reader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
-pub fn ABNf91221f15702f516Reader::get_value(Self) -> UInt raise @capnp.CapnpError
+pub fn ABNf91221f15702f516Reader::get_value(Self) -> UInt32 raise @capnp.CapnpError
 
 pub(all) struct ABuilder {
   inner : @capnp.StructBuilder
@@ -48,16 +48,16 @@ pub fn AReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
 pub(all) enum ArrayView {
   Borrowed
   Owned
-  Unknown(UInt)
+  Unknown(UInt32)
 }
-pub fn ArrayView::from_raw(UInt) -> Self
-pub fn ArrayView::to_raw(Self) -> UInt
+pub fn ArrayView::from_raw(UInt32) -> Self
+pub fn ArrayView::to_raw(Self) -> UInt32
 
 pub(all) struct BoxAsTextBuilder {
   inner : @capnp.StructBuilder
 }
 pub fn BoxAsTextBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
-pub fn BoxAsTextBuilder::set_value(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn BoxAsTextBuilder::set_value(Self, UInt32) -> Unit raise @capnp.CapnpError
 
 pub(all) struct BoxAsTextN1Builder {
   inner : @capnp.StructBuilder
@@ -75,7 +75,7 @@ pub(all) struct BoxAsTextReader {
   inner : @capnp.StructReader
 }
 pub fn BoxAsTextReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
-pub fn BoxAsTextReader::get_value(Self) -> UInt raise @capnp.CapnpError
+pub fn BoxAsTextReader::get_value(Self) -> UInt32 raise @capnp.CapnpError
 
 pub(all) struct BoxBuilder {
   inner : @capnp.StructBuilder
@@ -95,42 +95,42 @@ pub(all) struct FooNf3e391bd44dc24d6Builder {
   inner : @capnp.StructBuilder
 }
 pub fn FooNf3e391bd44dc24d6Builder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
-pub fn FooNf3e391bd44dc24d6Builder::set_value(Self, UInt) -> Unit raise @capnp.CapnpError
+pub fn FooNf3e391bd44dc24d6Builder::set_value(Self, UInt32) -> Unit raise @capnp.CapnpError
 
 pub(all) struct FooNf3e391bd44dc24d6Reader {
   inner : @capnp.StructReader
 }
 pub fn FooNf3e391bd44dc24d6Reader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
-pub fn FooNf3e391bd44dc24d6Reader::get_value(Self) -> UInt raise @capnp.CapnpError
+pub fn FooNf3e391bd44dc24d6Reader::get_value(Self) -> UInt32 raise @capnp.CapnpError
 
 pub(all) enum FooReader {
   First
   Second
-  Unknown(UInt)
+  Unknown(UInt32)
 }
-pub fn FooReader::from_raw(UInt) -> Self
-pub fn FooReader::to_raw(Self) -> UInt
+pub fn FooReader::from_raw(UInt32) -> Self
+pub fn FooReader::to_raw(Self) -> UInt32
 
 pub(all) enum Iter {
   Once
   Many
-  Unknown(UInt)
+  Unknown(UInt32)
 }
-pub fn Iter::from_raw(UInt) -> Self
-pub fn Iter::to_raw(Self) -> UInt
+pub fn Iter::from_raw(UInt32) -> Self
+pub fn Iter::to_raw(Self) -> UInt32
 
 pub(all) struct ListOwnerBuilder {
   inner : @capnp.StructBuilder
 }
-pub fn ListOwnerBuilder::init_children(Self, Int) -> ListOwnerChildrenListBuilder raise @capnp.CapnpError
+pub fn ListOwnerBuilder::init_children(Self, Int32) -> ListOwnerChildrenListBuilder raise @capnp.CapnpError
 pub fn ListOwnerBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
 pub fn ListOwnerBuilder::set_children(Self, ListOwnerChildrenListReader) -> Unit raise @capnp.CapnpError
 
 pub(all) struct ListOwnerChildrenListBuilder {
   inner : @capnp.ListBuilder
 }
-pub fn ListOwnerChildrenListBuilder::length(Self) -> Int
-pub fn ListOwnerChildrenListBuilder::set(Self, Int, UInt) -> Unit raise @capnp.CapnpError
+pub fn ListOwnerChildrenListBuilder::length(Self) -> Int32
+pub fn ListOwnerChildrenListBuilder::set(Self, Int32, UInt32) -> Unit raise @capnp.CapnpError
 
 pub(all) struct ListOwnerChildrenListN86fb774cf913e857Builder {
   inner : @capnp.StructBuilder
@@ -147,8 +147,8 @@ pub fn ListOwnerChildrenListN86fb774cf913e857Reader::get_value(Self) -> String r
 pub(all) struct ListOwnerChildrenListReader {
   inner : @capnp.ListReader
 }
-pub fn ListOwnerChildrenListReader::get(Self, Int) -> UInt raise @capnp.CapnpError
-pub fn ListOwnerChildrenListReader::length(Self) -> Int
+pub fn ListOwnerChildrenListReader::get(Self, Int32) -> UInt32 raise @capnp.CapnpError
+pub fn ListOwnerChildrenListReader::length(Self) -> Int32
 
 pub(all) struct ListOwnerReader {
   inner : @capnp.StructReader
@@ -159,10 +159,10 @@ pub fn ListOwnerReader::get_children(Self) -> ListOwnerChildrenListReader raise 
 pub(all) enum Ref {
   Read
   Write
-  Unknown(UInt)
+  Unknown(UInt32)
 }
-pub fn Ref::from_raw(UInt) -> Self
-pub fn Ref::to_raw(Self) -> UInt
+pub fn Ref::from_raw(UInt32) -> Self
+pub fn Ref::to_raw(Self) -> UInt32
 
 pub(all) struct UsesBuilder {
   inner : @capnp.StructBuilder
@@ -176,9 +176,9 @@ pub fn UsesBuilder::init_list_named(Self) -> ListOwnerChildrenListN86fb774cf913e
 pub fn UsesBuilder::init_nested(Self) -> ABNf91221f15702f516Builder raise @capnp.CapnpError
 pub fn UsesBuilder::init_nested_named(Self) -> ABN8532c518f2501f4fBuilder raise @capnp.CapnpError
 pub fn UsesBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
-pub fn UsesBuilder::init_root_field(Self, Int) -> UsesRootListBuilder raise @capnp.CapnpError
-pub fn UsesBuilder::init_root_field_f10(Self, Int) -> UsesRootFieldF10ListBuilder raise @capnp.CapnpError
-pub fn UsesBuilder::init_root_field_f10_f11(Self, Int) -> UsesRootFieldF10F11ListBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::init_root_field(Self, Int32) -> UsesRootListBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::init_root_field_f10(Self, Int32) -> UsesRootFieldF10ListBuilder raise @capnp.CapnpError
+pub fn UsesBuilder::init_root_field_f10_f11(Self, Int32) -> UsesRootFieldF10F11ListBuilder raise @capnp.CapnpError
 pub fn UsesBuilder::set_bound(Self, BoxAsTextN1Reader) -> Unit raise @capnp.CapnpError
 pub fn UsesBuilder::set_bound_named(Self, BoxAsTextReader) -> Unit raise @capnp.CapnpError
 pub fn UsesBuilder::set_constant_named(Self, ValuesConstantListNbbf610683e575ce0Reader) -> Unit raise @capnp.CapnpError
@@ -212,44 +212,44 @@ pub fn UsesReader::get_status(Self) -> FooReader raise @capnp.CapnpError
 pub(all) struct UsesRootFieldF10F11ListBuilder {
   inner : @capnp.ListBuilder
 }
-pub fn UsesRootFieldF10F11ListBuilder::length(Self) -> Int
-pub fn UsesRootFieldF10F11ListBuilder::set(Self, Int, UInt) -> Unit raise @capnp.CapnpError
+pub fn UsesRootFieldF10F11ListBuilder::length(Self) -> Int32
+pub fn UsesRootFieldF10F11ListBuilder::set(Self, Int32, UInt32) -> Unit raise @capnp.CapnpError
 
 pub(all) struct UsesRootFieldF10F11ListReader {
   inner : @capnp.ListReader
 }
-pub fn UsesRootFieldF10F11ListReader::get(Self, Int) -> UInt raise @capnp.CapnpError
-pub fn UsesRootFieldF10F11ListReader::length(Self) -> Int
+pub fn UsesRootFieldF10F11ListReader::get(Self, Int32) -> UInt32 raise @capnp.CapnpError
+pub fn UsesRootFieldF10F11ListReader::length(Self) -> Int32
 
 pub(all) struct UsesRootFieldF10ListBuilder {
   inner : @capnp.ListBuilder
 }
-pub fn UsesRootFieldF10ListBuilder::length(Self) -> Int
-pub fn UsesRootFieldF10ListBuilder::set(Self, Int, UInt) -> Unit raise @capnp.CapnpError
+pub fn UsesRootFieldF10ListBuilder::length(Self) -> Int32
+pub fn UsesRootFieldF10ListBuilder::set(Self, Int32, UInt32) -> Unit raise @capnp.CapnpError
 
 pub(all) struct UsesRootFieldF10ListReader {
   inner : @capnp.ListReader
 }
-pub fn UsesRootFieldF10ListReader::get(Self, Int) -> UInt raise @capnp.CapnpError
-pub fn UsesRootFieldF10ListReader::length(Self) -> Int
+pub fn UsesRootFieldF10ListReader::get(Self, Int32) -> UInt32 raise @capnp.CapnpError
+pub fn UsesRootFieldF10ListReader::length(Self) -> Int32
 
 pub(all) struct UsesRootListBuilder {
   inner : @capnp.ListBuilder
 }
-pub fn UsesRootListBuilder::length(Self) -> Int
-pub fn UsesRootListBuilder::set(Self, Int, UInt) -> Unit raise @capnp.CapnpError
+pub fn UsesRootListBuilder::length(Self) -> Int32
+pub fn UsesRootListBuilder::set(Self, Int32, UInt32) -> Unit raise @capnp.CapnpError
 
 pub(all) struct UsesRootListReader {
   inner : @capnp.ListReader
 }
-pub fn UsesRootListReader::get(Self, Int) -> UInt raise @capnp.CapnpError
-pub fn UsesRootListReader::length(Self) -> Int
+pub fn UsesRootListReader::get(Self, Int32) -> UInt32 raise @capnp.CapnpError
+pub fn UsesRootListReader::length(Self) -> Int32
 
 pub(all) struct ValuesConstantListBuilder {
   inner : @capnp.ListBuilder
 }
-pub fn ValuesConstantListBuilder::length(Self) -> Int
-pub fn ValuesConstantListBuilder::set(Self, Int, UInt) -> Unit raise @capnp.CapnpError
+pub fn ValuesConstantListBuilder::length(Self) -> Int32
+pub fn ValuesConstantListBuilder::set(Self, Int32, UInt32) -> Unit raise @capnp.CapnpError
 
 pub(all) struct ValuesConstantListNbbf610683e575ce0Builder {
   inner : @capnp.StructBuilder
@@ -266,8 +266,8 @@ pub fn ValuesConstantListNbbf610683e575ce0Reader::get_value(Self) -> String rais
 pub(all) struct ValuesConstantListReader {
   inner : @capnp.ListReader
 }
-pub fn ValuesConstantListReader::get(Self, Int) -> UInt raise @capnp.CapnpError
-pub fn ValuesConstantListReader::length(Self) -> Int
+pub fn ValuesConstantListReader::get(Self, Int32) -> UInt32 raise @capnp.CapnpError
+pub fn ValuesConstantListReader::length(Self) -> Int32
 
 // Type aliases
 

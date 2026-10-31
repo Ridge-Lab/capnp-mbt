@@ -5,7 +5,9 @@
 // Interface fields expose opaque capability indices; no RPC transport is generated.
 
 ///|
-fn capnp_schema_node(node : Int) -> @capnp.StructReader raise @capnp.CapnpError {
+fn capnp_schema_node(
+  node : Int32,
+) -> @capnp.StructReader raise @capnp.CapnpError {
   let payload : Bytes = b"\x00\x00\x00\x00\x55\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x00\x87\x02\x00\x00\x40\x00\x00\x00\x00\x00\x05\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x64\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x14\x00\x00\x00\x03\x00\x00\x00\x04\x00\x00\x00"
   @capnp.read_message(payload).root().get_list(0).get_struct(node)
 }
@@ -14,11 +16,11 @@ fn capnp_schema_node(node : Int) -> @capnp.StructReader raise @capnp.CapnpError 
 pub(all) enum FooReader {
   First
   Second
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
-pub fn FooReader::from_raw(value : UInt) -> FooReader {
+pub fn FooReader::from_raw(value : UInt32) -> FooReader {
   match value {
     0U => First
     1U => Second
@@ -27,7 +29,7 @@ pub fn FooReader::from_raw(value : UInt) -> FooReader {
 }
 
 ///|
-pub fn FooReader::to_raw(self : FooReader) -> UInt {
+pub fn FooReader::to_raw(self : FooReader) -> UInt32 {
   match self {
     First => 0U
     Second => 1U
@@ -39,11 +41,11 @@ pub fn FooReader::to_raw(self : FooReader) -> UInt {
 pub(all) enum Iter {
   Once
   Many
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
-pub fn Iter::from_raw(value : UInt) -> Iter {
+pub fn Iter::from_raw(value : UInt32) -> Iter {
   match value {
     0U => Once
     1U => Many
@@ -52,7 +54,7 @@ pub fn Iter::from_raw(value : UInt) -> Iter {
 }
 
 ///|
-pub fn Iter::to_raw(self : Iter) -> UInt {
+pub fn Iter::to_raw(self : Iter) -> UInt32 {
   match self {
     Once => 0U
     Many => 1U
@@ -64,11 +66,11 @@ pub fn Iter::to_raw(self : Iter) -> UInt {
 pub(all) enum ArrayView {
   Borrowed
   Owned
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
-pub fn ArrayView::from_raw(value : UInt) -> ArrayView {
+pub fn ArrayView::from_raw(value : UInt32) -> ArrayView {
   match value {
     0U => Borrowed
     1U => Owned
@@ -77,7 +79,7 @@ pub fn ArrayView::from_raw(value : UInt) -> ArrayView {
 }
 
 ///|
-pub fn ArrayView::to_raw(self : ArrayView) -> UInt {
+pub fn ArrayView::to_raw(self : ArrayView) -> UInt32 {
   match self {
     Borrowed => 0U
     Owned => 1U
@@ -89,11 +91,11 @@ pub fn ArrayView::to_raw(self : ArrayView) -> UInt {
 pub(all) enum Ref {
   Read
   Write
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
-pub fn Ref::from_raw(value : UInt) -> Ref {
+pub fn Ref::from_raw(value : UInt32) -> Ref {
   match value {
     0U => Read
     1U => Write
@@ -102,7 +104,7 @@ pub fn Ref::from_raw(value : UInt) -> Ref {
 }
 
 ///|
-pub fn Ref::to_raw(self : Ref) -> UInt {
+pub fn Ref::to_raw(self : Ref) -> UInt32 {
   match self {
     Read => 0U
     Write => 1U
@@ -121,30 +123,32 @@ pub(all) struct ValuesConstantListBuilder {
 }
 
 ///|
-pub fn ValuesConstantListReader::length(self : ValuesConstantListReader) -> Int {
+pub fn ValuesConstantListReader::length(
+  self : ValuesConstantListReader,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn ValuesConstantListBuilder::length(
   self : ValuesConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn ValuesConstantListReader::get(
   self : ValuesConstantListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn ValuesConstantListBuilder::set(
   self : ValuesConstantListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -181,14 +185,14 @@ pub fn FooNf3e391bd44dc24d6Builder::init_root(
 ///|
 pub fn FooNf3e391bd44dc24d6Reader::get_value(
   self : FooNf3e391bd44dc24d6Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn FooNf3e391bd44dc24d6Builder::set_value(
   self : FooNf3e391bd44dc24d6Builder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -230,30 +234,30 @@ pub(all) struct ListOwnerChildrenListBuilder {
 ///|
 pub fn ListOwnerChildrenListReader::length(
   self : ListOwnerChildrenListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn ListOwnerChildrenListBuilder::length(
   self : ListOwnerChildrenListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn ListOwnerChildrenListReader::get(
   self : ListOwnerChildrenListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn ListOwnerChildrenListBuilder::set(
   self : ListOwnerChildrenListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -268,7 +272,7 @@ pub fn ListOwnerReader::get_children(
 ///|
 pub fn ListOwnerBuilder::init_children(
   self : ListOwnerBuilder,
-  length : Int,
+  length : Int32,
 ) -> ListOwnerChildrenListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(0, 4, length), }
 }
@@ -402,14 +406,14 @@ pub fn BoxAsTextBuilder::init_root(
 ///|
 pub fn BoxAsTextReader::get_value(
   self : BoxAsTextReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn BoxAsTextBuilder::set_value(
   self : BoxAsTextBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -504,14 +508,14 @@ pub fn ABNf91221f15702f516Builder::init_root(
 ///|
 pub fn ABNf91221f15702f516Reader::get_value(
   self : ABNf91221f15702f516Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn ABNf91221f15702f516Builder::set_value(
   self : ABNf91221f15702f516Builder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -781,28 +785,28 @@ pub(all) struct UsesRootListBuilder {
 }
 
 ///|
-pub fn UsesRootListReader::length(self : UsesRootListReader) -> Int {
+pub fn UsesRootListReader::length(self : UsesRootListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn UsesRootListBuilder::length(self : UsesRootListBuilder) -> Int {
+pub fn UsesRootListBuilder::length(self : UsesRootListBuilder) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn UsesRootListReader::get(
   self : UsesRootListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn UsesRootListBuilder::set(
   self : UsesRootListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -817,7 +821,7 @@ pub fn UsesReader::get_root_field(
 ///|
 pub fn UsesBuilder::init_root_field(
   self : UsesBuilder,
-  length : Int,
+  length : Int32,
 ) -> UsesRootListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(8, 4, length), }
 }
@@ -843,30 +847,30 @@ pub(all) struct UsesRootFieldF10ListBuilder {
 ///|
 pub fn UsesRootFieldF10ListReader::length(
   self : UsesRootFieldF10ListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn UsesRootFieldF10ListBuilder::length(
   self : UsesRootFieldF10ListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn UsesRootFieldF10ListReader::get(
   self : UsesRootFieldF10ListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn UsesRootFieldF10ListBuilder::set(
   self : UsesRootFieldF10ListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -881,7 +885,7 @@ pub fn UsesReader::get_root_field_f10(
 ///|
 pub fn UsesBuilder::init_root_field_f10(
   self : UsesBuilder,
-  length : Int,
+  length : Int32,
 ) -> UsesRootFieldF10ListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(9, 4, length), }
 }
@@ -907,30 +911,30 @@ pub(all) struct UsesRootFieldF10F11ListBuilder {
 ///|
 pub fn UsesRootFieldF10F11ListReader::length(
   self : UsesRootFieldF10F11ListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn UsesRootFieldF10F11ListBuilder::length(
   self : UsesRootFieldF10F11ListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn UsesRootFieldF10F11ListReader::get(
   self : UsesRootFieldF10F11ListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn UsesRootFieldF10F11ListBuilder::set(
   self : UsesRootFieldF10F11ListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -945,7 +949,7 @@ pub fn UsesReader::get_root_field_f10_f11(
 ///|
 pub fn UsesBuilder::init_root_field_f10_f11(
   self : UsesBuilder,
-  length : Int,
+  length : Int32,
 ) -> UsesRootFieldF10F11ListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(10, 4, length), }
 }

@@ -3,7 +3,7 @@
 // Result: segment, body offset in words, resolved tag.
 fn PointerReader::read_resolve(
   self : PointerReader,
-) -> (Int, Int, UInt64) raise CapnpError {
+) -> (Int32, Int32, UInt64) raise CapnpError {
   if self.depth <= 0 {
     raise Limit("message nesting limit exceeded")
   }
@@ -172,7 +172,7 @@ pub fn PointerReader::as_list(
 ///|
 pub fn PointerReader::as_data(
   self : PointerReader,
-  default? : Bytes = b"",
+  default~ : Bytes = b"",
 ) -> Bytes raise CapnpError {
   if self.is_null() {
     return default
@@ -188,7 +188,7 @@ pub fn PointerReader::as_data(
 ///|
 pub fn PointerReader::as_text(
   self : PointerReader,
-  default? : String = "",
+  default~ : String = "",
 ) -> String raise CapnpError {
   if self.is_null() {
     return default
@@ -212,7 +212,7 @@ pub fn PointerReader::as_text(
 ///|
 pub fn StructReader::get_pointer(
   self : StructReader,
-  index : Int,
+  index : Int32,
 ) -> PointerReader raise CapnpError {
   if index < 0 {
     raise Bounds("negative struct pointer index")
@@ -231,7 +231,7 @@ pub fn StructReader::get_pointer(
 ///|
 pub fn StructReader::get_struct(
   self : StructReader,
-  index : Int,
+  index : Int32,
 ) -> StructReader raise CapnpError {
   self.get_pointer(index).as_struct()
 }
@@ -239,7 +239,7 @@ pub fn StructReader::get_struct(
 ///|
 pub fn StructReader::get_list(
   self : StructReader,
-  index : Int,
+  index : Int32,
 ) -> ListReader raise CapnpError {
   self.get_pointer(index).as_list()
 }
@@ -247,8 +247,8 @@ pub fn StructReader::get_list(
 ///|
 pub fn StructReader::get_text(
   self : StructReader,
-  index : Int,
-  default? : String = "",
+  index : Int32,
+  default~ : String = "",
 ) -> String raise CapnpError {
   self.get_pointer(index).as_text(default~)
 }
@@ -256,18 +256,18 @@ pub fn StructReader::get_text(
 ///|
 pub fn StructReader::get_data(
   self : StructReader,
-  index : Int,
-  default? : Bytes = b"",
+  index : Int32,
+  default~ : Bytes = b"",
 ) -> Bytes raise CapnpError {
   self.get_pointer(index).as_data(default~)
 }
 
 ///|
-pub fn StructReader::data_size_bytes(self : StructReader) -> Int {
+pub fn StructReader::data_size_bytes(self : StructReader) -> Int32 {
   self.data_bytes
 }
 
 ///|
-pub fn StructReader::pointer_count(self : StructReader) -> Int {
+pub fn StructReader::pointer_count(self : StructReader) -> Int32 {
   self.pointer_count
 }

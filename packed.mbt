@@ -69,7 +69,7 @@ pub fn pack(input : Bytes) -> Bytes raise CapnpError {
 /// allocation would exceed `max_output_bytes` (64 MiB by default).
 pub fn unpack(
   input : Bytes,
-  max_output_bytes? : Int = 64 * 1024 * 1024,
+  max_output_bytes~ : Int32 = 64 * 1024 * 1024,
 ) -> Bytes raise CapnpError {
   guard max_output_bytes >= 0 else { raise Limit("negative unpack limit") }
   let out : Array[Byte] = []

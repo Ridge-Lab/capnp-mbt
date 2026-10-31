@@ -1,18 +1,18 @@
 ///|
-pub fn ListReader::length(self : ListReader) -> Int {
+pub fn ListReader::length(self : ListReader) -> Int32 {
   self.count
 }
 
 ///|
 /// Return the wire element-size code, 0 through 7.
-pub fn ListReader::element_size(self : ListReader) -> Int {
+pub fn ListReader::element_size(self : ListReader) -> Int32 {
   self.code
 }
 
 ///|
 fn ListReader::read_list_index(
   self : ListReader,
-  index : Int,
+  index : Int32,
 ) -> Unit raise CapnpError {
   if index < 0 || index >= self.count {
     raise Bounds("list index out of bounds")
@@ -22,9 +22,9 @@ fn ListReader::read_list_index(
 ///|
 fn ListReader::read_list_bits(
   self : ListReader,
-  index : Int,
-  code : Int,
-  width : Int,
+  index : Int32,
+  code : Int32,
+  width : Int32,
 ) -> UInt64 raise CapnpError {
   ListReader::read_list_index(self, index)
   if self.code == 7 {
@@ -47,7 +47,7 @@ fn ListReader::read_list_bits(
 ///|
 pub fn ListReader::get_bool(
   self : ListReader,
-  index : Int,
+  index : Int32,
 ) -> Bool raise CapnpError {
   ListReader::read_list_index(self, index)
   if self.code != 1 {
@@ -60,7 +60,7 @@ pub fn ListReader::get_bool(
 ///|
 pub fn ListReader::get_uint8(
   self : ListReader,
-  index : Int,
+  index : Int32,
 ) -> Byte raise CapnpError {
   ListReader::read_list_bits(self, index, 2, 1).to_byte()
 }
@@ -68,23 +68,23 @@ pub fn ListReader::get_uint8(
 ///|
 pub fn ListReader::get_uint16(
   self : ListReader,
-  index : Int,
-) -> UInt raise CapnpError {
+  index : Int32,
+) -> UInt32 raise CapnpError {
   ListReader::read_list_bits(self, index, 3, 2).to_uint()
 }
 
 ///|
 pub fn ListReader::get_uint32(
   self : ListReader,
-  index : Int,
-) -> UInt raise CapnpError {
+  index : Int32,
+) -> UInt32 raise CapnpError {
   ListReader::read_list_bits(self, index, 4, 4).to_uint()
 }
 
 ///|
 pub fn ListReader::get_uint64(
   self : ListReader,
-  index : Int,
+  index : Int32,
 ) -> UInt64 raise CapnpError {
   ListReader::read_list_bits(self, index, 5, 8)
 }
@@ -92,8 +92,8 @@ pub fn ListReader::get_uint64(
 ///|
 pub fn ListReader::get_int8(
   self : ListReader,
-  index : Int,
-) -> Int raise CapnpError {
+  index : Int32,
+) -> Int32 raise CapnpError {
   let value = ListReader::read_list_bits(self, index, 2, 1).to_int()
   if value >= 128 {
     value - 256
@@ -105,8 +105,8 @@ pub fn ListReader::get_int8(
 ///|
 pub fn ListReader::get_int16(
   self : ListReader,
-  index : Int,
-) -> Int raise CapnpError {
+  index : Int32,
+) -> Int32 raise CapnpError {
   let value = ListReader::read_list_bits(self, index, 3, 2).to_int()
   if value >= 32768 {
     value - 65536
@@ -118,15 +118,15 @@ pub fn ListReader::get_int16(
 ///|
 pub fn ListReader::get_int32(
   self : ListReader,
-  index : Int,
-) -> Int raise CapnpError {
+  index : Int32,
+) -> Int32 raise CapnpError {
   ListReader::read_list_bits(self, index, 4, 4).to_uint().reinterpret_as_int()
 }
 
 ///|
 pub fn ListReader::get_int64(
   self : ListReader,
-  index : Int,
+  index : Int32,
 ) -> Int64 raise CapnpError {
   ListReader::read_list_bits(self, index, 5, 8).reinterpret_as_int64()
 }
@@ -134,7 +134,7 @@ pub fn ListReader::get_int64(
 ///|
 pub fn ListReader::get_float32(
   self : ListReader,
-  index : Int,
+  index : Int32,
 ) -> Float raise CapnpError {
   Float::reinterpret_from_uint(
     ListReader::read_list_bits(self, index, 4, 4).to_uint(),
@@ -144,7 +144,7 @@ pub fn ListReader::get_float32(
 ///|
 pub fn ListReader::get_float64(
   self : ListReader,
-  index : Int,
+  index : Int32,
 ) -> Double raise CapnpError {
   ListReader::read_list_bits(self, index, 5, 8).reinterpret_as_double()
 }
@@ -154,7 +154,7 @@ pub fn ListReader::get_float64(
 /// Bit lists cannot be upgraded to struct lists under the Cap'n Proto specification.
 pub fn ListReader::get_struct(
   self : ListReader,
-  index : Int,
+  index : Int32,
 ) -> StructReader raise CapnpError {
   ListReader::read_list_index(self, index)
   if self.code == 1 {
@@ -194,7 +194,7 @@ pub fn ListReader::get_struct(
 ///|
 pub fn ListReader::get_pointer(
   self : ListReader,
-  index : Int,
+  index : Int32,
 ) -> PointerReader raise CapnpError {
   ListReader::read_list_index(self, index)
   if self.code == 7 {
@@ -217,7 +217,7 @@ pub fn ListReader::get_pointer(
 ///|
 pub fn ListReader::get_list(
   self : ListReader,
-  index : Int,
+  index : Int32,
 ) -> ListReader raise CapnpError {
   self.get_pointer(index).as_list()
 }
@@ -225,7 +225,7 @@ pub fn ListReader::get_list(
 ///|
 pub fn ListReader::get_text(
   self : ListReader,
-  index : Int,
+  index : Int32,
 ) -> String raise CapnpError {
   self.get_pointer(index).as_text()
 }
@@ -233,7 +233,7 @@ pub fn ListReader::get_text(
 ///|
 pub fn ListReader::get_data(
   self : ListReader,
-  index : Int,
+  index : Int32,
 ) -> Bytes raise CapnpError {
   self.get_pointer(index).as_data()
 }

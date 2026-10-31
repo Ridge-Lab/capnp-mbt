@@ -56,7 +56,7 @@ fn emit_constant(
 }
 
 ///|
-fn any_reader_type(kind : Int) -> String {
+fn any_reader_type(kind : Int32) -> String {
   match kind {
     1 => "@capnp.StructReader"
     2 => "@capnp.ListReader"
@@ -65,7 +65,7 @@ fn any_reader_type(kind : Int) -> String {
 }
 
 ///|
-fn any_read_expression(pointer : String, kind : Int) -> String {
+fn any_read_expression(pointer : String, kind : Int32) -> String {
   match kind {
     1 => pointer + ".as_struct()"
     2 => pointer + ".as_list()"
@@ -76,7 +76,7 @@ fn any_read_expression(pointer : String, kind : Int) -> String {
 }
 
 ///|
-fn any_set_method(kind : Int) -> String {
+fn any_set_method(kind : Int32) -> String {
   match kind {
     1 => "set_struct"
     2 => "set_list"

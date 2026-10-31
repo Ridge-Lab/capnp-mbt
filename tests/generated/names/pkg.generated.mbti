@@ -27,27 +27,27 @@ pub fn NamesReader::get_string(Self) -> SchemaString raise @capnp.CapnpError
 pub(all) enum SchemaError {
   Invalid
   Valid
-  Unknown(UInt)
+  Unknown(UInt32)
 }
-pub fn SchemaError::from_raw(UInt) -> Self
-pub fn SchemaError::to_raw(Self) -> UInt
+pub fn SchemaError::from_raw(UInt32) -> Self
+pub fn SchemaError::to_raw(Self) -> UInt32
 
 pub(all) enum SchemaString {
   Empty
   Filled
-  Unknown(UInt)
+  Unknown(UInt32)
 }
-pub fn SchemaString::from_raw(UInt) -> Self
-pub fn SchemaString::to_raw(Self) -> UInt
+pub fn SchemaString::from_raw(UInt32) -> Self
+pub fn SchemaString::to_raw(Self) -> UInt32
 
 pub(all) enum Status {
   Unknown
   Ok
   UnknownValue1
-  UnknownValue2(UInt)
+  UnknownValue2(UInt32)
 }
-pub fn Status::from_raw(UInt) -> Self
-pub fn Status::to_raw(Self) -> UInt
+pub fn Status::from_raw(UInt32) -> Self
+pub fn Status::to_raw(Self) -> UInt32
 
 // Type aliases
 

@@ -5,7 +5,9 @@
 // Interface fields expose opaque capability indices; no RPC transport is generated.
 
 ///|
-fn capnp_schema_node(node : Int) -> @capnp.StructReader raise @capnp.CapnpError {
+fn capnp_schema_node(
+  node : Int32,
+) -> @capnp.StructReader raise @capnp.CapnpError {
   let payload : Bytes = {
     let chunks : Array[Bytes] = [
       b"\x00\x00\x00\x00\xca\x09\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x00\x47\x29\x00\x00\x20\x04\x00\x00\x00\x00\x05\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x2d\x14\x00\x00\x47\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xb5\x16\x00\x00\x87\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xad\x15\x00\x00\x27\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xd1\x13\x00\x00\xa7\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
@@ -21,8 +23,8 @@ fn capnp_schema_node(node : Int) -> @capnp.StructReader raise @capnp.CapnpError 
 
 ///|
 fn capnp_schema_default(
-  node : Int,
-  field : Int,
+  node : Int32,
+  field : Int32,
 ) -> @capnp.PointerReader raise @capnp.CapnpError {
   capnp_schema_node(node)
   .get_list(3)
@@ -41,11 +43,11 @@ pub(all) enum TestEnum {
   Corge
   Grault
   Garply
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
-pub fn TestEnum::from_raw(value : UInt) -> TestEnum {
+pub fn TestEnum::from_raw(value : UInt32) -> TestEnum {
   match value {
     0U => Foo
     1U => Bar
@@ -60,7 +62,7 @@ pub fn TestEnum::from_raw(value : UInt) -> TestEnum {
 }
 
 ///|
-pub fn TestEnum::to_raw(self : TestEnum) -> UInt {
+pub fn TestEnum::to_raw(self : TestEnum) -> UInt32 {
   match self {
     Foo => 0U
     Bar => 1U
@@ -78,12 +80,12 @@ pub fn TestEnum::to_raw(self : TestEnum) -> UInt {
 pub(all) enum TestNestedTypesNestedEnum {
   Foo
   Bar
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
 pub fn TestNestedTypesNestedEnum::from_raw(
-  value : UInt,
+  value : UInt32,
 ) -> TestNestedTypesNestedEnum {
   match value {
     0U => Foo
@@ -95,7 +97,7 @@ pub fn TestNestedTypesNestedEnum::from_raw(
 ///|
 pub fn TestNestedTypesNestedEnum::to_raw(
   self : TestNestedTypesNestedEnum,
-) -> UInt {
+) -> UInt32 {
   match self {
     Foo => 0U
     Bar => 1U
@@ -108,12 +110,12 @@ pub(all) enum TestNestedTypesNestedStructNestedEnum {
   Baz
   Qux
   Quux
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
 pub fn TestNestedTypesNestedStructNestedEnum::from_raw(
-  value : UInt,
+  value : UInt32,
 ) -> TestNestedTypesNestedStructNestedEnum {
   match value {
     0U => Baz
@@ -126,7 +128,7 @@ pub fn TestNestedTypesNestedStructNestedEnum::from_raw(
 ///|
 pub fn TestNestedTypesNestedStructNestedEnum::to_raw(
   self : TestNestedTypesNestedStructNestedEnum,
-) -> UInt {
+) -> UInt32 {
   match self {
     Baz => 0U
     Qux => 1U
@@ -156,17 +158,17 @@ pub fn const_test_constants_bool_const() -> Bool {
 }
 
 ///|
-pub fn const_test_constants_int8_const() -> Int {
+pub fn const_test_constants_int8_const() -> Int32 {
   -123
 }
 
 ///|
-pub fn const_test_constants_int16_const() -> Int {
+pub fn const_test_constants_int16_const() -> Int32 {
   -12345
 }
 
 ///|
-pub fn const_test_constants_int32_const() -> Int {
+pub fn const_test_constants_int32_const() -> Int32 {
   -12345678
 }
 
@@ -181,12 +183,12 @@ pub fn const_test_constants_uint8_const() -> Byte {
 }
 
 ///|
-pub fn const_test_constants_uint16_const() -> UInt {
+pub fn const_test_constants_uint16_const() -> UInt32 {
   45678U
 }
 
 ///|
-pub fn const_test_constants_uint32_const() -> UInt {
+pub fn const_test_constants_uint32_const() -> UInt32 {
   3456789012U
 }
 
@@ -238,21 +240,21 @@ pub(all) struct TestConstantsVoidListConstConstantListBuilder {
 ///|
 pub fn TestConstantsVoidListConstConstantListReader::length(
   self : TestConstantsVoidListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsVoidListConstConstantListBuilder::length(
   self : TestConstantsVoidListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsVoidListConstConstantListReader::get(
   self : TestConstantsVoidListConstConstantListReader,
-  index : Int,
+  index : Int32,
 ) -> Unit raise @capnp.CapnpError {
   if index < 0 || index >= self.inner.length() {
     raise @capnp.CapnpError::Bounds("void list index")
@@ -262,7 +264,7 @@ pub fn TestConstantsVoidListConstConstantListReader::get(
 ///|
 pub fn TestConstantsVoidListConstConstantListBuilder::set(
   self : TestConstantsVoidListConstConstantListBuilder,
-  index : Int,
+  index : Int32,
 ) -> Unit raise @capnp.CapnpError {
   if index < 0 || index >= self.inner.length() {
     raise @capnp.CapnpError::Bounds("void list index")
@@ -287,21 +289,21 @@ pub(all) struct TestConstantsBoolListConstConstantListBuilder {
 ///|
 pub fn TestConstantsBoolListConstConstantListReader::length(
   self : TestConstantsBoolListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsBoolListConstConstantListBuilder::length(
   self : TestConstantsBoolListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsBoolListConstConstantListReader::get(
   self : TestConstantsBoolListConstConstantListReader,
-  index : Int,
+  index : Int32,
 ) -> Bool raise @capnp.CapnpError {
   self.inner.get_bool(index)
 }
@@ -309,7 +311,7 @@ pub fn TestConstantsBoolListConstConstantListReader::get(
 ///|
 pub fn TestConstantsBoolListConstConstantListBuilder::set(
   self : TestConstantsBoolListConstConstantListBuilder,
-  index : Int,
+  index : Int32,
   value : Bool,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(index, value)
@@ -333,30 +335,30 @@ pub(all) struct TestConstantsInt8ListConstConstantListBuilder {
 ///|
 pub fn TestConstantsInt8ListConstConstantListReader::length(
   self : TestConstantsInt8ListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsInt8ListConstConstantListBuilder::length(
   self : TestConstantsInt8ListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsInt8ListConstConstantListReader::get(
   self : TestConstantsInt8ListConstConstantListReader,
-  index : Int,
-) -> Int raise @capnp.CapnpError {
+  index : Int32,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int8(index)
 }
 
 ///|
 pub fn TestConstantsInt8ListConstConstantListBuilder::set(
   self : TestConstantsInt8ListConstConstantListBuilder,
-  index : Int,
-  value : Int,
+  index : Int32,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int8(index, value)
 }
@@ -379,30 +381,30 @@ pub(all) struct TestConstantsInt16ListConstConstantListBuilder {
 ///|
 pub fn TestConstantsInt16ListConstConstantListReader::length(
   self : TestConstantsInt16ListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsInt16ListConstConstantListBuilder::length(
   self : TestConstantsInt16ListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsInt16ListConstConstantListReader::get(
   self : TestConstantsInt16ListConstConstantListReader,
-  index : Int,
-) -> Int raise @capnp.CapnpError {
+  index : Int32,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int16(index)
 }
 
 ///|
 pub fn TestConstantsInt16ListConstConstantListBuilder::set(
   self : TestConstantsInt16ListConstConstantListBuilder,
-  index : Int,
-  value : Int,
+  index : Int32,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int16(index, value)
 }
@@ -425,30 +427,30 @@ pub(all) struct TestConstantsInt32ListConstConstantListBuilder {
 ///|
 pub fn TestConstantsInt32ListConstConstantListReader::length(
   self : TestConstantsInt32ListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsInt32ListConstConstantListBuilder::length(
   self : TestConstantsInt32ListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsInt32ListConstConstantListReader::get(
   self : TestConstantsInt32ListConstConstantListReader,
-  index : Int,
-) -> Int raise @capnp.CapnpError {
+  index : Int32,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(index)
 }
 
 ///|
 pub fn TestConstantsInt32ListConstConstantListBuilder::set(
   self : TestConstantsInt32ListConstConstantListBuilder,
-  index : Int,
-  value : Int,
+  index : Int32,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(index, value)
 }
@@ -471,21 +473,21 @@ pub(all) struct TestConstantsInt64ListConstConstantListBuilder {
 ///|
 pub fn TestConstantsInt64ListConstConstantListReader::length(
   self : TestConstantsInt64ListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsInt64ListConstConstantListBuilder::length(
   self : TestConstantsInt64ListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsInt64ListConstConstantListReader::get(
   self : TestConstantsInt64ListConstConstantListReader,
-  index : Int,
+  index : Int32,
 ) -> Int64 raise @capnp.CapnpError {
   self.inner.get_int64(index)
 }
@@ -493,7 +495,7 @@ pub fn TestConstantsInt64ListConstConstantListReader::get(
 ///|
 pub fn TestConstantsInt64ListConstConstantListBuilder::set(
   self : TestConstantsInt64ListConstConstantListBuilder,
-  index : Int,
+  index : Int32,
   value : Int64,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int64(index, value)
@@ -517,21 +519,21 @@ pub(all) struct TestConstantsUint8ListConstConstantListBuilder {
 ///|
 pub fn TestConstantsUint8ListConstConstantListReader::length(
   self : TestConstantsUint8ListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsUint8ListConstConstantListBuilder::length(
   self : TestConstantsUint8ListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsUint8ListConstConstantListReader::get(
   self : TestConstantsUint8ListConstConstantListReader,
-  index : Int,
+  index : Int32,
 ) -> Byte raise @capnp.CapnpError {
   self.inner.get_uint8(index)
 }
@@ -539,7 +541,7 @@ pub fn TestConstantsUint8ListConstConstantListReader::get(
 ///|
 pub fn TestConstantsUint8ListConstConstantListBuilder::set(
   self : TestConstantsUint8ListConstConstantListBuilder,
-  index : Int,
+  index : Int32,
   value : Byte,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint8(index, value)
@@ -563,30 +565,30 @@ pub(all) struct TestConstantsUint16ListConstConstantListBuilder {
 ///|
 pub fn TestConstantsUint16ListConstConstantListReader::length(
   self : TestConstantsUint16ListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsUint16ListConstConstantListBuilder::length(
   self : TestConstantsUint16ListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsUint16ListConstConstantListReader::get(
   self : TestConstantsUint16ListConstConstantListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(index)
 }
 
 ///|
 pub fn TestConstantsUint16ListConstConstantListBuilder::set(
   self : TestConstantsUint16ListConstConstantListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(index, value)
 }
@@ -609,30 +611,30 @@ pub(all) struct TestConstantsUint32ListConstConstantListBuilder {
 ///|
 pub fn TestConstantsUint32ListConstConstantListReader::length(
   self : TestConstantsUint32ListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsUint32ListConstConstantListBuilder::length(
   self : TestConstantsUint32ListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsUint32ListConstConstantListReader::get(
   self : TestConstantsUint32ListConstConstantListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn TestConstantsUint32ListConstConstantListBuilder::set(
   self : TestConstantsUint32ListConstConstantListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -655,21 +657,21 @@ pub(all) struct TestConstantsUint64ListConstConstantListBuilder {
 ///|
 pub fn TestConstantsUint64ListConstConstantListReader::length(
   self : TestConstantsUint64ListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsUint64ListConstConstantListBuilder::length(
   self : TestConstantsUint64ListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsUint64ListConstConstantListReader::get(
   self : TestConstantsUint64ListConstConstantListReader,
-  index : Int,
+  index : Int32,
 ) -> UInt64 raise @capnp.CapnpError {
   self.inner.get_uint64(index)
 }
@@ -677,7 +679,7 @@ pub fn TestConstantsUint64ListConstConstantListReader::get(
 ///|
 pub fn TestConstantsUint64ListConstConstantListBuilder::set(
   self : TestConstantsUint64ListConstConstantListBuilder,
-  index : Int,
+  index : Int32,
   value : UInt64,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint64(index, value)
@@ -701,21 +703,21 @@ pub(all) struct TestConstantsFloat32ListConstConstantListBuilder {
 ///|
 pub fn TestConstantsFloat32ListConstConstantListReader::length(
   self : TestConstantsFloat32ListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsFloat32ListConstConstantListBuilder::length(
   self : TestConstantsFloat32ListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsFloat32ListConstConstantListReader::get(
   self : TestConstantsFloat32ListConstConstantListReader,
-  index : Int,
+  index : Int32,
 ) -> Float raise @capnp.CapnpError {
   self.inner.get_float32(index)
 }
@@ -723,7 +725,7 @@ pub fn TestConstantsFloat32ListConstConstantListReader::get(
 ///|
 pub fn TestConstantsFloat32ListConstConstantListBuilder::set(
   self : TestConstantsFloat32ListConstConstantListBuilder,
-  index : Int,
+  index : Int32,
   value : Float,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_float32(index, value)
@@ -747,21 +749,21 @@ pub(all) struct TestConstantsFloat64ListConstConstantListBuilder {
 ///|
 pub fn TestConstantsFloat64ListConstConstantListReader::length(
   self : TestConstantsFloat64ListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsFloat64ListConstConstantListBuilder::length(
   self : TestConstantsFloat64ListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsFloat64ListConstConstantListReader::get(
   self : TestConstantsFloat64ListConstConstantListReader,
-  index : Int,
+  index : Int32,
 ) -> Double raise @capnp.CapnpError {
   self.inner.get_float64(index)
 }
@@ -769,7 +771,7 @@ pub fn TestConstantsFloat64ListConstConstantListReader::get(
 ///|
 pub fn TestConstantsFloat64ListConstConstantListBuilder::set(
   self : TestConstantsFloat64ListConstConstantListBuilder,
-  index : Int,
+  index : Int32,
   value : Double,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_float64(index, value)
@@ -793,21 +795,21 @@ pub(all) struct TestConstantsTextListConstConstantListBuilder {
 ///|
 pub fn TestConstantsTextListConstConstantListReader::length(
   self : TestConstantsTextListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsTextListConstConstantListBuilder::length(
   self : TestConstantsTextListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsTextListConstConstantListReader::get(
   self : TestConstantsTextListConstConstantListReader,
-  index : Int,
+  index : Int32,
 ) -> String raise @capnp.CapnpError {
   self.inner.get_text(index)
 }
@@ -815,7 +817,7 @@ pub fn TestConstantsTextListConstConstantListReader::get(
 ///|
 pub fn TestConstantsTextListConstConstantListBuilder::set(
   self : TestConstantsTextListConstConstantListBuilder,
-  index : Int,
+  index : Int32,
   value : String,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_text(index, value)
@@ -839,21 +841,21 @@ pub(all) struct TestConstantsDataListConstConstantListBuilder {
 ///|
 pub fn TestConstantsDataListConstConstantListReader::length(
   self : TestConstantsDataListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsDataListConstConstantListBuilder::length(
   self : TestConstantsDataListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsDataListConstConstantListReader::get(
   self : TestConstantsDataListConstConstantListReader,
-  index : Int,
+  index : Int32,
 ) -> Bytes raise @capnp.CapnpError {
   self.inner.get_data(index)
 }
@@ -861,7 +863,7 @@ pub fn TestConstantsDataListConstConstantListReader::get(
 ///|
 pub fn TestConstantsDataListConstConstantListBuilder::set(
   self : TestConstantsDataListConstConstantListBuilder,
-  index : Int,
+  index : Int32,
   value : Bytes,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_data(index, value)
@@ -885,21 +887,21 @@ pub(all) struct TestConstantsStructListConstConstantListBuilder {
 ///|
 pub fn TestConstantsStructListConstConstantListReader::length(
   self : TestConstantsStructListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsStructListConstConstantListBuilder::length(
   self : TestConstantsStructListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsStructListConstConstantListReader::get(
   self : TestConstantsStructListConstConstantListReader,
-  index : Int,
+  index : Int32,
 ) -> TestAllTypesReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -907,7 +909,7 @@ pub fn TestConstantsStructListConstConstantListReader::get(
 ///|
 pub fn TestConstantsStructListConstConstantListBuilder::get(
   self : TestConstantsStructListConstConstantListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestAllTypesBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -930,21 +932,21 @@ pub(all) struct TestConstantsEnumListConstConstantListBuilder {
 ///|
 pub fn TestConstantsEnumListConstConstantListReader::length(
   self : TestConstantsEnumListConstConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsEnumListConstConstantListBuilder::length(
   self : TestConstantsEnumListConstConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestConstantsEnumListConstConstantListReader::get(
   self : TestConstantsEnumListConstConstantListReader,
-  index : Int,
+  index : Int32,
 ) -> TestEnum raise @capnp.CapnpError {
   TestEnum::from_raw(self.inner.get_uint16(index))
 }
@@ -952,7 +954,7 @@ pub fn TestConstantsEnumListConstConstantListReader::get(
 ///|
 pub fn TestConstantsEnumListConstConstantListBuilder::set(
   self : TestConstantsEnumListConstConstantListBuilder,
-  index : Int,
+  index : Int32,
   value : TestEnum,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(index, value.to_raw())
@@ -964,7 +966,7 @@ pub fn const_test_constants_enum_list_const() -> TestConstantsEnumListConstConst
 }
 
 ///|
-pub fn const_global_int() -> UInt {
+pub fn const_global_int() -> UInt32 {
   12345U
 }
 
@@ -1038,12 +1040,12 @@ pub(all) enum TestSturdyRefObjectIdTag {
   TestTailCallee
   TestTailCaller
   TestMoreStuff
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
 pub fn TestSturdyRefObjectIdTag::from_raw(
-  value : UInt,
+  value : UInt32,
 ) -> TestSturdyRefObjectIdTag {
   match value {
     0U => TestInterface
@@ -1059,7 +1061,7 @@ pub fn TestSturdyRefObjectIdTag::from_raw(
 ///|
 pub fn TestSturdyRefObjectIdTag::to_raw(
   self : TestSturdyRefObjectIdTag,
-) -> UInt {
+) -> UInt32 {
   match self {
     TestInterface => 0U
     TestExtends => 1U
@@ -1076,12 +1078,12 @@ pub(all) enum TestNameAnnotationBadlyNamedEnum {
   Foo
   Bar
   Baz
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
 pub fn TestNameAnnotationBadlyNamedEnum::from_raw(
-  value : UInt,
+  value : UInt32,
 ) -> TestNameAnnotationBadlyNamedEnum {
   match value {
     0U => Foo
@@ -1094,7 +1096,7 @@ pub fn TestNameAnnotationBadlyNamedEnum::from_raw(
 ///|
 pub fn TestNameAnnotationBadlyNamedEnum::to_raw(
   self : TestNameAnnotationBadlyNamedEnum,
-) -> UInt {
+) -> UInt32 {
   match self {
     Foo => 0U
     Bar => 1U
@@ -1108,12 +1110,12 @@ pub(all) enum TestNameAnnotationNestedStructDeeplyNestedEnum {
   Quux
   Corge
   Grault
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
 pub fn TestNameAnnotationNestedStructDeeplyNestedEnum::from_raw(
-  value : UInt,
+  value : UInt32,
 ) -> TestNameAnnotationNestedStructDeeplyNestedEnum {
   match value {
     0U => Quux
@@ -1126,7 +1128,7 @@ pub fn TestNameAnnotationNestedStructDeeplyNestedEnum::from_raw(
 ///|
 pub fn TestNameAnnotationNestedStructDeeplyNestedEnum::to_raw(
   self : TestNameAnnotationNestedStructDeeplyNestedEnum,
-) -> UInt {
+) -> UInt32 {
   match self {
     Quux => 0U
     Corge => 1U
@@ -1193,14 +1195,14 @@ pub fn TestAllTypesBuilder::set_bool_field(
 ///|
 pub fn TestAllTypesReader::get_int8_field(
   self : TestAllTypesReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int8(1, default=0)
 }
 
 ///|
 pub fn TestAllTypesBuilder::set_int8_field(
   self : TestAllTypesBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int8(1, value, default=0)
 }
@@ -1208,14 +1210,14 @@ pub fn TestAllTypesBuilder::set_int8_field(
 ///|
 pub fn TestAllTypesReader::get_int16_field(
   self : TestAllTypesReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int16(2, default=0)
 }
 
 ///|
 pub fn TestAllTypesBuilder::set_int16_field(
   self : TestAllTypesBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int16(2, value, default=0)
 }
@@ -1223,14 +1225,14 @@ pub fn TestAllTypesBuilder::set_int16_field(
 ///|
 pub fn TestAllTypesReader::get_int32_field(
   self : TestAllTypesReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(4, default=0)
 }
 
 ///|
 pub fn TestAllTypesBuilder::set_int32_field(
   self : TestAllTypesBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(4, value, default=0)
 }
@@ -1268,14 +1270,14 @@ pub fn TestAllTypesBuilder::set_u_int8_field(
 ///|
 pub fn TestAllTypesReader::get_u_int16_field(
   self : TestAllTypesReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(18, default=0U)
 }
 
 ///|
 pub fn TestAllTypesBuilder::set_u_int16_field(
   self : TestAllTypesBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(18, value, default=0U)
 }
@@ -1283,14 +1285,14 @@ pub fn TestAllTypesBuilder::set_u_int16_field(
 ///|
 pub fn TestAllTypesReader::get_u_int32_field(
   self : TestAllTypesReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(20, default=0U)
 }
 
 ///|
 pub fn TestAllTypesBuilder::set_u_int32_field(
   self : TestAllTypesBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(20, value, default=0U)
 }
@@ -1435,21 +1437,21 @@ pub(all) struct TestAllTypesVoidListListBuilder {
 ///|
 pub fn TestAllTypesVoidListListReader::length(
   self : TestAllTypesVoidListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesVoidListListBuilder::length(
   self : TestAllTypesVoidListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesVoidListListReader::get(
   self : TestAllTypesVoidListListReader,
-  index : Int,
+  index : Int32,
 ) -> Unit raise @capnp.CapnpError {
   if index < 0 || index >= self.inner.length() {
     raise @capnp.CapnpError::Bounds("void list index")
@@ -1459,7 +1461,7 @@ pub fn TestAllTypesVoidListListReader::get(
 ///|
 pub fn TestAllTypesVoidListListBuilder::set(
   self : TestAllTypesVoidListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> Unit raise @capnp.CapnpError {
   if index < 0 || index >= self.inner.length() {
     raise @capnp.CapnpError::Bounds("void list index")
@@ -1476,7 +1478,7 @@ pub fn TestAllTypesReader::get_void_list(
 ///|
 pub fn TestAllTypesBuilder::init_void_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesVoidListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(3, 0, length), }
 }
@@ -1502,21 +1504,21 @@ pub(all) struct TestAllTypesBoolListListBuilder {
 ///|
 pub fn TestAllTypesBoolListListReader::length(
   self : TestAllTypesBoolListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesBoolListListBuilder::length(
   self : TestAllTypesBoolListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesBoolListListReader::get(
   self : TestAllTypesBoolListListReader,
-  index : Int,
+  index : Int32,
 ) -> Bool raise @capnp.CapnpError {
   self.inner.get_bool(index)
 }
@@ -1524,7 +1526,7 @@ pub fn TestAllTypesBoolListListReader::get(
 ///|
 pub fn TestAllTypesBoolListListBuilder::set(
   self : TestAllTypesBoolListListBuilder,
-  index : Int,
+  index : Int32,
   value : Bool,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(index, value)
@@ -1540,7 +1542,7 @@ pub fn TestAllTypesReader::get_bool_list(
 ///|
 pub fn TestAllTypesBuilder::init_bool_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesBoolListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(4, 1, length), }
 }
@@ -1566,30 +1568,30 @@ pub(all) struct TestAllTypesInt8ListListBuilder {
 ///|
 pub fn TestAllTypesInt8ListListReader::length(
   self : TestAllTypesInt8ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesInt8ListListBuilder::length(
   self : TestAllTypesInt8ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesInt8ListListReader::get(
   self : TestAllTypesInt8ListListReader,
-  index : Int,
-) -> Int raise @capnp.CapnpError {
+  index : Int32,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int8(index)
 }
 
 ///|
 pub fn TestAllTypesInt8ListListBuilder::set(
   self : TestAllTypesInt8ListListBuilder,
-  index : Int,
-  value : Int,
+  index : Int32,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int8(index, value)
 }
@@ -1604,7 +1606,7 @@ pub fn TestAllTypesReader::get_int8_list(
 ///|
 pub fn TestAllTypesBuilder::init_int8_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesInt8ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(5, 2, length), }
 }
@@ -1630,30 +1632,30 @@ pub(all) struct TestAllTypesInt16ListListBuilder {
 ///|
 pub fn TestAllTypesInt16ListListReader::length(
   self : TestAllTypesInt16ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesInt16ListListBuilder::length(
   self : TestAllTypesInt16ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesInt16ListListReader::get(
   self : TestAllTypesInt16ListListReader,
-  index : Int,
-) -> Int raise @capnp.CapnpError {
+  index : Int32,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int16(index)
 }
 
 ///|
 pub fn TestAllTypesInt16ListListBuilder::set(
   self : TestAllTypesInt16ListListBuilder,
-  index : Int,
-  value : Int,
+  index : Int32,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int16(index, value)
 }
@@ -1668,7 +1670,7 @@ pub fn TestAllTypesReader::get_int16_list(
 ///|
 pub fn TestAllTypesBuilder::init_int16_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesInt16ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(6, 3, length), }
 }
@@ -1694,30 +1696,30 @@ pub(all) struct TestAllTypesInt32ListListBuilder {
 ///|
 pub fn TestAllTypesInt32ListListReader::length(
   self : TestAllTypesInt32ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesInt32ListListBuilder::length(
   self : TestAllTypesInt32ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesInt32ListListReader::get(
   self : TestAllTypesInt32ListListReader,
-  index : Int,
-) -> Int raise @capnp.CapnpError {
+  index : Int32,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(index)
 }
 
 ///|
 pub fn TestAllTypesInt32ListListBuilder::set(
   self : TestAllTypesInt32ListListBuilder,
-  index : Int,
-  value : Int,
+  index : Int32,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(index, value)
 }
@@ -1732,7 +1734,7 @@ pub fn TestAllTypesReader::get_int32_list(
 ///|
 pub fn TestAllTypesBuilder::init_int32_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesInt32ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(7, 4, length), }
 }
@@ -1758,21 +1760,21 @@ pub(all) struct TestAllTypesInt64ListListBuilder {
 ///|
 pub fn TestAllTypesInt64ListListReader::length(
   self : TestAllTypesInt64ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesInt64ListListBuilder::length(
   self : TestAllTypesInt64ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesInt64ListListReader::get(
   self : TestAllTypesInt64ListListReader,
-  index : Int,
+  index : Int32,
 ) -> Int64 raise @capnp.CapnpError {
   self.inner.get_int64(index)
 }
@@ -1780,7 +1782,7 @@ pub fn TestAllTypesInt64ListListReader::get(
 ///|
 pub fn TestAllTypesInt64ListListBuilder::set(
   self : TestAllTypesInt64ListListBuilder,
-  index : Int,
+  index : Int32,
   value : Int64,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int64(index, value)
@@ -1796,7 +1798,7 @@ pub fn TestAllTypesReader::get_int64_list(
 ///|
 pub fn TestAllTypesBuilder::init_int64_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesInt64ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(8, 5, length), }
 }
@@ -1822,21 +1824,21 @@ pub(all) struct TestAllTypesUInt8ListListBuilder {
 ///|
 pub fn TestAllTypesUInt8ListListReader::length(
   self : TestAllTypesUInt8ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesUInt8ListListBuilder::length(
   self : TestAllTypesUInt8ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesUInt8ListListReader::get(
   self : TestAllTypesUInt8ListListReader,
-  index : Int,
+  index : Int32,
 ) -> Byte raise @capnp.CapnpError {
   self.inner.get_uint8(index)
 }
@@ -1844,7 +1846,7 @@ pub fn TestAllTypesUInt8ListListReader::get(
 ///|
 pub fn TestAllTypesUInt8ListListBuilder::set(
   self : TestAllTypesUInt8ListListBuilder,
-  index : Int,
+  index : Int32,
   value : Byte,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint8(index, value)
@@ -1860,7 +1862,7 @@ pub fn TestAllTypesReader::get_u_int8_list(
 ///|
 pub fn TestAllTypesBuilder::init_u_int8_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesUInt8ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(9, 2, length), }
 }
@@ -1886,30 +1888,30 @@ pub(all) struct TestAllTypesUInt16ListListBuilder {
 ///|
 pub fn TestAllTypesUInt16ListListReader::length(
   self : TestAllTypesUInt16ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesUInt16ListListBuilder::length(
   self : TestAllTypesUInt16ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesUInt16ListListReader::get(
   self : TestAllTypesUInt16ListListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(index)
 }
 
 ///|
 pub fn TestAllTypesUInt16ListListBuilder::set(
   self : TestAllTypesUInt16ListListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(index, value)
 }
@@ -1924,7 +1926,7 @@ pub fn TestAllTypesReader::get_u_int16_list(
 ///|
 pub fn TestAllTypesBuilder::init_u_int16_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesUInt16ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(10, 3, length), }
 }
@@ -1950,30 +1952,30 @@ pub(all) struct TestAllTypesUInt32ListListBuilder {
 ///|
 pub fn TestAllTypesUInt32ListListReader::length(
   self : TestAllTypesUInt32ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesUInt32ListListBuilder::length(
   self : TestAllTypesUInt32ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesUInt32ListListReader::get(
   self : TestAllTypesUInt32ListListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn TestAllTypesUInt32ListListBuilder::set(
   self : TestAllTypesUInt32ListListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -1988,7 +1990,7 @@ pub fn TestAllTypesReader::get_u_int32_list(
 ///|
 pub fn TestAllTypesBuilder::init_u_int32_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesUInt32ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(11, 4, length), }
 }
@@ -2014,21 +2016,21 @@ pub(all) struct TestAllTypesUInt64ListListBuilder {
 ///|
 pub fn TestAllTypesUInt64ListListReader::length(
   self : TestAllTypesUInt64ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesUInt64ListListBuilder::length(
   self : TestAllTypesUInt64ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesUInt64ListListReader::get(
   self : TestAllTypesUInt64ListListReader,
-  index : Int,
+  index : Int32,
 ) -> UInt64 raise @capnp.CapnpError {
   self.inner.get_uint64(index)
 }
@@ -2036,7 +2038,7 @@ pub fn TestAllTypesUInt64ListListReader::get(
 ///|
 pub fn TestAllTypesUInt64ListListBuilder::set(
   self : TestAllTypesUInt64ListListBuilder,
-  index : Int,
+  index : Int32,
   value : UInt64,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint64(index, value)
@@ -2052,7 +2054,7 @@ pub fn TestAllTypesReader::get_u_int64_list(
 ///|
 pub fn TestAllTypesBuilder::init_u_int64_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesUInt64ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(12, 5, length), }
 }
@@ -2078,21 +2080,21 @@ pub(all) struct TestAllTypesFloat32ListListBuilder {
 ///|
 pub fn TestAllTypesFloat32ListListReader::length(
   self : TestAllTypesFloat32ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesFloat32ListListBuilder::length(
   self : TestAllTypesFloat32ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesFloat32ListListReader::get(
   self : TestAllTypesFloat32ListListReader,
-  index : Int,
+  index : Int32,
 ) -> Float raise @capnp.CapnpError {
   self.inner.get_float32(index)
 }
@@ -2100,7 +2102,7 @@ pub fn TestAllTypesFloat32ListListReader::get(
 ///|
 pub fn TestAllTypesFloat32ListListBuilder::set(
   self : TestAllTypesFloat32ListListBuilder,
-  index : Int,
+  index : Int32,
   value : Float,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_float32(index, value)
@@ -2116,7 +2118,7 @@ pub fn TestAllTypesReader::get_float32_list(
 ///|
 pub fn TestAllTypesBuilder::init_float32_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesFloat32ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(13, 4, length), }
 }
@@ -2142,21 +2144,21 @@ pub(all) struct TestAllTypesFloat64ListListBuilder {
 ///|
 pub fn TestAllTypesFloat64ListListReader::length(
   self : TestAllTypesFloat64ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesFloat64ListListBuilder::length(
   self : TestAllTypesFloat64ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesFloat64ListListReader::get(
   self : TestAllTypesFloat64ListListReader,
-  index : Int,
+  index : Int32,
 ) -> Double raise @capnp.CapnpError {
   self.inner.get_float64(index)
 }
@@ -2164,7 +2166,7 @@ pub fn TestAllTypesFloat64ListListReader::get(
 ///|
 pub fn TestAllTypesFloat64ListListBuilder::set(
   self : TestAllTypesFloat64ListListBuilder,
-  index : Int,
+  index : Int32,
   value : Double,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_float64(index, value)
@@ -2180,7 +2182,7 @@ pub fn TestAllTypesReader::get_float64_list(
 ///|
 pub fn TestAllTypesBuilder::init_float64_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesFloat64ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(14, 5, length), }
 }
@@ -2206,21 +2208,21 @@ pub(all) struct TestAllTypesTextListListBuilder {
 ///|
 pub fn TestAllTypesTextListListReader::length(
   self : TestAllTypesTextListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesTextListListBuilder::length(
   self : TestAllTypesTextListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesTextListListReader::get(
   self : TestAllTypesTextListListReader,
-  index : Int,
+  index : Int32,
 ) -> String raise @capnp.CapnpError {
   self.inner.get_text(index)
 }
@@ -2228,7 +2230,7 @@ pub fn TestAllTypesTextListListReader::get(
 ///|
 pub fn TestAllTypesTextListListBuilder::set(
   self : TestAllTypesTextListListBuilder,
-  index : Int,
+  index : Int32,
   value : String,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_text(index, value)
@@ -2244,7 +2246,7 @@ pub fn TestAllTypesReader::get_text_list(
 ///|
 pub fn TestAllTypesBuilder::init_text_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesTextListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(15, 6, length), }
 }
@@ -2270,21 +2272,21 @@ pub(all) struct TestAllTypesDataListListBuilder {
 ///|
 pub fn TestAllTypesDataListListReader::length(
   self : TestAllTypesDataListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesDataListListBuilder::length(
   self : TestAllTypesDataListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesDataListListReader::get(
   self : TestAllTypesDataListListReader,
-  index : Int,
+  index : Int32,
 ) -> Bytes raise @capnp.CapnpError {
   self.inner.get_data(index)
 }
@@ -2292,7 +2294,7 @@ pub fn TestAllTypesDataListListReader::get(
 ///|
 pub fn TestAllTypesDataListListBuilder::set(
   self : TestAllTypesDataListListBuilder,
-  index : Int,
+  index : Int32,
   value : Bytes,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_data(index, value)
@@ -2308,7 +2310,7 @@ pub fn TestAllTypesReader::get_data_list(
 ///|
 pub fn TestAllTypesBuilder::init_data_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesDataListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(16, 6, length), }
 }
@@ -2334,21 +2336,21 @@ pub(all) struct TestAllTypesStructListListBuilder {
 ///|
 pub fn TestAllTypesStructListListReader::length(
   self : TestAllTypesStructListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesStructListListBuilder::length(
   self : TestAllTypesStructListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesStructListListReader::get(
   self : TestAllTypesStructListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestAllTypesReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -2356,7 +2358,7 @@ pub fn TestAllTypesStructListListReader::get(
 ///|
 pub fn TestAllTypesStructListListBuilder::get(
   self : TestAllTypesStructListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestAllTypesBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -2371,7 +2373,7 @@ pub fn TestAllTypesReader::get_struct_list(
 ///|
 pub fn TestAllTypesBuilder::init_struct_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesStructListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(17, length, 6, 20), }
 }
@@ -2397,21 +2399,21 @@ pub(all) struct TestAllTypesEnumListListBuilder {
 ///|
 pub fn TestAllTypesEnumListListReader::length(
   self : TestAllTypesEnumListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesEnumListListBuilder::length(
   self : TestAllTypesEnumListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesEnumListListReader::get(
   self : TestAllTypesEnumListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestEnum raise @capnp.CapnpError {
   TestEnum::from_raw(self.inner.get_uint16(index))
 }
@@ -2419,7 +2421,7 @@ pub fn TestAllTypesEnumListListReader::get(
 ///|
 pub fn TestAllTypesEnumListListBuilder::set(
   self : TestAllTypesEnumListListBuilder,
-  index : Int,
+  index : Int32,
   value : TestEnum,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(index, value.to_raw())
@@ -2435,7 +2437,7 @@ pub fn TestAllTypesReader::get_enum_list(
 ///|
 pub fn TestAllTypesBuilder::init_enum_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesEnumListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(18, 3, length), }
 }
@@ -2461,21 +2463,21 @@ pub(all) struct TestAllTypesInterfaceListListBuilder {
 ///|
 pub fn TestAllTypesInterfaceListListReader::length(
   self : TestAllTypesInterfaceListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesInterfaceListListBuilder::length(
   self : TestAllTypesInterfaceListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestAllTypesInterfaceListListReader::get(
   self : TestAllTypesInterfaceListListReader,
-  index : Int,
+  index : Int32,
 ) -> Unit raise @capnp.CapnpError {
   if index < 0 || index >= self.inner.length() {
     raise @capnp.CapnpError::Bounds("void list index")
@@ -2485,7 +2487,7 @@ pub fn TestAllTypesInterfaceListListReader::get(
 ///|
 pub fn TestAllTypesInterfaceListListBuilder::set(
   self : TestAllTypesInterfaceListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> Unit raise @capnp.CapnpError {
   if index < 0 || index >= self.inner.length() {
     raise @capnp.CapnpError::Bounds("void list index")
@@ -2502,7 +2504,7 @@ pub fn TestAllTypesReader::get_interface_list(
 ///|
 pub fn TestAllTypesBuilder::init_interface_list(
   self : TestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestAllTypesInterfaceListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(19, 0, length), }
 }
@@ -2568,14 +2570,14 @@ pub fn TestDefaultsBuilder::set_bool_field(
 ///|
 pub fn TestDefaultsReader::get_int8_field(
   self : TestDefaultsReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int8(1, default=-123)
 }
 
 ///|
 pub fn TestDefaultsBuilder::set_int8_field(
   self : TestDefaultsBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int8(1, value, default=-123)
 }
@@ -2583,14 +2585,14 @@ pub fn TestDefaultsBuilder::set_int8_field(
 ///|
 pub fn TestDefaultsReader::get_int16_field(
   self : TestDefaultsReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int16(2, default=-12345)
 }
 
 ///|
 pub fn TestDefaultsBuilder::set_int16_field(
   self : TestDefaultsBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int16(2, value, default=-12345)
 }
@@ -2598,14 +2600,14 @@ pub fn TestDefaultsBuilder::set_int16_field(
 ///|
 pub fn TestDefaultsReader::get_int32_field(
   self : TestDefaultsReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(4, default=-12345678)
 }
 
 ///|
 pub fn TestDefaultsBuilder::set_int32_field(
   self : TestDefaultsBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(4, value, default=-12345678)
 }
@@ -2647,14 +2649,14 @@ pub fn TestDefaultsBuilder::set_u_int8_field(
 ///|
 pub fn TestDefaultsReader::get_u_int16_field(
   self : TestDefaultsReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(18, default=45678U)
 }
 
 ///|
 pub fn TestDefaultsBuilder::set_u_int16_field(
   self : TestDefaultsBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(18, value, default=45678U)
 }
@@ -2662,14 +2664,14 @@ pub fn TestDefaultsBuilder::set_u_int16_field(
 ///|
 pub fn TestDefaultsReader::get_u_int32_field(
   self : TestDefaultsReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(20, default=3456789012U)
 }
 
 ///|
 pub fn TestDefaultsBuilder::set_u_int32_field(
   self : TestDefaultsBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(20, value, default=3456789012U)
 }
@@ -2834,21 +2836,21 @@ pub(all) struct TestDefaultsVoidListListBuilder {
 ///|
 pub fn TestDefaultsVoidListListReader::length(
   self : TestDefaultsVoidListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsVoidListListBuilder::length(
   self : TestDefaultsVoidListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsVoidListListReader::get(
   self : TestDefaultsVoidListListReader,
-  index : Int,
+  index : Int32,
 ) -> Unit raise @capnp.CapnpError {
   if index < 0 || index >= self.inner.length() {
     raise @capnp.CapnpError::Bounds("void list index")
@@ -2858,7 +2860,7 @@ pub fn TestDefaultsVoidListListReader::get(
 ///|
 pub fn TestDefaultsVoidListListBuilder::set(
   self : TestDefaultsVoidListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> Unit raise @capnp.CapnpError {
   if index < 0 || index >= self.inner.length() {
     raise @capnp.CapnpError::Bounds("void list index")
@@ -2884,7 +2886,7 @@ pub fn TestDefaultsReader::get_void_list(
 ///|
 pub fn TestDefaultsBuilder::init_void_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsVoidListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(3, 0, length), }
 }
@@ -2910,21 +2912,21 @@ pub(all) struct TestDefaultsBoolListListBuilder {
 ///|
 pub fn TestDefaultsBoolListListReader::length(
   self : TestDefaultsBoolListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsBoolListListBuilder::length(
   self : TestDefaultsBoolListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsBoolListListReader::get(
   self : TestDefaultsBoolListListReader,
-  index : Int,
+  index : Int32,
 ) -> Bool raise @capnp.CapnpError {
   self.inner.get_bool(index)
 }
@@ -2932,7 +2934,7 @@ pub fn TestDefaultsBoolListListReader::get(
 ///|
 pub fn TestDefaultsBoolListListBuilder::set(
   self : TestDefaultsBoolListListBuilder,
-  index : Int,
+  index : Int32,
   value : Bool,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(index, value)
@@ -2957,7 +2959,7 @@ pub fn TestDefaultsReader::get_bool_list(
 ///|
 pub fn TestDefaultsBuilder::init_bool_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsBoolListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(4, 1, length), }
 }
@@ -2983,30 +2985,30 @@ pub(all) struct TestDefaultsInt8ListListBuilder {
 ///|
 pub fn TestDefaultsInt8ListListReader::length(
   self : TestDefaultsInt8ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsInt8ListListBuilder::length(
   self : TestDefaultsInt8ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsInt8ListListReader::get(
   self : TestDefaultsInt8ListListReader,
-  index : Int,
-) -> Int raise @capnp.CapnpError {
+  index : Int32,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int8(index)
 }
 
 ///|
 pub fn TestDefaultsInt8ListListBuilder::set(
   self : TestDefaultsInt8ListListBuilder,
-  index : Int,
-  value : Int,
+  index : Int32,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int8(index, value)
 }
@@ -3030,7 +3032,7 @@ pub fn TestDefaultsReader::get_int8_list(
 ///|
 pub fn TestDefaultsBuilder::init_int8_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsInt8ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(5, 2, length), }
 }
@@ -3056,30 +3058,30 @@ pub(all) struct TestDefaultsInt16ListListBuilder {
 ///|
 pub fn TestDefaultsInt16ListListReader::length(
   self : TestDefaultsInt16ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsInt16ListListBuilder::length(
   self : TestDefaultsInt16ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsInt16ListListReader::get(
   self : TestDefaultsInt16ListListReader,
-  index : Int,
-) -> Int raise @capnp.CapnpError {
+  index : Int32,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int16(index)
 }
 
 ///|
 pub fn TestDefaultsInt16ListListBuilder::set(
   self : TestDefaultsInt16ListListBuilder,
-  index : Int,
-  value : Int,
+  index : Int32,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int16(index, value)
 }
@@ -3103,7 +3105,7 @@ pub fn TestDefaultsReader::get_int16_list(
 ///|
 pub fn TestDefaultsBuilder::init_int16_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsInt16ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(6, 3, length), }
 }
@@ -3129,30 +3131,30 @@ pub(all) struct TestDefaultsInt32ListListBuilder {
 ///|
 pub fn TestDefaultsInt32ListListReader::length(
   self : TestDefaultsInt32ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsInt32ListListBuilder::length(
   self : TestDefaultsInt32ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsInt32ListListReader::get(
   self : TestDefaultsInt32ListListReader,
-  index : Int,
-) -> Int raise @capnp.CapnpError {
+  index : Int32,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(index)
 }
 
 ///|
 pub fn TestDefaultsInt32ListListBuilder::set(
   self : TestDefaultsInt32ListListBuilder,
-  index : Int,
-  value : Int,
+  index : Int32,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(index, value)
 }
@@ -3176,7 +3178,7 @@ pub fn TestDefaultsReader::get_int32_list(
 ///|
 pub fn TestDefaultsBuilder::init_int32_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsInt32ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(7, 4, length), }
 }
@@ -3202,21 +3204,21 @@ pub(all) struct TestDefaultsInt64ListListBuilder {
 ///|
 pub fn TestDefaultsInt64ListListReader::length(
   self : TestDefaultsInt64ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsInt64ListListBuilder::length(
   self : TestDefaultsInt64ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsInt64ListListReader::get(
   self : TestDefaultsInt64ListListReader,
-  index : Int,
+  index : Int32,
 ) -> Int64 raise @capnp.CapnpError {
   self.inner.get_int64(index)
 }
@@ -3224,7 +3226,7 @@ pub fn TestDefaultsInt64ListListReader::get(
 ///|
 pub fn TestDefaultsInt64ListListBuilder::set(
   self : TestDefaultsInt64ListListBuilder,
-  index : Int,
+  index : Int32,
   value : Int64,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int64(index, value)
@@ -3249,7 +3251,7 @@ pub fn TestDefaultsReader::get_int64_list(
 ///|
 pub fn TestDefaultsBuilder::init_int64_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsInt64ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(8, 5, length), }
 }
@@ -3275,21 +3277,21 @@ pub(all) struct TestDefaultsUInt8ListListBuilder {
 ///|
 pub fn TestDefaultsUInt8ListListReader::length(
   self : TestDefaultsUInt8ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsUInt8ListListBuilder::length(
   self : TestDefaultsUInt8ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsUInt8ListListReader::get(
   self : TestDefaultsUInt8ListListReader,
-  index : Int,
+  index : Int32,
 ) -> Byte raise @capnp.CapnpError {
   self.inner.get_uint8(index)
 }
@@ -3297,7 +3299,7 @@ pub fn TestDefaultsUInt8ListListReader::get(
 ///|
 pub fn TestDefaultsUInt8ListListBuilder::set(
   self : TestDefaultsUInt8ListListBuilder,
-  index : Int,
+  index : Int32,
   value : Byte,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint8(index, value)
@@ -3322,7 +3324,7 @@ pub fn TestDefaultsReader::get_u_int8_list(
 ///|
 pub fn TestDefaultsBuilder::init_u_int8_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsUInt8ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(9, 2, length), }
 }
@@ -3348,30 +3350,30 @@ pub(all) struct TestDefaultsUInt16ListListBuilder {
 ///|
 pub fn TestDefaultsUInt16ListListReader::length(
   self : TestDefaultsUInt16ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsUInt16ListListBuilder::length(
   self : TestDefaultsUInt16ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsUInt16ListListReader::get(
   self : TestDefaultsUInt16ListListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(index)
 }
 
 ///|
 pub fn TestDefaultsUInt16ListListBuilder::set(
   self : TestDefaultsUInt16ListListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(index, value)
 }
@@ -3395,7 +3397,7 @@ pub fn TestDefaultsReader::get_u_int16_list(
 ///|
 pub fn TestDefaultsBuilder::init_u_int16_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsUInt16ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(10, 3, length), }
 }
@@ -3421,30 +3423,30 @@ pub(all) struct TestDefaultsUInt32ListListBuilder {
 ///|
 pub fn TestDefaultsUInt32ListListReader::length(
   self : TestDefaultsUInt32ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsUInt32ListListBuilder::length(
   self : TestDefaultsUInt32ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsUInt32ListListReader::get(
   self : TestDefaultsUInt32ListListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn TestDefaultsUInt32ListListBuilder::set(
   self : TestDefaultsUInt32ListListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -3468,7 +3470,7 @@ pub fn TestDefaultsReader::get_u_int32_list(
 ///|
 pub fn TestDefaultsBuilder::init_u_int32_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsUInt32ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(11, 4, length), }
 }
@@ -3494,21 +3496,21 @@ pub(all) struct TestDefaultsUInt64ListListBuilder {
 ///|
 pub fn TestDefaultsUInt64ListListReader::length(
   self : TestDefaultsUInt64ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsUInt64ListListBuilder::length(
   self : TestDefaultsUInt64ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsUInt64ListListReader::get(
   self : TestDefaultsUInt64ListListReader,
-  index : Int,
+  index : Int32,
 ) -> UInt64 raise @capnp.CapnpError {
   self.inner.get_uint64(index)
 }
@@ -3516,7 +3518,7 @@ pub fn TestDefaultsUInt64ListListReader::get(
 ///|
 pub fn TestDefaultsUInt64ListListBuilder::set(
   self : TestDefaultsUInt64ListListBuilder,
-  index : Int,
+  index : Int32,
   value : UInt64,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint64(index, value)
@@ -3541,7 +3543,7 @@ pub fn TestDefaultsReader::get_u_int64_list(
 ///|
 pub fn TestDefaultsBuilder::init_u_int64_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsUInt64ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(12, 5, length), }
 }
@@ -3567,21 +3569,21 @@ pub(all) struct TestDefaultsFloat32ListListBuilder {
 ///|
 pub fn TestDefaultsFloat32ListListReader::length(
   self : TestDefaultsFloat32ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsFloat32ListListBuilder::length(
   self : TestDefaultsFloat32ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsFloat32ListListReader::get(
   self : TestDefaultsFloat32ListListReader,
-  index : Int,
+  index : Int32,
 ) -> Float raise @capnp.CapnpError {
   self.inner.get_float32(index)
 }
@@ -3589,7 +3591,7 @@ pub fn TestDefaultsFloat32ListListReader::get(
 ///|
 pub fn TestDefaultsFloat32ListListBuilder::set(
   self : TestDefaultsFloat32ListListBuilder,
-  index : Int,
+  index : Int32,
   value : Float,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_float32(index, value)
@@ -3614,7 +3616,7 @@ pub fn TestDefaultsReader::get_float32_list(
 ///|
 pub fn TestDefaultsBuilder::init_float32_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsFloat32ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(13, 4, length), }
 }
@@ -3640,21 +3642,21 @@ pub(all) struct TestDefaultsFloat64ListListBuilder {
 ///|
 pub fn TestDefaultsFloat64ListListReader::length(
   self : TestDefaultsFloat64ListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsFloat64ListListBuilder::length(
   self : TestDefaultsFloat64ListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsFloat64ListListReader::get(
   self : TestDefaultsFloat64ListListReader,
-  index : Int,
+  index : Int32,
 ) -> Double raise @capnp.CapnpError {
   self.inner.get_float64(index)
 }
@@ -3662,7 +3664,7 @@ pub fn TestDefaultsFloat64ListListReader::get(
 ///|
 pub fn TestDefaultsFloat64ListListBuilder::set(
   self : TestDefaultsFloat64ListListBuilder,
-  index : Int,
+  index : Int32,
   value : Double,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_float64(index, value)
@@ -3687,7 +3689,7 @@ pub fn TestDefaultsReader::get_float64_list(
 ///|
 pub fn TestDefaultsBuilder::init_float64_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsFloat64ListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(14, 5, length), }
 }
@@ -3713,21 +3715,21 @@ pub(all) struct TestDefaultsTextListListBuilder {
 ///|
 pub fn TestDefaultsTextListListReader::length(
   self : TestDefaultsTextListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsTextListListBuilder::length(
   self : TestDefaultsTextListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsTextListListReader::get(
   self : TestDefaultsTextListListReader,
-  index : Int,
+  index : Int32,
 ) -> String raise @capnp.CapnpError {
   self.inner.get_text(index)
 }
@@ -3735,7 +3737,7 @@ pub fn TestDefaultsTextListListReader::get(
 ///|
 pub fn TestDefaultsTextListListBuilder::set(
   self : TestDefaultsTextListListBuilder,
-  index : Int,
+  index : Int32,
   value : String,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_text(index, value)
@@ -3760,7 +3762,7 @@ pub fn TestDefaultsReader::get_text_list(
 ///|
 pub fn TestDefaultsBuilder::init_text_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsTextListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(15, 6, length), }
 }
@@ -3786,21 +3788,21 @@ pub(all) struct TestDefaultsDataListListBuilder {
 ///|
 pub fn TestDefaultsDataListListReader::length(
   self : TestDefaultsDataListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsDataListListBuilder::length(
   self : TestDefaultsDataListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsDataListListReader::get(
   self : TestDefaultsDataListListReader,
-  index : Int,
+  index : Int32,
 ) -> Bytes raise @capnp.CapnpError {
   self.inner.get_data(index)
 }
@@ -3808,7 +3810,7 @@ pub fn TestDefaultsDataListListReader::get(
 ///|
 pub fn TestDefaultsDataListListBuilder::set(
   self : TestDefaultsDataListListBuilder,
-  index : Int,
+  index : Int32,
   value : Bytes,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_data(index, value)
@@ -3833,7 +3835,7 @@ pub fn TestDefaultsReader::get_data_list(
 ///|
 pub fn TestDefaultsBuilder::init_data_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsDataListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(16, 6, length), }
 }
@@ -3859,21 +3861,21 @@ pub(all) struct TestDefaultsStructListListBuilder {
 ///|
 pub fn TestDefaultsStructListListReader::length(
   self : TestDefaultsStructListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsStructListListBuilder::length(
   self : TestDefaultsStructListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsStructListListReader::get(
   self : TestDefaultsStructListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestAllTypesReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -3881,7 +3883,7 @@ pub fn TestDefaultsStructListListReader::get(
 ///|
 pub fn TestDefaultsStructListListBuilder::get(
   self : TestDefaultsStructListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestAllTypesBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -3905,7 +3907,7 @@ pub fn TestDefaultsReader::get_struct_list(
 ///|
 pub fn TestDefaultsBuilder::init_struct_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsStructListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(17, length, 6, 20), }
 }
@@ -3931,21 +3933,21 @@ pub(all) struct TestDefaultsEnumListListBuilder {
 ///|
 pub fn TestDefaultsEnumListListReader::length(
   self : TestDefaultsEnumListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsEnumListListBuilder::length(
   self : TestDefaultsEnumListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsEnumListListReader::get(
   self : TestDefaultsEnumListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestEnum raise @capnp.CapnpError {
   TestEnum::from_raw(self.inner.get_uint16(index))
 }
@@ -3953,7 +3955,7 @@ pub fn TestDefaultsEnumListListReader::get(
 ///|
 pub fn TestDefaultsEnumListListBuilder::set(
   self : TestDefaultsEnumListListBuilder,
-  index : Int,
+  index : Int32,
   value : TestEnum,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(index, value.to_raw())
@@ -3978,7 +3980,7 @@ pub fn TestDefaultsReader::get_enum_list(
 ///|
 pub fn TestDefaultsBuilder::init_enum_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsEnumListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(18, 3, length), }
 }
@@ -4004,21 +4006,21 @@ pub(all) struct TestDefaultsInterfaceListListBuilder {
 ///|
 pub fn TestDefaultsInterfaceListListReader::length(
   self : TestDefaultsInterfaceListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsInterfaceListListBuilder::length(
   self : TestDefaultsInterfaceListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestDefaultsInterfaceListListReader::get(
   self : TestDefaultsInterfaceListListReader,
-  index : Int,
+  index : Int32,
 ) -> Unit raise @capnp.CapnpError {
   if index < 0 || index >= self.inner.length() {
     raise @capnp.CapnpError::Bounds("void list index")
@@ -4028,7 +4030,7 @@ pub fn TestDefaultsInterfaceListListReader::get(
 ///|
 pub fn TestDefaultsInterfaceListListBuilder::set(
   self : TestDefaultsInterfaceListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> Unit raise @capnp.CapnpError {
   if index < 0 || index >= self.inner.length() {
     raise @capnp.CapnpError::Bounds("void list index")
@@ -4045,7 +4047,7 @@ pub fn TestDefaultsReader::get_interface_list(
 ///|
 pub fn TestDefaultsBuilder::init_interface_list(
   self : TestDefaultsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestDefaultsInterfaceListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(19, 0, length), }
 }
@@ -4155,8 +4157,8 @@ pub fn TestAnyOthersBuilder::set_any_struct_field(
 ///|
 pub fn TestAnyOthersBuilder::init_any_struct_field(
   self : TestAnyOthersBuilder,
-  data_words : Int,
-  pointer_count : Int,
+  data_words : Int32,
+  pointer_count : Int32,
 ) -> @capnp.StructBuilder raise @capnp.CapnpError {
   self.inner.init_struct(0, data_words, pointer_count)
 }
@@ -4186,8 +4188,8 @@ pub fn TestAnyOthersBuilder::set_any_list_field(
 ///|
 pub fn TestAnyOthersBuilder::init_any_list_field(
   self : TestAnyOthersBuilder,
-  element_size : Int,
-  length : Int,
+  element_size : Int32,
+  length : Int32,
 ) -> @capnp.ListBuilder raise @capnp.CapnpError {
   self.inner.init_list(1, element_size, length)
 }
@@ -4195,9 +4197,9 @@ pub fn TestAnyOthersBuilder::init_any_list_field(
 ///|
 pub fn TestAnyOthersBuilder::init_any_list_field_structs(
   self : TestAnyOthersBuilder,
-  length : Int,
-  data_words : Int,
-  pointer_count : Int,
+  length : Int32,
+  data_words : Int32,
+  pointer_count : Int32,
 ) -> @capnp.ListBuilder raise @capnp.CapnpError {
   self.inner.init_struct_list(1, length, data_words, pointer_count)
 }
@@ -4691,7 +4693,7 @@ pub(all) struct TestUnionUnion0Builder {
 ///|
 pub fn TestUnionUnion0Reader::which(
   self : TestUnionUnion0Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -4781,7 +4783,7 @@ pub fn TestUnionUnion0Reader::is_u0f0s8(
 ///|
 pub fn TestUnionUnion0Reader::get_u0f0s8(
   self : TestUnionUnion0Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(0) != 2U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -4791,7 +4793,7 @@ pub fn TestUnionUnion0Reader::get_u0f0s8(
 ///|
 pub fn TestUnionUnion0Builder::set_u0f0s8(
   self : TestUnionUnion0Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(64, false)
   self.inner.set_uint8(8, 0)
@@ -4819,7 +4821,7 @@ pub fn TestUnionUnion0Reader::is_u0f0s16(
 ///|
 pub fn TestUnionUnion0Reader::get_u0f0s16(
   self : TestUnionUnion0Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(0) != 3U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -4829,7 +4831,7 @@ pub fn TestUnionUnion0Reader::get_u0f0s16(
 ///|
 pub fn TestUnionUnion0Builder::set_u0f0s16(
   self : TestUnionUnion0Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(64, false)
   self.inner.set_uint8(8, 0)
@@ -4857,7 +4859,7 @@ pub fn TestUnionUnion0Reader::is_u0f0s32(
 ///|
 pub fn TestUnionUnion0Reader::get_u0f0s32(
   self : TestUnionUnion0Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(0) != 4U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -4867,7 +4869,7 @@ pub fn TestUnionUnion0Reader::get_u0f0s32(
 ///|
 pub fn TestUnionUnion0Builder::set_u0f0s32(
   self : TestUnionUnion0Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(64, false)
   self.inner.set_uint8(8, 0)
@@ -5047,7 +5049,7 @@ pub fn TestUnionUnion0Reader::is_u0f1s8(
 ///|
 pub fn TestUnionUnion0Reader::get_u0f1s8(
   self : TestUnionUnion0Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(0) != 9U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -5057,7 +5059,7 @@ pub fn TestUnionUnion0Reader::get_u0f1s8(
 ///|
 pub fn TestUnionUnion0Builder::set_u0f1s8(
   self : TestUnionUnion0Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(64, false)
   self.inner.set_uint8(8, 0)
@@ -5085,7 +5087,7 @@ pub fn TestUnionUnion0Reader::is_u0f1s16(
 ///|
 pub fn TestUnionUnion0Reader::get_u0f1s16(
   self : TestUnionUnion0Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(0) != 10U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -5095,7 +5097,7 @@ pub fn TestUnionUnion0Reader::get_u0f1s16(
 ///|
 pub fn TestUnionUnion0Builder::set_u0f1s16(
   self : TestUnionUnion0Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(64, false)
   self.inner.set_uint8(8, 0)
@@ -5123,7 +5125,7 @@ pub fn TestUnionUnion0Reader::is_u0f1s32(
 ///|
 pub fn TestUnionUnion0Reader::get_u0f1s32(
   self : TestUnionUnion0Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(0) != 11U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -5133,7 +5135,7 @@ pub fn TestUnionUnion0Reader::get_u0f1s32(
 ///|
 pub fn TestUnionUnion0Builder::set_u0f1s32(
   self : TestUnionUnion0Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(64, false)
   self.inner.set_uint8(8, 0)
@@ -5240,7 +5242,7 @@ pub(all) struct TestUnionUnion1Builder {
 ///|
 pub fn TestUnionUnion1Reader::which(
   self : TestUnionUnion1Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(2)
 }
 
@@ -5386,7 +5388,7 @@ pub fn TestUnionUnion1Reader::is_u1f0s8(
 ///|
 pub fn TestUnionUnion1Reader::get_u1f0s8(
   self : TestUnionUnion1Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(2) != 3U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -5396,7 +5398,7 @@ pub fn TestUnionUnion1Reader::get_u1f0s8(
 ///|
 pub fn TestUnionUnion1Builder::set_u1f0s8(
   self : TestUnionUnion1Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(129, false)
   self.inner.set_bool(129, false)
@@ -5430,7 +5432,7 @@ pub fn TestUnionUnion1Reader::is_u1f1s8(
 ///|
 pub fn TestUnionUnion1Reader::get_u1f1s8(
   self : TestUnionUnion1Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(2) != 4U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -5440,7 +5442,7 @@ pub fn TestUnionUnion1Reader::get_u1f1s8(
 ///|
 pub fn TestUnionUnion1Builder::set_u1f1s8(
   self : TestUnionUnion1Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(129, false)
   self.inner.set_bool(129, false)
@@ -5474,7 +5476,7 @@ pub fn TestUnionUnion1Reader::is_u1f0s16(
 ///|
 pub fn TestUnionUnion1Reader::get_u1f0s16(
   self : TestUnionUnion1Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(2) != 5U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -5484,7 +5486,7 @@ pub fn TestUnionUnion1Reader::get_u1f0s16(
 ///|
 pub fn TestUnionUnion1Builder::set_u1f0s16(
   self : TestUnionUnion1Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(129, false)
   self.inner.set_bool(129, false)
@@ -5518,7 +5520,7 @@ pub fn TestUnionUnion1Reader::is_u1f1s16(
 ///|
 pub fn TestUnionUnion1Reader::get_u1f1s16(
   self : TestUnionUnion1Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(2) != 6U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -5528,7 +5530,7 @@ pub fn TestUnionUnion1Reader::get_u1f1s16(
 ///|
 pub fn TestUnionUnion1Builder::set_u1f1s16(
   self : TestUnionUnion1Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(129, false)
   self.inner.set_bool(129, false)
@@ -5562,7 +5564,7 @@ pub fn TestUnionUnion1Reader::is_u1f0s32(
 ///|
 pub fn TestUnionUnion1Reader::get_u1f0s32(
   self : TestUnionUnion1Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(2) != 7U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -5572,7 +5574,7 @@ pub fn TestUnionUnion1Reader::get_u1f0s32(
 ///|
 pub fn TestUnionUnion1Builder::set_u1f0s32(
   self : TestUnionUnion1Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(129, false)
   self.inner.set_bool(129, false)
@@ -5606,7 +5608,7 @@ pub fn TestUnionUnion1Reader::is_u1f1s32(
 ///|
 pub fn TestUnionUnion1Reader::get_u1f1s32(
   self : TestUnionUnion1Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(2) != 8U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -5616,7 +5618,7 @@ pub fn TestUnionUnion1Reader::get_u1f1s32(
 ///|
 pub fn TestUnionUnion1Builder::set_u1f1s32(
   self : TestUnionUnion1Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(129, false)
   self.inner.set_bool(129, false)
@@ -5914,7 +5916,7 @@ pub fn TestUnionUnion1Reader::is_u1f2s8(
 ///|
 pub fn TestUnionUnion1Reader::get_u1f2s8(
   self : TestUnionUnion1Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(2) != 15U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -5924,7 +5926,7 @@ pub fn TestUnionUnion1Reader::get_u1f2s8(
 ///|
 pub fn TestUnionUnion1Builder::set_u1f2s8(
   self : TestUnionUnion1Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(129, false)
   self.inner.set_bool(129, false)
@@ -5958,7 +5960,7 @@ pub fn TestUnionUnion1Reader::is_u1f2s16(
 ///|
 pub fn TestUnionUnion1Reader::get_u1f2s16(
   self : TestUnionUnion1Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(2) != 16U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -5968,7 +5970,7 @@ pub fn TestUnionUnion1Reader::get_u1f2s16(
 ///|
 pub fn TestUnionUnion1Builder::set_u1f2s16(
   self : TestUnionUnion1Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(129, false)
   self.inner.set_bool(129, false)
@@ -6002,7 +6004,7 @@ pub fn TestUnionUnion1Reader::is_u1f2s32(
 ///|
 pub fn TestUnionUnion1Reader::get_u1f2s32(
   self : TestUnionUnion1Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(2) != 17U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -6012,7 +6014,7 @@ pub fn TestUnionUnion1Reader::get_u1f2s32(
 ///|
 pub fn TestUnionUnion1Builder::set_u1f2s32(
   self : TestUnionUnion1Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(129, false)
   self.inner.set_bool(129, false)
@@ -6137,7 +6139,7 @@ pub(all) struct TestUnionUnion2Builder {
 ///|
 pub fn TestUnionUnion2Reader::which(
   self : TestUnionUnion2Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(4)
 }
 
@@ -6182,7 +6184,7 @@ pub fn TestUnionUnion2Reader::is_u2f0s8(
 ///|
 pub fn TestUnionUnion2Reader::get_u2f0s8(
   self : TestUnionUnion2Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(4) != 1U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -6192,7 +6194,7 @@ pub fn TestUnionUnion2Reader::get_u2f0s8(
 ///|
 pub fn TestUnionUnion2Builder::set_u2f0s8(
   self : TestUnionUnion2Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(256, false)
   self.inner.set_uint8(33, 0)
@@ -6213,7 +6215,7 @@ pub fn TestUnionUnion2Reader::is_u2f0s16(
 ///|
 pub fn TestUnionUnion2Reader::get_u2f0s16(
   self : TestUnionUnion2Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(4) != 2U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -6223,7 +6225,7 @@ pub fn TestUnionUnion2Reader::get_u2f0s16(
 ///|
 pub fn TestUnionUnion2Builder::set_u2f0s16(
   self : TestUnionUnion2Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(256, false)
   self.inner.set_uint8(33, 0)
@@ -6244,7 +6246,7 @@ pub fn TestUnionUnion2Reader::is_u2f0s32(
 ///|
 pub fn TestUnionUnion2Reader::get_u2f0s32(
   self : TestUnionUnion2Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(4) != 3U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -6254,7 +6256,7 @@ pub fn TestUnionUnion2Reader::get_u2f0s32(
 ///|
 pub fn TestUnionUnion2Builder::set_u2f0s32(
   self : TestUnionUnion2Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(256, false)
   self.inner.set_uint8(33, 0)
@@ -6309,7 +6311,7 @@ pub(all) struct TestUnionUnion3Builder {
 ///|
 pub fn TestUnionUnion3Reader::which(
   self : TestUnionUnion3Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(6)
 }
 
@@ -6354,7 +6356,7 @@ pub fn TestUnionUnion3Reader::is_u3f0s8(
 ///|
 pub fn TestUnionUnion3Reader::get_u3f0s8(
   self : TestUnionUnion3Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(6) != 1U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -6364,7 +6366,7 @@ pub fn TestUnionUnion3Reader::get_u3f0s8(
 ///|
 pub fn TestUnionUnion3Builder::set_u3f0s8(
   self : TestUnionUnion3Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(257, false)
   self.inner.set_uint8(34, 0)
@@ -6385,7 +6387,7 @@ pub fn TestUnionUnion3Reader::is_u3f0s16(
 ///|
 pub fn TestUnionUnion3Reader::get_u3f0s16(
   self : TestUnionUnion3Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(6) != 2U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -6395,7 +6397,7 @@ pub fn TestUnionUnion3Reader::get_u3f0s16(
 ///|
 pub fn TestUnionUnion3Builder::set_u3f0s16(
   self : TestUnionUnion3Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(257, false)
   self.inner.set_uint8(34, 0)
@@ -6416,7 +6418,7 @@ pub fn TestUnionUnion3Reader::is_u3f0s32(
 ///|
 pub fn TestUnionUnion3Reader::get_u3f0s32(
   self : TestUnionUnion3Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(6) != 3U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -6426,7 +6428,7 @@ pub fn TestUnionUnion3Reader::get_u3f0s32(
 ///|
 pub fn TestUnionUnion3Builder::set_u3f0s32(
   self : TestUnionUnion3Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(257, false)
   self.inner.set_uint8(34, 0)
@@ -6495,7 +6497,7 @@ pub fn TestUnnamedUnionBuilder::init_root(
 ///|
 pub fn TestUnnamedUnionReader::which(
   self : TestUnnamedUnionReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(4)
 }
 
@@ -6524,7 +6526,7 @@ pub fn TestUnnamedUnionReader::is_foo(
 ///|
 pub fn TestUnnamedUnionReader::get_foo(
   self : TestUnnamedUnionReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   if self.inner.get_uint16(4) != 0U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -6534,7 +6536,7 @@ pub fn TestUnnamedUnionReader::get_foo(
 ///|
 pub fn TestUnnamedUnionBuilder::set_foo(
   self : TestUnnamedUnionBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(0, 0U)
   self.inner.set_uint32(8, 0U)
@@ -6545,14 +6547,14 @@ pub fn TestUnnamedUnionBuilder::set_foo(
 ///|
 pub fn TestUnnamedUnionReader::get_middle(
   self : TestUnnamedUnionReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(2, default=0U)
 }
 
 ///|
 pub fn TestUnnamedUnionBuilder::set_middle(
   self : TestUnnamedUnionBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(2, value, default=0U)
 }
@@ -6567,7 +6569,7 @@ pub fn TestUnnamedUnionReader::is_bar(
 ///|
 pub fn TestUnnamedUnionReader::get_bar(
   self : TestUnnamedUnionReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   if self.inner.get_uint16(4) != 1U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -6577,7 +6579,7 @@ pub fn TestUnnamedUnionReader::get_bar(
 ///|
 pub fn TestUnnamedUnionBuilder::set_bar(
   self : TestUnnamedUnionBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(0, 0U)
   self.inner.set_uint32(8, 0U)
@@ -6613,7 +6615,7 @@ pub(all) struct TestUnionInUnionOuterInnerBuilder {
 ///|
 pub fn TestUnionInUnionOuterInnerReader::which(
   self : TestUnionInUnionOuterInnerReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(4)
 }
 
@@ -6627,7 +6629,7 @@ pub fn TestUnionInUnionOuterInnerReader::is_foo(
 ///|
 pub fn TestUnionInUnionOuterInnerReader::get_foo(
   self : TestUnionInUnionOuterInnerReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(4) != 0U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -6637,7 +6639,7 @@ pub fn TestUnionInUnionOuterInnerReader::get_foo(
 ///|
 pub fn TestUnionInUnionOuterInnerBuilder::set_foo(
   self : TestUnionInUnionOuterInnerBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, 0U)
   self.inner.set_uint32(0, 0U)
@@ -6655,7 +6657,7 @@ pub fn TestUnionInUnionOuterInnerReader::is_bar(
 ///|
 pub fn TestUnionInUnionOuterInnerReader::get_bar(
   self : TestUnionInUnionOuterInnerReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(4) != 1U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -6665,7 +6667,7 @@ pub fn TestUnionInUnionOuterInnerReader::get_bar(
 ///|
 pub fn TestUnionInUnionOuterInnerBuilder::set_bar(
   self : TestUnionInUnionOuterInnerBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, 0U)
   self.inner.set_uint32(0, 0U)
@@ -6736,7 +6738,7 @@ pub(all) struct TestUnionInUnionOuterBuilder {
 ///|
 pub fn TestUnionInUnionOuterReader::which(
   self : TestUnionInUnionOuterReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(8)
 }
 
@@ -6779,7 +6781,7 @@ pub fn TestUnionInUnionOuterReader::is_baz(
 ///|
 pub fn TestUnionInUnionOuterReader::get_baz(
   self : TestUnionInUnionOuterReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(8) != 1U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -6789,7 +6791,7 @@ pub fn TestUnionInUnionOuterReader::get_baz(
 ///|
 pub fn TestUnionInUnionOuterBuilder::set_baz(
   self : TestUnionInUnionOuterBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, 0U)
   self.inner.set_uint32(0, 0U)
@@ -6812,14 +6814,14 @@ pub(all) struct TestGroupsGroupsFooBuilder {
 ///|
 pub fn TestGroupsGroupsFooReader::get_corge(
   self : TestGroupsGroupsFooReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(0, default=0)
 }
 
 ///|
 pub fn TestGroupsGroupsFooBuilder::set_corge(
   self : TestGroupsGroupsFooBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(0, value, default=0)
 }
@@ -6867,14 +6869,14 @@ pub(all) struct TestGroupsGroupsBazBuilder {
 ///|
 pub fn TestGroupsGroupsBazReader::get_corge(
   self : TestGroupsGroupsBazReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(0, default=0)
 }
 
 ///|
 pub fn TestGroupsGroupsBazBuilder::set_corge(
   self : TestGroupsGroupsBazBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(0, value, default=0)
 }
@@ -6922,14 +6924,14 @@ pub(all) struct TestGroupsGroupsBarBuilder {
 ///|
 pub fn TestGroupsGroupsBarReader::get_corge(
   self : TestGroupsGroupsBarReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(0, default=0)
 }
 
 ///|
 pub fn TestGroupsGroupsBarBuilder::set_corge(
   self : TestGroupsGroupsBarBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(0, value, default=0)
 }
@@ -7032,7 +7034,7 @@ pub(all) struct TestGroupsGroupsBuilder {
 ///|
 pub fn TestGroupsGroupsReader::which(
   self : TestGroupsGroupsReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(4)
 }
 
@@ -7166,14 +7168,14 @@ pub fn TestInterleavedGroupsGroup1CorgeBuilder::set_grault(
 ///|
 pub fn TestInterleavedGroupsGroup1CorgeReader::get_garply(
   self : TestInterleavedGroupsGroup1CorgeReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(24, default=0U)
 }
 
 ///|
 pub fn TestInterleavedGroupsGroup1CorgeBuilder::set_garply(
   self : TestInterleavedGroupsGroup1CorgeBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(24, value, default=0U)
 }
@@ -7307,21 +7309,21 @@ pub(all) struct TestInterleavedGroupsGroup1Builder {
 ///|
 pub fn TestInterleavedGroupsGroup1Reader::which(
   self : TestInterleavedGroupsGroup1Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(28)
 }
 
 ///|
 pub fn TestInterleavedGroupsGroup1Reader::get_foo(
   self : TestInterleavedGroupsGroup1Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn TestInterleavedGroupsGroup1Builder::set_foo(
   self : TestInterleavedGroupsGroup1Builder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -7351,7 +7353,7 @@ pub fn TestInterleavedGroupsGroup1Reader::is_qux(
 ///|
 pub fn TestInterleavedGroupsGroup1Reader::get_qux(
   self : TestInterleavedGroupsGroup1Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   if self.inner.get_uint16(28) != 0U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -7361,7 +7363,7 @@ pub fn TestInterleavedGroupsGroup1Reader::get_qux(
 ///|
 pub fn TestInterleavedGroupsGroup1Builder::set_qux(
   self : TestInterleavedGroupsGroup1Builder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(24, 0U)
   self.inner.set_uint64(32, 0UL)
@@ -7464,21 +7466,21 @@ pub(all) struct TestInterleavedGroupsGroup2Builder {
 ///|
 pub fn TestInterleavedGroupsGroup2Reader::which(
   self : TestInterleavedGroupsGroup2Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(30)
 }
 
 ///|
 pub fn TestInterleavedGroupsGroup2Reader::get_foo(
   self : TestInterleavedGroupsGroup2Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(4, default=0U)
 }
 
 ///|
 pub fn TestInterleavedGroupsGroup2Builder::set_foo(
   self : TestInterleavedGroupsGroup2Builder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(4, value, default=0U)
 }
@@ -7508,7 +7510,7 @@ pub fn TestInterleavedGroupsGroup2Reader::is_qux(
 ///|
 pub fn TestInterleavedGroupsGroup2Reader::get_qux(
   self : TestInterleavedGroupsGroup2Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   if self.inner.get_uint16(30) != 0U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -7518,7 +7520,7 @@ pub fn TestInterleavedGroupsGroup2Reader::get_qux(
 ///|
 pub fn TestInterleavedGroupsGroup2Builder::set_qux(
   self : TestInterleavedGroupsGroup2Builder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(26, 0U)
   self.inner.set_uint64(40, 0UL)
@@ -7636,14 +7638,14 @@ pub fn TestInterleavedGroupsGroup2CorgeBuilder::set_grault(
 ///|
 pub fn TestInterleavedGroupsGroup2CorgeReader::get_garply(
   self : TestInterleavedGroupsGroup2CorgeReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(26, default=0U)
 }
 
 ///|
 pub fn TestInterleavedGroupsGroup2CorgeBuilder::set_garply(
   self : TestInterleavedGroupsGroup2CorgeBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(26, value, default=0U)
 }
@@ -8156,14 +8158,14 @@ pub fn TestListsStruct16Builder::init_root(
 ///|
 pub fn TestListsStruct16Reader::get_f(
   self : TestListsStruct16Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0, default=0U)
 }
 
 ///|
 pub fn TestListsStruct16Builder::set_f(
   self : TestListsStruct16Builder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(0, value, default=0U)
 }
@@ -8195,14 +8197,14 @@ pub fn TestListsStruct32Builder::init_root(
 ///|
 pub fn TestListsStruct32Reader::get_f(
   self : TestListsStruct32Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn TestListsStruct32Builder::set_f(
   self : TestListsStruct32Builder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -8320,21 +8322,23 @@ pub(all) struct TestListsList0ListBuilder {
 }
 
 ///|
-pub fn TestListsList0ListReader::length(self : TestListsList0ListReader) -> Int {
+pub fn TestListsList0ListReader::length(
+  self : TestListsList0ListReader,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsList0ListBuilder::length(
   self : TestListsList0ListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsList0ListReader::get(
   self : TestListsList0ListReader,
-  index : Int,
+  index : Int32,
 ) -> TestListsStruct0Reader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -8342,7 +8346,7 @@ pub fn TestListsList0ListReader::get(
 ///|
 pub fn TestListsList0ListBuilder::get(
   self : TestListsList0ListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestListsStruct0Builder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -8357,7 +8361,7 @@ pub fn TestListsReader::get_list0(
 ///|
 pub fn TestListsBuilder::init_list0(
   self : TestListsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestListsList0ListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(0, length, 0, 0), }
 }
@@ -8381,21 +8385,23 @@ pub(all) struct TestListsList1ListBuilder {
 }
 
 ///|
-pub fn TestListsList1ListReader::length(self : TestListsList1ListReader) -> Int {
+pub fn TestListsList1ListReader::length(
+  self : TestListsList1ListReader,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsList1ListBuilder::length(
   self : TestListsList1ListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsList1ListReader::get(
   self : TestListsList1ListReader,
-  index : Int,
+  index : Int32,
 ) -> TestListsStruct1Reader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -8403,7 +8409,7 @@ pub fn TestListsList1ListReader::get(
 ///|
 pub fn TestListsList1ListBuilder::get(
   self : TestListsList1ListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestListsStruct1Builder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -8418,7 +8424,7 @@ pub fn TestListsReader::get_list1(
 ///|
 pub fn TestListsBuilder::init_list1(
   self : TestListsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestListsList1ListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 1, 0), }
 }
@@ -8442,21 +8448,23 @@ pub(all) struct TestListsList8ListBuilder {
 }
 
 ///|
-pub fn TestListsList8ListReader::length(self : TestListsList8ListReader) -> Int {
+pub fn TestListsList8ListReader::length(
+  self : TestListsList8ListReader,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsList8ListBuilder::length(
   self : TestListsList8ListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsList8ListReader::get(
   self : TestListsList8ListReader,
-  index : Int,
+  index : Int32,
 ) -> TestListsStruct8Reader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -8464,7 +8472,7 @@ pub fn TestListsList8ListReader::get(
 ///|
 pub fn TestListsList8ListBuilder::get(
   self : TestListsList8ListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestListsStruct8Builder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -8479,7 +8487,7 @@ pub fn TestListsReader::get_list8(
 ///|
 pub fn TestListsBuilder::init_list8(
   self : TestListsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestListsList8ListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(2, length, 1, 0), }
 }
@@ -8505,21 +8513,21 @@ pub(all) struct TestListsList16ListBuilder {
 ///|
 pub fn TestListsList16ListReader::length(
   self : TestListsList16ListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsList16ListBuilder::length(
   self : TestListsList16ListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsList16ListReader::get(
   self : TestListsList16ListReader,
-  index : Int,
+  index : Int32,
 ) -> TestListsStruct16Reader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -8527,7 +8535,7 @@ pub fn TestListsList16ListReader::get(
 ///|
 pub fn TestListsList16ListBuilder::get(
   self : TestListsList16ListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestListsStruct16Builder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -8542,7 +8550,7 @@ pub fn TestListsReader::get_list16(
 ///|
 pub fn TestListsBuilder::init_list16(
   self : TestListsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestListsList16ListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(3, length, 1, 0), }
 }
@@ -8568,21 +8576,21 @@ pub(all) struct TestListsList32ListBuilder {
 ///|
 pub fn TestListsList32ListReader::length(
   self : TestListsList32ListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsList32ListBuilder::length(
   self : TestListsList32ListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsList32ListReader::get(
   self : TestListsList32ListReader,
-  index : Int,
+  index : Int32,
 ) -> TestListsStruct32Reader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -8590,7 +8598,7 @@ pub fn TestListsList32ListReader::get(
 ///|
 pub fn TestListsList32ListBuilder::get(
   self : TestListsList32ListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestListsStruct32Builder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -8605,7 +8613,7 @@ pub fn TestListsReader::get_list32(
 ///|
 pub fn TestListsBuilder::init_list32(
   self : TestListsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestListsList32ListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(4, length, 1, 0), }
 }
@@ -8631,21 +8639,21 @@ pub(all) struct TestListsList64ListBuilder {
 ///|
 pub fn TestListsList64ListReader::length(
   self : TestListsList64ListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsList64ListBuilder::length(
   self : TestListsList64ListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsList64ListReader::get(
   self : TestListsList64ListReader,
-  index : Int,
+  index : Int32,
 ) -> TestListsStruct64Reader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -8653,7 +8661,7 @@ pub fn TestListsList64ListReader::get(
 ///|
 pub fn TestListsList64ListBuilder::get(
   self : TestListsList64ListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestListsStruct64Builder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -8668,7 +8676,7 @@ pub fn TestListsReader::get_list64(
 ///|
 pub fn TestListsBuilder::init_list64(
   self : TestListsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestListsList64ListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(5, length, 1, 0), }
 }
@@ -8692,21 +8700,23 @@ pub(all) struct TestListsListPListBuilder {
 }
 
 ///|
-pub fn TestListsListPListReader::length(self : TestListsListPListReader) -> Int {
+pub fn TestListsListPListReader::length(
+  self : TestListsListPListReader,
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsListPListBuilder::length(
   self : TestListsListPListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsListPListReader::get(
   self : TestListsListPListReader,
-  index : Int,
+  index : Int32,
 ) -> TestListsStructPReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -8714,7 +8724,7 @@ pub fn TestListsListPListReader::get(
 ///|
 pub fn TestListsListPListBuilder::get(
   self : TestListsListPListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestListsStructPBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -8729,7 +8739,7 @@ pub fn TestListsReader::get_list_p(
 ///|
 pub fn TestListsBuilder::init_list_p(
   self : TestListsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestListsListPListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(6, length, 0, 1), }
 }
@@ -8755,14 +8765,14 @@ pub(all) struct TestListsInt32ListListListBuilder {
 ///|
 pub fn TestListsInt32ListListListReader::length(
   self : TestListsInt32ListListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsInt32ListListListBuilder::length(
   self : TestListsInt32ListListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
@@ -8779,30 +8789,30 @@ pub(all) struct TestListsInt32ListListListItemBuilder {
 ///|
 pub fn TestListsInt32ListListListItemReader::length(
   self : TestListsInt32ListListListItemReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsInt32ListListListItemBuilder::length(
   self : TestListsInt32ListListListItemBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsInt32ListListListItemReader::get(
   self : TestListsInt32ListListListItemReader,
-  index : Int,
-) -> Int raise @capnp.CapnpError {
+  index : Int32,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(index)
 }
 
 ///|
 pub fn TestListsInt32ListListListItemBuilder::set(
   self : TestListsInt32ListListListItemBuilder,
-  index : Int,
-  value : Int,
+  index : Int32,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(index, value)
 }
@@ -8810,7 +8820,7 @@ pub fn TestListsInt32ListListListItemBuilder::set(
 ///|
 pub fn TestListsInt32ListListListReader::get(
   self : TestListsInt32ListListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestListsInt32ListListListItemReader raise @capnp.CapnpError {
   { inner: self.inner.get_list(index), }
 }
@@ -8818,8 +8828,8 @@ pub fn TestListsInt32ListListListReader::get(
 ///|
 pub fn TestListsInt32ListListListBuilder::init(
   self : TestListsInt32ListListListBuilder,
-  index : Int,
-  length : Int,
+  index : Int32,
+  length : Int32,
 ) -> TestListsInt32ListListListItemBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(index, 4, length), }
 }
@@ -8834,7 +8844,7 @@ pub fn TestListsReader::get_int32_list_list(
 ///|
 pub fn TestListsBuilder::init_int32_list_list(
   self : TestListsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestListsInt32ListListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(7, 6, length), }
 }
@@ -8860,14 +8870,14 @@ pub(all) struct TestListsTextListListListBuilder {
 ///|
 pub fn TestListsTextListListListReader::length(
   self : TestListsTextListListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsTextListListListBuilder::length(
   self : TestListsTextListListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
@@ -8884,21 +8894,21 @@ pub(all) struct TestListsTextListListListItemBuilder {
 ///|
 pub fn TestListsTextListListListItemReader::length(
   self : TestListsTextListListListItemReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsTextListListListItemBuilder::length(
   self : TestListsTextListListListItemBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsTextListListListItemReader::get(
   self : TestListsTextListListListItemReader,
-  index : Int,
+  index : Int32,
 ) -> String raise @capnp.CapnpError {
   self.inner.get_text(index)
 }
@@ -8906,7 +8916,7 @@ pub fn TestListsTextListListListItemReader::get(
 ///|
 pub fn TestListsTextListListListItemBuilder::set(
   self : TestListsTextListListListItemBuilder,
-  index : Int,
+  index : Int32,
   value : String,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_text(index, value)
@@ -8915,7 +8925,7 @@ pub fn TestListsTextListListListItemBuilder::set(
 ///|
 pub fn TestListsTextListListListReader::get(
   self : TestListsTextListListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestListsTextListListListItemReader raise @capnp.CapnpError {
   { inner: self.inner.get_list(index), }
 }
@@ -8923,8 +8933,8 @@ pub fn TestListsTextListListListReader::get(
 ///|
 pub fn TestListsTextListListListBuilder::init(
   self : TestListsTextListListListBuilder,
-  index : Int,
-  length : Int,
+  index : Int32,
+  length : Int32,
 ) -> TestListsTextListListListItemBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(index, 6, length), }
 }
@@ -8939,7 +8949,7 @@ pub fn TestListsReader::get_text_list_list(
 ///|
 pub fn TestListsBuilder::init_text_list_list(
   self : TestListsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestListsTextListListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(8, 6, length), }
 }
@@ -8965,14 +8975,14 @@ pub(all) struct TestListsStructListListListBuilder {
 ///|
 pub fn TestListsStructListListListReader::length(
   self : TestListsStructListListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsStructListListListBuilder::length(
   self : TestListsStructListListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
@@ -8989,21 +8999,21 @@ pub(all) struct TestListsStructListListListItemBuilder {
 ///|
 pub fn TestListsStructListListListItemReader::length(
   self : TestListsStructListListListItemReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsStructListListListItemBuilder::length(
   self : TestListsStructListListListItemBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListsStructListListListItemReader::get(
   self : TestListsStructListListListItemReader,
-  index : Int,
+  index : Int32,
 ) -> TestAllTypesReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -9011,7 +9021,7 @@ pub fn TestListsStructListListListItemReader::get(
 ///|
 pub fn TestListsStructListListListItemBuilder::get(
   self : TestListsStructListListListItemBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestAllTypesBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -9019,7 +9029,7 @@ pub fn TestListsStructListListListItemBuilder::get(
 ///|
 pub fn TestListsStructListListListReader::get(
   self : TestListsStructListListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestListsStructListListListItemReader raise @capnp.CapnpError {
   { inner: self.inner.get_list(index), }
 }
@@ -9027,8 +9037,8 @@ pub fn TestListsStructListListListReader::get(
 ///|
 pub fn TestListsStructListListListBuilder::init(
   self : TestListsStructListListListBuilder,
-  index : Int,
-  length : Int,
+  index : Int32,
+  length : Int32,
 ) -> TestListsStructListListListItemBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(index, length, 6, 20), }
 }
@@ -9043,7 +9053,7 @@ pub fn TestListsReader::get_struct_list_list(
 ///|
 pub fn TestListsBuilder::init_struct_list_list(
   self : TestListsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestListsStructListListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(9, 6, length), }
 }
@@ -9241,14 +9251,14 @@ pub fn TestListsStruct16cBuilder::init_root(
 ///|
 pub fn TestListsStruct16cReader::get_f(
   self : TestListsStruct16cReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0, default=0U)
 }
 
 ///|
 pub fn TestListsStruct16cBuilder::set_f(
   self : TestListsStruct16cBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(0, value, default=0U)
 }
@@ -9295,14 +9305,14 @@ pub fn TestListsStruct32cBuilder::init_root(
 ///|
 pub fn TestListsStruct32cReader::get_f(
   self : TestListsStruct32cReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn TestListsStruct32cBuilder::set_f(
   self : TestListsStruct32cBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -9581,14 +9591,14 @@ pub fn TestLateUnionBuilder::init_root(
 ///|
 pub fn TestLateUnionReader::get_foo(
   self : TestLateUnionReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(0, default=0)
 }
 
 ///|
 pub fn TestLateUnionBuilder::set_foo(
   self : TestLateUnionBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(0, value, default=0)
 }
@@ -9611,14 +9621,14 @@ pub fn TestLateUnionBuilder::set_bar(
 ///|
 pub fn TestLateUnionReader::get_baz(
   self : TestLateUnionReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int16(4, default=0)
 }
 
 ///|
 pub fn TestLateUnionBuilder::set_baz(
   self : TestLateUnionBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int16(4, value, default=0)
 }
@@ -9686,7 +9696,7 @@ pub(all) struct TestLateUnionTheUnionBuilder {
 ///|
 pub fn TestLateUnionTheUnionReader::which(
   self : TestLateUnionTheUnionReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(6)
 }
 
@@ -9739,30 +9749,30 @@ pub(all) struct TestLateUnionTheUnionCorgeListBuilder {
 ///|
 pub fn TestLateUnionTheUnionCorgeListReader::length(
   self : TestLateUnionTheUnionCorgeListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestLateUnionTheUnionCorgeListBuilder::length(
   self : TestLateUnionTheUnionCorgeListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestLateUnionTheUnionCorgeListReader::get(
   self : TestLateUnionTheUnionCorgeListReader,
-  index : Int,
-) -> Int raise @capnp.CapnpError {
+  index : Int32,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(index)
 }
 
 ///|
 pub fn TestLateUnionTheUnionCorgeListBuilder::set(
   self : TestLateUnionTheUnionCorgeListBuilder,
-  index : Int,
-  value : Int,
+  index : Int32,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(index, value)
 }
@@ -9780,7 +9790,7 @@ pub fn TestLateUnionTheUnionReader::get_corge(
 ///|
 pub fn TestLateUnionTheUnionBuilder::init_corge(
   self : TestLateUnionTheUnionBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestLateUnionTheUnionCorgeListBuilder raise @capnp.CapnpError {
   self.inner.clear_pointer(1)
   self.inner.clear_pointer(1)
@@ -9843,7 +9853,7 @@ pub(all) struct TestLateUnionAnotherUnionBuilder {
 ///|
 pub fn TestLateUnionAnotherUnionReader::which(
   self : TestLateUnionAnotherUnionReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(12)
 }
 
@@ -9896,30 +9906,30 @@ pub(all) struct TestLateUnionAnotherUnionCorgeListBuilder {
 ///|
 pub fn TestLateUnionAnotherUnionCorgeListReader::length(
   self : TestLateUnionAnotherUnionCorgeListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestLateUnionAnotherUnionCorgeListBuilder::length(
   self : TestLateUnionAnotherUnionCorgeListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestLateUnionAnotherUnionCorgeListReader::get(
   self : TestLateUnionAnotherUnionCorgeListReader,
-  index : Int,
-) -> Int raise @capnp.CapnpError {
+  index : Int32,
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(index)
 }
 
 ///|
 pub fn TestLateUnionAnotherUnionCorgeListBuilder::set(
   self : TestLateUnionAnotherUnionCorgeListBuilder,
-  index : Int,
-  value : Int,
+  index : Int32,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(index, value)
 }
@@ -9937,7 +9947,7 @@ pub fn TestLateUnionAnotherUnionReader::get_corge(
 ///|
 pub fn TestLateUnionAnotherUnionBuilder::init_corge(
   self : TestLateUnionAnotherUnionBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestLateUnionAnotherUnionCorgeListBuilder raise @capnp.CapnpError {
   self.inner.clear_pointer(2)
   self.inner.clear_pointer(2)
@@ -10196,7 +10206,7 @@ pub fn TestOldUnionVersionBuilder::init_root(
 ///|
 pub fn TestOldUnionVersionReader::which(
   self : TestOldUnionVersionReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -10281,7 +10291,7 @@ pub fn TestNewUnionVersionBuilder::init_root(
 ///|
 pub fn TestNewUnionVersionReader::which(
   self : TestNewUnionVersionReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -10355,7 +10365,7 @@ pub(all) struct TestNewUnionVersionABuilder {
 ///|
 pub fn TestNewUnionVersionAReader::which(
   self : TestNewUnionVersionAReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(8)
 }
 
@@ -10528,7 +10538,7 @@ pub(all) struct TestStructUnionUnBuilder {
 ///|
 pub fn TestStructUnionUnReader::which(
   self : TestStructUnionUnReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -10635,14 +10645,14 @@ pub fn TestPrintInlineStructsInlineStructBuilder::init_root(
 ///|
 pub fn TestPrintInlineStructsInlineStructReader::get_int32_field(
   self : TestPrintInlineStructsInlineStructReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(0, default=0)
 }
 
 ///|
 pub fn TestPrintInlineStructsInlineStructBuilder::set_int32_field(
   self : TestPrintInlineStructsInlineStructBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(0, value, default=0)
 }
@@ -10714,21 +10724,21 @@ pub(all) struct TestPrintInlineStructsStructListListBuilder {
 ///|
 pub fn TestPrintInlineStructsStructListListReader::length(
   self : TestPrintInlineStructsStructListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestPrintInlineStructsStructListListBuilder::length(
   self : TestPrintInlineStructsStructListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestPrintInlineStructsStructListListReader::get(
   self : TestPrintInlineStructsStructListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestPrintInlineStructsInlineStructReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -10736,7 +10746,7 @@ pub fn TestPrintInlineStructsStructListListReader::get(
 ///|
 pub fn TestPrintInlineStructsStructListListBuilder::get(
   self : TestPrintInlineStructsStructListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestPrintInlineStructsInlineStructBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -10751,7 +10761,7 @@ pub fn TestPrintInlineStructsReader::get_struct_list(
 ///|
 pub fn TestPrintInlineStructsBuilder::init_struct_list(
   self : TestPrintInlineStructsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestPrintInlineStructsStructListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 1, 1), }
 }
@@ -10853,7 +10863,7 @@ pub fn TestGenericsBuilder::init_root(
 ///|
 pub fn TestGenericsReader::which(
   self : TestGenericsReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -10976,21 +10986,21 @@ pub(all) struct TestGenericsListListBuilder {
 ///|
 pub fn TestGenericsListListReader::length(
   self : TestGenericsListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsListListBuilder::length(
   self : TestGenericsListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsListListReader::get(
   self : TestGenericsListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -10998,7 +11008,7 @@ pub fn TestGenericsListListReader::get(
 ///|
 pub fn TestGenericsListListBuilder::get(
   self : TestGenericsListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -11013,7 +11023,7 @@ pub fn TestGenericsReader::get_list(
 ///|
 pub fn TestGenericsBuilder::init_list(
   self : TestGenericsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(2, length, 0, 2), }
 }
@@ -11039,14 +11049,14 @@ pub(all) struct TestGenericsUgBuilder {
 ///|
 pub fn TestGenericsUgReader::get_ugfoo(
   self : TestGenericsUgReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(4, default=0)
 }
 
 ///|
 pub fn TestGenericsUgBuilder::set_ugfoo(
   self : TestGenericsUgBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(4, value, default=0)
 }
@@ -11567,7 +11577,7 @@ pub fn TestGenericsAsTestAllTypesAndTestAnyPointerBuilder::init_root(
 ///|
 pub fn TestGenericsAsTestAllTypesAndTestAnyPointerReader::which(
   self : TestGenericsAsTestAllTypesAndTestAnyPointerReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -11681,21 +11691,21 @@ pub(all) struct TestGenericsAsTestAllTypesAndTestAnyPointerListListBuilder {
 ///|
 pub fn TestGenericsAsTestAllTypesAndTestAnyPointerListListReader::length(
   self : TestGenericsAsTestAllTypesAndTestAnyPointerListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsTestAllTypesAndTestAnyPointerListListBuilder::length(
   self : TestGenericsAsTestAllTypesAndTestAnyPointerListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsTestAllTypesAndTestAnyPointerListListReader::get(
   self : TestGenericsAsTestAllTypesAndTestAnyPointerListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsTestAllTypesAndTestAnyPointerReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -11703,7 +11713,7 @@ pub fn TestGenericsAsTestAllTypesAndTestAnyPointerListListReader::get(
 ///|
 pub fn TestGenericsAsTestAllTypesAndTestAnyPointerListListBuilder::get(
   self : TestGenericsAsTestAllTypesAndTestAnyPointerListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsTestAllTypesAndTestAnyPointerBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -11718,7 +11728,7 @@ pub fn TestGenericsAsTestAllTypesAndTestAnyPointerReader::get_list(
 ///|
 pub fn TestGenericsAsTestAllTypesAndTestAnyPointerBuilder::init_list(
   self : TestGenericsAsTestAllTypesAndTestAnyPointerBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsAsTestAllTypesAndTestAnyPointerListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(2, length, 0, 2), }
 }
@@ -11758,7 +11768,7 @@ pub fn TestGenericsAsTestAnyPointerAndTestAllTypesBuilder::init_root(
 ///|
 pub fn TestGenericsAsTestAnyPointerAndTestAllTypesReader::which(
   self : TestGenericsAsTestAnyPointerAndTestAllTypesReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -11872,21 +11882,21 @@ pub(all) struct TestGenericsAsTestAnyPointerAndTestAllTypesListListBuilder {
 ///|
 pub fn TestGenericsAsTestAnyPointerAndTestAllTypesListListReader::length(
   self : TestGenericsAsTestAnyPointerAndTestAllTypesListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsTestAnyPointerAndTestAllTypesListListBuilder::length(
   self : TestGenericsAsTestAnyPointerAndTestAllTypesListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsTestAnyPointerAndTestAllTypesListListReader::get(
   self : TestGenericsAsTestAnyPointerAndTestAllTypesListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsTestAnyPointerAndTestAllTypesReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -11894,7 +11904,7 @@ pub fn TestGenericsAsTestAnyPointerAndTestAllTypesListListReader::get(
 ///|
 pub fn TestGenericsAsTestAnyPointerAndTestAllTypesListListBuilder::get(
   self : TestGenericsAsTestAnyPointerAndTestAllTypesListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsTestAnyPointerAndTestAllTypesBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -11909,7 +11919,7 @@ pub fn TestGenericsAsTestAnyPointerAndTestAllTypesReader::get_list(
 ///|
 pub fn TestGenericsAsTestAnyPointerAndTestAllTypesBuilder::init_list(
   self : TestGenericsAsTestAnyPointerAndTestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsAsTestAnyPointerAndTestAllTypesListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(2, length, 0, 2), }
 }
@@ -11935,14 +11945,14 @@ pub(all) struct TestGenericsUgAsTestAnyPointerAndTestAllTypesBuilder {
 ///|
 pub fn TestGenericsUgAsTestAnyPointerAndTestAllTypesReader::get_ugfoo(
   self : TestGenericsUgAsTestAnyPointerAndTestAllTypesReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(4, default=0)
 }
 
 ///|
 pub fn TestGenericsUgAsTestAnyPointerAndTestAllTypesBuilder::set_ugfoo(
   self : TestGenericsUgAsTestAnyPointerAndTestAllTypesBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(4, value, default=0)
 }
@@ -12028,14 +12038,14 @@ pub(all) struct TestGenericsUgAsTestAllTypesAndTestAnyPointerBuilder {
 ///|
 pub fn TestGenericsUgAsTestAllTypesAndTestAnyPointerReader::get_ugfoo(
   self : TestGenericsUgAsTestAllTypesAndTestAnyPointerReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(4, default=0)
 }
 
 ///|
 pub fn TestGenericsUgAsTestAllTypesAndTestAnyPointerBuilder::set_ugfoo(
   self : TestGenericsUgAsTestAllTypesAndTestAnyPointerBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(4, value, default=0)
 }
@@ -12600,7 +12610,7 @@ pub fn TestGenericsAsTextAndTestAllTypesBuilder::init_root(
 ///|
 pub fn TestGenericsAsTextAndTestAllTypesReader::which(
   self : TestGenericsAsTextAndTestAllTypesReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -12707,21 +12717,21 @@ pub(all) struct TestGenericsAsTextAndTestAllTypesListListBuilder {
 ///|
 pub fn TestGenericsAsTextAndTestAllTypesListListReader::length(
   self : TestGenericsAsTextAndTestAllTypesListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsTextAndTestAllTypesListListBuilder::length(
   self : TestGenericsAsTextAndTestAllTypesListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsTextAndTestAllTypesListListReader::get(
   self : TestGenericsAsTextAndTestAllTypesListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsTextAndTestAllTypesReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -12729,7 +12739,7 @@ pub fn TestGenericsAsTextAndTestAllTypesListListReader::get(
 ///|
 pub fn TestGenericsAsTextAndTestAllTypesListListBuilder::get(
   self : TestGenericsAsTextAndTestAllTypesListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsTextAndTestAllTypesBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -12744,7 +12754,7 @@ pub fn TestGenericsAsTextAndTestAllTypesReader::get_list(
 ///|
 pub fn TestGenericsAsTextAndTestAllTypesBuilder::init_list(
   self : TestGenericsAsTextAndTestAllTypesBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsAsTextAndTestAllTypesListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(2, length, 0, 2), }
 }
@@ -12784,7 +12794,7 @@ pub fn TestGenericsAsTestAllTypesAndTextBuilder::init_root(
 ///|
 pub fn TestGenericsAsTestAllTypesAndTextReader::which(
   self : TestGenericsAsTestAllTypesAndTextReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -12898,21 +12908,21 @@ pub(all) struct TestGenericsAsTestAllTypesAndTextListListBuilder {
 ///|
 pub fn TestGenericsAsTestAllTypesAndTextListListReader::length(
   self : TestGenericsAsTestAllTypesAndTextListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsTestAllTypesAndTextListListBuilder::length(
   self : TestGenericsAsTestAllTypesAndTextListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsTestAllTypesAndTextListListReader::get(
   self : TestGenericsAsTestAllTypesAndTextListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsTestAllTypesAndTextReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -12920,7 +12930,7 @@ pub fn TestGenericsAsTestAllTypesAndTextListListReader::get(
 ///|
 pub fn TestGenericsAsTestAllTypesAndTextListListBuilder::get(
   self : TestGenericsAsTestAllTypesAndTextListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsTestAllTypesAndTextBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -12935,7 +12945,7 @@ pub fn TestGenericsAsTestAllTypesAndTextReader::get_list(
 ///|
 pub fn TestGenericsAsTestAllTypesAndTextBuilder::init_list(
   self : TestGenericsAsTestAllTypesAndTextBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsAsTestAllTypesAndTextListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(2, length, 0, 2), }
 }
@@ -12961,14 +12971,14 @@ pub(all) struct TestGenericsUgAsTestAllTypesAndTextBuilder {
 ///|
 pub fn TestGenericsUgAsTestAllTypesAndTextReader::get_ugfoo(
   self : TestGenericsUgAsTestAllTypesAndTextReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(4, default=0)
 }
 
 ///|
 pub fn TestGenericsUgAsTestAllTypesAndTextBuilder::set_ugfoo(
   self : TestGenericsUgAsTestAllTypesAndTextBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(4, value, default=0)
 }
@@ -13047,14 +13057,14 @@ pub(all) struct TestGenericsUgAsTextAndTestAllTypesBuilder {
 ///|
 pub fn TestGenericsUgAsTextAndTestAllTypesReader::get_ugfoo(
   self : TestGenericsUgAsTextAndTestAllTypesReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(4, default=0)
 }
 
 ///|
 pub fn TestGenericsUgAsTextAndTestAllTypesBuilder::set_ugfoo(
   self : TestGenericsUgAsTextAndTestAllTypesBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(4, value, default=0)
 }
@@ -13319,7 +13329,7 @@ pub fn TestGenericsUnionBuilder::init_root(
 ///|
 pub fn TestGenericsUnionReader::which(
   self : TestGenericsUnionReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -14328,30 +14338,30 @@ pub(all) struct TestGenericsInner2AsTestAllTypesAndTestAnyPointerAndListOfUint32
 ///|
 pub fn TestGenericsInner2AsTestAllTypesAndTestAnyPointerAndListOfUint32BazListReader::length(
   self : TestGenericsInner2AsTestAllTypesAndTestAnyPointerAndListOfUint32BazListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsInner2AsTestAllTypesAndTestAnyPointerAndListOfUint32BazListBuilder::length(
   self : TestGenericsInner2AsTestAllTypesAndTestAnyPointerAndListOfUint32BazListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsInner2AsTestAllTypesAndTestAnyPointerAndListOfUint32BazListReader::get(
   self : TestGenericsInner2AsTestAllTypesAndTestAnyPointerAndListOfUint32BazListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn TestGenericsInner2AsTestAllTypesAndTestAnyPointerAndListOfUint32BazListBuilder::set(
   self : TestGenericsInner2AsTestAllTypesAndTestAnyPointerAndListOfUint32BazListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -14366,7 +14376,7 @@ pub fn TestGenericsInner2AsTestAllTypesAndTestAnyPointerAndListOfUint32Reader::g
 ///|
 pub fn TestGenericsInner2AsTestAllTypesAndTestAnyPointerAndListOfUint32Builder::init_baz(
   self : TestGenericsInner2AsTestAllTypesAndTestAnyPointerAndListOfUint32Builder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsInner2AsTestAllTypesAndTestAnyPointerAndListOfUint32BazListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(1, 4, length), }
 }
@@ -14570,30 +14580,30 @@ pub(all) struct TestGenericsUseAliasesAsTestAllTypesAndListOfUint32RevFooListBui
 ///|
 pub fn TestGenericsUseAliasesAsTestAllTypesAndListOfUint32RevFooListReader::length(
   self : TestGenericsUseAliasesAsTestAllTypesAndListOfUint32RevFooListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsUseAliasesAsTestAllTypesAndListOfUint32RevFooListBuilder::length(
   self : TestGenericsUseAliasesAsTestAllTypesAndListOfUint32RevFooListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsUseAliasesAsTestAllTypesAndListOfUint32RevFooListReader::get(
   self : TestGenericsUseAliasesAsTestAllTypesAndListOfUint32RevFooListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn TestGenericsUseAliasesAsTestAllTypesAndListOfUint32RevFooListBuilder::set(
   self : TestGenericsUseAliasesAsTestAllTypesAndListOfUint32RevFooListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -14608,7 +14618,7 @@ pub fn TestGenericsUseAliasesAsTestAllTypesAndListOfUint32Reader::get_rev_foo(
 ///|
 pub fn TestGenericsUseAliasesAsTestAllTypesAndListOfUint32Builder::init_rev_foo(
   self : TestGenericsUseAliasesAsTestAllTypesAndListOfUint32Builder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsUseAliasesAsTestAllTypesAndListOfUint32RevFooListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(5, 4, length), }
 }
@@ -14680,30 +14690,30 @@ pub(all) struct TestGenericsInnerAsTestAllTypesAndListOfUint32BarListBuilder {
 ///|
 pub fn TestGenericsInnerAsTestAllTypesAndListOfUint32BarListReader::length(
   self : TestGenericsInnerAsTestAllTypesAndListOfUint32BarListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsInnerAsTestAllTypesAndListOfUint32BarListBuilder::length(
   self : TestGenericsInnerAsTestAllTypesAndListOfUint32BarListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsInnerAsTestAllTypesAndListOfUint32BarListReader::get(
   self : TestGenericsInnerAsTestAllTypesAndListOfUint32BarListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn TestGenericsInnerAsTestAllTypesAndListOfUint32BarListBuilder::set(
   self : TestGenericsInnerAsTestAllTypesAndListOfUint32BarListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -14718,7 +14728,7 @@ pub fn TestGenericsInnerAsTestAllTypesAndListOfUint32Reader::get_bar(
 ///|
 pub fn TestGenericsInnerAsTestAllTypesAndListOfUint32Builder::init_bar(
   self : TestGenericsInnerAsTestAllTypesAndListOfUint32Builder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsInnerAsTestAllTypesAndListOfUint32BarListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(1, 4, length), }
 }
@@ -14768,30 +14778,30 @@ pub(all) struct TestGenericsInner2AsTestAllTypesAndListOfUint32AndAnyPointerBarL
 ///|
 pub fn TestGenericsInner2AsTestAllTypesAndListOfUint32AndAnyPointerBarListReader::length(
   self : TestGenericsInner2AsTestAllTypesAndListOfUint32AndAnyPointerBarListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsInner2AsTestAllTypesAndListOfUint32AndAnyPointerBarListBuilder::length(
   self : TestGenericsInner2AsTestAllTypesAndListOfUint32AndAnyPointerBarListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsInner2AsTestAllTypesAndListOfUint32AndAnyPointerBarListReader::get(
   self : TestGenericsInner2AsTestAllTypesAndListOfUint32AndAnyPointerBarListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn TestGenericsInner2AsTestAllTypesAndListOfUint32AndAnyPointerBarListBuilder::set(
   self : TestGenericsInner2AsTestAllTypesAndListOfUint32AndAnyPointerBarListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -14806,7 +14816,7 @@ pub fn TestGenericsInner2AsTestAllTypesAndListOfUint32AndAnyPointerReader::get_b
 ///|
 pub fn TestGenericsInner2AsTestAllTypesAndListOfUint32AndAnyPointerBuilder::init_bar(
   self : TestGenericsInner2AsTestAllTypesAndListOfUint32AndAnyPointerBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsInner2AsTestAllTypesAndListOfUint32AndAnyPointerBarListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(0, 4, length), }
 }
@@ -14931,30 +14941,30 @@ pub(all) struct TestGenericsInner2AsTestAllTypesAndListOfUint32AndTextBarListBui
 ///|
 pub fn TestGenericsInner2AsTestAllTypesAndListOfUint32AndTextBarListReader::length(
   self : TestGenericsInner2AsTestAllTypesAndListOfUint32AndTextBarListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsInner2AsTestAllTypesAndListOfUint32AndTextBarListBuilder::length(
   self : TestGenericsInner2AsTestAllTypesAndListOfUint32AndTextBarListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsInner2AsTestAllTypesAndListOfUint32AndTextBarListReader::get(
   self : TestGenericsInner2AsTestAllTypesAndListOfUint32AndTextBarListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn TestGenericsInner2AsTestAllTypesAndListOfUint32AndTextBarListBuilder::set(
   self : TestGenericsInner2AsTestAllTypesAndListOfUint32AndTextBarListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -14969,7 +14979,7 @@ pub fn TestGenericsInner2AsTestAllTypesAndListOfUint32AndTextReader::get_bar(
 ///|
 pub fn TestGenericsInner2AsTestAllTypesAndListOfUint32AndTextBuilder::init_bar(
   self : TestGenericsInner2AsTestAllTypesAndListOfUint32AndTextBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsInner2AsTestAllTypesAndListOfUint32AndTextBarListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(0, 4, length), }
 }
@@ -15068,7 +15078,7 @@ pub fn TestGenericsAsCapabilityAndTextBuilder::init_root(
 ///|
 pub fn TestGenericsAsCapabilityAndTextReader::which(
   self : TestGenericsAsCapabilityAndTextReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -15198,21 +15208,21 @@ pub(all) struct TestGenericsAsCapabilityAndTextListListBuilder {
 ///|
 pub fn TestGenericsAsCapabilityAndTextListListReader::length(
   self : TestGenericsAsCapabilityAndTextListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsCapabilityAndTextListListBuilder::length(
   self : TestGenericsAsCapabilityAndTextListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsCapabilityAndTextListListReader::get(
   self : TestGenericsAsCapabilityAndTextListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsCapabilityAndTextReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -15220,7 +15230,7 @@ pub fn TestGenericsAsCapabilityAndTextListListReader::get(
 ///|
 pub fn TestGenericsAsCapabilityAndTextListListBuilder::get(
   self : TestGenericsAsCapabilityAndTextListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsCapabilityAndTextBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -15235,7 +15245,7 @@ pub fn TestGenericsAsCapabilityAndTextReader::get_list(
 ///|
 pub fn TestGenericsAsCapabilityAndTextBuilder::init_list(
   self : TestGenericsAsCapabilityAndTextBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsAsCapabilityAndTextListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(2, length, 0, 2), }
 }
@@ -15275,7 +15285,7 @@ pub fn TestGenericsAsTextAndCapabilityBuilder::init_root(
 ///|
 pub fn TestGenericsAsTextAndCapabilityReader::which(
   self : TestGenericsAsTextAndCapabilityReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -15382,21 +15392,21 @@ pub(all) struct TestGenericsAsTextAndCapabilityListListBuilder {
 ///|
 pub fn TestGenericsAsTextAndCapabilityListListReader::length(
   self : TestGenericsAsTextAndCapabilityListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsTextAndCapabilityListListBuilder::length(
   self : TestGenericsAsTextAndCapabilityListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsTextAndCapabilityListListReader::get(
   self : TestGenericsAsTextAndCapabilityListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsTextAndCapabilityReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -15404,7 +15414,7 @@ pub fn TestGenericsAsTextAndCapabilityListListReader::get(
 ///|
 pub fn TestGenericsAsTextAndCapabilityListListBuilder::get(
   self : TestGenericsAsTextAndCapabilityListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsTextAndCapabilityBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -15419,7 +15429,7 @@ pub fn TestGenericsAsTextAndCapabilityReader::get_list(
 ///|
 pub fn TestGenericsAsTextAndCapabilityBuilder::init_list(
   self : TestGenericsAsTextAndCapabilityBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsAsTextAndCapabilityListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(2, length, 0, 2), }
 }
@@ -15445,14 +15455,14 @@ pub(all) struct TestGenericsUgAsTextAndCapabilityBuilder {
 ///|
 pub fn TestGenericsUgAsTextAndCapabilityReader::get_ugfoo(
   self : TestGenericsUgAsTextAndCapabilityReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(4, default=0)
 }
 
 ///|
 pub fn TestGenericsUgAsTextAndCapabilityBuilder::set_ugfoo(
   self : TestGenericsUgAsTextAndCapabilityBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(4, value, default=0)
 }
@@ -15547,14 +15557,14 @@ pub(all) struct TestGenericsUgAsCapabilityAndTextBuilder {
 ///|
 pub fn TestGenericsUgAsCapabilityAndTextReader::get_ugfoo(
   self : TestGenericsUgAsCapabilityAndTextReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(4, default=0)
 }
 
 ///|
 pub fn TestGenericsUgAsCapabilityAndTextBuilder::set_ugfoo(
   self : TestGenericsUgAsCapabilityAndTextBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(4, value, default=0)
 }
@@ -15663,7 +15673,7 @@ pub fn TestGenericsAsListOfTestEnumAndTextBuilder::init_root(
 ///|
 pub fn TestGenericsAsListOfTestEnumAndTextReader::which(
   self : TestGenericsAsListOfTestEnumAndTextReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -15680,21 +15690,21 @@ pub(all) struct TestGenericsAsListOfTestEnumAndTextFooListBuilder {
 ///|
 pub fn TestGenericsAsListOfTestEnumAndTextFooListReader::length(
   self : TestGenericsAsListOfTestEnumAndTextFooListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsListOfTestEnumAndTextFooListBuilder::length(
   self : TestGenericsAsListOfTestEnumAndTextFooListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsListOfTestEnumAndTextFooListReader::get(
   self : TestGenericsAsListOfTestEnumAndTextFooListReader,
-  index : Int,
+  index : Int32,
 ) -> TestEnum raise @capnp.CapnpError {
   TestEnum::from_raw(self.inner.get_uint16(index))
 }
@@ -15702,7 +15712,7 @@ pub fn TestGenericsAsListOfTestEnumAndTextFooListReader::get(
 ///|
 pub fn TestGenericsAsListOfTestEnumAndTextFooListBuilder::set(
   self : TestGenericsAsListOfTestEnumAndTextFooListBuilder,
-  index : Int,
+  index : Int32,
   value : TestEnum,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(index, value.to_raw())
@@ -15718,7 +15728,7 @@ pub fn TestGenericsAsListOfTestEnumAndTextReader::get_foo(
 ///|
 pub fn TestGenericsAsListOfTestEnumAndTextBuilder::init_foo(
   self : TestGenericsAsListOfTestEnumAndTextBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsAsListOfTestEnumAndTextFooListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(0, 3, length), }
 }
@@ -15819,21 +15829,21 @@ pub(all) struct TestGenericsAsListOfTestEnumAndTextListListBuilder {
 ///|
 pub fn TestGenericsAsListOfTestEnumAndTextListListReader::length(
   self : TestGenericsAsListOfTestEnumAndTextListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsListOfTestEnumAndTextListListBuilder::length(
   self : TestGenericsAsListOfTestEnumAndTextListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsListOfTestEnumAndTextListListReader::get(
   self : TestGenericsAsListOfTestEnumAndTextListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsListOfTestEnumAndTextReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -15841,7 +15851,7 @@ pub fn TestGenericsAsListOfTestEnumAndTextListListReader::get(
 ///|
 pub fn TestGenericsAsListOfTestEnumAndTextListListBuilder::get(
   self : TestGenericsAsListOfTestEnumAndTextListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsListOfTestEnumAndTextBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -15856,7 +15866,7 @@ pub fn TestGenericsAsListOfTestEnumAndTextReader::get_list(
 ///|
 pub fn TestGenericsAsListOfTestEnumAndTextBuilder::init_list(
   self : TestGenericsAsListOfTestEnumAndTextBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsAsListOfTestEnumAndTextListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(2, length, 0, 2), }
 }
@@ -15896,7 +15906,7 @@ pub fn TestGenericsAsTextAndListOfTestEnumBuilder::init_root(
 ///|
 pub fn TestGenericsAsTextAndListOfTestEnumReader::which(
   self : TestGenericsAsTextAndListOfTestEnumReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
 }
 
@@ -16003,21 +16013,21 @@ pub(all) struct TestGenericsAsTextAndListOfTestEnumListListBuilder {
 ///|
 pub fn TestGenericsAsTextAndListOfTestEnumListListReader::length(
   self : TestGenericsAsTextAndListOfTestEnumListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsTextAndListOfTestEnumListListBuilder::length(
   self : TestGenericsAsTextAndListOfTestEnumListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsAsTextAndListOfTestEnumListListReader::get(
   self : TestGenericsAsTextAndListOfTestEnumListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsTextAndListOfTestEnumReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -16025,7 +16035,7 @@ pub fn TestGenericsAsTextAndListOfTestEnumListListReader::get(
 ///|
 pub fn TestGenericsAsTextAndListOfTestEnumListListBuilder::get(
   self : TestGenericsAsTextAndListOfTestEnumListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestGenericsInnerAsTextAndListOfTestEnumBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -16040,7 +16050,7 @@ pub fn TestGenericsAsTextAndListOfTestEnumReader::get_list(
 ///|
 pub fn TestGenericsAsTextAndListOfTestEnumBuilder::init_list(
   self : TestGenericsAsTextAndListOfTestEnumBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsAsTextAndListOfTestEnumListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(2, length, 0, 2), }
 }
@@ -16066,14 +16076,14 @@ pub(all) struct TestGenericsUgAsTextAndListOfTestEnumBuilder {
 ///|
 pub fn TestGenericsUgAsTextAndListOfTestEnumReader::get_ugfoo(
   self : TestGenericsUgAsTextAndListOfTestEnumReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(4, default=0)
 }
 
 ///|
 pub fn TestGenericsUgAsTextAndListOfTestEnumBuilder::set_ugfoo(
   self : TestGenericsUgAsTextAndListOfTestEnumBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(4, value, default=0)
 }
@@ -16130,21 +16140,21 @@ pub(all) struct TestGenericsInnerAsTextAndListOfTestEnumBarListBuilder {
 ///|
 pub fn TestGenericsInnerAsTextAndListOfTestEnumBarListReader::length(
   self : TestGenericsInnerAsTextAndListOfTestEnumBarListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsInnerAsTextAndListOfTestEnumBarListBuilder::length(
   self : TestGenericsInnerAsTextAndListOfTestEnumBarListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsInnerAsTextAndListOfTestEnumBarListReader::get(
   self : TestGenericsInnerAsTextAndListOfTestEnumBarListReader,
-  index : Int,
+  index : Int32,
 ) -> TestEnum raise @capnp.CapnpError {
   TestEnum::from_raw(self.inner.get_uint16(index))
 }
@@ -16152,7 +16162,7 @@ pub fn TestGenericsInnerAsTextAndListOfTestEnumBarListReader::get(
 ///|
 pub fn TestGenericsInnerAsTextAndListOfTestEnumBarListBuilder::set(
   self : TestGenericsInnerAsTextAndListOfTestEnumBarListBuilder,
-  index : Int,
+  index : Int32,
   value : TestEnum,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(index, value.to_raw())
@@ -16168,7 +16178,7 @@ pub fn TestGenericsInnerAsTextAndListOfTestEnumReader::get_bar(
 ///|
 pub fn TestGenericsInnerAsTextAndListOfTestEnumBuilder::init_bar(
   self : TestGenericsInnerAsTextAndListOfTestEnumBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsInnerAsTextAndListOfTestEnumBarListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(1, 3, length), }
 }
@@ -16194,14 +16204,14 @@ pub(all) struct TestGenericsUgAsListOfTestEnumAndTextBuilder {
 ///|
 pub fn TestGenericsUgAsListOfTestEnumAndTextReader::get_ugfoo(
   self : TestGenericsUgAsListOfTestEnumAndTextReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(4, default=0)
 }
 
 ///|
 pub fn TestGenericsUgAsListOfTestEnumAndTextBuilder::set_ugfoo(
   self : TestGenericsUgAsListOfTestEnumAndTextBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(4, value, default=0)
 }
@@ -16243,21 +16253,21 @@ pub(all) struct TestGenericsInnerAsListOfTestEnumAndTextFooListBuilder {
 ///|
 pub fn TestGenericsInnerAsListOfTestEnumAndTextFooListReader::length(
   self : TestGenericsInnerAsListOfTestEnumAndTextFooListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsInnerAsListOfTestEnumAndTextFooListBuilder::length(
   self : TestGenericsInnerAsListOfTestEnumAndTextFooListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestGenericsInnerAsListOfTestEnumAndTextFooListReader::get(
   self : TestGenericsInnerAsListOfTestEnumAndTextFooListReader,
-  index : Int,
+  index : Int32,
 ) -> TestEnum raise @capnp.CapnpError {
   TestEnum::from_raw(self.inner.get_uint16(index))
 }
@@ -16265,7 +16275,7 @@ pub fn TestGenericsInnerAsListOfTestEnumAndTextFooListReader::get(
 ///|
 pub fn TestGenericsInnerAsListOfTestEnumAndTextFooListBuilder::set(
   self : TestGenericsInnerAsListOfTestEnumAndTextFooListBuilder,
-  index : Int,
+  index : Int32,
   value : TestEnum,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint16(index, value.to_raw())
@@ -16281,7 +16291,7 @@ pub fn TestGenericsInnerAsListOfTestEnumAndTextReader::get_foo(
 ///|
 pub fn TestGenericsInnerAsListOfTestEnumAndTextBuilder::init_foo(
   self : TestGenericsInnerAsListOfTestEnumAndTextBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestGenericsInnerAsListOfTestEnumAndTextFooListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(0, 3, length), }
 }
@@ -16336,14 +16346,14 @@ pub fn TypeNb874edc0d559b391Builder::init_root(
 ///|
 pub fn TypeNb874edc0d559b391Reader::get_i(
   self : TypeNb874edc0d559b391Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn TypeNb874edc0d559b391Builder::set_i(
   self : TypeNb874edc0d559b391Builder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -16641,8 +16651,8 @@ pub fn TestAnyPointerConstantsBuilder::set_any_struct_as_struct(
 ///|
 pub fn TestAnyPointerConstantsBuilder::init_any_struct_as_struct(
   self : TestAnyPointerConstantsBuilder,
-  data_words : Int,
-  pointer_count : Int,
+  data_words : Int32,
+  pointer_count : Int32,
 ) -> @capnp.StructBuilder raise @capnp.CapnpError {
   self.inner.init_struct(1, data_words, pointer_count)
 }
@@ -16703,8 +16713,8 @@ pub fn TestAnyPointerConstantsBuilder::set_any_list_as_list(
 ///|
 pub fn TestAnyPointerConstantsBuilder::init_any_list_as_list(
   self : TestAnyPointerConstantsBuilder,
-  element_size : Int,
-  length : Int,
+  element_size : Int32,
+  length : Int32,
 ) -> @capnp.ListBuilder raise @capnp.CapnpError {
   self.inner.init_list(3, element_size, length)
 }
@@ -16712,9 +16722,9 @@ pub fn TestAnyPointerConstantsBuilder::init_any_list_as_list(
 ///|
 pub fn TestAnyPointerConstantsBuilder::init_any_list_as_list_structs(
   self : TestAnyPointerConstantsBuilder,
-  length : Int,
-  data_words : Int,
-  pointer_count : Int,
+  length : Int32,
+  data_words : Int32,
+  pointer_count : Int32,
 ) -> @capnp.ListBuilder raise @capnp.CapnpError {
   self.inner.init_struct_list(3, length, data_words, pointer_count)
 }
@@ -16763,21 +16773,21 @@ pub(all) struct TestListOfAnyCapListListBuilder {
 ///|
 pub fn TestListOfAnyCapListListReader::length(
   self : TestListOfAnyCapListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListOfAnyCapListListBuilder::length(
   self : TestListOfAnyCapListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestListOfAnyCapListListReader::get(
   self : TestListOfAnyCapListListReader,
-  index : Int,
+  index : Int32,
 ) -> @capnp.PointerReader raise @capnp.CapnpError {
   let p = self.inner.get_pointer(index)
   if !p.is_null() {
@@ -16789,7 +16799,7 @@ pub fn TestListOfAnyCapListListReader::get(
 ///|
 pub fn TestListOfAnyCapListListBuilder::set(
   self : TestListOfAnyCapListListBuilder,
-  index : Int,
+  index : Int32,
   value : @capnp.PointerReader,
 ) -> Unit raise @capnp.CapnpError {
   if !value.is_null() {
@@ -16801,7 +16811,7 @@ pub fn TestListOfAnyCapListListBuilder::set(
 ///|
 pub fn TestListOfAnyCapListListBuilder::get(
   self : TestListOfAnyCapListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> @capnp.PointerBuilder raise @capnp.CapnpError {
   self.inner.get_pointer(index)
 }
@@ -16816,7 +16826,7 @@ pub fn TestListOfAnyReader::get_cap_list(
 ///|
 pub fn TestListOfAnyBuilder::init_cap_list(
   self : TestListOfAnyBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestListOfAnyCapListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(0, 6, length), }
 }
@@ -16952,14 +16962,14 @@ pub fn TypeNc7e8df5096257034Builder::init_root(
 ///|
 pub fn TypeNc7e8df5096257034Reader::get_n(
   self : TypeNc7e8df5096257034Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn TypeNc7e8df5096257034Builder::set_n(
   self : TypeNc7e8df5096257034Builder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -17231,21 +17241,21 @@ pub(all) struct TypeNa604ee63cf37819fListListBuilder {
 ///|
 pub fn TypeNa604ee63cf37819fListListReader::length(
   self : TypeNa604ee63cf37819fListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TypeNa604ee63cf37819fListListBuilder::length(
   self : TypeNa604ee63cf37819fListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TypeNa604ee63cf37819fListListReader::get(
   self : TypeNa604ee63cf37819fListListReader,
-  index : Int,
+  index : Int32,
 ) -> @capnp.PointerReader raise @capnp.CapnpError {
   let p = self.inner.get_pointer(index)
   if !p.is_null() {
@@ -17257,7 +17267,7 @@ pub fn TypeNa604ee63cf37819fListListReader::get(
 ///|
 pub fn TypeNa604ee63cf37819fListListBuilder::set(
   self : TypeNa604ee63cf37819fListListBuilder,
-  index : Int,
+  index : Int32,
   value : @capnp.PointerReader,
 ) -> Unit raise @capnp.CapnpError {
   if !value.is_null() {
@@ -17269,7 +17279,7 @@ pub fn TypeNa604ee63cf37819fListListBuilder::set(
 ///|
 pub fn TypeNa604ee63cf37819fListListBuilder::get(
   self : TypeNa604ee63cf37819fListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> @capnp.PointerBuilder raise @capnp.CapnpError {
   self.inner.get_pointer(index)
 }
@@ -17284,7 +17294,7 @@ pub fn TypeNa604ee63cf37819fReader::get_list(
 ///|
 pub fn TypeNa604ee63cf37819fBuilder::init_list(
   self : TypeNa604ee63cf37819fBuilder,
-  length : Int,
+  length : Int32,
 ) -> TypeNa604ee63cf37819fListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(2, 6, length), }
 }
@@ -17348,14 +17358,14 @@ pub fn TypeNf8e36b53ab093d4eBuilder::init_root(
 ///|
 pub fn TypeNf8e36b53ab093d4eReader::get_n(
   self : TypeNf8e36b53ab093d4eReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn TypeNf8e36b53ab093d4eBuilder::set_n(
   self : TypeNf8e36b53ab093d4eBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -17618,14 +17628,14 @@ pub fn TypeN8f1e8cd56ceb74dcBuilder::init_root(
 ///|
 pub fn TypeN8f1e8cd56ceb74dcReader::get_expected(
   self : TypeN8f1e8cd56ceb74dcReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn TypeN8f1e8cd56ceb74dcBuilder::set_expected(
   self : TypeN8f1e8cd56ceb74dcBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -17657,14 +17667,14 @@ pub fn TypeNdedbb6bf3810eab7Builder::init_root(
 ///|
 pub fn TypeNdedbb6bf3810eab7Reader::get_n(
   self : TypeNdedbb6bf3810eab7Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn TypeNdedbb6bf3810eab7Builder::set_n(
   self : TypeNdedbb6bf3810eab7Builder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -17696,14 +17706,14 @@ pub fn TypeNc5e1efc325614957Builder::init_root(
 ///|
 pub fn TypeNc5e1efc325614957Reader::get_i(
   self : TypeNc5e1efc325614957Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(0, default=0)
 }
 
 ///|
 pub fn TypeNc5e1efc325614957Builder::set_i(
   self : TypeNc5e1efc325614957Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(0, value, default=0)
 }
@@ -17750,14 +17760,14 @@ pub fn TestTailCalleeTailResultBuilder::init_root(
 ///|
 pub fn TestTailCalleeTailResultReader::get_i(
   self : TestTailCalleeTailResultReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn TestTailCalleeTailResultBuilder::set_i(
   self : TestTailCalleeTailResultBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -17842,14 +17852,14 @@ pub fn TypeNb07a279515dc8ac5Builder::init_root(
 ///|
 pub fn TypeNb07a279515dc8ac5Reader::get_i(
   self : TypeNb07a279515dc8ac5Reader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   self.inner.get_int32(0, default=0)
 }
 
 ///|
 pub fn TypeNb07a279515dc8ac5Builder::set_i(
   self : TypeNb07a279515dc8ac5Builder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_int32(0, value, default=0)
 }
@@ -17919,14 +17929,14 @@ pub fn TypeNa54d8461ca481e30Builder::init_root(
 ///|
 pub fn TypeNa54d8461ca481e30Reader::get_i(
   self : TypeNa54d8461ca481e30Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn TypeNa54d8461ca481e30Builder::set_i(
   self : TypeNa54d8461ca481e30Builder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -17958,14 +17968,14 @@ pub fn TypeNd98b719b583f011fBuilder::init_root(
 ///|
 pub fn TypeNd98b719b583f011fReader::get_j(
   self : TypeNd98b719b583f011fReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn TypeNd98b719b583f011fBuilder::set_j(
   self : TypeNd98b719b583f011fBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -18021,14 +18031,14 @@ pub fn TypeN81a5584f93367084Builder::init_root(
 ///|
 pub fn TypeN81a5584f93367084Reader::get_total_i(
   self : TypeN81a5584f93367084Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn TypeN81a5584f93367084Builder::set_total_i(
   self : TypeN81a5584f93367084Builder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -18036,14 +18046,14 @@ pub fn TypeN81a5584f93367084Builder::set_total_i(
 ///|
 pub fn TypeN81a5584f93367084Reader::get_total_j(
   self : TypeN81a5584f93367084Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(4, default=0U)
 }
 
 ///|
 pub fn TypeN81a5584f93367084Builder::set_total_j(
   self : TypeN81a5584f93367084Builder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(4, value, default=0U)
 }
@@ -18885,14 +18895,14 @@ pub fn TypeN99160a25fa50fbf1Builder::set_a(
 ///|
 pub fn TypeN99160a25fa50fbf1Reader::get_b(
   self : TypeN99160a25fa50fbf1Reader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=123U)
 }
 
 ///|
 pub fn TypeN99160a25fa50fbf1Builder::set_b(
   self : TypeN99160a25fa50fbf1Builder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=123U)
 }
@@ -19339,21 +19349,21 @@ pub(all) struct TypeNcc96c4ae7c0e9f2cFillListBuilder {
 ///|
 pub fn TypeNcc96c4ae7c0e9f2cFillListReader::length(
   self : TypeNcc96c4ae7c0e9f2cFillListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TypeNcc96c4ae7c0e9f2cFillListBuilder::length(
   self : TypeNcc96c4ae7c0e9f2cFillListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TypeNcc96c4ae7c0e9f2cFillListReader::get(
   self : TypeNcc96c4ae7c0e9f2cFillListReader,
-  index : Int,
+  index : Int32,
 ) -> Byte raise @capnp.CapnpError {
   self.inner.get_uint8(index)
 }
@@ -19361,7 +19371,7 @@ pub fn TypeNcc96c4ae7c0e9f2cFillListReader::get(
 ///|
 pub fn TypeNcc96c4ae7c0e9f2cFillListBuilder::set(
   self : TypeNcc96c4ae7c0e9f2cFillListBuilder,
-  index : Int,
+  index : Int32,
   value : Byte,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint8(index, value)
@@ -19377,7 +19387,7 @@ pub fn TypeNcc96c4ae7c0e9f2cReader::get_fill(
 ///|
 pub fn TypeNcc96c4ae7c0e9f2cBuilder::init_fill(
   self : TypeNcc96c4ae7c0e9f2cBuilder,
-  length : Int,
+  length : Int32,
 ) -> TypeNcc96c4ae7c0e9f2cFillListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(0, 2, length), }
 }
@@ -20213,21 +20223,21 @@ pub(all) struct TestContainMembraneListListBuilder {
 ///|
 pub fn TestContainMembraneListListReader::length(
   self : TestContainMembraneListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestContainMembraneListListBuilder::length(
   self : TestContainMembraneListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestContainMembraneListListReader::get(
   self : TestContainMembraneListListReader,
-  index : Int,
+  index : Int32,
 ) -> @capnp.PointerReader raise @capnp.CapnpError {
   let p = self.inner.get_pointer(index)
   if !p.is_null() {
@@ -20239,7 +20249,7 @@ pub fn TestContainMembraneListListReader::get(
 ///|
 pub fn TestContainMembraneListListBuilder::set(
   self : TestContainMembraneListListBuilder,
-  index : Int,
+  index : Int32,
   value : @capnp.PointerReader,
 ) -> Unit raise @capnp.CapnpError {
   if !value.is_null() {
@@ -20251,7 +20261,7 @@ pub fn TestContainMembraneListListBuilder::set(
 ///|
 pub fn TestContainMembraneListListBuilder::get(
   self : TestContainMembraneListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> @capnp.PointerBuilder raise @capnp.CapnpError {
   self.inner.get_pointer(index)
 }
@@ -20266,7 +20276,7 @@ pub fn TestContainMembraneReader::get_list(
 ///|
 pub fn TestContainMembraneBuilder::init_list(
   self : TestContainMembraneBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestContainMembraneListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(1, 6, length), }
 }
@@ -20393,21 +20403,21 @@ pub(all) struct TestTransferCapListListBuilder {
 ///|
 pub fn TestTransferCapListListReader::length(
   self : TestTransferCapListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestTransferCapListListBuilder::length(
   self : TestTransferCapListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestTransferCapListListReader::get(
   self : TestTransferCapListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestTransferCapElementReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -20415,7 +20425,7 @@ pub fn TestTransferCapListListReader::get(
 ///|
 pub fn TestTransferCapListListBuilder::get(
   self : TestTransferCapListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestTransferCapElementBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -20430,7 +20440,7 @@ pub fn TestTransferCapReader::get_list(
 ///|
 pub fn TestTransferCapBuilder::init_list(
   self : TestTransferCapBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestTransferCapListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(0, length, 0, 2), }
 }
@@ -21093,7 +21103,7 @@ pub fn TestNameAnnotationBuilder::init_root(
 ///|
 pub fn TestNameAnnotationReader::which(
   self : TestNameAnnotationReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(2)
 }
 
@@ -21135,7 +21145,7 @@ pub fn TestNameAnnotationReader::is_bar(
 ///|
 pub fn TestNameAnnotationReader::get_bar(
   self : TestNameAnnotationReader,
-) -> Int raise @capnp.CapnpError {
+) -> Int32 raise @capnp.CapnpError {
   if self.inner.get_uint16(2) != 1U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
@@ -21145,7 +21155,7 @@ pub fn TestNameAnnotationReader::get_bar(
 ///|
 pub fn TestNameAnnotationBuilder::set_bar(
   self : TestNameAnnotationBuilder,
-  value : Int,
+  value : Int32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_bool(0, false)
   self.inner.set_uint8(0, 0)
@@ -21206,7 +21216,7 @@ pub(all) struct TestNameAnnotationBadlyNamedUnionBuilder {
 ///|
 pub fn TestNameAnnotationBadlyNamedUnionReader::which(
   self : TestNameAnnotationBadlyNamedUnionReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(6)
 }
 
@@ -21403,21 +21413,21 @@ pub(all) struct TestImpliedFirstFieldTextStructListListBuilder {
 ///|
 pub fn TestImpliedFirstFieldTextStructListListReader::length(
   self : TestImpliedFirstFieldTextStructListListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestImpliedFirstFieldTextStructListListBuilder::length(
   self : TestImpliedFirstFieldTextStructListListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestImpliedFirstFieldTextStructListListReader::get(
   self : TestImpliedFirstFieldTextStructListListReader,
-  index : Int,
+  index : Int32,
 ) -> TestImpliedFirstFieldTextStructReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -21425,7 +21435,7 @@ pub fn TestImpliedFirstFieldTextStructListListReader::get(
 ///|
 pub fn TestImpliedFirstFieldTextStructListListBuilder::get(
   self : TestImpliedFirstFieldTextStructListListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestImpliedFirstFieldTextStructBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -21440,7 +21450,7 @@ pub fn TestImpliedFirstFieldReader::get_text_struct_list(
 ///|
 pub fn TestImpliedFirstFieldBuilder::init_text_struct_list(
   self : TestImpliedFirstFieldBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestImpliedFirstFieldTextStructListListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 1, 1), }
 }
@@ -21518,14 +21528,14 @@ pub fn TestImpliedFirstFieldTextStructBuilder::set_text(
 ///|
 pub fn TestImpliedFirstFieldTextStructReader::get_i(
   self : TestImpliedFirstFieldTextStructReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=321U)
 }
 
 ///|
 pub fn TestImpliedFirstFieldTextStructBuilder::set_i(
   self : TestImpliedFirstFieldTextStructBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=321U)
 }
@@ -21543,14 +21553,14 @@ pub(all) struct TestImpliedFirstFieldIntGroupBuilder {
 ///|
 pub fn TestImpliedFirstFieldIntGroupReader::get_i(
   self : TestImpliedFirstFieldIntGroupReader,
-) -> UInt raise @capnp.CapnpError {
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(0, default=0U)
 }
 
 ///|
 pub fn TestImpliedFirstFieldIntGroupBuilder::set_i(
   self : TestImpliedFirstFieldIntGroupBuilder,
-  value : UInt,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(0, value, default=0U)
 }
@@ -21607,21 +21617,21 @@ pub(all) struct TestCycleBNoCapsFooListBuilder {
 ///|
 pub fn TestCycleBNoCapsFooListReader::length(
   self : TestCycleBNoCapsFooListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestCycleBNoCapsFooListBuilder::length(
   self : TestCycleBNoCapsFooListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestCycleBNoCapsFooListReader::get(
   self : TestCycleBNoCapsFooListReader,
-  index : Int,
+  index : Int32,
 ) -> TestCycleANoCapsReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -21629,7 +21639,7 @@ pub fn TestCycleBNoCapsFooListReader::get(
 ///|
 pub fn TestCycleBNoCapsFooListBuilder::get(
   self : TestCycleBNoCapsFooListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestCycleANoCapsBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -21644,7 +21654,7 @@ pub fn TestCycleBNoCapsReader::get_foo(
 ///|
 pub fn TestCycleBNoCapsBuilder::init_foo(
   self : TestCycleBNoCapsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestCycleBNoCapsFooListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(0, length, 0, 1), }
 }
@@ -21762,21 +21772,21 @@ pub(all) struct TestCycleBWithCapsFooListBuilder {
 ///|
 pub fn TestCycleBWithCapsFooListReader::length(
   self : TestCycleBWithCapsFooListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestCycleBWithCapsFooListBuilder::length(
   self : TestCycleBWithCapsFooListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn TestCycleBWithCapsFooListReader::get(
   self : TestCycleBWithCapsFooListReader,
-  index : Int,
+  index : Int32,
 ) -> TestCycleAWithCapsReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -21784,7 +21794,7 @@ pub fn TestCycleBWithCapsFooListReader::get(
 ///|
 pub fn TestCycleBWithCapsFooListBuilder::get(
   self : TestCycleBWithCapsFooListBuilder,
-  index : Int,
+  index : Int32,
 ) -> TestCycleAWithCapsBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -21799,7 +21809,7 @@ pub fn TestCycleBWithCapsReader::get_foo(
 ///|
 pub fn TestCycleBWithCapsBuilder::init_foo(
   self : TestCycleBWithCapsBuilder,
-  length : Int,
+  length : Int32,
 ) -> TestCycleBWithCapsFooListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(0, length, 0, 1), }
 }

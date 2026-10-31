@@ -54,7 +54,7 @@ fn text_literal(value : String) -> String {
 }
 
 ///|
-fn scalar_default(tag : Int, value : @capnp.StructReader) -> String raise {
+fn scalar_default(tag : Int32, value : @capnp.StructReader) -> String raise {
   match tag {
     0 => "()"
     1 => value.get_bool(16).to_string()
@@ -252,7 +252,7 @@ fn clear_fields(
   out : StringBuilder,
   fields : Array[Field],
   nodes : Array[Node],
-  depth : Int,
+  depth : Int32,
 ) -> Unit raise CodegenError {
   if depth > 32 {
     raise InvalidRequest("recursive group")

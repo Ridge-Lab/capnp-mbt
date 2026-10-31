@@ -6,7 +6,7 @@
 
 适合已有 Cap'n Proto 协议的服务、数据采集程序、离线处理工具和二进制文件消费者接入 MoonBit。协议定义、字段布局和已有数据格式可以继续使用，业务代码无需手写偏移或经 JSON 中转。这里实现的是序列化层；网络传输和 RPC 不在本版本范围内。
 
-**0.3.0 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer 和常量均纳入序列化支持，使用未经删改的官方 `test.capnp` 验证。[标准目标](docs/SERIALIZATION-STANDARD.md)与[验证矩阵](docs/CONFORMANCE.md)将兼容承诺对应到测试、独立参考实现和复现步骤。
+**0.3.1 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer 和常量均纳入序列化支持，使用未经删改的官方 `test.capnp` 验证。[标准目标](docs/SERIALIZATION-STANDARD.md)与[验证矩阵](docs/CONFORMANCE.md)将兼容承诺对应到测试、独立参考实现和复现步骤。
 
 ## 可运行的完整流程
 
@@ -20,16 +20,16 @@
 
 [`examples/schema_compat`](examples/schema_compat/README.md) 验证接入既有协议：两端直接使用官方 1.5.0 `test.capnp`，Python/C++ 写入分段及 packed 数据，MoonBit 读取嵌套泛型与五种 AnyPointer 负载，再用生成的 builder 写回；Python 核对泛型绑定、默认值、常量及未知负载的内容。原文件中的接口、常量、别名和嵌入数据均保留，复现步骤见示例文档。
 
-0.3.0 新增 [`FrameDecoder`](stream.mbt) 和[流式采集处理示例](examples/streaming/README.md)。示例从管道分块读取多条消息，逐条生成统计结果，由独立 Python/C++ 端核验；本地已处理 8,192 条消息、135,036,992 字节输入，每次读取最多 8 KiB，单帧上限 1 MiB。这个例子不需要把完整输入流放进内存。端到端检查覆盖交互回复、极端浮点值、截断和恶意长度声明。
+0.3.0 新增 [`FrameDecoder`](stream.mbt) 和[流式采集处理示例](examples/streaming/README.md)。示例从管道分块读取多条消息，逐条生成统计结果，由独立 Python/C++ 端核验；0.3.0 的本地复现处理了 8,192 条消息、135,036,992 字节输入，每次读取最多 8 KiB，单帧上限 1 MiB。这个例子不需要把完整输入流放进内存。端到端检查覆盖交互回复、极端浮点值、截断和恶意长度声明。
 
 ## 安装与快速运行
 
-需要 MoonBit **0.10.14 或更新版本**。CI 固定验证 `0.10.14+7d59c7ec9`。运行库支持 `wasm`、`wasm-gc`、`js`、`native`，无需 C++ Cap'n Proto 动态库。
+需要 MoonBit **0.10.16 或更新版本**。当前复现工具链及 CI 配置固定为 `0.10.16+b1a0e846e`，使用相同版本的 core；执行结果以对应提交的工作流记录为准。运行库支持 `wasm`、`wasm-gc`、`js`、`native`，无需 C++ Cap'n Proto 动态库。
 
 在自己的 MoonBit 项目中添加依赖：
 
 ```sh
-moon add Ridge-Lab/capnp@0.3.0
+moon add Ridge-Lab/capnp@0.3.1
 ```
 
 包的 `moon.pkg` 中导入：
@@ -43,7 +43,7 @@ import {
 直接运行本仓库的例子：
 
 ```sh
-git clone --branch v0.3.0 https://github.com/Ridge-Lab/capnp-mbt
+git clone --branch v0.3.1 https://github.com/Ridge-Lab/capnp-mbt
 cd capnp-mbt
 moon update
 moon run --target js examples/roundtrip
@@ -131,7 +131,7 @@ moon build --target all --release
 
 [基准脚本](benchmarks/README.md)在进程内测量编码、选读、完整扫描、packed 编解码和未知结构复制，提供原始轮次、预热、环境、源码哈希和中位数。基准包含真实分配、GC 和校验成本；选读结果不能解释成整条消息解码吞吐，也没有用 Python 包装层时间冒充 C++ 引擎性能。CI 仅检查基准能够运行及结果可校验，不以不稳定的耗时阈值决定正确性。
 
-CI 在 Linux 验证四个后端，在 Windows 验证 Node.js 检查、测试与二进制流示例。跨语言用例还覆盖官方旧新版本的默认值与未知字段转发，以及嵌套 union、交错 group 和未知标签。尚无外部生产采用证明，欢迎提供真实协议和可复现的问题；维护和回归方法见[开发文档](docs/DEVELOPMENT.md)。
+CI 在 Linux 验证四个后端，在 Windows 验证 Node.js 和 MSVC 原生后端的检查、测试、构建及二进制流示例。跨语言用例还覆盖官方旧新版本的默认值与未知字段转发，以及嵌套 union、交错 group 和未知标签。尚无外部生产采用证明，欢迎提供真实协议和可复现的问题；维护和回归方法见[开发文档](docs/DEVELOPMENT.md)。
 
 ## 来源与许可证
 

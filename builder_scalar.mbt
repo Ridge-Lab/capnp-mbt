@@ -2,9 +2,9 @@
 /// Set a bit in the data section, XOR'd with its schema default.
 pub fn StructBuilder::set_bool(
   self : StructBuilder,
-  bit_offset : Int,
+  bit_offset : Int32,
   value : Bool,
-  default? : Bool = false,
+  default~ : Bool = false,
 ) -> Unit raise CapnpError {
   if bit_offset < 0 {
     raise Bounds("negative bit offset")
@@ -21,9 +21,9 @@ pub fn StructBuilder::set_bool(
 ///|
 pub fn StructBuilder::set_uint8(
   self : StructBuilder,
-  byte_offset : Int,
+  byte_offset : Int32,
   value : Byte,
-  default? : Byte = 0,
+  default~ : Byte = 0,
 ) -> Unit raise CapnpError {
   b_write(
     self.owner,
@@ -36,9 +36,9 @@ pub fn StructBuilder::set_uint8(
 ///|
 pub fn StructBuilder::set_uint16(
   self : StructBuilder,
-  byte_offset : Int,
-  value : UInt,
-  default? : UInt = 0,
+  byte_offset : Int32,
+  value : UInt32,
+  default~ : UInt32 = 0,
 ) -> Unit raise CapnpError {
   if value > 65535U || default > 65535U {
     raise Bounds("uint16 value or default exceeds 65535")
@@ -54,9 +54,9 @@ pub fn StructBuilder::set_uint16(
 ///|
 pub fn StructBuilder::set_uint32(
   self : StructBuilder,
-  byte_offset : Int,
-  value : UInt,
-  default? : UInt = 0,
+  byte_offset : Int32,
+  value : UInt32,
+  default~ : UInt32 = 0,
 ) -> Unit raise CapnpError {
   b_write(
     self.owner,
@@ -69,9 +69,9 @@ pub fn StructBuilder::set_uint32(
 ///|
 pub fn StructBuilder::set_uint64(
   self : StructBuilder,
-  byte_offset : Int,
+  byte_offset : Int32,
   value : UInt64,
-  default? : UInt64 = 0,
+  default~ : UInt64 = 0,
 ) -> Unit raise CapnpError {
   b_write(self.owner, b_data(self, byte_offset, 8), value ^ default, 8)
 }
@@ -79,9 +79,9 @@ pub fn StructBuilder::set_uint64(
 ///|
 pub fn StructBuilder::set_int8(
   self : StructBuilder,
-  byte_offset : Int,
-  value : Int,
-  default? : Int = 0,
+  byte_offset : Int32,
+  value : Int32,
+  default~ : Int32 = 0,
 ) -> Unit raise CapnpError {
   if value < -128 || value > 127 || default < -128 || default > 127 {
     raise Bounds("int8 value or default outside -128..127")
@@ -97,9 +97,9 @@ pub fn StructBuilder::set_int8(
 ///|
 pub fn StructBuilder::set_int16(
   self : StructBuilder,
-  byte_offset : Int,
-  value : Int,
-  default? : Int = 0,
+  byte_offset : Int32,
+  value : Int32,
+  default~ : Int32 = 0,
 ) -> Unit raise CapnpError {
   if value < -32768 || value > 32767 || default < -32768 || default > 32767 {
     raise Bounds("int16 value or default outside -32768..32767")
@@ -115,9 +115,9 @@ pub fn StructBuilder::set_int16(
 ///|
 pub fn StructBuilder::set_int32(
   self : StructBuilder,
-  byte_offset : Int,
-  value : Int,
-  default? : Int = 0,
+  byte_offset : Int32,
+  value : Int32,
+  default~ : Int32 = 0,
 ) -> Unit raise CapnpError {
   b_write(
     self.owner,
@@ -130,9 +130,9 @@ pub fn StructBuilder::set_int32(
 ///|
 pub fn StructBuilder::set_int64(
   self : StructBuilder,
-  byte_offset : Int,
+  byte_offset : Int32,
   value : Int64,
-  default? : Int64 = 0,
+  default~ : Int64 = 0,
 ) -> Unit raise CapnpError {
   b_write(
     self.owner,
@@ -145,9 +145,9 @@ pub fn StructBuilder::set_int64(
 ///|
 pub fn StructBuilder::set_float32(
   self : StructBuilder,
-  byte_offset : Int,
+  byte_offset : Int32,
   value : Float,
-  default? : Float = 0.0,
+  default~ : Float = 0.0,
 ) -> Unit raise CapnpError {
   self.set_uint32(
     byte_offset,
@@ -159,9 +159,9 @@ pub fn StructBuilder::set_float32(
 ///|
 pub fn StructBuilder::set_float64(
   self : StructBuilder,
-  byte_offset : Int,
+  byte_offset : Int32,
   value : Double,
-  default? : Double = 0.0,
+  default~ : Double = 0.0,
 ) -> Unit raise CapnpError {
   self.set_uint64(
     byte_offset,

@@ -21,12 +21,12 @@ fn finite_units(value : Double) -> @bigint.BigInt {
 ///|
 // Round the exact rational mean once, to nearest binary64 with ties to even.
 // A mean of finite values cannot exceed the largest input's magnitude.
-fn rounded_mean(total : @bigint.BigInt, count : Int) -> Double {
+fn rounded_mean(total : @bigint.BigInt, count : Int32) -> Double {
   let negative = total.compare_int(0) < 0
   let magnitude = if negative { -total } else { total }
   let divisor = @bigint.BigInt::from_int(count)
   let length = (magnitude / divisor).bit_length()
-  let mut shift = Int::max(0, length - 53)
+  let mut shift = Int32::max(0, length - 53)
   let denominator = divisor << shift
   let mut mantissa = (magnitude / denominator).to_uint64()
   let twice_remainder = (magnitude % denominator) << 1

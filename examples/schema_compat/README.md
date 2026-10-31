@@ -12,7 +12,7 @@ exchanges measurements and computed results.
 
 ## Run the two peers
 
-Requirements: MoonBit 0.10.14, Python 3.12, `pycapnp==2.2.1`, and Node.js 24 for
+Requirements: MoonBit `0.10.16+b1a0e846e`, Python 3.12, `pycapnp==2.2.1`, and Node.js 24 for
 the JS target. Run from the repository root:
 
 ```sh

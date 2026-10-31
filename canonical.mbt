@@ -4,8 +4,8 @@
 /// cannot be canonicalized because their identity requires an external table.
 pub fn canonicalize(
   message : Message,
-  max_words? : Int = 8_388_608,
-  max_depth? : Int = 64,
+  max_words~ : Int32 = 8_388_608,
+  max_depth~ : Int32 = 64,
 ) -> Bytes raise CapnpError {
   if max_depth < 1 || max_depth > 256 {
     raise Limit("canonical depth must be between 1 and 256")
@@ -25,7 +25,7 @@ pub fn canonicalize(
 }
 
 ///|
-fn canonical_shape(source : StructReader) -> (Int, Int) raise CapnpError {
+fn canonical_shape(source : StructReader) -> (Int32, Int32) raise CapnpError {
   let mut data_words = (source.data_bytes + 7) / 8
   let mut pointers = source.pointer_count
   while data_words > 0 && source.get_uint64((data_words - 1) * 8) == 0UL {
@@ -41,7 +41,7 @@ fn canonical_shape(source : StructReader) -> (Int, Int) raise CapnpError {
 fn canonical_struct_into(
   target : StructBuilder,
   source : StructReader,
-  depth : Int,
+  depth : Int32,
 ) -> Unit raise CapnpError {
   for i in 0..<target.data_words {
     target.set_uint64(i * 8, source.get_uint64(i * 8))
@@ -59,9 +59,9 @@ fn canonical_struct_into(
 ///|
 fn canonical_pointer(
   owner : Builder,
-  slot : Int,
+  slot : Int32,
   source : PointerReader,
-  depth : Int,
+  depth : Int32,
 ) -> Unit raise CapnpError {
   if source.is_null() {
     b_write(owner, slot, 0UL, 8)
@@ -87,9 +87,9 @@ fn canonical_pointer(
 ///|
 fn canonical_list(
   owner : Builder,
-  slot : Int,
+  slot : Int32,
   source : ListReader,
-  depth : Int,
+  depth : Int32,
 ) -> Unit raise CapnpError {
   if source.code == 7 {
     if source.data_words == 0 && source.pointer_count == 0 {

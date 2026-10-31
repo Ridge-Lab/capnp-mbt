@@ -6,15 +6,15 @@ import {
 }
 
 // Values
-pub fn canonicalize(Message, max_words? : Int, max_depth? : Int) -> Bytes raise CapnpError
+pub fn canonicalize(Message, max_words? : Int32, max_depth? : Int32) -> Bytes raise CapnpError
 
-pub fn frame_length(Bytes, offset? : Int, max_segments? : Int, max_message_bytes? : Int) -> Int? raise CapnpError
+pub fn frame_length(Bytes, offset? : Int32, max_segments? : Int32, max_message_bytes? : Int32) -> Int32? raise CapnpError
 
 pub fn pack(Bytes) -> Bytes raise CapnpError
 
-pub fn read_message(Bytes, traversal_limit_words? : Int, nesting_limit? : Int, max_segments? : Int) -> Message raise CapnpError
+pub fn read_message(Bytes, traversal_limit_words? : Int32, nesting_limit? : Int32, max_segments? : Int32) -> Message raise CapnpError
 
-pub fn unpack(Bytes, max_output_bytes? : Int) -> Bytes raise CapnpError
+pub fn unpack(Bytes, max_output_bytes? : Int32) -> Bytes raise CapnpError
 
 // Errors
 pub(all) suberror CapnpError {
@@ -30,90 +30,90 @@ pub fn CapnpError::to_repr(Self) -> @debug.Repr
 pub struct Builder {
   // private fields
 }
-pub fn Builder::allocated_words(Self) -> Int
+pub fn Builder::allocated_words(Self) -> Int32
 pub fn Builder::finish(Self) -> Bytes
-pub fn Builder::init_root(Self, Int, Int) -> StructBuilder raise CapnpError
-pub fn Builder::new(max_words? : Int) -> Self raise CapnpError
+pub fn Builder::init_root(Self, Int32, Int32) -> StructBuilder raise CapnpError
+pub fn Builder::new(max_words? : Int32) -> Self raise CapnpError
 pub fn Builder::root_pointer(Self) -> PointerBuilder
 
 pub struct FrameDecoder {
   // private fields
 }
-pub fn FrameDecoder::buffered_bytes(Self) -> Int
+pub fn FrameDecoder::buffered_bytes(Self) -> Int32
 pub fn FrameDecoder::feed(Self, Bytes) -> Array[Bytes] raise CapnpError
 pub fn FrameDecoder::finish(Self) -> Unit raise CapnpError
-pub fn FrameDecoder::new(max_segments? : Int, max_message_bytes? : Int) -> Self raise CapnpError
+pub fn FrameDecoder::new(max_segments? : Int32, max_message_bytes? : Int32) -> Self raise CapnpError
 pub fn FrameDecoder::reset(Self) -> Unit
 
 pub struct ListBuilder {
   // private fields
 }
-pub fn ListBuilder::clear_pointer(Self, Int) -> Unit raise CapnpError
-pub fn ListBuilder::element_size(Self) -> Int
-pub fn ListBuilder::get_pointer(Self, Int) -> PointerBuilder raise CapnpError
-pub fn ListBuilder::init_list(Self, Int, Int, Int) -> Self raise CapnpError
-pub fn ListBuilder::init_struct(Self, Int, Int, Int) -> StructBuilder raise CapnpError
-pub fn ListBuilder::init_struct_list(Self, Int, Int, Int, Int) -> Self raise CapnpError
-pub fn ListBuilder::length(Self) -> Int
-pub fn ListBuilder::set_bool(Self, Int, Bool) -> Unit raise CapnpError
-pub fn ListBuilder::set_data(Self, Int, Bytes) -> Unit raise CapnpError
-pub fn ListBuilder::set_float32(Self, Int, Float) -> Unit raise CapnpError
-pub fn ListBuilder::set_float64(Self, Int, Double) -> Unit raise CapnpError
-pub fn ListBuilder::set_int16(Self, Int, Int) -> Unit raise CapnpError
-pub fn ListBuilder::set_int32(Self, Int, Int) -> Unit raise CapnpError
-pub fn ListBuilder::set_int64(Self, Int, Int64) -> Unit raise CapnpError
-pub fn ListBuilder::set_int8(Self, Int, Int) -> Unit raise CapnpError
-pub fn ListBuilder::set_text(Self, Int, String) -> Unit raise CapnpError
-pub fn ListBuilder::set_uint16(Self, Int, UInt) -> Unit raise CapnpError
-pub fn ListBuilder::set_uint32(Self, Int, UInt) -> Unit raise CapnpError
-pub fn ListBuilder::set_uint64(Self, Int, UInt64) -> Unit raise CapnpError
-pub fn ListBuilder::set_uint8(Self, Int, Byte) -> Unit raise CapnpError
-pub fn ListBuilder::set_void(Self, Int) -> Unit raise CapnpError
-pub fn ListBuilder::struct_at(Self, Int) -> StructBuilder raise CapnpError
+pub fn ListBuilder::clear_pointer(Self, Int32) -> Unit raise CapnpError
+pub fn ListBuilder::element_size(Self) -> Int32
+pub fn ListBuilder::get_pointer(Self, Int32) -> PointerBuilder raise CapnpError
+pub fn ListBuilder::init_list(Self, Int32, Int32, Int32) -> Self raise CapnpError
+pub fn ListBuilder::init_struct(Self, Int32, Int32, Int32) -> StructBuilder raise CapnpError
+pub fn ListBuilder::init_struct_list(Self, Int32, Int32, Int32, Int32) -> Self raise CapnpError
+pub fn ListBuilder::length(Self) -> Int32
+pub fn ListBuilder::set_bool(Self, Int32, Bool) -> Unit raise CapnpError
+pub fn ListBuilder::set_data(Self, Int32, Bytes) -> Unit raise CapnpError
+pub fn ListBuilder::set_float32(Self, Int32, Float) -> Unit raise CapnpError
+pub fn ListBuilder::set_float64(Self, Int32, Double) -> Unit raise CapnpError
+pub fn ListBuilder::set_int16(Self, Int32, Int32) -> Unit raise CapnpError
+pub fn ListBuilder::set_int32(Self, Int32, Int32) -> Unit raise CapnpError
+pub fn ListBuilder::set_int64(Self, Int32, Int64) -> Unit raise CapnpError
+pub fn ListBuilder::set_int8(Self, Int32, Int32) -> Unit raise CapnpError
+pub fn ListBuilder::set_text(Self, Int32, String) -> Unit raise CapnpError
+pub fn ListBuilder::set_uint16(Self, Int32, UInt32) -> Unit raise CapnpError
+pub fn ListBuilder::set_uint32(Self, Int32, UInt32) -> Unit raise CapnpError
+pub fn ListBuilder::set_uint64(Self, Int32, UInt64) -> Unit raise CapnpError
+pub fn ListBuilder::set_uint8(Self, Int32, Byte) -> Unit raise CapnpError
+pub fn ListBuilder::set_void(Self, Int32) -> Unit raise CapnpError
+pub fn ListBuilder::struct_at(Self, Int32) -> StructBuilder raise CapnpError
 
 pub struct ListReader {
   // private fields
 }
-pub fn ListReader::element_size(Self) -> Int
-pub fn ListReader::get_bool(Self, Int) -> Bool raise CapnpError
-pub fn ListReader::get_data(Self, Int) -> Bytes raise CapnpError
-pub fn ListReader::get_float32(Self, Int) -> Float raise CapnpError
-pub fn ListReader::get_float64(Self, Int) -> Double raise CapnpError
-pub fn ListReader::get_int16(Self, Int) -> Int raise CapnpError
-pub fn ListReader::get_int32(Self, Int) -> Int raise CapnpError
-pub fn ListReader::get_int64(Self, Int) -> Int64 raise CapnpError
-pub fn ListReader::get_int8(Self, Int) -> Int raise CapnpError
-pub fn ListReader::get_list(Self, Int) -> Self raise CapnpError
-pub fn ListReader::get_pointer(Self, Int) -> PointerReader raise CapnpError
-pub fn ListReader::get_struct(Self, Int) -> StructReader raise CapnpError
-pub fn ListReader::get_text(Self, Int) -> String raise CapnpError
-pub fn ListReader::get_uint16(Self, Int) -> UInt raise CapnpError
-pub fn ListReader::get_uint32(Self, Int) -> UInt raise CapnpError
-pub fn ListReader::get_uint64(Self, Int) -> UInt64 raise CapnpError
-pub fn ListReader::get_uint8(Self, Int) -> Byte raise CapnpError
-pub fn ListReader::length(Self) -> Int
+pub fn ListReader::element_size(Self) -> Int32
+pub fn ListReader::get_bool(Self, Int32) -> Bool raise CapnpError
+pub fn ListReader::get_data(Self, Int32) -> Bytes raise CapnpError
+pub fn ListReader::get_float32(Self, Int32) -> Float raise CapnpError
+pub fn ListReader::get_float64(Self, Int32) -> Double raise CapnpError
+pub fn ListReader::get_int16(Self, Int32) -> Int32 raise CapnpError
+pub fn ListReader::get_int32(Self, Int32) -> Int32 raise CapnpError
+pub fn ListReader::get_int64(Self, Int32) -> Int64 raise CapnpError
+pub fn ListReader::get_int8(Self, Int32) -> Int32 raise CapnpError
+pub fn ListReader::get_list(Self, Int32) -> Self raise CapnpError
+pub fn ListReader::get_pointer(Self, Int32) -> PointerReader raise CapnpError
+pub fn ListReader::get_struct(Self, Int32) -> StructReader raise CapnpError
+pub fn ListReader::get_text(Self, Int32) -> String raise CapnpError
+pub fn ListReader::get_uint16(Self, Int32) -> UInt32 raise CapnpError
+pub fn ListReader::get_uint32(Self, Int32) -> UInt32 raise CapnpError
+pub fn ListReader::get_uint64(Self, Int32) -> UInt64 raise CapnpError
+pub fn ListReader::get_uint8(Self, Int32) -> Byte raise CapnpError
+pub fn ListReader::length(Self) -> Int32
 
 pub struct Message {
   // private fields
 }
-pub fn Message::remaining_traversal_words(Self) -> Int
+pub fn Message::remaining_traversal_words(Self) -> Int32
 pub fn Message::root(Self) -> StructReader raise CapnpError
 pub fn Message::root_pointer(Self) -> PointerReader
-pub fn Message::segment_count(Self) -> Int
+pub fn Message::segment_count(Self) -> Int32
 
 pub struct PointerBuilder {
   // private fields
 }
 pub fn PointerBuilder::clear(Self) -> Unit
-pub fn PointerBuilder::init_list(Self, Int, Int) -> ListBuilder raise CapnpError
-pub fn PointerBuilder::init_struct(Self, Int, Int) -> StructBuilder raise CapnpError
-pub fn PointerBuilder::init_struct_list(Self, Int, Int, Int) -> ListBuilder raise CapnpError
+pub fn PointerBuilder::init_list(Self, Int32, Int32) -> ListBuilder raise CapnpError
+pub fn PointerBuilder::init_struct(Self, Int32, Int32) -> StructBuilder raise CapnpError
+pub fn PointerBuilder::init_struct_list(Self, Int32, Int32, Int32) -> ListBuilder raise CapnpError
 pub fn PointerBuilder::is_null(Self) -> Bool
-pub fn PointerBuilder::set(Self, PointerReader, max_depth? : Int, max_words? : Int) -> Unit raise CapnpError
-pub fn PointerBuilder::set_capability_index(Self, UInt) -> Unit
+pub fn PointerBuilder::set(Self, PointerReader, max_depth? : Int32, max_words? : Int32) -> Unit raise CapnpError
+pub fn PointerBuilder::set_capability_index(Self, UInt32) -> Unit
 pub fn PointerBuilder::set_data(Self, Bytes) -> Unit raise CapnpError
-pub fn PointerBuilder::set_list(Self, ListReader, max_depth? : Int, max_words? : Int) -> Unit raise CapnpError
-pub fn PointerBuilder::set_struct(Self, StructReader, max_depth? : Int, max_words? : Int) -> Unit raise CapnpError
+pub fn PointerBuilder::set_list(Self, ListReader, max_depth? : Int32, max_words? : Int32) -> Unit raise CapnpError
+pub fn PointerBuilder::set_struct(Self, StructReader, max_depth? : Int32, max_words? : Int32) -> Unit raise CapnpError
 pub fn PointerBuilder::set_text(Self, String) -> Unit raise CapnpError
 
 pub(all) enum PointerKind {
@@ -133,54 +133,54 @@ pub fn PointerReader::as_data(Self, default? : Bytes) -> Bytes raise CapnpError
 pub fn PointerReader::as_list(Self) -> ListReader raise CapnpError
 pub fn PointerReader::as_struct(Self) -> StructReader raise CapnpError
 pub fn PointerReader::as_text(Self, default? : String) -> String raise CapnpError
-pub fn PointerReader::capability_index(Self) -> UInt raise CapnpError
+pub fn PointerReader::capability_index(Self) -> UInt32 raise CapnpError
 pub fn PointerReader::is_null(Self) -> Bool
 pub fn PointerReader::kind(Self) -> PointerKind raise CapnpError
 
 pub struct StructBuilder {
   // private fields
 }
-pub fn StructBuilder::clear_data(Self, Int, Int) -> Unit raise CapnpError
-pub fn StructBuilder::clear_pointer(Self, Int) -> Unit raise CapnpError
-pub fn StructBuilder::get_pointer(Self, Int) -> PointerBuilder raise CapnpError
-pub fn StructBuilder::init_list(Self, Int, Int, Int) -> ListBuilder raise CapnpError
-pub fn StructBuilder::init_struct(Self, Int, Int, Int) -> Self raise CapnpError
-pub fn StructBuilder::init_struct_list(Self, Int, Int, Int, Int) -> ListBuilder raise CapnpError
-pub fn StructBuilder::set_bool(Self, Int, Bool, default? : Bool) -> Unit raise CapnpError
-pub fn StructBuilder::set_data(Self, Int, Bytes) -> Unit raise CapnpError
-pub fn StructBuilder::set_float32(Self, Int, Float, default? : Float) -> Unit raise CapnpError
-pub fn StructBuilder::set_float64(Self, Int, Double, default? : Double) -> Unit raise CapnpError
-pub fn StructBuilder::set_int16(Self, Int, Int, default? : Int) -> Unit raise CapnpError
-pub fn StructBuilder::set_int32(Self, Int, Int, default? : Int) -> Unit raise CapnpError
-pub fn StructBuilder::set_int64(Self, Int, Int64, default? : Int64) -> Unit raise CapnpError
-pub fn StructBuilder::set_int8(Self, Int, Int, default? : Int) -> Unit raise CapnpError
-pub fn StructBuilder::set_text(Self, Int, String) -> Unit raise CapnpError
-pub fn StructBuilder::set_uint16(Self, Int, UInt, default? : UInt) -> Unit raise CapnpError
-pub fn StructBuilder::set_uint32(Self, Int, UInt, default? : UInt) -> Unit raise CapnpError
-pub fn StructBuilder::set_uint64(Self, Int, UInt64, default? : UInt64) -> Unit raise CapnpError
-pub fn StructBuilder::set_uint8(Self, Int, Byte, default? : Byte) -> Unit raise CapnpError
+pub fn StructBuilder::clear_data(Self, Int32, Int32) -> Unit raise CapnpError
+pub fn StructBuilder::clear_pointer(Self, Int32) -> Unit raise CapnpError
+pub fn StructBuilder::get_pointer(Self, Int32) -> PointerBuilder raise CapnpError
+pub fn StructBuilder::init_list(Self, Int32, Int32, Int32) -> ListBuilder raise CapnpError
+pub fn StructBuilder::init_struct(Self, Int32, Int32, Int32) -> Self raise CapnpError
+pub fn StructBuilder::init_struct_list(Self, Int32, Int32, Int32, Int32) -> ListBuilder raise CapnpError
+pub fn StructBuilder::set_bool(Self, Int32, Bool, default? : Bool) -> Unit raise CapnpError
+pub fn StructBuilder::set_data(Self, Int32, Bytes) -> Unit raise CapnpError
+pub fn StructBuilder::set_float32(Self, Int32, Float, default? : Float) -> Unit raise CapnpError
+pub fn StructBuilder::set_float64(Self, Int32, Double, default? : Double) -> Unit raise CapnpError
+pub fn StructBuilder::set_int16(Self, Int32, Int32, default? : Int32) -> Unit raise CapnpError
+pub fn StructBuilder::set_int32(Self, Int32, Int32, default? : Int32) -> Unit raise CapnpError
+pub fn StructBuilder::set_int64(Self, Int32, Int64, default? : Int64) -> Unit raise CapnpError
+pub fn StructBuilder::set_int8(Self, Int32, Int32, default? : Int32) -> Unit raise CapnpError
+pub fn StructBuilder::set_text(Self, Int32, String) -> Unit raise CapnpError
+pub fn StructBuilder::set_uint16(Self, Int32, UInt32, default? : UInt32) -> Unit raise CapnpError
+pub fn StructBuilder::set_uint32(Self, Int32, UInt32, default? : UInt32) -> Unit raise CapnpError
+pub fn StructBuilder::set_uint64(Self, Int32, UInt64, default? : UInt64) -> Unit raise CapnpError
+pub fn StructBuilder::set_uint8(Self, Int32, Byte, default? : Byte) -> Unit raise CapnpError
 
 pub struct StructReader {
   // private fields
 }
-pub fn StructReader::data_size_bytes(Self) -> Int
-pub fn StructReader::get_bool(Self, Int, default? : Bool) -> Bool raise CapnpError
-pub fn StructReader::get_data(Self, Int, default? : Bytes) -> Bytes raise CapnpError
-pub fn StructReader::get_float32(Self, Int, default? : Float) -> Float raise CapnpError
-pub fn StructReader::get_float64(Self, Int, default? : Double) -> Double raise CapnpError
-pub fn StructReader::get_int16(Self, Int, default? : Int) -> Int raise CapnpError
-pub fn StructReader::get_int32(Self, Int, default? : Int) -> Int raise CapnpError
-pub fn StructReader::get_int64(Self, Int, default? : Int64) -> Int64 raise CapnpError
-pub fn StructReader::get_int8(Self, Int, default? : Int) -> Int raise CapnpError
-pub fn StructReader::get_list(Self, Int) -> ListReader raise CapnpError
-pub fn StructReader::get_pointer(Self, Int) -> PointerReader raise CapnpError
-pub fn StructReader::get_struct(Self, Int) -> Self raise CapnpError
-pub fn StructReader::get_text(Self, Int, default? : String) -> String raise CapnpError
-pub fn StructReader::get_uint16(Self, Int, default? : UInt) -> UInt raise CapnpError
-pub fn StructReader::get_uint32(Self, Int, default? : UInt) -> UInt raise CapnpError
-pub fn StructReader::get_uint64(Self, Int, default? : UInt64) -> UInt64 raise CapnpError
-pub fn StructReader::get_uint8(Self, Int, default? : Byte) -> Byte raise CapnpError
-pub fn StructReader::pointer_count(Self) -> Int
+pub fn StructReader::data_size_bytes(Self) -> Int32
+pub fn StructReader::get_bool(Self, Int32, default? : Bool) -> Bool raise CapnpError
+pub fn StructReader::get_data(Self, Int32, default? : Bytes) -> Bytes raise CapnpError
+pub fn StructReader::get_float32(Self, Int32, default? : Float) -> Float raise CapnpError
+pub fn StructReader::get_float64(Self, Int32, default? : Double) -> Double raise CapnpError
+pub fn StructReader::get_int16(Self, Int32, default? : Int32) -> Int32 raise CapnpError
+pub fn StructReader::get_int32(Self, Int32, default? : Int32) -> Int32 raise CapnpError
+pub fn StructReader::get_int64(Self, Int32, default? : Int64) -> Int64 raise CapnpError
+pub fn StructReader::get_int8(Self, Int32, default? : Int32) -> Int32 raise CapnpError
+pub fn StructReader::get_list(Self, Int32) -> ListReader raise CapnpError
+pub fn StructReader::get_pointer(Self, Int32) -> PointerReader raise CapnpError
+pub fn StructReader::get_struct(Self, Int32) -> Self raise CapnpError
+pub fn StructReader::get_text(Self, Int32, default? : String) -> String raise CapnpError
+pub fn StructReader::get_uint16(Self, Int32, default? : UInt32) -> UInt32 raise CapnpError
+pub fn StructReader::get_uint32(Self, Int32, default? : UInt32) -> UInt32 raise CapnpError
+pub fn StructReader::get_uint64(Self, Int32, default? : UInt64) -> UInt64 raise CapnpError
+pub fn StructReader::get_uint8(Self, Int32, default? : Byte) -> Byte raise CapnpError
+pub fn StructReader::pointer_count(Self) -> Int32
 
 // Type aliases
 

@@ -5,7 +5,9 @@
 // Interface fields expose opaque capability indices; no RPC transport is generated.
 
 ///|
-fn capnp_schema_node(node : Int) -> @capnp.StructReader raise @capnp.CapnpError {
+fn capnp_schema_node(
+  node : Int32,
+) -> @capnp.StructReader raise @capnp.CapnpError {
   let payload : Bytes = b"\x00\x00\x00\x00\xbd\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x00\x8f\x04\x00\x00\x74\x00\x00\x00\x00\x00\x05\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc8\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc8\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xbc\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc0\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xd4\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xd8\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xd8\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xd8\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x7b\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x4a\x00\x00\x00\x63\x6f\x6e\x73\x74\x61\x6e\x74\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x14\x00\x00\x00\x01\x00\x00\x00\xff\xff\xff\xff\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\x01\x00\xc8\x01\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x7a\x00\x00\x00\x62\x6f\x75\x6e\x64\x20\x63\x6f\x6e\x73\x74\x61\x6e\x74\x00\x00\x01\x00\x00\x00\x1e\x00\x00\x00\x09\x00\x00\x00\x0e\x00\x00\x00\x0d\x00\x00\x00\x06\x00\x00\x00\x09\x00\x00\x00\x16\x00\x00\x00\x01\x00\x00\x00\x22\x00\x00\x00\x6f\x6e\x65\x00\x00\x00\x00\x00\x05\x00\x00\x00\x22\x00\x00\x00\x05\x00\x00\x00\x32\x00\x00\x00\x74\x77\x6f\x00\x00\x00\x00\x00\x74\x68\x72\x65\x65\x00\x00\x00\x01\x00\x00\x00\x17\x00\x00\x00\x08\x00\x00\x00\x00\x00\x01\x00\x05\x00\x00\x00\x32\x00\x00\x00\x05\x00\x00\x00\x3a\x00\x00\x00\x66\x69\x72\x73\x74\x00\x00\x00\x73\x65\x63\x6f\x6e\x64\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x7b\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x4a\x00\x00\x00\x63\x6f\x6e\x73\x74\x61\x6e\x74\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x7b\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x4a\x00\x00\x00\x63\x6f\x6e\x73\x74\x61\x6e\x74\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x14\x00\x00\x00\x01\x00\x00\x00\xff\xff\xff\xff"
   @capnp.read_message(payload).root().get_list(0).get_struct(node)
 }
@@ -14,11 +16,11 @@ fn capnp_schema_node(node : Int) -> @capnp.StructReader raise @capnp.CapnpError 
 pub(all) enum Choice {
   No
   Yes
-  Unknown(UInt)
+  Unknown(UInt32)
 }
 
 ///|
-pub fn Choice::from_raw(value : UInt) -> Choice {
+pub fn Choice::from_raw(value : UInt32) -> Choice {
   match value {
     0U => No
     1U => Yes
@@ -27,7 +29,7 @@ pub fn Choice::from_raw(value : UInt) -> Choice {
 }
 
 ///|
-pub fn Choice::to_raw(self : Choice) -> UInt {
+pub fn Choice::to_raw(self : Choice) -> UInt32 {
   match self {
     No => 0U
     Yes => 1U
@@ -81,28 +83,28 @@ pub(all) struct ListConstantListBuilder {
 }
 
 ///|
-pub fn ListConstantListReader::length(self : ListConstantListReader) -> Int {
+pub fn ListConstantListReader::length(self : ListConstantListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn ListConstantListBuilder::length(self : ListConstantListBuilder) -> Int {
+pub fn ListConstantListBuilder::length(self : ListConstantListBuilder) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn ListConstantListReader::get(
   self : ListConstantListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn ListConstantListBuilder::set(
   self : ListConstantListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -130,14 +132,14 @@ pub(all) struct NestedListConstantListBuilder {
 ///|
 pub fn NestedListConstantListReader::length(
   self : NestedListConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NestedListConstantListBuilder::length(
   self : NestedListConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
@@ -154,21 +156,21 @@ pub(all) struct NestedListConstantListItemBuilder {
 ///|
 pub fn NestedListConstantListItemReader::length(
   self : NestedListConstantListItemReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NestedListConstantListItemBuilder::length(
   self : NestedListConstantListItemBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn NestedListConstantListItemReader::get(
   self : NestedListConstantListItemReader,
-  index : Int,
+  index : Int32,
 ) -> String raise @capnp.CapnpError {
   self.inner.get_text(index)
 }
@@ -176,7 +178,7 @@ pub fn NestedListConstantListItemReader::get(
 ///|
 pub fn NestedListConstantListItemBuilder::set(
   self : NestedListConstantListItemBuilder,
-  index : Int,
+  index : Int32,
   value : String,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_text(index, value)
@@ -185,7 +187,7 @@ pub fn NestedListConstantListItemBuilder::set(
 ///|
 pub fn NestedListConstantListReader::get(
   self : NestedListConstantListReader,
-  index : Int,
+  index : Int32,
 ) -> NestedListConstantListItemReader raise @capnp.CapnpError {
   { inner: self.inner.get_list(index), }
 }
@@ -193,8 +195,8 @@ pub fn NestedListConstantListReader::get(
 ///|
 pub fn NestedListConstantListBuilder::init(
   self : NestedListConstantListBuilder,
-  index : Int,
-  length : Int,
+  index : Int32,
+  length : Int32,
 ) -> NestedListConstantListItemBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(index, 6, length), }
 }
@@ -217,21 +219,21 @@ pub(all) struct GenericBoxesConstantListBuilder {
 ///|
 pub fn GenericBoxesConstantListReader::length(
   self : GenericBoxesConstantListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn GenericBoxesConstantListBuilder::length(
   self : GenericBoxesConstantListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn GenericBoxesConstantListReader::get(
   self : GenericBoxesConstantListReader,
-  index : Int,
+  index : Int32,
 ) -> BoxAsTextReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -239,7 +241,7 @@ pub fn GenericBoxesConstantListReader::get(
 ///|
 pub fn GenericBoxesConstantListBuilder::get(
   self : GenericBoxesConstantListBuilder,
-  index : Int,
+  index : Int32,
 ) -> BoxAsTextBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -394,19 +396,19 @@ pub(all) struct BoxValuesListBuilder {
 }
 
 ///|
-pub fn BoxValuesListReader::length(self : BoxValuesListReader) -> Int {
+pub fn BoxValuesListReader::length(self : BoxValuesListReader) -> Int32 {
   self.inner.length()
 }
 
 ///|
-pub fn BoxValuesListBuilder::length(self : BoxValuesListBuilder) -> Int {
+pub fn BoxValuesListBuilder::length(self : BoxValuesListBuilder) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BoxValuesListReader::get(
   self : BoxValuesListReader,
-  index : Int,
+  index : Int32,
 ) -> BoxReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -414,7 +416,7 @@ pub fn BoxValuesListReader::get(
 ///|
 pub fn BoxValuesListBuilder::get(
   self : BoxValuesListBuilder,
-  index : Int,
+  index : Int32,
 ) -> BoxBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -429,7 +431,7 @@ pub fn BoxReader::get_values(
 ///|
 pub fn BoxBuilder::init_values(
   self : BoxBuilder,
-  length : Int,
+  length : Int32,
 ) -> BoxValuesListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 0, 4), }
 }
@@ -1163,8 +1165,8 @@ pub fn UsesBuilder::set_structure(
 ///|
 pub fn UsesBuilder::init_structure(
   self : UsesBuilder,
-  data_words : Int,
-  pointer_count : Int,
+  data_words : Int32,
+  pointer_count : Int32,
 ) -> @capnp.StructBuilder raise @capnp.CapnpError {
   self.inner.init_struct(6, data_words, pointer_count)
 }
@@ -1194,8 +1196,8 @@ pub fn UsesBuilder::set_list(
 ///|
 pub fn UsesBuilder::init_list(
   self : UsesBuilder,
-  element_size : Int,
-  length : Int,
+  element_size : Int32,
+  length : Int32,
 ) -> @capnp.ListBuilder raise @capnp.CapnpError {
   self.inner.init_list(7, element_size, length)
 }
@@ -1203,9 +1205,9 @@ pub fn UsesBuilder::init_list(
 ///|
 pub fn UsesBuilder::init_list_structs(
   self : UsesBuilder,
-  length : Int,
-  data_words : Int,
-  pointer_count : Int,
+  length : Int32,
+  data_words : Int32,
+  pointer_count : Int32,
 ) -> @capnp.ListBuilder raise @capnp.CapnpError {
   self.inner.init_struct_list(7, length, data_words, pointer_count)
 }
@@ -1329,21 +1331,21 @@ pub(all) struct BoxAsTextValuesListBuilder {
 ///|
 pub fn BoxAsTextValuesListReader::length(
   self : BoxAsTextValuesListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BoxAsTextValuesListBuilder::length(
   self : BoxAsTextValuesListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BoxAsTextValuesListReader::get(
   self : BoxAsTextValuesListReader,
-  index : Int,
+  index : Int32,
 ) -> BoxAsTextReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -1351,7 +1353,7 @@ pub fn BoxAsTextValuesListReader::get(
 ///|
 pub fn BoxAsTextValuesListBuilder::get(
   self : BoxAsTextValuesListBuilder,
-  index : Int,
+  index : Int32,
 ) -> BoxAsTextBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -1366,7 +1368,7 @@ pub fn BoxAsTextReader::get_values(
 ///|
 pub fn BoxAsTextBuilder::init_values(
   self : BoxAsTextBuilder,
-  length : Int,
+  length : Int32,
 ) -> BoxAsTextValuesListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 0, 4), }
 }
@@ -1507,21 +1509,21 @@ pub(all) struct BoxAsSampleValuesListBuilder {
 ///|
 pub fn BoxAsSampleValuesListReader::length(
   self : BoxAsSampleValuesListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BoxAsSampleValuesListBuilder::length(
   self : BoxAsSampleValuesListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BoxAsSampleValuesListReader::get(
   self : BoxAsSampleValuesListReader,
-  index : Int,
+  index : Int32,
 ) -> BoxAsSampleReader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -1529,7 +1531,7 @@ pub fn BoxAsSampleValuesListReader::get(
 ///|
 pub fn BoxAsSampleValuesListBuilder::get(
   self : BoxAsSampleValuesListBuilder,
-  index : Int,
+  index : Int32,
 ) -> BoxAsSampleBuilder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -1544,7 +1546,7 @@ pub fn BoxAsSampleReader::get_values(
 ///|
 pub fn BoxAsSampleBuilder::init_values(
   self : BoxAsSampleBuilder,
-  length : Int,
+  length : Int32,
 ) -> BoxAsSampleValuesListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 0, 4), }
 }
@@ -1670,30 +1672,30 @@ pub(all) struct BoxAsListOfUint32ValueListBuilder {
 ///|
 pub fn BoxAsListOfUint32ValueListReader::length(
   self : BoxAsListOfUint32ValueListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BoxAsListOfUint32ValueListBuilder::length(
   self : BoxAsListOfUint32ValueListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BoxAsListOfUint32ValueListReader::get(
   self : BoxAsListOfUint32ValueListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn BoxAsListOfUint32ValueListBuilder::set(
   self : BoxAsListOfUint32ValueListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -1708,7 +1710,7 @@ pub fn BoxAsListOfUint32Reader::get_value(
 ///|
 pub fn BoxAsListOfUint32Builder::init_value(
   self : BoxAsListOfUint32Builder,
-  length : Int,
+  length : Int32,
 ) -> BoxAsListOfUint32ValueListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(0, 4, length), }
 }
@@ -1734,21 +1736,21 @@ pub(all) struct BoxAsListOfUint32ValuesListBuilder {
 ///|
 pub fn BoxAsListOfUint32ValuesListReader::length(
   self : BoxAsListOfUint32ValuesListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BoxAsListOfUint32ValuesListBuilder::length(
   self : BoxAsListOfUint32ValuesListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BoxAsListOfUint32ValuesListReader::get(
   self : BoxAsListOfUint32ValuesListReader,
-  index : Int,
+  index : Int32,
 ) -> BoxAsListOfUint32Reader raise @capnp.CapnpError {
   { inner: self.inner.get_struct(index), }
 }
@@ -1756,7 +1758,7 @@ pub fn BoxAsListOfUint32ValuesListReader::get(
 ///|
 pub fn BoxAsListOfUint32ValuesListBuilder::get(
   self : BoxAsListOfUint32ValuesListBuilder,
-  index : Int,
+  index : Int32,
 ) -> BoxAsListOfUint32Builder raise @capnp.CapnpError {
   { inner: self.inner.struct_at(index), }
 }
@@ -1771,7 +1773,7 @@ pub fn BoxAsListOfUint32Reader::get_values(
 ///|
 pub fn BoxAsListOfUint32Builder::init_values(
   self : BoxAsListOfUint32Builder,
-  length : Int,
+  length : Int32,
 ) -> BoxAsListOfUint32ValuesListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_struct_list(1, length, 0, 4), }
 }
@@ -1851,30 +1853,30 @@ pub(all) struct BoxDetailsAsListOfUint32ExtraListBuilder {
 ///|
 pub fn BoxDetailsAsListOfUint32ExtraListReader::length(
   self : BoxDetailsAsListOfUint32ExtraListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BoxDetailsAsListOfUint32ExtraListBuilder::length(
   self : BoxDetailsAsListOfUint32ExtraListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn BoxDetailsAsListOfUint32ExtraListReader::get(
   self : BoxDetailsAsListOfUint32ExtraListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn BoxDetailsAsListOfUint32ExtraListBuilder::set(
   self : BoxDetailsAsListOfUint32ExtraListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -1889,7 +1891,7 @@ pub fn BoxDetailsAsListOfUint32Reader::get_extra(
 ///|
 pub fn BoxDetailsAsListOfUint32Builder::init_extra(
   self : BoxDetailsAsListOfUint32Builder,
-  length : Int,
+  length : Int32,
 ) -> BoxDetailsAsListOfUint32ExtraListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(3, 4, length), }
 }
@@ -2067,30 +2069,30 @@ pub(all) struct OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListBui
 ///|
 pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListReader::length(
   self : OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListReader,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListBuilder::length(
   self : OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListBuilder,
-) -> Int {
+) -> Int32 {
   self.inner.length()
 }
 
 ///|
 pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListReader::get(
   self : OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListReader,
-  index : Int,
-) -> UInt raise @capnp.CapnpError {
+  index : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint32(index)
 }
 
 ///|
 pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListBuilder::set(
   self : OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListBuilder,
-  index : Int,
-  value : UInt,
+  index : Int32,
+  value : UInt32,
 ) -> Unit raise @capnp.CapnpError {
   self.inner.set_uint32(index, value)
 }
@@ -2105,7 +2107,7 @@ pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Reader::get_fourth(
 ///|
 pub fn OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Builder::init_fourth(
   self : OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32Builder,
-  length : Int,
+  length : Int32,
 ) -> OuterInnerDeepAsTextAndDataAndSampleAndListOfUint32FourthListBuilder raise @capnp.CapnpError {
   { inner: self.inner.init_list(3, 4, length), }
 }
@@ -2160,8 +2162,8 @@ pub fn MethodNamesBuilder::set_foo(
 ///|
 pub fn MethodNamesBuilder::init_foo(
   self : MethodNamesBuilder,
-  element_size : Int,
-  length : Int,
+  element_size : Int32,
+  length : Int32,
 ) -> @capnp.ListBuilder raise @capnp.CapnpError {
   self.inner.init_list(0, element_size, length)
 }
@@ -2169,9 +2171,9 @@ pub fn MethodNamesBuilder::init_foo(
 ///|
 pub fn MethodNamesBuilder::init_foo_structs_inline(
   self : MethodNamesBuilder,
-  length : Int,
-  data_words : Int,
-  pointer_count : Int,
+  length : Int32,
+  data_words : Int32,
+  pointer_count : Int32,
 ) -> @capnp.ListBuilder raise @capnp.CapnpError {
   self.inner.init_struct_list(0, length, data_words, pointer_count)
 }

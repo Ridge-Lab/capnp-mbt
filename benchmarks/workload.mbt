@@ -35,17 +35,17 @@ fn Operation::name(self : Operation) -> String {
 }
 
 ///|
-fn mix(checksum : UInt, value : UInt) -> UInt {
+fn mix(checksum : UInt32, value : UInt32) -> UInt32 {
   checksum.lxor(value) * 16777619U
 }
 
 ///|
-fn mix_u64(checksum : UInt, value : UInt64) -> UInt {
+fn mix_u64(checksum : UInt32, value : UInt64) -> UInt32 {
   mix(mix(checksum, value.to_uint()), (value >> 32).to_uint())
 }
 
 ///|
-fn mix_text(checksum : UInt, value : String) -> UInt {
+fn mix_text(checksum : UInt32, value : String) -> UInt32 {
   let mut result = checksum
   for c in value {
     result = mix(result, c.to_int().reinterpret_as_uint())
@@ -54,14 +54,14 @@ fn mix_text(checksum : UInt, value : String) -> UInt {
 }
 
 ///|
-fn job_id(variant : Int) -> UInt64 {
+fn job_id(variant : Int32) -> UInt64 {
   9007199254740993UL + variant.to_uint64()
 }
 
 ///|
 fn encode(
   samples : Array[SampleInput],
-  variant : Int,
+  variant : Int32,
 ) -> Bytes raise @capnp.CapnpError {
   let message = @capnp.Builder::new()
   let root = @telemetry.BatchBuilder::init_root(message)
@@ -79,7 +79,7 @@ fn encode(
 }
 
 ///|
-fn selected_read(bytes : Bytes) -> UInt raise @capnp.CapnpError {
+fn selected_read(bytes : Bytes) -> UInt32 raise @capnp.CapnpError {
   let root = @telemetry.BatchReader::from_message(@capnp.read_message(bytes))
   let samples = root.get_samples()
   let mut sum = mix_u64(2166136261U, root.get_job_id())
@@ -92,7 +92,7 @@ fn selected_read(bytes : Bytes) -> UInt raise @capnp.CapnpError {
 }
 
 ///|
-fn full_scan(bytes : Bytes) -> UInt raise @capnp.CapnpError {
+fn full_scan(bytes : Bytes) -> UInt32 raise @capnp.CapnpError {
   let root = @telemetry.BatchReader::from_message(@capnp.read_message(bytes))
   let samples = root.get_samples()
   let mut sum = mix_u64(2166136261U, root.get_job_id())
@@ -120,7 +120,7 @@ fn opaque_copy(bytes : Bytes) -> Bytes raise @capnp.CapnpError {
 // Constant-size observation of an output allocation; full correctness checks
 // are performed before measurement. This cost is included in all byte-producing
 // operations. The checksum is emitted and checked after every measured batch.
-fn fingerprint(bytes : Bytes) -> UInt {
+fn fingerprint(bytes : Bytes) -> UInt32 {
   let mut sum = mix(2166136261U, bytes.length().reinterpret_as_uint())
   let head = if bytes.length() < 24 { bytes.length() } else { 24 }
   for i in 0..<head {
@@ -136,8 +136,8 @@ fn fingerprint(bytes : Bytes) -> UInt {
 fn run_one(
   fixture : Fixture,
   operation : Operation,
-  variant : Int,
-) -> UInt raise @capnp.CapnpError {
+  variant : Int32,
+) -> UInt32 raise @capnp.CapnpError {
   match operation {
     Encode => fingerprint(encode(fixture.samples, variant))
     SelectedRead => selected_read(fixture.plain[variant])
@@ -152,7 +152,7 @@ fn run_one(
 fn validate_batch(
   bytes : Bytes,
   inputs : Array[SampleInput],
-  variant : Int,
+  variant : Int32,
 ) -> Unit raise {
   let root = @telemetry.BatchReader::from_message(@capnp.read_message(bytes))
   assert_eq(root.get_job_id(), job_id(variant))
@@ -188,7 +188,7 @@ fn validate_batch(
 }
 
 ///|
-fn make_fixture(count : Int) -> Fixture raise {
+fn make_fixture(count : Int32) -> Fixture raise {
   let samples = Array::makei(count, i => {
     (
       {

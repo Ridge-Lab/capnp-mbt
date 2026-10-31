@@ -347,7 +347,7 @@ test "mutated official pointer and framing bytes remain bounded and copies fail 
   let wire = @fs.read_file_to_bytes("fixtures/conformance.segmented.bin")
   // Exercise each bit of the segment table, far landing pointers, and first
   // objects from an external compiler fixture rather than our own builder.
-  for pos in 0..<Int::min(128, wire.length()) {
+  for pos in 0..<Int32::min(128, wire.length()) {
     for bit in 0..<8 {
       let altered = Bytes::makei(wire.length(), i => {
         if i == pos {

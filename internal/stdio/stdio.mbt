@@ -6,7 +6,7 @@ pub suberror IOError {
 ///|
 /// Read one bounded binary stdin chunk. Empty bytes mean EOF. The caller can
 /// process and release each chunk instead of retaining the complete stream.
-pub fn read_stdin_chunk(chunk_bytes? : Int = 8192) -> Bytes raise IOError {
+pub fn read_stdin_chunk(chunk_bytes~ : Int32 = 8192) -> Bytes raise IOError {
   guard chunk_bytes > 0 && chunk_bytes <= 1024 * 1024 else {
     raise IOError("stdin chunk size must be between 1 byte and 1 MiB")
   }
@@ -23,7 +23,7 @@ pub fn read_stdin_chunk(chunk_bytes? : Int = 8192) -> Bytes raise IOError {
 }
 
 ///|
-pub fn read_stdin(max_bytes? : Int = 64 * 1024 * 1024) -> Bytes raise IOError {
+pub fn read_stdin(max_bytes~ : Int32 = 64 * 1024 * 1024) -> Bytes raise IOError {
   guard max_bytes >= 0 else { raise IOError("negative stdin byte limit") }
   let output = @buffer.Buffer()
   let chunk = Bytes::make(8192, 0)
@@ -49,7 +49,7 @@ pub fn write_stdout(data : Bytes) -> Unit raise IOError {
 }
 
 ///|
-pub fn exit(code : Int) -> Unit {
+pub fn exit(code : Int32) -> Unit {
   exit_impl(code)
 }
 

@@ -3,30 +3,30 @@
 /// Handles share the arena; scalar writes do not copy the message.
 pub struct Builder {
   priv arena : Array[Byte]
-  priv max_words : Int
+  priv max_words : Int32
 }
 
 ///|
 pub struct StructBuilder {
   priv owner : Builder
-  priv data_start : Int
-  priv data_words : Int
-  priv pointer_count : Int
+  priv data_start : Int32
+  priv data_words : Int32
+  priv pointer_count : Int32
 }
 
 ///|
 pub struct ListBuilder {
   priv owner : Builder
-  priv start : Int
-  priv count : Int
-  priv size_code : Int
-  priv data_words : Int
-  priv pointer_count : Int
+  priv start : Int32
+  priv count : Int32
+  priv size_code : Int32
+  priv data_words : Int32
+  priv pointer_count : Int32
 }
 
 ///|
 /// The default allocation limit is 64 MiB, including the root pointer.
-pub fn Builder::new(max_words? : Int = 8_388_608) -> Builder raise CapnpError {
+pub fn Builder::new(max_words~ : Int32 = 8_388_608) -> Builder raise CapnpError {
   if max_words < 1 || max_words > 268_435_454 {
     raise Limit("builder max_words must be between 1 and 268435454")
   }
@@ -34,7 +34,7 @@ pub fn Builder::new(max_words? : Int = 8_388_608) -> Builder raise CapnpError {
 }
 
 ///|
-fn b_alloc(owner : Builder, words : Int) -> Int raise CapnpError {
+fn b_alloc(owner : Builder, words : Int32) -> Int32 raise CapnpError {
   let used = owner.arena.length() / 8
   if words < 0 || words > owner.max_words - used {
     raise Limit("single-segment builder allocation limit exceeded")
@@ -47,7 +47,12 @@ fn b_alloc(owner : Builder, words : Int) -> Int raise CapnpError {
 }
 
 ///|
-fn b_write(owner : Builder, offset : Int, value : UInt64, width : Int) -> Unit {
+fn b_write(
+  owner : Builder,
+  offset : Int32,
+  value : UInt64,
+  width : Int32,
+) -> Unit {
   for i in 0..<width {
     owner.arena[offset + i] = (value >> (i * 8)).to_byte()
   }
@@ -55,8 +60,8 @@ fn b_write(owner : Builder, offset : Int, value : UInt64, width : Int) -> Unit {
 
 ///|
 fn b_struct_size(
-  data_words : Int,
-  pointer_count : Int,
+  data_words : Int32,
+  pointer_count : Int32,
 ) -> Unit raise CapnpError {
   if data_words < 0 ||
     data_words > 65535 ||
@@ -71,9 +76,9 @@ fn b_struct_size(
 ///|
 fn b_init_struct(
   owner : Builder,
-  slot : Int,
-  data_words : Int,
-  pointer_count : Int,
+  slot : Int32,
+  data_words : Int32,
+  pointer_count : Int32,
 ) -> StructBuilder raise CapnpError {
   b_struct_size(data_words, pointer_count)
   let start = b_alloc(owner, data_words + pointer_count)
@@ -96,8 +101,8 @@ fn b_init_struct(
 /// remains allocated and is still charged to the allocation limit.
 pub fn Builder::init_root(
   self : Builder,
-  data_words : Int,
-  pointer_count : Int,
+  data_words : Int32,
+  pointer_count : Int32,
 ) -> StructBuilder raise CapnpError {
   b_init_struct(self, 0, data_words, pointer_count)
 }
@@ -118,16 +123,16 @@ pub fn Builder::finish(self : Builder) -> Bytes {
 }
 
 ///|
-pub fn Builder::allocated_words(self : Builder) -> Int {
+pub fn Builder::allocated_words(self : Builder) -> Int32 {
   self.arena.length() / 8
 }
 
 ///|
 fn b_data(
   handle : StructBuilder,
-  offset : Int,
-  width : Int,
-) -> Int raise CapnpError {
+  offset : Int32,
+  width : Int32,
+) -> Int32 raise CapnpError {
   let size = handle.data_words * 8
   if offset < 0 || width < 0 || offset > size || width > size - offset {
     raise Bounds("field extends beyond struct data section")
@@ -136,7 +141,7 @@ fn b_data(
 }
 
 ///|
-fn b_pointer(handle : StructBuilder, slot : Int) -> Int raise CapnpError {
+fn b_pointer(handle : StructBuilder, slot : Int32) -> Int32 raise CapnpError {
   if slot < 0 || slot >= handle.pointer_count {
     raise Bounds("pointer slot outside struct pointer section")
   }
@@ -146,7 +151,7 @@ fn b_pointer(handle : StructBuilder, slot : Int) -> Int raise CapnpError {
 ///|
 pub fn StructBuilder::clear_pointer(
   self : StructBuilder,
-  slot : Int,
+  slot : Int32,
 ) -> Unit raise CapnpError {
   b_write(self.owner, b_pointer(self, slot), 0, 8)
 }
@@ -154,8 +159,8 @@ pub fn StructBuilder::clear_pointer(
 ///|
 pub fn StructBuilder::clear_data(
   self : StructBuilder,
-  byte_offset : Int,
-  byte_length : Int,
+  byte_offset : Int32,
+  byte_length : Int32,
 ) -> Unit raise CapnpError {
   let start = b_data(self, byte_offset, byte_length)
   for i in 0..<byte_length {
@@ -166,15 +171,15 @@ pub fn StructBuilder::clear_data(
 ///|
 pub fn StructBuilder::init_struct(
   self : StructBuilder,
-  slot : Int,
-  data_words : Int,
-  pointer_count : Int,
+  slot : Int32,
+  data_words : Int32,
+  pointer_count : Int32,
 ) -> StructBuilder raise CapnpError {
   b_init_struct(self.owner, b_pointer(self, slot), data_words, pointer_count)
 }
 
 ///|
-fn b_count(length : Int) -> Unit raise CapnpError {
+fn b_count(length : Int32) -> Unit raise CapnpError {
   if length < 0 || length > 536_870_911 {
     raise Bounds("list element count must fit unsigned 29 bits")
   }
@@ -183,9 +188,9 @@ fn b_count(length : Int) -> Unit raise CapnpError {
 ///|
 fn b_init_list(
   owner : Builder,
-  slot : Int,
-  element_size : Int,
-  length : Int,
+  slot : Int32,
+  element_size : Int32,
+  length : Int32,
 ) -> ListBuilder raise CapnpError {
   b_count(length)
   let words = match element_size {
@@ -224,10 +229,10 @@ fn b_init_list(
 ///|
 fn b_init_struct_list(
   owner : Builder,
-  slot : Int,
-  length : Int,
-  data_words : Int,
-  pointer_count : Int,
+  slot : Int32,
+  length : Int32,
+  data_words : Int32,
+  pointer_count : Int32,
 ) -> ListBuilder raise CapnpError {
   b_count(length)
   b_struct_size(data_words, pointer_count)
@@ -271,9 +276,9 @@ fn b_init_struct_list(
 /// 4 uint32, 5 uint64, 6 pointer. Struct lists use init_struct_list.
 pub fn StructBuilder::init_list(
   self : StructBuilder,
-  slot : Int,
-  element_size : Int,
-  length : Int,
+  slot : Int32,
+  element_size : Int32,
+  length : Int32,
 ) -> ListBuilder raise CapnpError {
   b_init_list(self.owner, b_pointer(self, slot), element_size, length)
 }
@@ -281,10 +286,10 @@ pub fn StructBuilder::init_list(
 ///|
 pub fn StructBuilder::init_struct_list(
   self : StructBuilder,
-  slot : Int,
-  length : Int,
-  data_words : Int,
-  pointer_count : Int,
+  slot : Int32,
+  length : Int32,
+  data_words : Int32,
+  pointer_count : Int32,
 ) -> ListBuilder raise CapnpError {
   b_init_struct_list(
     self.owner,
@@ -298,7 +303,7 @@ pub fn StructBuilder::init_struct_list(
 ///|
 fn b_blob(
   owner : Builder,
-  slot : Int,
+  slot : Int32,
   bytes : Bytes,
   text : Bool,
 ) -> Unit raise CapnpError {
@@ -316,7 +321,7 @@ fn b_blob(
 ///|
 pub fn StructBuilder::set_text(
   self : StructBuilder,
-  slot : Int,
+  slot : Int32,
   value : String,
 ) -> Unit raise CapnpError {
   b_blob(self.owner, b_pointer(self, slot), @utf8.encode(value), true)
@@ -325,7 +330,7 @@ pub fn StructBuilder::set_text(
 ///|
 pub fn StructBuilder::set_data(
   self : StructBuilder,
-  slot : Int,
+  slot : Int32,
   value : Bytes,
 ) -> Unit raise CapnpError {
   b_blob(self.owner, b_pointer(self, slot), value, false)

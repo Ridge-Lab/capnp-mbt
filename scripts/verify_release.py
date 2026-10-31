@@ -1,6 +1,6 @@
 """Install a published package and use its generator/runtime in a fresh module.
 
-Requires MoonBit 0.10.14, Node.js, a native C toolchain and capnp 1.5.0.
+Requires MoonBit 0.10.16 or later, Node.js, a native C toolchain and capnp 1.5.0.
 No source override or generated bindings from the checkout are used.
 """
 from __future__ import annotations
@@ -145,6 +145,11 @@ def verify_host_tools(installed: Path, directory: Path, moon: str, version: str)
 
 
 def verify(directory: Path, version: str, moon: str, capnp: str) -> None:
+    toolchain = subprocess.check_output([moon, "version", "--all"], text=True)
+    match = re.search(r"^moonc v(\d+)\.(\d+)\.(\d+)(?:\+|\s|$)", toolchain, re.MULTILINE)
+    if match is None or tuple(map(int, match.groups())) < (0, 10, 16):
+        raise RuntimeError("Acceptance verification requires moonc >= 0.10.16; run moon version --all")
+    print(toolchain.strip(), flush=True)
     compiler_version = subprocess.check_output([capnp, "--version"], text=True).strip()
     if compiler_version != "Cap'n Proto version 1.5.0":
         raise RuntimeError(f"Expected Cap'n Proto 1.5.0; found {compiler_version}")

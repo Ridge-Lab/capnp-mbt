@@ -30,8 +30,8 @@ percentage-complete estimate or an assertion of exhaustive protocol coverage.
 
 ## Reproduce
 
-Use MoonBit 0.10.14 with matching core. Node.js 24 and Python 3.12 are used in
-CI. The generated bindings are committed; the first commands need no `capnp`
+Use MoonBit `0.10.16+b1a0e846e` with matching core. Node.js 24 and Python 3.12
+are configured in CI. The generated bindings are committed; the first commands need no `capnp`
 compiler or C++ runtime:
 
 ```sh
