@@ -1,11 +1,15 @@
 ///|
-fn main raise {
+fn run() -> Unit raise {
   let args = @stdio.args()
   guard args.length() == 4 && (args[1] == "pack" || args[1] == "unpack") else {
-    println(
-      "Usage: packing pack|unpack INPUT OUTPUT (use - for binary stdin/stdout)",
-    )
-    @stdio.exit(if args.length() == 2 && args[1] == "--help" { 0 } else { 2 })
+    let usage = "Usage: packing pack|unpack INPUT OUTPUT (use - for binary stdin/stdout)"
+    if args.length() == 2 && args[1] == "--help" {
+      println(usage)
+      @stdio.exit(0)
+    } else {
+      @stdio.write_stderr(usage + "\n")
+      @stdio.exit(2)
+    }
     return
   }
   let input = if args[2] == "-" {
@@ -22,5 +26,12 @@ fn main raise {
     @stdio.write_stdout(output)
   } else {
     @fs.write_bytes_to_file(args[3], output)
+  }
+}
+
+///|
+fn main {
+  run() catch {
+    error => @stdio.fail("packing: \{error}")
   }
 }

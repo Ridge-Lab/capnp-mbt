@@ -49,6 +49,23 @@ pub fn write_stdout(data : Bytes) -> Unit raise IOError {
 }
 
 ///|
+/// Write a UTF-8 diagnostic to stderr without raising another I/O error.
+/// Native and Node write only to fd 2. The Wasm CLI adapter has no stderr host
+/// binding and drops the diagnostic; it never falls back to binary stdout.
+pub fn write_stderr(message : String) -> Unit {
+  let data = @utf8.encode(message)
+  ignore(write_error_chunk(data, data.length()))
+}
+
+///|
+/// Report a CLI failure without invoking the runtime's unhandled-error printer.
+/// Writing diagnostics is best-effort; even if stderr is closed, exit nonzero.
+pub fn fail(message : String) -> Unit {
+  write_stderr(message + "\n")
+  exit_impl(1)
+}
+
+///|
 pub fn exit(code : Int32) -> Unit {
   exit_impl(code)
 }

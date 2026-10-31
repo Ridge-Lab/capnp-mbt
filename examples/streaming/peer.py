@@ -210,6 +210,7 @@ def exercise(command: list[str], jobs: int, output: Path) -> None:
     truncated = subprocess.run(command, input=encode(0) + encode(1)[:-1],
                                capture_output=True, timeout=30)
     assert truncated.returncode != 0, "truncated final frame was silently accepted"
+    assert truncated.stderr, "truncation must report a diagnostic on stderr"
     prefix = output / "prefix-before-error.bin"
     prefix.write_bytes(truncated.stdout)
     verify(prefix, 1)
@@ -217,6 +218,7 @@ def exercise(command: list[str], jobs: int, output: Path) -> None:
     huge_header = (0).to_bytes(4, "little") + (0xFFFFFFFF).to_bytes(4, "little")
     invalid = subprocess.run(command, input=huge_header, capture_output=True, timeout=30)
     assert invalid.returncode != 0 and not invalid.stdout
+    assert invalid.stderr, "oversized frame must report a diagnostic on stderr"
     print("Rejected truncated EOF and oversized frame header; earlier reports remain usable")
 
 

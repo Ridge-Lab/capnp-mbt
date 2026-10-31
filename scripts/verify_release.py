@@ -135,13 +135,18 @@ def verify_host_tools(installed: Path, directory: Path, moon: str, version: str)
         if generated.read_bytes() != expected_source:
             raise RuntimeError(f"Installed {target} stdin plugin differs from library generator")
         invalid = subprocess.run(plugin, input=b"invalid", cwd=output, capture_output=True)
-        if invalid.returncode == 0 or generated.read_bytes() != expected_source:
-            raise RuntimeError(f"Installed {target} plugin replaced output on an invalid request")
+        if (invalid.returncode == 0 or invalid.stdout or not invalid.stderr
+                or generated.read_bytes() != expected_source):
+            raise RuntimeError(f"Installed {target} plugin mishandled an invalid request or its diagnostics")
         for mode, source, expected in (("pack", plain, packed), ("unpack", packed, plain)):
             actual = subprocess.check_output(command("packing") + [mode, "-", "-"], input=source)
             if actual != expected:
                 raise RuntimeError(f"Installed {target} binary stdin/stdout {mode} differs from oracle")
-        print(f"Verified installed {target} plugin, invalid-request preservation and binary packing")
+        malformed = subprocess.run(command("packing") + ["unpack", "-", "-"],
+                                   input=b"\xff", capture_output=True)
+        if malformed.returncode == 0 or malformed.stdout or not malformed.stderr:
+            raise RuntimeError(f"Installed {target} unpacker mixed an error into binary stdout")
+        print(f"Verified installed {target} plugin, invalid-request preservation, binary packing and stderr-only errors")
 
 
 def verify(directory: Path, version: str, moon: str, capnp: str) -> None:

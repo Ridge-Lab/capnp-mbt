@@ -1,5 +1,5 @@
 ///|
-fn main raise {
+fn run() -> Unit raise {
   let decoder = @capnp.FrameDecoder::new(max_message_bytes=1024 * 1024)
   while true {
     let chunk = @stdio.read_stdin_chunk()
@@ -11,4 +11,11 @@ fn main raise {
     }
   }
   decoder.finish()
+}
+
+///|
+fn main {
+  run() catch {
+    error => @stdio.fail("streaming: \{error}")
+  }
 }

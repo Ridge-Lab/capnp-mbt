@@ -6,9 +6,13 @@ pub fn args() -> Array[String]
 
 pub fn exit(Int32) -> Unit
 
+pub fn fail(String) -> Unit
+
 pub fn read_stdin(max_bytes? : Int32) -> Bytes raise IOError
 
 pub fn read_stdin_chunk(chunk_bytes? : Int32) -> Bytes raise IOError
+
+pub fn write_stderr(String) -> Unit
 
 pub fn write_stdout(Bytes) -> Unit raise IOError
 

@@ -38,3 +38,29 @@ fn read_chunk(data : Bytes, size : Int32) -> Int32 {
 fn write_chunk(data : Bytes, size : Int32) -> Int32 {
   call_io(write_sync, 1, data, size)
 }
+
+///|
+extern "js" fn call_error_io(
+  f : (Int32, Bytes, Int32, Int32) -> Int32,
+  data : Bytes,
+  size : Int32,
+) -> Int32 =
+  #| (f, data, size) => {
+  #|   let offset = 0;
+  #|   while (offset < size) {
+  #|     try {
+  #|       const count = f(2, data, offset, size - offset);
+  #|       if (count <= 0) return -1;
+  #|       offset += count;
+  #|     } catch (error) {
+  #|       if (error && error.code === "EINTR") continue;
+  #|       return -1;
+  #|     }
+  #|   }
+  #|   return offset;
+  #| }
+
+///|
+fn write_error_chunk(data : Bytes, size : Int32) -> Int32 {
+  call_error_io(write_sync, data, size)
+}

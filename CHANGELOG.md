@@ -2,6 +2,7 @@
 
 ## 0.3.1
 
+- Catch binary CLI failures at the entry point and write diagnostics to stderr before exiting nonzero. This prevents the Windows 0.10.16 runtime's uncaught-error text from corrupting streamed stdout; independently check truncated streams, invalid compiler requests and malformed packed input.
 - Migrate formatted sources and generated interfaces to the 0.10.16 formatter's explicit `Int32`/`UInt32` spelling. Wire widths and serialization behavior are unchanged.
 - Refuse published-package verification with moonc older than 0.10.16, before fetching dependencies or compiling a consumer.
 - Raise the MoonBit toolchain baseline to 0.10.16 for the updated acceptance requirements, pinning compiler and core to `0.10.16+b1a0e846e`.

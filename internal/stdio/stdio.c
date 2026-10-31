@@ -37,3 +37,20 @@ int capnp_mbt_stdout_write(const unsigned char *data, int size) {
 }
 
 void capnp_mbt_exit(int code) { exit(code); }
+
+int capnp_mbt_stderr_write(const unsigned char *data, int size) {
+  if (size < 0) return -1;
+  int offset = 0;
+  while (offset < size) {
+#ifdef _WIN32
+    int count = _write(_fileno(stderr), data + offset,
+                       (unsigned int)(size - offset));
+#else
+    ssize_t count = write(STDERR_FILENO, data + offset, (size_t)(size - offset));
+#endif
+    if (count < 0 && errno == EINTR) continue;
+    if (count <= 0) return -1;
+    offset += (int)count;
+  }
+  return offset;
+}

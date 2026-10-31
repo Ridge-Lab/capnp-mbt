@@ -61,7 +61,10 @@ generates new bindings and runs the consumer on all four backends. The check
 verifies required distribution files and upstream hashes, builds the installed
 native/Node.js CLIs, compares binary stdin/stdout packing with the official
 fixture, and checks that an invalid compiler request cannot replace existing
-output. Release tag, checkout manifest and installed package versions must agree.
+output. Invalid requests and malformed packed input must exit nonzero, report
+on stderr and leave binary stdout empty; truncated streams preserve only their
+previously emitted valid frames. Release tag, checkout manifest and installed
+package versions must agree.
 
 ## Explicit boundaries
 

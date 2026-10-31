@@ -44,7 +44,7 @@ fn safe_output_path(path : String) -> Bool {
 }
 
 ///|
-fn main raise {
+fn run() -> Unit raise {
   let args = @stdio.args()
   let mut input : String? = None
   let mut output = "."
@@ -97,5 +97,12 @@ fn main raise {
     @fs.write_string_to_file(
       package_path, "import {\n  \"Ridge-Lab/capnp\",\n}\n",
     )
+  }
+}
+
+///|
+fn main {
+  run() catch {
+    error => @stdio.fail("capnpc-moonbit: \{error}")
   }
 }

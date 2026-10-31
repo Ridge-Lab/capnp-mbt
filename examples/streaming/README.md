@@ -39,7 +39,8 @@ before closing stdin or sending the next, catching buffered-read stalls.
 
 The final checks reject a truncated last frame and an oversized header. A valid
 prefix may already have produced output before a later error; consumers must
-check process exit status. This is per-message processing, not an all-or-nothing
+check process exit status. Error diagnostics go to stderr, never the binary
+stdout stream. This is per-message processing, not an all-or-nothing
 transaction across the whole stream. `reports.bin` can also be read by another
 Cap'n Proto consumer using `Report` from `examples/telemetry/schema/telemetry.capnp`.
 
