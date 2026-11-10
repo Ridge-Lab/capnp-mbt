@@ -40,3 +40,8 @@ project does not use the MoonBit SWE-AGI Cap'n Proto benchmark solution.
 
 Code and documentation were developed with AI assistance. The maintainer is
 responsible for reviewing, testing, explaining and maintaining the work.
+
+The standard-library verification driver reuses the maintainer's MIT-licensed
+[MoonStretch](https://github.com/Ridge-Lab/moonstretch) task/log/report pattern,
+with Cap'n Proto-specific checks. It is shared development infrastructure,
+not counted as a new serialization algorithm or an independent reference.

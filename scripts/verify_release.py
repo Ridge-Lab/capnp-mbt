@@ -65,7 +65,23 @@ CONSUMER = """fn main raise {
   decoder.finish()
   assert_eq(frames, [bytes, bytes])
   assert_eq(decoder.buffered_bytes(), 0)
-  println("Verified installed runtime: generics, AnyPointer, constants, packing, canonical copy and incremental framing")
+  let packed = @capnp.pack(bytes)
+  let packed_decoder = @capnp.PackedFrameDecoder::new(max_message_bytes=bytes.length(), max_frames_per_feed=2)
+  assert_eq(packed_decoder.feed(packed[:1].to_owned()), [])
+  assert_eq(packed_decoder.feed(packed[1:].to_owned() + packed), [bytes, bytes])
+  packed_decoder.finish()
+  packed_decoder.reset()
+  ignore(packed_decoder.feed(b"\\xff"))
+  try packed_decoder.finish() catch {
+    @capnp.InvalidMessage(_) => ()
+    _ => fail("incorrect packed EOF error")
+  } noraise { _ => fail("truncated packed EOF accepted") }
+  let bounded = @capnp.PackedFrameDecoder::new(max_frames_per_feed=2)
+  try bounded.feed(b"\\x00\\xff") catch {
+    @capnp.Limit(_) => ()
+    _ => fail("incorrect packed batch limit error")
+  } noraise { _ => fail("packed expansion limit ignored") }
+  println("Verified installed runtime: generics, AnyPointer, constants, canonical copy and bounded plain/packed streaming")
 }
 """
 
@@ -91,6 +107,7 @@ def verify_distribution(installed: Path) -> None:
         "examples/schema_compat/peer.py", "examples/telemetry/worker.py",
         "examples/streaming/main.mbt", "examples/streaming/peer.py",
         "benchmarks/main.mbt", "scripts/run_benchmarks.py",
+        "packed_stream.mbt", "scripts/verify.py", "scripts/verify_oracles.py",
         "fixtures/conformance.bin", "fixtures/conformance.packed.bin",
     )
     for name in required:

@@ -1,6 +1,6 @@
 # Development
 
-The 0.3.1 reproduction toolchain and CI configuration pin MoonBit
+The 0.4.0 reproduction toolchain and CI configuration pin MoonBit
 `0.10.16+b1a0e846e` with matching core. Check the workflow for the relevant
 commit's execution results. From the repository root:
 
@@ -8,12 +8,38 @@ commit's execution results. From the repository root:
 moon update
 moon fmt
 moon info
-moon check --target all --deny-warn
-moon test --target all --deny-warn
-moon build --target all --release
+python scripts/verify.py --profile quick --targets js wasm wasm-gc native
 ```
 
 Review generated `.mbti` diffs when changing public APIs; do not edit them by hand. All four backends run the same protocol tests. `tests/generated` and `examples/telemetry/generated` contain compiler output with handwritten tests alongside it.
+
+Use only installed backends locally; Windows without MSVC can select
+`--targets js wasm wasm-gc`. Unselected targets are not claimed as passed.
+`quick` checks formatting, compiler minimum, strict check/test/release build,
+the portable example and verification failure contracts. `full` adds independent
+compiler/peer exchange and a benchmark smoke run:
+
+```sh
+python -m pip install -r examples/telemetry/requirements.txt
+python scripts/verify.py --profile full --targets js native --capnp capnp
+```
+
+Both profiles write a new directory under `work/verification`, containing
+`summary.json`, `summary.sha256`, command logs and SHA-256 hashes. The report
+fingerprints tracked and non-ignored source before/after the run and fails if
+it changed. Missing tools, timeouts, failed dependencies and missing artifacts
+fail the run; quick's external-oracle check is explicitly skipped. Counts are
+commands, not individual assertions or independent test cases. `--moon`,
+`--node`, `--capnp`, `--timeout` and `--output` make the environment explicit.
+The driver installs no toolchain and keeps child temporary files in its run
+directory. Do not run two builds against the same checkout concurrently.
+
+The full profile compiles eleven schemas with official 1.5.0, compares formatted
+generated APIs without rewriting source, checks eleven canonical fixtures,
+executes both peers and verifies plain/packed streams. Source archive hashing
+is additionally enforced in CI. Keep each implementation change, its regression
+and its relevant API documentation together; the evidence is the logs and
+independent outputs, not a self-assigned rubric score.
 
 ## External oracles
 
@@ -34,7 +60,7 @@ moon run --target native examples/roundtrip
 
 Linux CI uses the system C compiler. MoonBit `0.10.16+b1a0e846e` requires an MSVC-compatible compiler/linker and Windows SDK for Windows native builds; run native commands from an x64 Visual Studio developer shell with the C++ build tools installed. The Node.js request-file path and JS/Wasm tests do not need a C compiler.
 
-The 0.3.0 local benchmark used MoonBit 0.10.14 with LLVM-MinGW 20261006 and `CCC_OVERRIDE_OPTIONS=+-D_CRT_RAND_S`. That is a historical environment record, not the Windows native setup for 0.3.1.
+The 0.3.0 local benchmark used MoonBit 0.10.14 with LLVM-MinGW 20261006 and `CCC_OVERRIDE_OPTIONS=+-D_CRT_RAND_S`. That is a historical environment record, not the Windows native setup for 0.4.0.
 
 ## Layout
 
@@ -57,7 +83,7 @@ and [benchmark methodology](../benchmarks/README.md) for full reproductions.
 After publishing to Mooncakes, run this from the matching release checkout:
 
 ```sh
-python scripts/verify_release.py --release-tag v0.3.1
+python scripts/verify_release.py --release-tag v0.4.0
 ```
 
 The script requires Python 3.12, MoonBit `0.10.16+b1a0e846e`, Node.js 24, a native C compiler,

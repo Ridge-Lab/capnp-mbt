@@ -20,6 +20,8 @@ enum Operation {
   Pack
   Unpack
   OpaqueCopy
+  FramedStream
+  PackedStream
 }
 
 ///|
@@ -31,6 +33,8 @@ fn Operation::name(self : Operation) -> String {
     Pack => "pack"
     Unpack => "unpack"
     OpaqueCopy => "opaque_copy"
+    FramedStream => "framed_stream"
+    PackedStream => "packed_stream"
   }
 }
 
@@ -117,6 +121,39 @@ fn opaque_copy(bytes : Bytes) -> Bytes raise @capnp.CapnpError {
 }
 
 ///|
+fn streamed_frame(
+  bytes : Bytes,
+  packed : Bool,
+) -> Bytes raise @capnp.CapnpError {
+  let frames : Array[Bytes] = []
+  if packed {
+    let decoder = @capnp.PackedFrameDecoder::new()
+    for pos = 0; pos < bytes.length(); pos = pos + 1024 {
+      frames.append(
+        decoder.feed(
+          bytes[pos:Int32::min(pos + 1024, bytes.length())].to_owned(),
+        ),
+      )
+    }
+    decoder.finish()
+  } else {
+    let decoder = @capnp.FrameDecoder::new()
+    for pos = 0; pos < bytes.length(); pos = pos + 1024 {
+      frames.append(
+        decoder.feed(
+          bytes[pos:Int32::min(pos + 1024, bytes.length())].to_owned(),
+        ),
+      )
+    }
+    decoder.finish()
+  }
+  guard frames.length() == 1 else {
+    raise @capnp.InvalidMessage("benchmark expected one frame")
+  }
+  frames[0]
+}
+
+///|
 // Constant-size observation of an output allocation; full correctness checks
 // are performed before measurement. This cost is included in all byte-producing
 // operations. The checksum is emitted and checked after every measured batch.
@@ -145,6 +182,8 @@ fn run_one(
     Pack => fingerprint(@capnp.pack(fixture.plain[variant]))
     Unpack => fingerprint(@capnp.unpack(fixture.packed[variant]))
     OpaqueCopy => fingerprint(opaque_copy(fixture.plain[variant]))
+    FramedStream => fingerprint(streamed_frame(fixture.plain[variant], false))
+    PackedStream => fingerprint(streamed_frame(fixture.packed[variant], true))
   }
 }
 
@@ -204,6 +243,8 @@ fn make_fixture(count : Int32) -> Fixture raise {
     validate_batch(bytes, samples, variant)
     let compressed = @capnp.pack(bytes)
     assert_eq(@capnp.unpack(compressed), bytes)
+    assert_eq(streamed_frame(compressed, true), bytes)
+    assert_eq(streamed_frame(bytes, false), bytes)
     let copy = opaque_copy(bytes)
     validate_batch(copy, samples, variant)
     assert_eq(

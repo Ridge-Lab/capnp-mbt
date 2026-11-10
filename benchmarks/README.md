@@ -32,6 +32,8 @@ The unchanged schema is [telemetry.capnp](../examples/telemetry/schema/telemetry
 | `pack` | Packing the prepared uncompressed message, including output allocation and fingerprint. |
 | `unpack` | Unpacking the prepared packed message, including output allocation and fingerprint. Parsing the unpacked message is excluded. |
 | `opaque_copy` | Fresh message reader and builder, deep copy through `root_pointer().set(...)`, `finish()` and output fingerprint. No generated schema is used during the copy. |
+| `framed_stream` | New `FrameDecoder`, feed one prepared message in at most 1 KiB chunks, EOF check, output fingerprint. Chunk copies are included. |
+| `packed_stream` | New `PackedFrameDecoder`, the same process on packed input, including unpacking, framing and output budgets. Chunk copies are included. |
 
 Every read starts with a fresh message and traversal budget. Timed loops include operation dispatch, checksum accumulation, allocation and any GC that occurs naturally. No process launch, compilation, filesystem I/O or JSON formatting is included. There is no forced GC or automatic outlier removal.
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0
+
+- Add incremental `PackedFrameDecoder` for fragmented and concatenated packed streams, including runs crossing message boundaries. Bound expanded frames and per-feed output bytes/count; retain explicit EOF, failed-state and reset behavior.
+- Extend the existing telemetry pipe example with packed input/output. The independent C++ peer checks ordered reports, interactive replies, truncation and hostile lengths in both modes.
+- Add deterministic packed-stream regressions across sparse/dense/zero/random words, 255-word run limits and 2 KiB chunk boundaries. Extend the existing benchmark with plain and packed incremental framing workloads, including checksum validation.
+- Use one verification entry point locally and in CI. Record source/toolchain identity, per-command logs and hashes, artifact hashes, failure/skip states and report digest; test failure propagation, missing artifacts/tools, stale reports, timeout and minimum compiler version.
+- Regenerate eleven schemas with official Cap'n Proto 1.5.0 without mutating checkout sources; retain unchanged upstream generics/AnyPointer/constants bidirectional exchange and eleven canonical comparisons. Extend the fresh published-package consumer to exercise the new packed API and limits.
+
 ## 0.3.1
 
 - Catch binary CLI failures at the entry point and write diagnostics to stderr before exiting nonzero. This prevents the Windows 0.10.16 runtime's uncaught-error text from corrupting streamed stdout; independently check truncated streams, invalid compiler requests and malformed packed input.

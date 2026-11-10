@@ -25,11 +25,12 @@ jobs:
           core-version: "0.10.16+b1a0e846e"
       - run: moon version --all
       - run: moon update
-      - run: moon fmt --check
-      - run: moon check --target ${{ matrix.target }} --deny-warn
-      - run: moon test --target ${{ matrix.target }} --deny-warn
-      - run: moon build --target ${{ matrix.target }} --release
-      - run: moon run --target ${{ matrix.target }} examples/roundtrip
+      - run: python scripts/verify.py --profile quick --targets ${{ matrix.target }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verification-linux-${{ matrix.target }}
+          path: work/verification/
   windows:
     runs-on: windows-latest
     strategy:
@@ -54,16 +55,23 @@ jobs:
         with:
           python-version: "3.12"
       - run: moon update
-      - run: moon fmt --check
-      - run: moon check --target ${{ matrix.target }} --deny-warn
-      - run: moon test --target ${{ matrix.target }} --deny-warn
-      - run: moon build --target ${{ matrix.target }} --release --deny-warn
-      - run: moon run --target ${{ matrix.target }} examples/roundtrip
+      - run: python scripts/verify.py --profile quick --targets ${{ matrix.target }}
       - run: python -m pip install -r examples/telemetry/requirements.txt
       - run: python examples/streaming/peer.py --jobs 128 --output work/stream-windows -- node _build/js/release/build/examples/streaming/streaming.js
         if: matrix.target == 'js'
       - run: python examples/streaming/peer.py --jobs 128 --output work/stream-windows-native -- _build/native/release/build/examples/streaming/streaming.exe
         if: matrix.target == 'native'
+      - run: python examples/streaming/peer.py --packed --jobs 128 --output work/stream-windows-packed -- node _build/js/release/build/examples/streaming/streaming.js --packed
+        if: matrix.target == 'js'
+      - run: python examples/streaming/peer.py --packed --jobs 128 --output work/stream-windows-native-packed -- _build/native/release/build/examples/streaming/streaming.exe --packed
+        if: matrix.target == 'native'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verification-windows-${{ matrix.target }}
+          path: |
+            work/verification/
+            work/stream-windows*/
   interoperability:
     runs-on: ubuntu-latest
     steps:
@@ -94,92 +102,15 @@ jobs:
       - run: capnp --version
       - run: python -m pip install -r examples/telemetry/requirements.txt
       - run: moon update
-      - run: moon build --target native --release cmd/capnpc-moonbit
-      - name: Reproduce committed generated API fixtures
-        run: |
-          moon run --target native cmd/capnpc-moonbit -- --request fixtures/conformance.request.bin --out tests/generated
-          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/advanced.request.bin --out tests/generated/advanced
-          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/names.request.bin --out tests/generated/names
-          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/generic.request.bin --out tests/generated/generic
-          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/brands.request.bin --out tests/generated/brands
-          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/growing.request.bin --out tests/generated/growing
-          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/collision-compat.request.bin --out tests/generated/collision_compat
-          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/long-text.request.bin --out tests/generated/long_text
-          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/upstream.request.bin --out tests/generated/upstream
-          moon run --target native cmd/capnpc-moonbit -- --request codegen/fixtures/compiler.request.bin --out tests/generated/compiler
-          moon fmt
-          git diff --exit-code -- tests/generated
-      - name: Generate types using the actual compiler plugin protocol
-        run: capnp compile -o./_build/native/release/build/cmd/capnpc-moonbit/capnpc-moonbit.exe:examples/telemetry/generated examples/telemetry/schema/telemetry.capnp
-      - name: Check regenerated code and examples
-        run: moon check --target native --deny-warn
-      - name: MoonBit to independent Python/C++ peer
-        run: |
-          mkdir -p work
-          moon run --target native examples/telemetry -- produce work/batch.bin
-          python examples/telemetry/worker.py work/batch.bin work/report.bin
-          moon run --target native examples/telemetry -- verify work/report.bin
-      - name: Official compiler reads MoonBit packed output
-        run: |
-          moon run --target native cmd/packing -- pack work/batch.bin work/batch.packed.bin
-          capnp decode --packed examples/telemetry/schema/telemetry.capnp Batch < work/batch.packed.bin
-      - name: Check a real compiler request on Node.js
-        run: moon run --target js cmd/capnpc-moonbit -- --request fixtures/conformance.request.bin --out work/generated
-      - name: Compile the unchanged upstream test and compiler schemas
-        run: |
-          capnp compile --no-standard-import -Ifixtures/upstream/capnproto-1.5.0 --src-prefix=fixtures/upstream/capnproto-1.5.0 -o./_build/native/release/build/cmd/capnpc-moonbit/capnpc-moonbit.exe:tests/generated/upstream fixtures/upstream/capnproto-1.5.0/capnp/test.capnp
-          capnp compile --no-standard-import -Ifixtures/upstream/capnproto-1.5.0 --src-prefix=fixtures/upstream/capnproto-1.5.0 -o./_build/native/release/build/cmd/capnpc-moonbit/capnpc-moonbit.exe:tests/generated/compiler fixtures/upstream/capnproto-1.5.0/capnp/schema.capnp
-          moon fmt
-          git diff --exit-code -- tests/generated/upstream tests/generated/compiler
-      - name: Compile valid schemas with colliding generated names
-        run: |
-          capnp compile -o./_build/native/release/build/cmd/capnpc-moonbit/capnpc-moonbit.exe:tests/generated/collision_compat codegen/fixtures/collision-compat.capnp
-          moon fmt
-          git diff --exit-code -- tests/generated/collision_compat
-      - name: Compile large Unicode Text constants and defaults
-        run: |
-          capnp compile -o./_build/native/release/build/cmd/capnpc-moonbit/capnpc-moonbit.exe:tests/generated/long_text codegen/fixtures/long-text.capnp
-          moon fmt
-          git diff --exit-code -- tests/generated/long_text
-      - name: Bidirectional generics AnyPointer and constants interoperability
-        run: |
-          python examples/schema_compat/peer.py prepare work/schema-compat
-          moon run --target native examples/schema_compat -- work/schema-compat
-          python examples/schema_compat/peer.py verify work/schema-compat
-          moon run --target js examples/schema_compat -- work/schema-compat
-          python examples/schema_compat/peer.py verify work/schema-compat
-      - name: Process fragmented multi-message streams with independent verification
-        run: |
-          moon build --target native --release examples/streaming
-          moon build --target js --release examples/streaming
-          python examples/streaming/peer.py --jobs 128 --output work/stream-native -- _build/native/release/build/examples/streaming/streaming.exe
-          python examples/streaming/peer.py --jobs 128 --output work/stream-js -- node _build/js/release/build/examples/streaming/streaming.js
-      - name: Check benchmark execution and raw timing validation
-        run: python scripts/run_benchmarks.py --targets native js --samples 1 32 --round-ms 5 --warmup-ms 5 --rounds 3 --output work/benchmark-smoke.json
-      - name: Reproduce canonical encoding with the official converter
-        run: |
-          for source in fixtures/conformance.bin fixtures/conformance.segmented.bin; do
-            capnp convert binary:canonical < "$source" > work/canonical.bin
-            cmp fixtures/conformance.canonical.bin work/canonical.bin
-          done
-          for canonical in fixtures/upstream/oracle-1.5.0/*.canonical.bin; do
-            source="${canonical%.canonical.bin}.bin"
-            capnp convert binary:canonical < "$source" > work/canonical.bin
-            cmp "$canonical" work/canonical.bin
-          done
+      - name: Reproduce runtime, compiler protocol, both peers and benchmarks
+        run: python scripts/verify.py --profile full --targets js native
       - name: Install the published package in a fresh consumer
         if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: python scripts/verify_release.py
+        run: python scripts/verify.py --profile release --version 0.4.0
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: interoperability-results
-          path: |
-            work/batch.bin
-            work/report.bin
-            work/batch.packed.bin
-            work/schema-compat/
-            work/stream-native/
-            work/stream-js/
-            work/benchmark-smoke.json
+          path: work/verification/

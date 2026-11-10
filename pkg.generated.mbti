@@ -101,6 +101,15 @@ pub fn Message::root(Self) -> StructReader raise CapnpError
 pub fn Message::root_pointer(Self) -> PointerReader
 pub fn Message::segment_count(Self) -> Int32
 
+pub struct PackedFrameDecoder {
+  // private fields
+}
+pub fn PackedFrameDecoder::buffered_bytes(Self) -> Int32
+pub fn PackedFrameDecoder::feed(Self, Bytes) -> Array[Bytes] raise CapnpError
+pub fn PackedFrameDecoder::finish(Self) -> Unit raise CapnpError
+pub fn PackedFrameDecoder::new(max_segments? : Int32, max_message_bytes? : Int32, max_output_bytes_per_feed? : Int32, max_frames_per_feed? : Int32) -> Self raise CapnpError
+pub fn PackedFrameDecoder::reset(Self) -> Unit
+
 pub struct PointerBuilder {
   // private fields
 }

@@ -101,7 +101,7 @@ fn measure(
   let packed_bytes = fixture.packed[0].length()
   let input_bytes = match operation {
     Encode => 0
-    Unpack => packed_bytes
+    Unpack | PackedStream => packed_bytes
     _ => wire_bytes
   }
   let rate = 1000000.0 * iterations.to_double() / median_us
@@ -157,7 +157,17 @@ fn main raise {
     return
   }
   let fixture = make_fixture(count)
-  for operation in [Encode, SelectedRead, FullScan, Pack, Unpack, OpaqueCopy] {
+  for
+    operation in [
+      Encode,
+      SelectedRead,
+      FullScan,
+      Pack,
+      Unpack,
+      OpaqueCopy,
+      FramedStream,
+      PackedStream,
+    ] {
     measure(fixture, operation, round_ms, warmup_ms, rounds)
   }
 }

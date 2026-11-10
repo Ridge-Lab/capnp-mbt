@@ -1,6 +1,6 @@
 # Compatibility and limits
 
-Version 0.3.1 uses **Cap'n Proto 1.5.0** as its serialization baseline. The
+Version 0.4.0 uses **Cap'n Proto 1.5.0** as its serialization baseline. The
 [standard target](SERIALIZATION-STANDARD.md) defines the endpoint; the
 [unchanged-schema example](../examples/schema_compat/README.md) records a
 reproducible interoperability case. This is not a claim that every schema or
@@ -12,7 +12,8 @@ every feature of the C++ SDK has been tested.
 single-far and double-far pointers. It checks framing immediately and validates
 objects lazily on access. Success does not validate every reachable object.
 `frame_length` identifies partial and concatenated frames. Packed input must
-first pass through `unpack`; packing is not auto-detected.
+first pass through `unpack`, or use `PackedFrameDecoder` for a stream; packing
+is not auto-detected.
 
 `FrameDecoder` accepts arbitrary chunks of standard unpacked frames. `feed`
 returns complete frames and retains only the unfinished tail. Segment counts,
@@ -25,6 +26,26 @@ The limit applies to each frame and logical tail-buffer length, not the total
 size of a returned batch or peak process memory. Framing alone does not validate
 object pointers. The implementation scans each table once and appends body
 bytes once, avoiding repeated parsing or shifting of a growing prefix.
+
+`PackedFrameDecoder` separates packed framing with the same per-message limits
+and failed/finished/reset lifecycle. It retains packing state across arbitrary
+chunk boundaries, including a raw run spanning several messages. EOF must end
+both a packing token and a frame: a complete frame followed by a missing run
+length is still an error. Expanded chunks are at most 2 KiB, plus one 8-byte
+partial word and the unfinished frame; the whole stream is never expanded.
+`buffered_bytes()` counts expanded bytes in the unfinished frame, excluding
+the partial word. Returned frames are unpacked and still need pointer validation.
+
+Packing can amplify two bytes into 2 KiB. To bound accumulated output, the
+decoder also defaults to **64 MiB of returned frames and 4,096 frames per feed**
+(`max_output_bytes_per_feed`, `max_frames_per_feed`). Exceeding either rejects
+that feed and requires reset; reduce input chunk size or explicitly raise the
+limits for a trusted large batch. These are per-call budgets, not lifetime
+limits. An individual completed frame can include buffered bytes from previous
+calls, so the byte budget should normally be at least the frame limit. These
+logical limits exclude input bytes, caller-held prior results, allocator/GC
+overhead and the temporary completed-frame batch from a 2 KiB expansion chunk;
+they are not a hard process RSS guarantee.
 
 The writer emits one segment and inline-composite struct lists. `finish()`
 returns a snapshot with stream framing. `canonicalize(message)` instead returns
@@ -102,6 +123,7 @@ pipelining and distributed capability lifetime management are outside this SDK.
 | `read_message` | 8,388,608 traversal words; depth 64; 512 segments | Shared across views; repeated dereferences and far-pointer inspection consume budget |
 | `frame_length` | 64 MiB | Maximum framed message size |
 | `FrameDecoder::new` | 64 MiB/frame; 512 segments | Unfinished frame retained between feed calls; returned batches are controlled by the caller's chunk size |
+| `PackedFrameDecoder::new` | 64 MiB/frame; 512 segments; 64 MiB and 4,096 returned frames/feed | Packing state and bounded expansion chunks; per-feed byte/count budgets prevent unlimited batch amplification |
 | `unpack` | 64 MiB | Maximum decompressed bytes |
 | `Builder::new` | 8,388,608 words | Arena allocation, including the root pointer |
 | Opaque deep copy | 8,388,608 words; depth 64 | Independent copy budget, in addition to reader and destination limits |

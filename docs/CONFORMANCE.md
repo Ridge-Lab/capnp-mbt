@@ -20,6 +20,7 @@ percentage-complete estimate or an assertion of exhaustive protocol coverage.
 | Multiple segments, near/single-far/double-far pointers | [reader oracle tests](../reader_oracle_test.mbt), [pointer checks](../reader_security_test.mbt), [opaque copy](../copy_test.mbt) | Official segmented fixture; Python/C++ creates small-segment messages; double-far boundary vectors are project-authored |
 | Packed encoding and partial/concatenated frames | [packed tests](../packed_test.mbt), [stream tests](../stream_test.mbt) | Official packed fixture is decoded and re-encoded identically; CI uses `capnp decode --packed` on MoonBit output |
 | Bounded incremental standard framing and EOF/error state | [decoder tests](../stream_decoder_test.mbt), [stream processor](../examples/streaming) | Independent C++ producer writes segmented messages through irregular pipe chunks; native/JS filters return reports independently decoded and verified in Python/C++ |
+| Packed streaming across arbitrary fragments, zero/raw runs, expanded frame and batch limits | [packed decoder regressions](../packed_stream_test.mbt), [packed pipe example](../examples/streaming) | C++ generates packed segmented input and independently reads packed replies; seeded byte patterns also compare incremental output with batch unpacking |
 | Compatible field/list evolution and unknown enum values | [reader oracle tests](../reader_oracle_test.mbt), [reader checks](../reader_security_test.mbt), [enum tests](../tests/generated/names/names_test.mbt) | Official primitive/pointer-list inputs; project-authored old/new struct cases; generic enum ordinal `40000` round-trips through Python/C++ |
 | Existing old/new protocol defaults and unknown-field forwarding | [upstream evolution tests](../tests/generated/upstream/evolution_test.mbt) | Original `TestOldVersion`/`TestNewVersion` and old/new union types exchange values with C++; opaque copying retains new fields even through the older generated view |
 | Nested unions, interleaved groups and unknown discriminant guards | [upstream evolution tests](../tests/generated/upstream/evolution_test.mbt) | Original `TestUnionInUnion` and `TestInterleavedGroups` are independently checked; a C++-generated discriminant unknown to a smaller view cannot expose a known member and survives opaque copying |
@@ -29,6 +30,21 @@ percentage-complete estimate or an assertion of exhaustive protocol coverage.
 | Valid schema names colliding with generated Reader/Builder, list or generic names | [collision regression](../tests/generated/collision_compat/collision_test.mbt) | [Official-compiler input](../codegen/fixtures/collision-compat.capnp) retains the original names; generated APIs read/write each distinct declaration and field |
 
 ## Reproduce
+
+The local/CI entry point is `python scripts/verify.py --profile quick --targets js`.
+Use `--profile full --targets js native` with official `capnp` 1.5.0 and
+`pycapnp==2.2.1` for independently regenerated schemas, bidirectional peers and
+canonical comparisons. [Development](DEVELOPMENT.md) explains logs, source and
+artifact hashes, explicit skips, and the commands below for individual checks.
+
+The [verification failure tests](../scripts/verify_harness_test.py) deliberately
+return exit 23, omit a result, supply a stale report, remove a required executable
+and time out; all must fail the enclosing run. Packed decoding additionally
+tests `00 ff`, which expands two bytes into 256 minimal frame headers, against
+a two-frame output budget. This prevents a new streaming API from accepting
+unbounded output amplification merely because each individual frame is small.
+These checks demonstrate error detection; they do not prove the absence of all
+bugs or replace independent protocol evidence.
 
 Use MoonBit `0.10.16+b1a0e846e` with matching core. Node.js 24 and Python 3.12
 are configured in CI. The generated bindings are committed; the first commands need no `capnp`

@@ -6,7 +6,7 @@
 
 适合已有 Cap'n Proto 协议的服务、数据采集程序、离线处理工具和二进制文件消费者接入 MoonBit。协议定义、字段布局和已有数据格式可以继续使用，业务代码无需手写偏移或经 JSON 中转。这里实现的是序列化层；网络传输和 RPC 不在本版本范围内。
 
-**0.3.1 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer 和常量均纳入序列化支持，使用未经删改的官方 `test.capnp` 验证。[标准目标](docs/SERIALIZATION-STANDARD.md)与[验证矩阵](docs/CONFORMANCE.md)将兼容承诺对应到测试、独立参考实现和复现步骤。
+**0.4.0 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer 和常量均纳入序列化支持，使用未经删改的官方 `test.capnp` 验证。[标准目标](docs/SERIALIZATION-STANDARD.md)与[验证矩阵](docs/CONFORMANCE.md)将兼容承诺对应到测试、独立参考实现和复现步骤。
 
 ## 可运行的完整流程
 
@@ -22,6 +22,10 @@
 
 0.3.0 新增 [`FrameDecoder`](stream.mbt) 和[流式采集处理示例](examples/streaming/README.md)。示例从管道分块读取多条消息，逐条生成统计结果，由独立 Python/C++ 端核验；0.3.0 的本地复现处理了 8,192 条消息、135,036,992 字节输入，每次读取最多 8 KiB，单帧上限 1 MiB。这个例子不需要把完整输入流放进内存。端到端检查覆盖交互回复、极端浮点值、截断和恶意长度声明。
 
+0.4.0 增加 [`PackedFrameDecoder`](packed_stream.mbt)：压缩日志和管道输入可以边解包边分帧，不再要求先把整条压缩流展开。状态机保留跨分块的 tag、非零字节和连续段，临时展开块最多 2 KiB；单帧大小、每次返回的字节数和帧数分别设限，避免小输入放大成大量结果。流式示例的 `--packed` 模式与 C++ 双向交换消息。压缩比和吞吐量取决于数据，项目不声称优于官方实现。
+
+开发与 CI 使用同一入口：`python scripts/verify.py --profile quick --targets js`；完整外部对照使用 `--profile full --targets js native`。每次生成独立日志、源码指纹、工具链记录、报告及 SHA-256，失败或缺少工具不会计为通过。[验证矩阵](docs/CONFORMANCE.md)给出功能、独立参考和失败检查之间的对应关系。
+
 ## 安装与快速运行
 
 需要 MoonBit **0.10.16 或更新版本**。当前复现工具链及 CI 配置固定为 `0.10.16+b1a0e846e`，使用相同版本的 core；执行结果以对应提交的工作流记录为准。运行库支持 `wasm`、`wasm-gc`、`js`、`native`，无需 C++ Cap'n Proto 动态库。
@@ -29,7 +33,7 @@
 在自己的 MoonBit 项目中添加依赖：
 
 ```sh
-moon add Ridge-Lab/capnp@0.3.1
+moon add Ridge-Lab/capnp@0.4.0
 ```
 
 包的 `moon.pkg` 中导入：
@@ -43,7 +47,7 @@ import {
 直接运行本仓库的例子：
 
 ```sh
-git clone --branch v0.3.1 https://github.com/Ridge-Lab/capnp-mbt
+git clone --branch v0.4.0 https://github.com/Ridge-Lab/capnp-mbt
 cd capnp-mbt
 moon update
 moon run --target js examples/roundtrip
@@ -100,7 +104,7 @@ assert_eq(received.get_samples().get(0).get_value(), 21.5)
 | 泛型与常量 | 显式及祖先作用域绑定、嵌套泛型、别名、未绑定参数；标量、列表、结构体及泛型常量 |
 | 动态负载 | AnyPointer / AnyStruct / AnyList 视图与写入；保留未知字段的深拷贝，失败时回滚目标 |
 | 帧和指针 | 标准分段帧、近指针、单跳和双跳 far pointer 的读取；writer 生成单段帧 |
-| 压缩与流 | 标准 packed 编解码；`frame_length` 判断边界，`FrameDecoder` 增量处理碎片输入与串联标准帧 |
+| 压缩与流 | 标准 packed 编解码；`FrameDecoder` / `PackedFrameDecoder` 分别增量处理普通 / packed 帧，支持任意碎片输入、串联帧及 EOF 校验 |
 | Canonical 格式 | `canonicalize` 生成无 segment table 的 canonical segment，与官方转换器输出比较 |
 | 防护 | 指针越界检查、共享遍历预算、嵌套深度限制、段数限制、解包和 writer 分配上限 |
 | 演进 | 缺失字段默认值、额外字段跳过、未知 enum 值保留、兼容的 list / struct 扩展 |

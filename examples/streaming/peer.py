@@ -62,7 +62,7 @@ def readings(job: int) -> list[tuple[float, str]]:
     return result
 
 
-def encode(job: int) -> bytes:
+def encode(job: int, packed: bool = False) -> bytes:
     values = readings(job)
     batch = SCHEMA.Batch.new_message(num_first_segment_words=1)
     batch.jobId = BASE_ID + job
@@ -72,13 +72,14 @@ def encode(job: int) -> bytes:
         samples[index].timestampNs = 1792281600000000000 + index * 1000000000
         samples[index].value = value
         samples[index].quality = quality
-    return batch.to_bytes()
+    return batch.to_bytes_packed() if packed else batch.to_bytes()
 
 
-def verify(path: Path, jobs: int) -> None:
+def verify(path: Path, jobs: int, packed: bool = False) -> None:
     count = 0
     with path.open("rb") as stream:
-        for report in SCHEMA.Report.read_multiple(stream):
+        read = SCHEMA.Report.read_multiple_packed if packed else SCHEMA.Report.read_multiple
+        for report in read(stream):
             assert count < jobs, "processor returned extra messages"
             readings_for_job = readings(count)
             values = [value for value, quality in readings_for_job
@@ -108,7 +109,7 @@ def verify(path: Path, jobs: int) -> None:
     print(f"Verified {count} ordered reports with independent C++ decoding and Python calculations")
 
 
-def verify_interactive(command: list[str]) -> None:
+def verify_interactive(command: list[str], packed: bool = False) -> None:
     responses: queue.Queue[bytes | BaseException] = queue.Queue()
     with tempfile.TemporaryFile() as errors:
         processor = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=errors)
@@ -124,6 +125,12 @@ def verify_interactive(command: list[str]) -> None:
                         result.extend(part)
                     return bytes(result)
                 for _ in range(2):
+                    if packed:
+                        # The C++ packed reader owns protocol parsing; convert
+                        # only its completed value for the shared assertions.
+                        report = SCHEMA.Report.read_packed(processor.stdout)
+                        responses.put(report.as_builder().to_bytes())
+                        continue
                     header = read_exact(8)
                     segments = int.from_bytes(header[:4], "little") + 1
                     assert 1 <= segments <= 512
@@ -139,7 +146,7 @@ def verify_interactive(command: list[str]) -> None:
             reader.start()
             assert processor.stdin is not None
             for job in range(2):
-                processor.stdin.write(encode(job))
+                processor.stdin.write(encode(job, packed))
                 processor.stdin.flush()
                 # Do not send the next request or close stdin before a reply.
                 reply = responses.get(timeout=10)
@@ -158,8 +165,8 @@ def verify_interactive(command: list[str]) -> None:
     print("Received two separate replies while stdin remained open")
 
 
-def exercise(command: list[str], jobs: int, output: Path) -> None:
-    verify_interactive(command)
+def exercise(command: list[str], jobs: int, output: Path, packed: bool = False) -> None:
+    verify_interactive(command, packed)
     output.mkdir(parents=True, exist_ok=True)
     replies = output / "reports.bin"
     with replies.open("wb") as sink, tempfile.TemporaryFile() as errors:
@@ -173,7 +180,7 @@ def exercise(command: list[str], jobs: int, output: Path) -> None:
                 pattern = (1, 3, 17, 4093, 8191)
                 chunk_index = 0
                 for job in range(jobs):
-                    message = encode(job)
+                    message = encode(job, packed)
                     input_bytes += len(message)
                     cursor = 0
                     while cursor < len(message):
@@ -203,19 +210,21 @@ def exercise(command: list[str], jobs: int, output: Path) -> None:
             processor.wait()
             writer.join(timeout=5)
             raise
-    verify(replies, jobs)
+    verify(replies, jobs, packed)
     print(f"Processed {input_bytes} input bytes with 8 KiB reads and a 1 MiB frame limit")
 
     # End-of-stream truncation must be detected, including after a valid prefix.
-    truncated = subprocess.run(command, input=encode(0) + encode(1)[:-1],
+    truncated = subprocess.run(command, input=encode(0, packed) + encode(1, packed)[:-1],
                                capture_output=True, timeout=30)
     assert truncated.returncode != 0, "truncated final frame was silently accepted"
     assert truncated.stderr, "truncation must report a diagnostic on stderr"
     prefix = output / "prefix-before-error.bin"
     prefix.write_bytes(truncated.stdout)
-    verify(prefix, 1)
+    verify(prefix, 1, packed)
     # Reject huge declarations from the header; do not wait to allocate payload.
     huge_header = (0).to_bytes(4, "little") + (0xFFFFFFFF).to_bytes(4, "little")
+    if packed:
+        huge_header = b"\xf0\xff\xff\xff\xff"
     invalid = subprocess.run(command, input=huge_header, capture_output=True, timeout=30)
     assert invalid.returncode != 0 and not invalid.stdout
     assert invalid.stderr, "oversized frame must report a diagnostic on stderr"
@@ -226,6 +235,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--jobs", type=int, default=128)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--packed", action="store_true", help="Use C++ packed input/output with processor --packed")
     parser.add_argument("processor", nargs=argparse.REMAINDER,
                         help="Command following --, e.g. node path/to/streaming.js")
     args = parser.parse_args()
@@ -236,7 +246,7 @@ def main() -> None:
         command = command[1:]
     if not command:
         parser.error("a processor command is required after --")
-    exercise(command, args.jobs, args.output)
+    exercise(command, args.jobs, args.output, args.packed)
 
 
 if __name__ == "__main__":

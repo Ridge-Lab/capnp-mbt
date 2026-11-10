@@ -18,6 +18,7 @@ From the repository root, with MoonBit `0.10.16+b1a0e846e`, Node.js 24 and Pytho
 python -m pip install -r examples/telemetry/requirements.txt
 moon build --target js --release examples/streaming
 python examples/streaming/peer.py --jobs 128 --output work/stream-js -- node _build/js/release/build/examples/streaming/streaming.js
+python examples/streaming/peer.py --packed --jobs 128 --output work/stream-js-packed -- node _build/js/release/build/examples/streaming/streaming.js --packed
 moon build --target native --release examples/streaming
 python examples/streaming/peer.py --jobs 128 --output work/stream-native -- _build/native/release/build/examples/streaming/streaming.exe
 ```
@@ -44,5 +45,11 @@ stdout stream. This is per-message processing, not an all-or-nothing
 transaction across the whole stream. `reports.bin` can also be read by another
 Cap'n Proto consumer using `Report` from `examples/telemetry/schema/telemetry.capnp`.
 
-The filter accepts unpacked standard frames. It does not auto-detect packed
-data, add a network protocol, implement RPC, or claim external production usage.
+`--packed` switches both stdin and stdout to packed messages. The same schema,
+computation and independent assertions apply; C++ produces and consumes packed
+values directly. `PackedFrameDecoder` retains incomplete packing tokens and
+expands at most 2 KiB at a time into the standard framer, with a 1 MiB expanded
+frame limit and default 64 MiB/4,096-frame output budgets per feed. The filter
+still reads at most 8 KiB at a time. It neither auto-detects the encoding nor
+implements RPC. Packing is useful when the existing producer already sends
+packed logs; it does not imply third-party deployment or a throughput advantage.

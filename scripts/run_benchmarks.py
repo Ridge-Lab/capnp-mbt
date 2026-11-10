@@ -21,7 +21,7 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OPERATIONS = {"encode", "selected_read", "full_scan", "pack", "unpack", "opaque_copy"}
+OPERATIONS = {"encode", "selected_read", "full_scan", "pack", "unpack", "opaque_copy", "framed_stream", "packed_stream"}
 
 
 def bounded_integer(minimum: int, maximum: int):
