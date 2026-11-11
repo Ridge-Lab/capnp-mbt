@@ -14,6 +14,7 @@ test "legal schema names survive wrapper generic constant and field collisions" 
   root.init_root_field(1).set(0, 90U)
   root.init_root_field_f10(1).set(0, 100U)
   root.init_root_field_f10_f11(1).set(0, 110U)
+  root.set_shared_state(Ready)
   let read = @collision_compat.UsesReader::from_message(
     @capnp.read_message(message.finish()),
   )
@@ -32,5 +33,6 @@ test "legal schema names survive wrapper generic constant and field collisions" 
   assert_eq(read.get_root_field().get(0), 90U)
   assert_eq(read.get_root_field_f10().get(0), 100U)
   assert_eq(read.get_root_field_f10_f11().get(0), 110U)
+  assert_eq(read.get_shared_state().to_raw(), 1U)
   assert_eq(@collision_compat.const_values().get(1), 4U)
 }

@@ -60,7 +60,7 @@ moon run --target native examples/roundtrip
 
 Linux CI uses the system C compiler. MoonBit `0.10.20+65efd5b93` requires an MSVC-compatible compiler/linker and Windows SDK for Windows native builds; run native commands from an x64 Visual Studio developer shell with the C++ build tools installed. The Node.js request-file path and JS/Wasm tests do not need a C compiler.
 
-The 0.3.0 local benchmark used MoonBit 0.10.14 with LLVM-MinGW 20261006 and `CCC_OVERRIDE_OPTIONS=+-D_CRT_RAND_S`. That is a historical environment record, not the Windows native setup for 0.4.1.
+The 0.3.0 local benchmark used MoonBit 0.10.14 with LLVM-MinGW 20261006 and `CCC_OVERRIDE_OPTIONS=+-D_CRT_RAND_S`. That is a historical environment record, not the Windows native setup for 0.4.2.
 
 ## Layout
 
@@ -83,7 +83,7 @@ and [benchmark methodology](../benchmarks/README.md) for full reproductions.
 After publishing to Mooncakes, run this from the matching release checkout:
 
 ```sh
-python scripts/verify_release.py --release-tag v0.4.1
+python scripts/verify_release.py --release-tag v0.4.2
 ```
 
 The script requires Python 3.12, MoonBit `0.10.20+65efd5b93`, Node.js 24, a native C compiler,

@@ -221,6 +221,19 @@ def exercise(command: list[str], jobs: int, output: Path, packed: bool = False) 
     prefix = output / "prefix-before-error.bin"
     prefix.write_bytes(truncated.stdout)
     verify(prefix, 1, packed)
+    if packed:
+        # A valid alternative encoding sends each word as a dense token with
+        # no additional raw words. Its final count byte is mandatory.
+        plain = encode(1)
+        dense = b"".join(b"\xff" + plain[i:i + 8] + b"\x00" for i in range(0, len(plain), 8))
+        assert SCHEMA.Batch.from_bytes_packed(dense).jobId == BASE_ID + 1
+        cut = subprocess.run(command, input=encode(0, True) + dense[:-1],
+                             capture_output=True, timeout=30)
+        assert cut.returncode != 0 and cut.stderr
+        prefix = output / "before-incomplete-dense-token.bin"
+        prefix.write_bytes(cut.stdout)
+        verify(prefix, 1, True)
+        print("Rejected incomplete dense token before delivering its report")
     # Reject huge declarations from the header; do not wait to allocate payload.
     huge_header = (0).to_bytes(4, "little") + (0xFFFFFFFF).to_bytes(4, "little")
     if packed:

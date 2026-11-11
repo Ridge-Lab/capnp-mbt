@@ -8,6 +8,8 @@ import {
 // Values
 pub fn generate(Bytes) -> Array[GeneratedFile] raise CodegenError
 
+pub fn generate_with_manifest(Bytes) -> (Array[GeneratedFile], String) raise CodegenError
+
 // Errors
 pub(all) suberror CodegenError {
   InvalidRequest(String)

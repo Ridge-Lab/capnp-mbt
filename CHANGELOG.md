@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.2
+
+- Defer delivery of frames ending inside a packed dense run until its required count and all declared raw bytes have arrived. Keep a maximum of 256 words for an unfinished run. The official 1.5.0 format and Python/C++ pipe peer reproduce the truncated-final-word case.
+- Generate compilable bindings for shared enum schemas using MoonBit-reserved names such as `Int32`, `BytesView` and `FuncRef`. `generate_with_manifest` exposes the matching package manifest; the CLI omits unused runtime imports for enum and scalar-constant-only schemas.
+
 ## 0.4.1
 
 - Support MoonBit 0.10.20 strict builds and the 0.10.16 minimum with explicit implementations of the existing Debug and Eq traits. The two compilers use different derive syntax.

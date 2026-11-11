@@ -1,6 +1,6 @@
 # Compatibility and limits
 
-Version 0.4.1 uses **Cap'n Proto 1.5.0** as its serialization baseline. The
+Version 0.4.2 uses **Cap'n Proto 1.5.0** as its serialization baseline. The
 [standard target](SERIALIZATION-STANDARD.md) defines the endpoint; the
 [unchanged-schema example](../examples/schema_compat/README.md) records a
 reproducible interoperability case. This is not a claim that every schema or
@@ -30,11 +30,12 @@ bytes once, avoiding repeated parsing or shifting of a growing prefix.
 `PackedFrameDecoder` separates packed framing with the same per-message limits
 and failed/finished/reset lifecycle. It retains packing state across arbitrary
 chunk boundaries, including a raw run spanning several messages. EOF must end
-both a packing token and a frame: a complete frame followed by a missing run
-length is still an error. Expanded chunks are at most 2 KiB, plus one 8-byte
-partial word and the unfinished frame; the whole stream is never expanded.
+both a packing token and a frame. A frame ending inside a dense run becomes
+visible only once its count byte and declared payload have arrived. A short
+final token cannot expose a message before EOF rejection. The longest pending
+token is 2 KiB (256 words), independent of the stream length.
 `buffered_bytes()` counts expanded bytes in the unfinished frame, excluding
-the partial word. Returned frames are unpacked and still need pointer validation.
+an incomplete packing token. Returned frames are unpacked and still need pointer validation.
 
 Packing can amplify two bytes into 2 KiB. To bound accumulated output, the
 decoder also defaults to **64 MiB of returned frames and 4,096 frames per feed**

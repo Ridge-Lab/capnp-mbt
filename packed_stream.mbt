@@ -3,7 +3,7 @@ priv enum PackedStage {
   Tag
   Word(Int32, Int32)
   Run(Int32)
-  Raw(Int32)
+  Raw(Int32, Array[Byte])
 }
 
 ///|
@@ -105,22 +105,31 @@ pub fn PackedFrameDecoder::feed(
         }
         if index < 8 {
           self.stage = Word(tag, index)
+        } else if tag == 0 || tag == 255 {
+          // A run-length byte is part of this token, even when its value is
+          // zero. Its first word alone must never release a frame to a caller.
+          self.stage = Run(tag)
         } else {
-          if pending.length() > 2040 {
-            produced = self.collect(pending, outputs, produced)
-            pending.clear()
-          }
           pending.append(self.word)
-          self.stage = if tag == 0 || tag == 255 { Run(tag) } else { Tag }
+          self.stage = Tag
         }
       }
       Run(tag) => {
         let size = chunk[pos].to_int() * 8
         pos += 1
-        if tag == 255 {
-          self.stage = if size == 0 { Tag } else { Raw(size) }
+        if size == 0 {
+          pending.append(self.word)
+          self.stage = Tag
+        } else if tag == 255 {
+          // One dense token is at most 256 words. Commit it atomically,
+          // including when its payload spans chunks or multiple messages.
+          if !pending.is_empty() {
+            produced = self.collect(pending, outputs, produced)
+            pending.clear()
+          }
+          self.stage = Raw(size, self.word.copy())
         } else {
-          for _ in 0..<size {
+          for _ in 0..<(size + 8) {
             pending.push(0)
             if pending.length() == 2048 {
               produced = self.collect(pending, outputs, produced)
@@ -130,16 +139,18 @@ pub fn PackedFrameDecoder::feed(
           self.stage = Tag
         }
       }
-      Raw(remaining) => {
-        let size = Int32::min(
-          remaining,
-          Int32::min(chunk.length() - pos, 2048 - pending.length()),
-        )
+      Raw(remaining, token) => {
+        let size = Int32::min(remaining, chunk.length() - pos)
         for i in 0..<size {
-          pending.push(chunk[pos + i])
+          token.push(chunk[pos + i])
         }
         pos += size
-        self.stage = if size == remaining { Tag } else { Raw(remaining - size) }
+        if size == remaining {
+          produced = self.collect(token, outputs, produced)
+          self.stage = Tag
+        } else {
+          self.stage = Raw(remaining - size, token)
+        }
       }
     }
     if pending.length() == 2048 {
@@ -186,7 +197,7 @@ pub fn PackedFrameDecoder::reset(self : PackedFrameDecoder) -> Unit {
 }
 
 ///|
-/// Expanded bytes of the unfinished frame, excluding the partial 8-byte word.
+/// Expanded bytes of the unfinished frame, excluding an incomplete packed token.
 pub fn PackedFrameDecoder::buffered_bytes(self : PackedFrameDecoder) -> Int32 {
   self.frames.buffered_bytes()
 }

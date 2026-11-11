@@ -6,7 +6,9 @@
 
 适合已有 Cap'n Proto 协议的服务、数据采集程序、离线处理工具和二进制文件消费者接入 MoonBit。协议定义、字段布局和已有数据格式可以继续使用，业务代码无需手写偏移或经 JSON 中转。这里实现的是序列化层；网络传输和 RPC 不在本版本范围内。
 
-**0.4.1 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer 和常量均纳入序列化支持，使用未经删改的官方 `test.capnp` 验证。[标准目标](docs/SERIALIZATION-STANDARD.md)与[验证矩阵](docs/CONFORMANCE.md)将兼容承诺对应到测试、独立参考实现和复现步骤。
+**0.4.2 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer 和常量均纳入序列化支持，使用未经删改的官方 `test.capnp` 验证。[标准目标](docs/SERIALIZATION-STANDARD.md)与[验证矩阵](docs/CONFORMANCE.md)将兼容承诺对应到测试、独立参考实现和复现步骤。
+
+Mooncakes 已有 [Protocol Buffers 运行库和生成器](https://github.com/moonbitlang/protoc-gen-mbt)以及 [FlatBuffers 实现](https://github.com/mizchi/flatbuffers)。本库面向对端已经使用 Cap’n Proto 的场合。例如采集器已有一批按 `.capnp` 定义写出的 packed 消息时，MoonBit 可以从同一份 schema 生成接口，读入旧数据，并写回原采集器可以读取的结果。下方示例验证了这个往返过程。
 
 ## 可运行的完整流程
 
@@ -33,7 +35,7 @@
 在自己的 MoonBit 项目中添加依赖：
 
 ```sh
-moon add Ridge-Lab/capnp@0.4.1
+moon add Ridge-Lab/capnp@0.4.2
 ```
 
 包的 `moon.pkg` 中导入：
@@ -47,7 +49,7 @@ import {
 直接运行本仓库的例子：
 
 ```sh
-git clone --branch v0.4.1 https://github.com/Ridge-Lab/capnp-mbt
+git clone --branch v0.4.2 https://github.com/Ridge-Lab/capnp-mbt
 cd capnp-mbt
 moon update
 moon run --target js examples/roundtrip
@@ -66,7 +68,7 @@ moon fmt
 moon check --target native --deny-warn
 ```
 
-插件接收官方 `CodeGeneratorRequest`，由官方编译器处理 schema 语法和字段布局。所有所需声明（含 import）生成到同一个 `capnp_generated.mbt`，同时在目标目录缺少 `moon.pkg` 时创建运行库导入。多份相关 schema 应在一次 `capnp compile` 调用中传入；每次生成会替换目标文件。
+插件接收官方 `CodeGeneratorRequest`，由官方编译器处理 schema 语法和字段布局。所有所需声明（含 import）生成到同一个 `capnp_generated.mbt`，插件为新目录生成 `moon.pkg`，纯枚举及标量常量无需导入运行库。再次生成时，仅更新未经编辑且带有生成器标记的清单。多份相关 schema 应在一次 `capnp compile` 调用中传入；每次生成会替换目标文件。
 
 也可使用请求文件和 Node.js，不必编译 native 插件：
 

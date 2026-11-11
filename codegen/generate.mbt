@@ -2,6 +2,16 @@
 /// Compile the official capnp compiler's binary CodeGeneratorRequest to typed
 /// MoonBit views/builders. All declarations (including imports) share one package.
 pub fn generate(request : Bytes) -> Array[GeneratedFile] raise CodegenError {
+  let (files, _) = generate_with_manifest(request)
+  files
+}
+
+///|
+/// Generate source files and the package manifest needed to compile them.
+/// An enum or scalar-constant-only schema can be used without a runtime import.
+pub fn generate_with_manifest(
+  request : Bytes,
+) -> (Array[GeneratedFile], String) raise CodegenError {
   generate_impl(request) catch {
     CodegenError::InvalidRequest(message) => raise InvalidRequest(message)
     CodegenError::UnsupportedSchema(message) => raise UnsupportedSchema(message)
@@ -10,7 +20,7 @@ pub fn generate(request : Bytes) -> Array[GeneratedFile] raise CodegenError {
 }
 
 ///|
-fn generate_impl(request : Bytes) -> Array[GeneratedFile] raise {
+fn generate_impl(request : Bytes) -> (Array[GeneratedFile], String) raise {
   if request.length() > 16 * 1024 * 1024 {
     raise InvalidRequest("schema request exceeds 16 MiB")
   }
@@ -79,5 +89,10 @@ fn generate_impl(request : Bytes) -> Array[GeneratedFile] raise {
       _ => raise UnsupportedSchema("unknown declaration kind \{node.kind}")
     }
   }
-  [{ path: "capnp_generated.mbt", content: out.to_string(), }]
+  let manifest = if needs_default || nodes.any(n => n.kind == 1) {
+    "import {\n  \"Ridge-Lab/capnp\",\n}\n"
+  } else {
+    ""
+  }
+  ([{ path: "capnp_generated.mbt", content: out.to_string(), }], manifest)
 }

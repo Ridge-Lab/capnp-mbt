@@ -88,6 +88,16 @@ fn node_symbols(node : Node, name : String) -> Array[String] {
 // names. Reader/Builder and list wrappers can also collide with valid user names.
 fn allocate_names(nodes : Array[Node]) -> Unit raise CodegenError {
   let occupied : Map[String, Bool] = Map([])
+  // MoonBit reserves these concrete type names even without a matching
+  // import. Reserve emitted symbols, not schema base names: a struct named
+  // Int32 already has valid Int32Reader/Int32Builder APIs to preserve.
+  for
+    name in [
+      "Int16", "Int32", "UInt32", "V128", "FuncRef", "ReadOnlyArray", "StringView",
+      "BytesView",
+    ] {
+    occupied[name] = true
+  }
   for node in nodes {
     if node.kind == 1 {
       allocate_field_names(node)

@@ -71,7 +71,7 @@ test "packed framing rejects every truncated token and frame prefix" {
     let packed = @capnp.pack(frame)
     for size in 1..<packed.length() {
       let decoder = @capnp.PackedFrameDecoder::new()
-      ignore(decoder.feed(packed[:size].to_owned()))
+      assert_eq(decoder.feed(packed[:size].to_owned()), [])
       reader_error("invalid", () => decoder.finish())
       assert_eq(decoder.buffered_bytes(), 0)
       reader_error("invalid", () => ignore(decoder.feed(packed)))
@@ -133,6 +133,33 @@ test "packed raw runs may cross standard frame boundaries" {
   }
   decoder.finish()
   assert_eq(outputs, [frame, frame])
+}
+
+///|
+test "a dense word cannot publish a frame before its complete token arrives" {
+  // Official capnp 1.5.0 encode --packed of Box {val @0 :UInt64} with
+  // val=0x1122334455667788. The final 00 is a required run count.
+  let packed = b"\x10\x02\x10\x01\xff\x88\x77\x66\x55\x44\x33\x22\x11\x00"
+  let frame = @capnp.unpack(packed)
+  let end = packed.length() - 1
+  for split in 0..<=end {
+    let decoder = @capnp.PackedFrameDecoder::new()
+    assert_eq(decoder.feed(packed[:split].to_owned()), [])
+    assert_eq(decoder.feed(packed[split:end].to_owned()), [])
+    reader_error("invalid", () => decoder.finish())
+    decoder.reset()
+    assert_eq(decoder.feed(packed + packed[:end].to_owned()), [frame])
+    assert_eq(decoder.feed(packed[end:].to_owned()), [frame])
+    decoder.finish()
+  }
+  // A dense run containing two frames can be fragmented after the nominal
+  // end of the first frame. No frame from the run is visible on a short read.
+  let pair = frame + frame
+  let token = b"\xff" + pair[:8].to_owned() + b"\x05" + pair[8:].to_owned()
+  let decoder = @capnp.PackedFrameDecoder::new()
+  assert_eq(decoder.feed(token[:token.length() - 1].to_owned()), [])
+  assert_eq(decoder.feed(token[token.length() - 1:].to_owned()), [frame, frame])
+  decoder.finish()
 }
 
 ///|

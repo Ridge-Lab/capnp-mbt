@@ -20,11 +20,13 @@ VERSION = re.compile(r'^version\s*=\s*"([^"]+)"', re.MULTILINE)
 SCHEMA = """@0xc6ba5b4329891aef;
 struct Record { id @0 :UInt64; name @1 :Text; }
 enum RecordReader { unset @0; ready @1; }
+enum Int32 { small @0; large @1; }
 struct Parcel(T) { value @0 :T; }
 struct Envelope {
   item @0 :Parcel(Record);
   extra @1 :AnyPointer;
   status @2 :RecordReader;
+  width @3 :Int32;
 }
 const defaultId :UInt64 = 9007199254740993;
 const fallback :Record = (id = 42, name = "constant payload");
@@ -44,12 +46,14 @@ CONSUMER = """fn main raise {
   record.set_id(@types.const_default_id())
   record.set_name("fresh Mooncakes consumer")
   root.set_status(@types.RecordReader::Ready)
+  root.set_width(Large)
   root.init_extra().set_struct(@types.const_fallback().inner)
   let bytes = @capnp.unpack(@capnp.pack(message.finish()))
   let received = @types.EnvelopeReader::from_message(@capnp.read_message(bytes))
   assert_eq(received.get_item().get_value().get_id(), 9007199254740993UL)
   assert_eq(received.get_item().get_value().get_name(), "fresh Mooncakes consumer")
   assert_eq(received.get_status().to_raw(), 1U)
+  assert_eq(received.get_width().to_raw(), 1U)
   let payload = received.get_extra().as_struct()
   assert_eq(payload.get_uint64(0), 42UL)
   assert_eq(payload.get_text(0), "constant payload")
@@ -71,7 +75,7 @@ CONSUMER = """fn main raise {
   assert_eq(packed_decoder.feed(packed[1:].to_owned() + packed), [bytes, bytes])
   packed_decoder.finish()
   packed_decoder.reset()
-  ignore(packed_decoder.feed(b"\\xff"))
+  assert_eq(packed_decoder.feed(b"\\x10\\x02\\x10\\x01\\xff\\x88\\x77\\x66\\x55\\x44\\x33\\x22\\x11"), [])
   try packed_decoder.finish() catch {
     @capnp.InvalidMessage(_) => ()
     _ => fail("incorrect packed EOF error")

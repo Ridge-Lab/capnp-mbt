@@ -1,5 +1,7 @@
 @0xe5845191dfb4ea36;
 
+using Shared = import "shared-types.capnp";
+
 struct Foo { value @0 :UInt32; }
 enum FooReader { first @0; second @1; }
 enum Iter { once @0; many @1; }
@@ -31,4 +33,5 @@ struct Uses {
   root @9 :List(UInt32);
   rootField @10 :List(UInt32);
   rootFieldF10 @11 :List(UInt32);
+  sharedState @12 :Shared.Int32;
 }

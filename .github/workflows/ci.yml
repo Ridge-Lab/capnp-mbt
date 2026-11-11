@@ -112,7 +112,7 @@ jobs:
         if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: python scripts/verify.py --profile release --version 0.4.1
+        run: python scripts/verify.py --profile release --version 0.4.2
       - uses: actions/upload-artifact@v4
         if: always()
         with:

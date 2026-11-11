@@ -52,6 +52,19 @@ def main() -> None:
         raise RuntimeError(f"Expected pycapnp 2.2.1, found {capnp.__version__}")
     verify_distribution(ROOT)
 
+    # Reproduce the dense-final-word regression with the official writer
+    # and read the truncated message in a separate reference CLI process.
+    word = directory / "word.capnp"
+    word.write_text('@0xe51353fa1bc49931;\nstruct Box { val @0 :UInt64; }\n', encoding="utf-8")
+    dense = run([compiler, "encode", "--packed", str(word), "Box"],
+                data=b"(val=1234605616436508552)", binary=True)
+    if dense.hex() != "10021001ff887766554433221100":
+        raise RuntimeError("Official dense-word regression vector differs")
+    cut = subprocess.run([compiler, "decode", "--packed", str(word), "Box"],
+                         input=dense[:-1], capture_output=True, timeout=30)
+    if cut.returncode == 0 or cut.stdout or b"Premature EOF" not in cut.stderr:
+        raise RuntimeError("Official decoder did not reject a missing dense run count")
+
     def command(target: str, package: str) -> list[str]:
         path = ROOT / "_build" / target / "release/build" / package / Path(package).name
         return [args.node, str(path.with_suffix(".js"))] if target == "js" else [str(path.with_suffix(".exe"))]
@@ -91,6 +104,18 @@ def main() -> None:
             raise RuntimeError(f"Canonical fixture differs from official converter: {source}")
 
     for target in args.targets:
+        # A shared vocabulary with no struct declarations must compile in a
+        # fresh MoonBit module without any runtime imports. Generate it using
+        # the actual CLI, including its moon.pkg, and compile with warnings fatal.
+        vocabulary = directory / f"shared-vocabulary-{target}"
+        vocabulary.mkdir()
+        request = run([compiler, "compile", "-o-", "codegen/fixtures/shared-types.capnp"], binary=True)
+        run(command(target, "cmd/capnpc-moonbit") + ["--out", str(vocabulary)], data=request)
+        (vocabulary / "moon.mod").write_text('name = "consumer/vocabulary"\nversion = "0.0.0"\n', encoding="utf-8")
+        (vocabulary / "shared_wbtest.mbt").write_text(
+            'test "shared schema constant" { assert_eq(const_default_state().to_raw(), 1U) }\n', encoding="utf-8")
+        run([moon, "-C", str(vocabulary), "check", "--target", target, "--deny-warn"])
+        run([moon, "-C", str(vocabulary), "test", "--target", target, "--deny-warn"])
         batch, report = directory / f"batch-{target}.bin", directory / f"report-{target}.bin"
         run(command(target, "examples/telemetry") + ["produce", str(batch)])
         run([sys.executable, "examples/telemetry/worker.py", str(batch), str(report)])
