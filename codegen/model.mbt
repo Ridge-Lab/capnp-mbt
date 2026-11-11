@@ -2,7 +2,16 @@
 pub(all) suberror CodegenError {
   InvalidRequest(String)
   UnsupportedSchema(String)
-} derive(Debug)
+}
+
+///|
+pub impl @debug.Debug for CodegenError with fn to_repr(self) {
+  let (name, message) = match self {
+    InvalidRequest(s) => ("InvalidRequest", s)
+    UnsupportedSchema(s) => ("UnsupportedSchema", s)
+  }
+  @debug.Repr::ctor(name, [(None, @debug.Repr(message))])
+}
 
 ///|
 pub extend CodegenError with @debug.Debug::{to_repr}
@@ -11,7 +20,15 @@ pub extend CodegenError with @debug.Debug::{to_repr}
 pub(all) struct GeneratedFile {
   path : String
   content : String
-} derive(Debug)
+}
+
+///|
+pub impl @debug.Debug for GeneratedFile with fn to_repr(self) {
+  @debug.Repr::record({
+    "path": @debug.Repr(self.path),
+    "content": @debug.Repr(self.content),
+  })
+}
 
 ///|
 pub extend GeneratedFile with @debug.Debug::{to_repr}

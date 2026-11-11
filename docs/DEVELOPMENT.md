@@ -1,7 +1,7 @@
 # Development
 
-The 0.4.0 reproduction toolchain and CI configuration pin MoonBit
-`0.10.16+b1a0e846e` with matching core. Check the workflow for the relevant
+The main branch and CI pin MoonBit
+`0.10.20+65efd5b93` with matching core. Check the workflow for the relevant
 commit's execution results. From the repository root:
 
 ```sh
@@ -58,9 +58,9 @@ moon run --target native examples/roundtrip
 
 `internal/stdio` is a host adapter. C handles binary stdin/stdout; JS uses Node's `node:fs`. Protocol parsing, generation and packing remain MoonBit code. Standard input/output is supported on native and Node.js. Wasm users can use file-based commands where the host filesystem package is available, or call the library directly.
 
-Linux CI uses the system C compiler. MoonBit `0.10.16+b1a0e846e` requires an MSVC-compatible compiler/linker and Windows SDK for Windows native builds; run native commands from an x64 Visual Studio developer shell with the C++ build tools installed. The Node.js request-file path and JS/Wasm tests do not need a C compiler.
+Linux CI uses the system C compiler. MoonBit `0.10.20+65efd5b93` requires an MSVC-compatible compiler/linker and Windows SDK for Windows native builds; run native commands from an x64 Visual Studio developer shell with the C++ build tools installed. The Node.js request-file path and JS/Wasm tests do not need a C compiler.
 
-The 0.3.0 local benchmark used MoonBit 0.10.14 with LLVM-MinGW 20261006 and `CCC_OVERRIDE_OPTIONS=+-D_CRT_RAND_S`. That is a historical environment record, not the Windows native setup for 0.4.0.
+The 0.3.0 local benchmark used MoonBit 0.10.14 with LLVM-MinGW 20261006 and `CCC_OVERRIDE_OPTIONS=+-D_CRT_RAND_S`. That is a historical environment record, not the Windows native setup for 0.4.1.
 
 ## Layout
 
@@ -83,10 +83,10 @@ and [benchmark methodology](../benchmarks/README.md) for full reproductions.
 After publishing to Mooncakes, run this from the matching release checkout:
 
 ```sh
-python scripts/verify_release.py --release-tag v0.4.0
+python scripts/verify_release.py --release-tag v0.4.1
 ```
 
-The script requires Python 3.12, MoonBit `0.10.16+b1a0e846e`, Node.js 24, a native C compiler,
+The script requires Python 3.12, MoonBit `0.10.20+65efd5b93`, Node.js 24, a native C compiler,
 and the official `capnp` 1.5.0 executable. `--moon` and `--capnp` accept explicit
 tool paths. `--version` may select another package only if it provides the APIs
 exercised by this checkout's script. To verify an older release, use its matching

@@ -14,6 +14,10 @@ jobs:
       fail-fast: false
       matrix:
         target: [wasm, wasm-gc, js, native]
+        sdk: ["0.10.20+65efd5b93"]
+        include:
+          - target: js
+            sdk: "0.10.16+b1a0e846e"
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
@@ -21,15 +25,15 @@ jobs:
           node-version: "24"
       - uses: hustcer/setup-moonbit@v1.22
         with:
-          version: "0.10.16+b1a0e846e"
-          core-version: "0.10.16+b1a0e846e"
+          version: ${{ matrix.sdk }}
+          core-version: ${{ matrix.sdk }}
       - run: moon version --all
       - run: moon update
       - run: python scripts/verify.py --profile quick --targets ${{ matrix.target }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: verification-linux-${{ matrix.target }}
+          name: verification-linux-${{ matrix.target }}-${{ matrix.sdk }}
           path: work/verification/
   windows:
     runs-on: windows-latest
@@ -44,8 +48,8 @@ jobs:
           node-version: "24"
       - uses: hustcer/setup-moonbit@v1.22
         with:
-          version: "0.10.16+b1a0e846e"
-          core-version: "0.10.16+b1a0e846e"
+          version: "0.10.20+65efd5b93"
+          core-version: "0.10.20+65efd5b93"
       - run: moon version --all
       - uses: ilammy/msvc-dev-cmd@v1
         if: matrix.target == 'native'
@@ -81,8 +85,8 @@ jobs:
           node-version: "24"
       - uses: hustcer/setup-moonbit@v1.22
         with:
-          version: "0.10.16+b1a0e846e"
-          core-version: "0.10.16+b1a0e846e"
+          version: "0.10.20+65efd5b93"
+          core-version: "0.10.20+65efd5b93"
       - run: moon version --all
       - uses: actions/setup-python@v5
         with:
@@ -108,7 +112,7 @@ jobs:
         if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: python scripts/verify.py --profile release --version 0.4.0
+        run: python scripts/verify.py --profile release --version 0.4.1
       - uses: actions/upload-artifact@v4
         if: always()
         with:

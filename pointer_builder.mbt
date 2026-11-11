@@ -5,7 +5,28 @@ pub(all) enum PointerKind {
   Struct
   List
   Capability
-} derive(Eq, Debug)
+}
+
+///|
+pub impl @debug.Debug for PointerKind with fn to_repr(self) {
+  let name = match self {
+    Null => "Null"
+    Struct => "Struct"
+    List => "List"
+    Capability => "Capability"
+  }
+  @debug.Repr::ctor(name, [])
+}
+
+///|
+pub impl Eq for PointerKind with fn equal(self, other) {
+  match self {
+    Null => other is Null
+    Struct => other is Struct
+    List => other is List
+    Capability => other is Capability
+  }
+}
 
 ///|
 pub extend PointerKind with @debug.Debug::{to_repr}

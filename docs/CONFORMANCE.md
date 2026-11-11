@@ -46,7 +46,7 @@ unbounded output amplification merely because each individual frame is small.
 These checks demonstrate error detection; they do not prove the absence of all
 bugs or replace independent protocol evidence.
 
-Use MoonBit `0.10.16+b1a0e846e` with matching core. Node.js 24 and Python 3.12
+Use MoonBit `0.10.20+65efd5b93` with matching core. Node.js 24 and Python 3.12
 are configured in CI. The generated bindings are committed; the first commands need no `capnp`
 compiler or C++ runtime:
 

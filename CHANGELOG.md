@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.1
+
+- Support MoonBit 0.10.20 strict builds and the 0.10.16 minimum with explicit implementations of the existing Debug and Eq traits. The two compilers use different derive syntax.
+- Update the filesystem dependency to moonbitlang/x 0.5.7. CI runs the latest pinned compiler on four targets and the minimum compiler on JS.
+
 ## 0.4.0
 
 - Add incremental `PackedFrameDecoder` for fragmented and concatenated packed streams, including runs crossing message boundaries. Bound expanded frames and per-feed output bytes/count; retain explicit EOF, failed-state and reset behavior.

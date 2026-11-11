@@ -12,15 +12,17 @@ pub fn generate(Bytes) -> Array[GeneratedFile] raise CodegenError
 pub(all) suberror CodegenError {
   InvalidRequest(String)
   UnsupportedSchema(String)
-} derive(@debug.Debug)
+}
 pub fn CodegenError::to_repr(Self) -> @debug.Repr
+pub impl @debug.Debug for CodegenError
 
 // Types and methods
 pub(all) struct GeneratedFile {
   path : String
   content : String
-} derive(@debug.Debug)
+}
 pub fn GeneratedFile::to_repr(Self) -> @debug.Repr
+pub impl @debug.Debug for GeneratedFile
 
 // Type aliases
 

@@ -23,8 +23,9 @@ pub(all) suberror CapnpError {
   Limit(String)
   TypeMismatch(String)
   Unsupported(String)
-} derive(@debug.Debug)
+}
 pub fn CapnpError::to_repr(Self) -> @debug.Repr
+pub impl @debug.Debug for CapnpError
 
 // Types and methods
 pub struct Builder {
@@ -130,10 +131,12 @@ pub(all) enum PointerKind {
   Struct
   List
   Capability
-} derive(Eq, @debug.Debug)
+}
 pub fn PointerKind::equal(Self, Self) -> Bool
 pub fn PointerKind::not_equal(Self, Self) -> Bool
 pub fn PointerKind::to_repr(Self) -> @debug.Repr
+pub impl Eq for PointerKind
+pub impl @debug.Debug for PointerKind
 
 pub struct PointerReader {
   // private fields

@@ -1,6 +1,6 @@
 name = "Ridge-Lab/capnp"
 
-version = "0.4.0"
+version = "0.4.1"
 
 readme = "README.md"
 
@@ -15,5 +15,5 @@ description = "Cap'n Proto serialization runtime and schema code generation for 
 preferred_target = "wasm-gc"
 
 import {
-  "moonbitlang/x@0.5.5",
+  "moonbitlang/x@0.5.7",
 }

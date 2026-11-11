@@ -179,7 +179,7 @@ def verify(directory: Path, version: str, moon: str, capnp: str) -> None:
 version = "0.0.0"
 import {{
   "Ridge-Lab/capnp@{version}",
-  "moonbitlang/x@0.5.5",
+  "moonbitlang/x@0.5.7",
 }}
 ''')
     write(directory, "contract.capnp", SCHEMA)
