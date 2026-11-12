@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
 import os
@@ -9,10 +10,70 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import tempfile
 
-from verify_release import verify_distribution
+from verify_release import VERSION, verify_distribution
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def verify_workerd(run, command, compiler, moon, directory, targets):
+    """Exchange synthetic workerd module bundles with the C++ implementation."""
+    import capnp
+
+    fixtures = ROOT / "fixtures/upstream"
+    schema = fixtures / "workerd/modules.capnp"
+    includes = fixtures / "capnproto-1.5.0"
+    for path, expected in (
+        (schema, "53e87d5229b9b83a5da3e9ec9dcf2eb889dfc15afbee42c63a896775f79430b5"),
+        (schema.with_name("LICENSE"), "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"),
+    ):
+        if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+            raise RuntimeError(f"workerd upstream file differs: {path}")
+    request = run([compiler, "compile", "--no-standard-import", f"-I{includes}",
+                   f"--src-prefix={schema.parent}", "-o-", str(schema)], binary=True)
+    bundle = capnp.load(str(schema), imports=[str(includes)]).Bundle
+    modules = [
+        dict(name="index.js", type="bundle", src=b"export default 7;",
+             tsDeclaration="declare const n: number;", compileCache=b"\x00\xff\x01"),
+        dict(name="math.wasm", type="builtin", wasm=b"\0asm\x01\0\0\0"),
+        dict(name="table.bin", type="internal", data=b"\xff\x00\x80"),
+        dict(name="settings.json", type="internal", json='{"title":"音频"}'),
+    ]
+    frame = bundle.new_message(modules=modules).to_bytes()
+    (directory / "workerd-input.bin").write_bytes(frame)
+    version = VERSION.search((ROOT / "moon.mod").read_text(encoding="utf-8")).group(1)
+    for target in targets:
+        with tempfile.TemporaryDirectory(dir=directory) as temp:
+            consumer = Path(temp)
+            generated = consumer / "types"
+            generated.mkdir()
+            run(command(target, "cmd/capnpc-moonbit") + ["--out", str(generated)], data=request)
+            (consumer / "moon.work").write_text(
+                f'members = [".", {json.dumps(ROOT.as_posix())}]\n', encoding="utf-8")
+            (consumer / "moon.mod").write_text(
+                f'name = "consumer/workerd"\nversion = "0.0.0"\nimport {{ "Ridge-Lab/capnp@{version}" }}\n',
+                encoding="utf-8")
+            (consumer / "moon.pkg").write_text(
+                'import { "consumer/workerd/types" @types, "Ridge-Lab/capnp", '
+                '"moonbitlang/core/encoding/base64", "moonbitlang/core/env" }\npkgtype(kind: "executable")\n',
+                encoding="utf-8")
+            shutil.copyfile(ROOT / "scripts/fixtures/workerd_peer.mbt", consumer / "main.mbt")
+            encoded = run([moon, "-C", str(consumer), "run", "--target", target, "--release", "--deny-warn",
+                           ".", "--", base64.b64encode(frame).decode("ascii")], binary=True)
+        reply = base64.b64decode(encoded.strip(), validate=True)
+        (directory / f"workerd-reply-{target}.bin").write_bytes(reply)
+        with bundle.from_bytes(reply) as response:
+            if len(response.modules) != len(modules):
+                raise RuntimeError(f"workerd bundle length differs on {target}")
+            for original, actual in zip(reversed(modules), response.modules):
+                tag = next(key for key in ("src", "wasm", "data", "json") if key in original)
+                if (actual.which() != tag or getattr(actual, tag) != original[tag]
+                        or actual.name != "verified/" + original["name"] or str(actual.type) != original["type"]
+                        or actual.tsDeclaration != original.get("tsDeclaration", "")
+                        or actual.compileCache != original.get("compileCache", b"")):
+                    raise RuntimeError(f"workerd {tag} reply differs on {target}")
+        print(f"Verified workerd module bundle on {target}: four union arms, byte payloads and enum values")
 
 
 def main() -> None:
@@ -133,12 +194,14 @@ def main() -> None:
                  *(["--packed"] if packed_mode else []), "--", *command(target, "examples/streaming"),
                  *(["--packed"] if packed_mode else [])])
 
+    verify_workerd(run, command, compiler, moon, directory, args.targets)
     artifacts = [{"path": str(path.relative_to(directory)), "bytes": path.stat().st_size,
                   "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
                  for path in sorted(directory.rglob("*")) if path.is_file()]
     (directory / "report.json").write_text(json.dumps({"status": "passed", "compiler": version,
         "pycapnp": capnp.__version__, "targets": args.targets, "schema_cases": len(cases),
-        "canonical_cases": len(canonical_cases), "artifacts": artifacts}, indent=2) + "\n", encoding="utf-8")
+        "canonical_cases": len(canonical_cases), "workerd_union_arms": ["src", "wasm", "data", "json"],
+        "artifacts": artifacts}, indent=2) + "\n", encoding="utf-8")
     print(f"Verified {len(cases)} schemas, {len(canonical_cases)} official canonical fixtures, "
           "bidirectional typed values and plain/packed streams", flush=True)
 

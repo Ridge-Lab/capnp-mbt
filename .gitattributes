@@ -15,3 +15,4 @@
 **/capnp_generated.mbt linguist-generated=true
 **/pkg.generated.mbti linguist-generated=true
 fixtures/upstream/capnproto-1.5.0/** linguist-vendored=true
+fixtures/upstream/workerd/** -text linguist-vendored=true

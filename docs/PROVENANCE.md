@@ -24,9 +24,15 @@ The compatibility baseline is the **v1.5.0** specification and schema.
   outputs. Some inputs are upstream constants; the canonical boundary inputs
   are independently hand-authored wire vectors. Its [README](../fixtures/upstream/oracle-1.5.0/README.md)
   distinguishes these origins and provides generation commands and hashes.
+- `fixtures/upstream/workerd/` contains Cloudflare workerd’s unchanged
+  [module bundle schema](https://github.com/cloudflare/workerd/blob/5dc4754a80ffd9f512f8d77c4a7be6c6fb322ee2/src/workerd/jsg/modules.capnp)
+  and its [Apache 2.0 license](../fixtures/upstream/workerd/LICENSE). The upstream
+  [build rule](https://github.com/cloudflare/workerd/blob/5dc4754a80ffd9f512f8d77c4a7be6c6fb322ee2/build/wd_js_bundle.bzl)
+  uses this schema to bundle modules. The full verification checks both file
+  hashes, generates temporary bindings and exchanges project-authored synthetic data.
 - `codegen/fixtures/upstream.request.bin` and `compiler.request.bin` are
   official compiler outputs for the vendored upstream test and compiler schemas.
-  Other `.capnp` schemas and values under `fixtures/`, `codegen/fixtures/` and
+  Outside the upstream directories, `.capnp` schemas and values under `fixtures/`, `codegen/fixtures/` and
   `examples/telemetry/` were written for this project. Their binary messages or
   requests are compiled outputs. See [fixture regeneration](../fixtures/README.md).
 - `examples/schema_compat/peer.py` is project-authored interoperability code

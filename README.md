@@ -28,6 +28,8 @@ Mooncakes 已有 [Protocol Buffers 运行库和生成器](https://github.com/moo
 
 开发与 CI 使用同一入口：`python scripts/verify.py --profile quick --targets js`；完整外部对照使用 `--profile full --targets js native`。每次生成独立日志、源码指纹、工具链记录、报告及 SHA-256，失败或缺少工具不会计为通过。[验证矩阵](docs/CONFORMANCE.md)给出功能、独立参考和失败检查之间的对应关系。
 
+完整验证还会从 Cloudflare workerd 打包模块用的原始协议生成 MoonBit 接口。Python/C++ 用合成数据写入四类模块（JavaScript、Wasm、二进制资源、JSON），MoonBit 读取各自的 union 分支，重排模块、改名并写回。Python/C++ 再逐项核对模块内容、类型、TypeScript 声明和编译缓存。输入和返回的二进制帧保存在本次验证的 `oracles/workerd-*.bin` 中。[固定版本与许可证](docs/PROVENANCE.md)
+
 ## 安装与快速运行
 
 需要 MoonBit **0.10.16 或更新版本**。当前复现工具链及 CI 配置固定为 `0.10.20+65efd5b93`，使用相同版本的 core；执行结果以对应提交的工作流记录为准。运行库支持 `wasm`、`wasm-gc`、`js`、`native`，无需 C++ Cap'n Proto 动态库。
