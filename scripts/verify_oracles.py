@@ -140,6 +140,8 @@ def main() -> None:
     for schema, generated in (("test", "upstream"), ("schema", "compiler")):
         cases.append((f"{upstream}/capnp/{schema}.capnp", f"tests/generated/{generated}",
                       ["--no-standard-import", f"-I{upstream}", f"--src-prefix={upstream}"]))
+    cases.append(("fixtures/upstream/workerd/modules.capnp", "examples/builtin_bundle/types",
+                  ["--no-standard-import", f"-I{upstream}"]))
     for index, (source, expected, flags) in enumerate(cases):
         request = run([compiler, "compile", *flags, "-o-", source], binary=True)
         (directory / f"request-{index}.bin").write_bytes(request)

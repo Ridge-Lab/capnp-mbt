@@ -1,0 +1,80 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Ridge-Lab/capnp/examples/builtin_bundle/types"
+
+import {
+  "Ridge-Lab/capnp",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub(all) struct BundleBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn BundleBuilder::init_modules(Self, Int32) -> BundleModulesListBuilder raise @capnp.CapnpError
+pub fn BundleBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn BundleBuilder::set_modules(Self, BundleModulesListReader) -> Unit raise @capnp.CapnpError
+
+pub(all) struct BundleModulesListBuilder {
+  inner : @capnp.ListBuilder
+}
+pub fn BundleModulesListBuilder::get(Self, Int32) -> ModuleBuilder raise @capnp.CapnpError
+pub fn BundleModulesListBuilder::length(Self) -> Int32
+
+pub(all) struct BundleModulesListReader {
+  inner : @capnp.ListReader
+}
+pub fn BundleModulesListReader::get(Self, Int32) -> ModuleReader raise @capnp.CapnpError
+pub fn BundleModulesListReader::length(Self) -> Int32
+
+pub(all) struct BundleReader {
+  inner : @capnp.StructReader
+}
+pub fn BundleReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn BundleReader::get_modules(Self) -> BundleModulesListReader raise @capnp.CapnpError
+
+pub(all) struct ModuleBuilder {
+  inner : @capnp.StructBuilder
+}
+pub fn ModuleBuilder::init_root(@capnp.Builder) -> Self raise @capnp.CapnpError
+pub fn ModuleBuilder::set_compile_cache(Self, Bytes) -> Unit raise @capnp.CapnpError
+pub fn ModuleBuilder::set_data(Self, Bytes) -> Unit raise @capnp.CapnpError
+pub fn ModuleBuilder::set_json(Self, String) -> Unit raise @capnp.CapnpError
+pub fn ModuleBuilder::set_name(Self, String) -> Unit raise @capnp.CapnpError
+pub fn ModuleBuilder::set_src(Self, Bytes) -> Unit raise @capnp.CapnpError
+pub fn ModuleBuilder::set_ts_declaration(Self, String) -> Unit raise @capnp.CapnpError
+pub fn ModuleBuilder::set_type(Self, ModuleType) -> Unit raise @capnp.CapnpError
+pub fn ModuleBuilder::set_wasm(Self, Bytes) -> Unit raise @capnp.CapnpError
+
+pub(all) struct ModuleReader {
+  inner : @capnp.StructReader
+}
+pub fn ModuleReader::from_message(@capnp.Message) -> Self raise @capnp.CapnpError
+pub fn ModuleReader::get_compile_cache(Self) -> Bytes raise @capnp.CapnpError
+pub fn ModuleReader::get_data(Self) -> Bytes raise @capnp.CapnpError
+pub fn ModuleReader::get_json(Self) -> String raise @capnp.CapnpError
+pub fn ModuleReader::get_name(Self) -> String raise @capnp.CapnpError
+pub fn ModuleReader::get_src(Self) -> Bytes raise @capnp.CapnpError
+pub fn ModuleReader::get_ts_declaration(Self) -> String raise @capnp.CapnpError
+pub fn ModuleReader::get_type(Self) -> ModuleType raise @capnp.CapnpError
+pub fn ModuleReader::get_wasm(Self) -> Bytes raise @capnp.CapnpError
+pub fn ModuleReader::is_data(Self) -> Bool raise @capnp.CapnpError
+pub fn ModuleReader::is_json(Self) -> Bool raise @capnp.CapnpError
+pub fn ModuleReader::is_src(Self) -> Bool raise @capnp.CapnpError
+pub fn ModuleReader::is_wasm(Self) -> Bool raise @capnp.CapnpError
+pub fn ModuleReader::which(Self) -> UInt32 raise @capnp.CapnpError
+
+pub(all) enum ModuleType {
+  Bundle
+  Builtin
+  Internal
+  Unknown(UInt32)
+}
+pub fn ModuleType::from_raw(UInt32) -> Self
+pub fn ModuleType::to_raw(Self) -> UInt32
+
+// Type aliases
+
+// Traits

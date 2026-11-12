@@ -6,11 +6,13 @@
 
 适合已有 Cap'n Proto 协议的服务、数据采集程序、离线处理工具和二进制文件消费者接入 MoonBit。协议定义、字段布局和已有数据格式可以继续使用，业务代码无需手写偏移或经 JSON 中转。这里实现的是序列化层；网络传输和 RPC 不在本版本范围内。
 
-**0.4.2 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer 和常量均纳入序列化支持，使用未经删改的官方 `test.capnp` 验证。[标准目标](docs/SERIALIZATION-STANDARD.md)与[验证矩阵](docs/CONFORMANCE.md)将兼容承诺对应到测试、独立参考实现和复现步骤。
+**0.5.0 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer 和常量均纳入序列化支持，使用未经删改的官方 `test.capnp` 验证。[标准目标](docs/SERIALIZATION-STANDARD.md)与[验证矩阵](docs/CONFORMANCE.md)将兼容承诺对应到测试、独立参考实现和复现步骤。
 
 Mooncakes 已有 [Protocol Buffers 运行库和生成器](https://github.com/moonbitlang/protoc-gen-mbt)以及 [FlatBuffers 实现](https://github.com/mizchi/flatbuffers)。本库面向对端已经使用 Cap’n Proto 的场合。例如采集器已有一批按 `.capnp` 定义写出的 packed 消息时，MoonBit 可以从同一份 schema 生成接口，读入旧数据，并写回原采集器可以读取的结果。下方示例验证了这个往返过程。
 
 ## 可运行的完整流程
+
+0.5.0 的[内置模块读取示例](examples/builtin_bundle/)从 Cloudflare 官方发行的 workerd 程序中取出 Pyodide 模块包，用 MoonBit 列出 28 个内置模块，并按名字导出其中任一模块。CI 逐字节比对全部导出内容，还核对了两个 Python 源文件在上游 Git 中的对象哈希。
 
 [`examples/telemetry`](examples/telemetry) 演示一个数据处理任务：
 
@@ -30,6 +32,8 @@ Mooncakes 已有 [Protocol Buffers 运行库和生成器](https://github.com/moo
 
 完整验证还会从 Cloudflare workerd 打包模块用的原始协议生成 MoonBit 接口。Python/C++ 用合成数据写入四类模块（JavaScript、Wasm、二进制资源、JSON），MoonBit 读取各自的 union 分支，重排模块、改名并写回。Python/C++ 再逐项核对模块内容、类型、TypeScript 声明和编译缓存。输入和返回的二进制帧保存在本次验证的 `oracles/workerd-*.bin` 中。[固定版本与许可证](docs/PROVENANCE.md)
 
+可以直接用 MoonBit 检查 workerd 实际编译的部署配置。随附的上游测试 Worker 经 `workerd compile --config-only` 生成二进制文件，检查器列出模块并提取原始源码，`workerd test --binary` 回读同一份制品运行上游测试。[复现步骤与源码](examples/workerd_config/)
+
 ## 安装与快速运行
 
 需要 MoonBit **0.10.16 或更新版本**。当前复现工具链及 CI 配置固定为 `0.10.20+65efd5b93`，使用相同版本的 core；执行结果以对应提交的工作流记录为准。运行库支持 `wasm`、`wasm-gc`、`js`、`native`，无需 C++ Cap'n Proto 动态库。
@@ -37,7 +41,7 @@ Mooncakes 已有 [Protocol Buffers 运行库和生成器](https://github.com/moo
 在自己的 MoonBit 项目中添加依赖：
 
 ```sh
-moon add Ridge-Lab/capnp@0.4.2
+moon add Ridge-Lab/capnp@0.5.0
 ```
 
 包的 `moon.pkg` 中导入：
@@ -51,7 +55,7 @@ import {
 直接运行本仓库的例子：
 
 ```sh
-git clone --branch v0.4.2 https://github.com/Ridge-Lab/capnp-mbt
+git clone --branch v0.5.0 https://github.com/Ridge-Lab/capnp-mbt
 cd capnp-mbt
 moon update
 moon run --target js examples/roundtrip

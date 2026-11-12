@@ -1,0 +1,1455 @@
+# Copyright (c) 2017-2022 Cloudflare, Inc.
+# Licensed under the Apache 2.0 license found in the LICENSE file or at:
+#     https://opensource.org/licenses/Apache-2.0
+
+@0xe6afd26682091c01;
+# This file defines the schema for configuring the workerd runtime.
+#
+# A config file can be written as a `.capnp` file that imports this file and then defines a
+# constant of type `Config`. Alternatively, various higher-level tooling (e.g. wrangler) may
+# generate configs for you, outputting a binary Cap'n Proto file.
+#
+# To start a server with a config, do:
+#
+#     workerd serve my-config.capnp constantName
+#
+# You can also build a new self-contained binary which combines the `workerd` binary with your
+# configuration and all your source code:
+#
+#     workerd compile my-config.capnp constantName -o my-server-bin
+#
+# This binary can then be run stand-alone.
+#
+# A common theme in this configuration is capability-based design. We generally like to avoid
+# giving a Worker the ability to access external resources by name, since this makes it hard
+# to see and restrict what each Worker can access. Instead, the default is that a Worker has
+# access to no privileged resources at all, and you must explicitly declare "bindings" to give
+# it access to specific resources. A binding gives the Worker a JavaScript API object that points
+# to a specific resource. This means that by changing config alone, you can fully control which
+# resources an Worker connects to. (You can even disallow access to the public internet, although
+# public internet access is granted by default.)
+#
+# This config format is fairly powerful, allowing you to do things like define a TLS-terminating
+# reverse proxy server without using any actual JavaScript code. However, you should not be
+# afraid to fall back to code for anything the config cannot express, as Workers are very fast
+# to execute!
+
+# Any capnp files imported here must be:
+# 1. embedded using wd_cc_embed
+# 2. added to `tryImportBulitin` in schema-file.c++ (grep for '"/workerd/workerd.capnp"').
+using Cxx = import "/capnp/c++.capnp";
+$Cxx.namespace("workerd::server::config");
+$Cxx.allowCancellation;
+
+struct Config {
+  # Top-level configuration for a workerd instance.
+
+  services @0 :List(Service);
+  # List of named services defined by this server. These names are private; they are only used
+  # to refer to the services from elsewhere in this config file, as well as for logging and the
+  # like. Services are not reachable until you configure some way to make them reachable, such
+  # as via a Socket.
+  #
+  # If you do not define any service called "internet", one is defined implicitly, representing
+  # the ability to access public internet servers. An explicit definition would look like:
+  #
+  #     ( name = "internet",
+  #       network = (
+  #         allow = ["public"],   # Allows connections to publicly-routable addresses only.
+  #         tlsOptions = (trustBrowserCas = true)
+  #       )
+  #     )
+  #
+  # The "internet" service backs the global `fetch()` function in a Worker, unless that Worker's
+  # configuration specifies some other service using the `globalOutbound` setting.
+
+  sockets @1 :List(Socket);
+  # List of sockets on which this server will listen, and the services that will be exposed
+  # through them.
+
+  v8Flags @2 :List(Text);
+  # List of "command-line" flags to pass to V8, like "--expose-gc". We put these in the config
+  # rather than on the actual command line because for most use cases, managing these via the
+  # config file is probably cleaner and easier than passing on the actual CLI.
+  #
+  # WARNING: Use at your own risk. V8 flags can have all sorts of wild effects including completely
+  #   breaking everything. V8 flags also generally do not come with any guarantee of stability
+  #   between V8 versions. Most users should not set any V8 flags.
+
+  extensions @3 :List(Extension);
+  # Extensions provide capabilities to all workers. Extensions are usually prepared separately
+  # and are late-linked with the app using this config field.
+
+  autogates @4 :List(Text);
+  # A list of gates which are enabled.
+  # These are used to gate features/changes in workerd and in our internal repo. See the equivalent
+  # config definition in our internal repo for more details.
+
+  structuredLogging @5 :Bool = false;
+  # If true, logs will be emitted as JSON for structured logging.
+  # When false, logs use the traditional human-readable format.
+  # This affects the format of logs from KJ_LOG and exception reporting as well as js logs.
+  # This won't work for logs coming from service worker syntax workers with the old module registry.
+  # Note: This field is obsolete and deprecated. Use the logging struct instead.
+
+  logging @6 : LoggingOptions;
+  # Console and Stdio logging configuration options.
+
+  cluster @7 :ClusterConfig;
+  # Set when this instance should join a cluster. Requires `--experimental`.
+}
+
+struct ClusterConfig {
+  # workerd instances can work together in a cluster, to distribute Durable Objects among them.
+  # Each Durable Object runs on one instance at a time, its owner; any instance routes requests
+  # for it there.
+  #
+  # The cluster's shared state lives in a bucket, S3-compatible or Google Cloud Storage (`bucket`):
+  # each instance renews a lease record naming its address, and each Durable Object's owner is a
+  # record claimed by a conditional write. Taking an object over from an owner whose lease expired
+  # bumps its ownership epoch. Instances need no shared filesystem: `durableObjectStorage.localDisk`
+  # is each instance's own disk. Durable Objects stored in memory stay local to each instance. The
+  # bucket's copy of an object replaces the instance's, so a `localDisk` already holding Durable
+  # Objects from before cluster mode is refused at startup; they are not imported.
+  #
+  # All instances in the cluster MUST have identical configuration: any instance may forward any
+  # request to any other and it must produce the same result. During a rolling upgrade, instances
+  # may differ in backwards-compatible ways.
+  #
+  # The bucket can also hold named deployments. Each deployment is an encoded `Config` that contains
+  # only services. A catalog record in the bucket selects the current version of every deployment.
+  #
+  # Each workerd process is one cluster instance. Each instance reads the catalog at startup and
+  # serves accepted deployments beside the services in its own config. It considers deployments
+  # in catalog order and skips a deployment as a whole when it breaks any of these rules, alone
+  # or against the instance's config or a deployment accepted before it. Instances with the same
+  # config and catalog skip the same deployments:
+  #
+  # - Service names must be unique across the instance's config and every deployment.
+  # - Actor namespace keys must also be unique. These keys are Durable Object `uniqueKey` values
+  #   and Workflow namespace keys. Each Durable Object `uniqueKey` must be one path component.
+  # - Every `Text` value must be valid UTF-8.
+  # - A deployment cannot define a `disk` service or a service named `internet`. It can refer to a
+  #   disk service in the instance's config by name.
+  # - A deployment cannot have `fromEnvironment` bindings, so it cannot read the instance's
+  #   environment variables.
+  #
+  # An instance also skips a deployment whose objects are missing, invalid, or larger than its
+  # bucket client can read. A catalog entry whose name is not a valid deployment name is unreadable
+  # and skipped in the same way.
+  #
+  # An error in a deployment's service, such as a worker that throws while loading, is logged with
+  # the deployment's name and does not stop the instance. The broken service fails requests and
+  # actor construction. Warnings from deployment services are also attributed to their
+  # deployments.
+  #
+  # A reference in the instance's own config to a service that neither that config nor a
+  # deployment that was read defines is treated as a deployment reference. It is logged,
+  # naming any unreadable deployments, and fails its requests without stopping the instance.
+  # A reference to a skipped deployment's service fails in the same way. When a deployment's
+  # service cannot satisfy a reference, the deployment's error names the referring service or
+  # socket.
+  #
+  # A tail whose service is missing or cannot handle requests is not started; the request it would
+  # tail proceeds. A broken deployment service's Durable Object namespace fails requests before
+  # the instance claims an object in the bucket and does not adopt dead peers' alarms.
+  #
+  # `--external-addr` and `--directory-path` overrides apply only to services in the instance's
+  # own config. An override that names only a deployment's service is unmatched and is an error in
+  # the instance's config.
+  #
+  # Only a failure to open the bucket or to reach or read its catalog ends the process. Run each
+  # instance under a supervisor that restarts it.
+  #
+  # `src/workerd/server/cluster/deploy.rs` documents the bucket layout for tools that write
+  # deployments.
+  #
+  # `workerd deploy` publishes a wrangler project or a Cap'n Proto config:
+  #
+  #     workerd deploy --experimental [<project>] --bucket s3://bucket/prefix
+  #
+  # See `workerd deploy --help` for details. A wrangler project's worker becomes a service named
+  # after the deployment. Its Durable Objects use the disk service named `do-storage`. Every
+  # instance that serves the project with Durable Objects must define this service in its own
+  # config.
+  #
+  # For a wrangler project, each Durable Object class gets the `uniqueKey` `<name>-<key>`. Here,
+  # `<name>` is the deployment name. `<key>` is the class's storage key from the project's
+  # migrations. The storage key defaults to the class name and stays the same after a rename.
+  # Deploying the project under another name creates separate Durable Objects. They start empty.
+  # A Cap'n Proto deployment's Durable Object `uniqueKey`s and every Workflow namespace key are
+  # used as written.
+  #
+  # An instance reads the catalog only at startup. Restart it to serve a published catalog
+  # revision. `workerd deploy` checks a deployment against the catalog's other deployments. It
+  # does not read any instance config.
+  #
+  # A deployment has the authority granted by each instance's config. Its services can reach the
+  # instance's network, container engine, and named services. Anyone who can publish deployments
+  # can run code with that authority on every instance. Restricting a writer to the deployment area
+  # of the bucket does not reduce that authority.
+
+  bucket @0 :Text;
+  # The bucket that holds the cluster's shared state: `s3://bucket/prefix` for S3 or an
+  # S3-compatible store (R2, MinIO), or `gs://bucket/prefix` for Google Cloud Storage.
+  #
+  # A `gs://` bucket is reached through Cloud Storage's XML API, whose writes are conditional on
+  # object generations. Its access tokens come from the service account key that
+  # `GOOGLE_APPLICATION_CREDENTIALS` names (a credentials file of another type is an error); else
+  # from the metadata server of the Compute Engine VM or GKE pod the instance runs on, which under
+  # GKE Workload Identity answers the token of the pod's Kubernetes service account.
+  # `GCE_METADATA_HOST` names another metadata server; an IPv6-only VM, which cannot reach
+  # 169.254.169.254, needs it set to `[fd20:ce::254]`.
+  # A first token, from any source, is retried, as a new GKE pod's metadata server may refuse
+  # requests at first: attempts start for up to 30 s and each has 10 s, so the wait can reach
+  # about 40 s. But when nothing suggests the instance runs on Google Cloud (none of
+  # `GCE_METADATA_HOST`, `KUBERNETES_SERVICE_HOST`, Cloud Run's `K_SERVICE` and `CLOUD_RUN_JOB`,
+  # Cloud Run functions' `FUNCTION_TARGET` and `FUNCTION_NAME`, or App Engine's `GAE_ENV` and
+  # `GAE_SERVICE` is set, and the machine's DMI product name is not Google's), a metadata server
+  # that refuses the connection, or does not connect within a second, fails it at once, with an
+  # error that says how to provide credentials. On a Kubernetes cluster outside Google Cloud
+  # whose network drops packets to 169.254.169.254, that error comes only after the 40 s. At the
+  # default address, an answer without the `Metadata-Flavor: Google` header of Google's metadata
+  # server, on Google Cloud or off it, fails it at once too, unless its status is 429 or 5xx; a
+  # metadata server `GCE_METADATA_HOST` names, such as a proxy or an emulator, need not send the
+  # header. The identity needs to read, write, list and delete the bucket's objects, as
+  # `roles/storage.objectUser` grants: replacing an object requires permission to delete it.
+  # Without Workload Identity, a GCE VM or GKE node's default access scopes are often read-only
+  # for storage, which shows up as a 403 when the instance starts.
+  # For tests, `STORAGE_EMULATOR_HOST` (`host:port` or a URL) sends the requests to an emulator
+  # instead, without a token unless `GOOGLE_APPLICATION_CREDENTIALS` or `GCE_METADATA_HOST` is
+  # set.
+
+  bucketOptions @1 :List(Text);
+  # `key=value` settings for an `s3://` bucket: `aws_endpoint=https://...`, `aws_region=auto`,
+  # `aws_access_key_id=...`, `aws_secret_access_key=...`, and `aws_token=...`. In place of the
+  # last three, `aws_credentials_file=<path>` names a file of `AWS_ACCESS_KEY_ID=`,
+  # `AWS_SECRET_ACCESS_KEY=` and `AWS_SESSION_TOKEN=` lines, reread whenever it changes, so
+  # short-lived credentials rotate without a restart. Replace it by rename, not in place. Each
+  # setting not given falls back to an environment variable: `AWS_ENDPOINT_URL`, `AWS_REGION`,
+  # `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`, `AWS_CREDENTIALS_FILE`.
+  #
+  # A `gs://` bucket takes no settings: any setting is an error that stops the instance, as
+  # `workerd deploy --endpoint` or `--region` is for the command. The `AWS_*` environment
+  # variables do not apply to it.
+  #
+  # For either scheme, an entry without `=` is ignored.
+
+  address @2 :Text;
+  # Where this instance listens for other instances: `host:port`, a port of 0 for an ephemeral
+  # one. Overridden by `--cluster-addr`. Holders of `key` get full access to every service in the
+  # process through it, and its traffic is not encrypted: only the cluster's instances should
+  # reach it, on a private network (a VPC, WireGuard, Tailscale). A public IP is refused unless
+  # `unsafePublicAddress` is set; a wildcard (`0.0.0.0`) listens on every interface, so firewall
+  # the port.
+
+  advertise @4 :Text;
+  # The address other instances reach this one at, which goes in its lease record in the bucket.
+  # Optional: by default, the address bound, with the port it got. Required when that is a
+  # wildcard (`0.0.0.0:7000`) or not what peers can reach (NAT, a container). A port of 0 is the
+  # port bound. Overridden by `--cluster-advertise`. A public IP is refused unless
+  # `unsafePublicAddress` is set.
+
+  key @3 :Text;
+  # A secret known only to members of the cluster, at least 32 bytes: random, such as the output
+  # of `openssl rand -hex 32`. Each connection between instances opens with
+  # a MAC keyed by it, over the target, a timestamp and a nonce, so a header seen on the wire
+  # cannot be replayed; the instances' clocks must agree within 30 seconds. It also keys channel
+  # tokens, which pass service and Durable Object stubs over RPC. Traffic is not encrypted: run
+  # the cluster on a private network (a VPC, WireGuard, Tailscale).
+  #
+  # TODO(someday): Support some way to gradually roll out a rotated key.
+
+  unsafePublicAddress @5 :Bool = false;
+  # Allow a public IP as `address` or `advertise`. Refused by default, since traffic between
+  # instances is not encrypted. Private, loopback, link-local and shared (100.64.0.0/10, as
+  # Tailscale uses) addresses, wildcards and hostnames are allowed.
+
+  stopTimeoutMs @6 :UInt32 = 8000;
+  # How long an instance takes to stop, from SIGTERM to exit. Rather than leave its Durable Objects
+  # to wait for its lease to expire, a stopping instance hands them to its peers, busiest first,
+  # while it keeps serving the rest: each object takes no new requests but those that the work of
+  # an object being handed off makes, here or on a peer, directly or through other Durable Objects,
+  # its requests in flight finish, and it is released for the next request anywhere to claim.
+  # Requests that arrive meanwhile, other Durable Objects' calls included, wait for the object and
+  # then go where it runs next. While a Durable Object serves a call of a handoff's work, all the
+  # calls it makes count as that work. Then the instance leaves the cluster, keeps accepting
+  # requests until at least five seconds after SIGTERM (or until the handoff deadline, if that comes
+  # sooner), as load balancers take a while to stop sending them, lets its connections finish, and
+  # stops its containers' Docker containers.
+  #
+  # The time is spent in order: until half of it, requests in flight on an object being handed off
+  # may finish, and are then cancelled, failing as requests that may have run, which are not sent
+  # again; at three quarters, the handoff ends, and an object not yet released is stopped if it
+  # still runs, and taken over by a peer once the instance has left; at nine tenths, the instance
+  # stops waiting for its connections, whose requests end as it exits; the rest is for the
+  # containers. A call that reaches an object being handed off through a stateless worker, rather
+  # than from a Durable Object, waits like any other request, so a call from the object back to
+  # itself that way ends only with the requests in flight. Stopping an object's Docker container
+  # takes one of the few handoffs that run at once.
+  #
+  # The default fits within the 10 seconds that `docker stop` and Docker Compose give a container,
+  # and the 30 seconds that Kubernetes gives a pod (`terminationGracePeriodSeconds`). Raising this,
+  # raise the supervisor's grace period too (`docker stop -t`, `stop_grace_period`,
+  # `terminationGracePeriodSeconds`); below about 6700 the five seconds of accepting are cut
+  # short. An instance with very many objects may not stop them all by 33/40 of the timeout: it
+  # then stays a member, and its peers take over every object it did not hand off once its lease
+  # expires, after it exited, as they do when the supervisor kills it first.
+  #
+  # A `fetch()` to an object that moves is sent on transparently. A JS RPC call that a peer sent
+  # through a stub to the stopping instance may fail once, as retryable; the stub's next call finds
+  # the object. WebSockets an object here accepted close as it is handed off. An alarm that comes
+  # due on a stopping instance runs where its object goes: when a request claims the object there,
+  # or else once a peer adopts the alarms of the instance that left, within five seconds of its
+  # leaving, so up to one stop and five seconds late; for an instance that stays a member with
+  # objects still running, once its lease expires, up to 20 seconds later still.
+  #
+  # `GET /ready` on the cluster port answers 200 while the instance serves, holds its lease and is
+  # not stopping, and 503 otherwise: a readiness probe for a rolling restart.
+
+  unsafeTimeDivisor @7 :UInt32 = 1;
+  # For tests: divides by this the times that a takeover and a stop wait out, which tests would
+  # otherwise spend most of their time on. These are the 20-second lease, with the rounds that
+  # renew it and the bounds on them, the five seconds between rounds that adopt dead instances'
+  # alarms, and the five seconds a stopping instance accepts requests for at least.
+  # `stopTimeoutMs` is not divided. A divisor of 0, or one that rounds a time down to 0 (above
+  # 1000), fails the config. Bucket requests that stall past the shortened bounds fence the
+  # instance, so leave this at 1 outside tests.
+}
+
+struct LoggingOptions {
+  structuredLogging @0 :Bool = false;
+  # Override of top-level structured logging (only when true).
+  # If true, logs will be emitted as JSON for structured logging.
+  # When false, logs use the traditional human-readable format.
+  # This affects the format of logs from KJ_LOG and exception reporting as well as js logs.
+  # This won't work for logs coming from service worker syntax workers with the old module registry.
+
+  stdoutPrefix @1 :Text;
+  # Set a custom prefix for process.stdout. Defaults to "stdout: ".
+
+  stderrPrefix @2 :Text;
+  # Set a custom prefix for process.stderr. Defaults to "stderr: ".
+}
+
+# ========================================================================================
+# Sockets
+
+struct Socket {
+  name @0 :Text;
+  # Each socket has a unique name which can be used on the command line to override the socket's
+  # address with `--socket-addr <name>=<addr>` or `--socket-fd <name>=<fd>`.
+
+  address @1 :Text;
+  # Address/port on which this socket will listen. Optional; if not specified, then you will be
+  # required to specify the socket on the command line with with `--socket-addr <name>=<addr>` or
+  # `--socket-fd <name>=<fd>`.
+  #
+  # Examples:
+  # - "*:80": Listen on port 80 on all local IPv4 and IPv6 interfaces.
+  # - "1.2.3.4": Listen on the specific IPv4 address on the default port for the protocol.
+  # - "1.2.3.4:80": Listen on the specific IPv4 address and port.
+  # - "1234:5678::abcd": Listen on the specific IPv6 address on the default port for the protocol.
+  # - "[1234:5678::abcd]:80": Listen on the specific IPv6 address and port.
+  # - "unix:/path/to/socket": Listen on a Unix socket.
+  # - "unix-abstract:name": On Linux, listen on the given "abstract" Unix socket name.
+  # - "example.com:80": Perform a DNS lookup to determine the address, and then listen on it. If
+  #     this resolves to multiple addresses, listen on all of them.
+  #
+  # UDP sockets currently bind only the first address when a hostname resolves to multiple
+  # addresses. Specify a numeric address when selecting the address family matters.
+  #
+  # (These are the formats supported by KJ's parseAddress().)
+
+  union {
+    http @2 :HttpOptions;
+    https :group {
+      options @3 :HttpOptions;
+      tlsOptions @4 :TlsOptions;
+    }
+    tcp :group {
+      tlsOptions @6 :TlsOptions;
+
+      tlsMode @9 :TcpTlsMode = implicit;
+      # How `tlsOptions` is applied to accepted connections. Ignored if `tlsOptions` is not set.
+    }
+
+    udp :group {
+      # Listen for UDP datagrams. Bindings to this service will only support the `connect()`
+      # method, same as `tcp`; `fetch()` will throw an exception. Unlike `tcp`, the delivered
+      # Socket's `readable`/`writable` are value-mode: each chunk read or written is exactly one
+      # datagram (see Socket.protocol).
+      #
+      # Datagrams from a given peer address/port are grouped into one flow, dispatched to one
+      # `connect()` call, until no datagram has been seen from that peer for `idleTimeoutMs`.
+
+      idleTimeoutMs @7 :UInt32 = 30000;
+
+      # Bound, in bytes, on datagrams queued for one flow waiting to be consumed by
+      # `DatagramChannel::receive()`. The listener keeps
+      # draining the kernel socket regardless of whether this flow's queue has room, so one slow
+      # flow does not block delivery to other peers sharing the same socket.
+      # Once `maxPendingBytes` worth of datagrams are queued, further arrivals for this flow are
+      # dropped rather than buffered.
+      maxPendingBytes @8 :UInt32 = 262144;
+    }
+
+    # TODO(someday): TCP proxy, SMTP, Cap'n Proto, ...
+  }
+
+  service @5 :ServiceDesignator;
+  # Service name which should handle requests on this socket.
+
+  # TODO(someday): Support mapping different hostnames to different services? Or should that be
+  #   done strictly via JavaScript?
+
+  enum TcpTlsMode {
+    implicit @0;
+    # Perform the TLS handshake as soon as a connection is accepted. The `connect()` handler sees
+    # only the decrypted stream, and its socket does not support `startTls()`.
+
+    startTls @1;
+    # Accept connections in plaintext. The `connect()` handler's socket has secureTransport set to
+    # "starttls" and the handler performs the TLS handshake as the server by calling `startTls()` at
+    # the point in its protocol where the upgrade belongs.
+  }
+}
+
+# ========================================================================================
+# Services
+
+struct Service {
+  # Defines a named service. Each server has a list of named services. The names are private,
+  # used to refer to the services within this same config file.
+
+  name @0 :Text;
+  # Name of the service. Used only to refer to the service from elsewhere in the config file.
+  # Services are not accessible unless you explicitly configure them to be, such as through a
+  # `Socket` or through a binding from another Worker.
+
+  union {
+    unspecified @1 :Void;
+    # (This catches when someone forgets to specify one of the union members. Do not set this.)
+
+    worker @2 :Worker;
+    # A Worker!
+
+    network @3 :Network;
+    # A service that implements access to a network. fetch() requests are routed according to
+    # the URL hostname.
+
+    external @4 :ExternalServer;
+    # A service that forwards all requests to a specific remote server. Typically used to
+    # connect to a back-end server on your internal network.
+
+    disk @5 :DiskDirectory;
+    # An HTTP service backed by a directory on disk, supporting a basic HTTP GET/PUT. Generally
+    # not intended to be exposed directly to the internet; typically you want to bind this into
+    # a Worker that adds logic for setting Content-Type and the like.
+
+    bucket @6 :ClusterBucket;
+    # A directory in the cluster's bucket, served over HTTP. Requires `Config.cluster`.
+  }
+
+  # TODO(someday): Allow defining a list of middlewares to stack on top of the service. This would
+  #   be a list of Worker names, where each Worker must have a binding called `next`. This
+  #   implicitly creates an inherited worker that wraps this service, with the `next` binding
+  #   pointing to the service itself (or to the next middleware in the stack).
+}
+
+struct ClusterBucket {
+  # GET, PUT and DELETE on `/<file>` read, write and remove the object
+  # `<cluster prefix>services/<path>/<file>` in the cluster's bucket (`Config.cluster`), so
+  # that every instance sees the same files. The cluster keeps its own state outside
+  # `services/`, where this service cannot reach it. A binding to this service grants only its
+  # directory, as a writable `disk` does. Experimental: requires `--experimental`.
+
+  path @0 :Text;
+  # The directory below `services/`: one or more `/`-separated names, none `.` or `..`.
+}
+
+struct ServiceDesignator {
+  # A reference to a service from elsewhere in the config file, e.g. from a service binding in a
+  # Worker.
+  #
+  # In the case that only `name` needs to be specified, then you can provide a raw string wherever
+  # `ServiceDesignator` is needed. Cap'n proto automatically assumes the string is intended to be
+  # the value for `name`, since that is the first field. In other words, if you would otherwise
+  # write something like:
+  #
+  #     bindings = [(service = (name = "foo"))]
+  #
+  # You can write this instead, which is equivalent:
+  #
+  #     bindings = [(service = "foo")]
+
+  name @0 :Text;
+  # Name of the service in the Config.services list.
+
+  entrypoint @1 :Text;
+  # A modules-syntax Worker can export multiple named entrypoints. `export default {` specifies
+  # the default entrypoint, whereas `export let foo = {` defines an entrypoint named `foo`. If
+  # `entrypoint` is specified here, it names an alternate entrypoint to use on the target worker,
+  # otherwise the default is used.
+
+  props :union {
+    # Value to provide in `ctx.props` in the target worker.
+
+    empty @2 :Void;
+    # Empty object. (This is the default.)
+
+    json @3 :Text;
+    # A JSON-encoded value.
+  }
+
+  # TODO(someday): Options to specify which event types are allowed.
+  # TODO(someday): Allow adding an outgoing middleware stack here (see TODO in Service, above).
+}
+
+struct WorkflowsEngine {
+  # Defines an engine that allows running Workflows defined on this worker.
+  # These workflows are exposed through the `ctx.exports.*` mechanism
+  #
+  # Each Workflow gets assigned its own ActorNamespace, but all of them use the same underlying ActorClass
+  # to run the Workflows code.
+  #
+  # Additionally, a list of workflows can be given to specify which workflows can run or not,
+  # i.e., which workflows get a binding built for them.
+
+  actorClass @0 :ServiceDesignator;
+  # The actor class implementing the Workflows engine which all local Workflow-related ActorNamespaces
+  # use to instantiate actors
+
+  workflows @1 :List(Workflow);
+  # List of local workflows that can run for this worker. This controls which workflows get a binding built
+  # and placed on the `ctx.exports` object
+
+  struct Workflow {
+    # Minimal definition of a Workflow in the context of building a binding for it in `ctx.exports.*`
+
+    className @0 :Text;
+    # The name of the class extending `WorkflowEntrypoint`
+
+    name @1 :Text;
+    # The name of the workflow
+
+    bindingService @2 :ServiceDesignator;
+    # Reference to the service implementing the Workflows public API.
+    # This is used as the inner fetcher when building the Workflows binding
+  }
+}
+
+struct Worker {
+  union {
+    modules @0 :List(Module);
+    # The Worker is composed of ES modules that may import each other. The first module in the list
+    # is the main module, which exports event handlers.
+
+    serviceWorkerScript @1 :Text;
+    # The Worker is composed of one big script that uses global `addEventListener()` to register
+    # event handlers.
+    #
+    # The value of this field is the raw source code. When using Cap'n Proto text format, use the
+    # `embed` directive to read the code from an external file:
+    #
+    #     serviceWorkerScript = embed "worker.js"
+
+    inherit @2 :Text;
+    # Inherit the configuration of some other Worker by its service name. This Worker is a clone
+    # of the other worker, but various settings can be modified:
+    # * `bindings`, if specified, overrides specific named bindings. (Each binding listed in the
+    #   derived worker must match the name and type of some binding in the inherited worker.)
+    # * `globalOutbound`, if non-null, overrides the one specified in the inherited worker.
+    # * `compatibilityDate` and `compatibilityFlags` CANNOT be modified; they must be null.
+    # * If the inherited worker defines durable object namespaces, then the derived worker must
+    #   specify `durableObjectStorage` to specify where its instances should be stored. Each
+    #   devived worker receives its own namespace of objects. `durableObjectUniqueKeyModifier`
+    #   must also be specified by derived workers.
+    #
+    # This can be useful when you want to run the same Worker in multiple configurations or hooked
+    # up to different back-ends. Note that all derived workers run in the same isolate as the
+    # base worker; they differ in the content of the `env` object passed to them, which contains
+    # the bindings. (When using service workers syntax, the global scope contains the bindings;
+    # in this case each derived worker runs in its own global scope, though still in the same
+    # isolate.)
+  }
+
+  struct Module {
+    name @0 :Text;
+    # Name (or path) used to import the module.
+
+    union {
+      esModule @1 :Text;
+      # An ES module file with imports and exports.
+      #
+      # As with `serviceWorkerScript`, above, the value is the raw source code.
+
+      commonJsModule @2 :Text;
+      # A common JS module, using require().
+
+      text @3 :Text;
+      # A raw text blob. Importing this will produce a string with the value.
+
+      data @4 :Data;
+      # A raw data blob. Importing this will produce an ArrayBuffer with the value.
+
+      wasm @5 :Data;
+      # A Wasm module. The value is a compiled binary Wasm module file. Importing this will produce
+      # a `WebAssembly.Module` object, which you can then instantiate.
+
+      json @6 :Text;
+      # Importing this will produce the result of parsing the given text as JSON.
+
+      obsolete @7 :Text;
+      # This position used to be the nodeJsCompatModule type that has now been
+      # obsoleted.
+
+      pythonModule @8 :Text;
+      # A Python module. All bundles containing this value type are converted into a JS/WASM Worker
+      # Bundle prior to execution.
+
+      obsoletePythonRequirement @9 :Text;
+      # This position used to be the pythonRequirement type that has now been deprecated.
+
+      bundled @11 :Text;
+      # An ES module whose source is bundled with workerd, by name: `/workerd/kv.js`, the KV
+      # Worker, `/workerd/cron.js`, cron triggers, or `/workerd/queues.js`, the Queues Worker
+      # (see each one's header for the config it takes). Unlike built-in modules such as
+      # `node:` ones, user code cannot import it; it is a Worker's source. Experimental.
+    }
+
+    namedExports @10 :List(Text);
+    # For commonJsModule modules, this is a list of named exports that the
+    # module expects to be exported once the evaluation is complete.
+    #
+    # (`commonJsModule` should have been a group containing the body and `namedExports`, but it's
+    # too late to change now.)
+  }
+
+  compatibilityDate @3 :Text;
+  compatibilityFlags @4 :List(Text);
+  # See: https://developers.cloudflare.com/workers/platform/compatibility-dates/
+  #
+  # `compatibilityDate` must be specified, unless the Worker inhits from another worker, in which
+  # case it must not be specified. `compatibilityFlags` can optionally be specified when
+  # `compatibilityDate` is specified.
+
+  bindings @5 :List(Binding);
+  # List of bindings, which give the Worker access to external resources and configuration
+  # settings.
+  #
+  # For Workers using ES modules syntax, the bindings are delivered via the `env` object. For
+  # service workers syntax, each binding shows up as a global variable.
+
+  struct Binding {
+    name @0 :Text;
+
+    union {
+      unspecified @1 :Void;
+      # (This catches when someone forgets to specify one of the union members. Do not set this.)
+
+      parameter :group {
+        # Indicates that the Worker requires a binding of the given type, but it won't be specified
+        # here. Another Worker can inherit this Worker and fill in this binding.
+
+        type @2 :Type;
+        # Expected type of this parameter.
+
+        optional @3 :Bool;
+        # If true, this binding is optional. Derived workers need not specify it, in which case
+        # the binding won't be present in the environment object passed to the worker.
+        #
+        # When a Worker has any non-optional parameters that haven't been filled in, then it can
+        # only be used for inheritance; it cannot be invoked directly.
+      }
+
+      text @4 :Text;
+      # A string.
+
+      data @5 :Data;
+      # An ArrayBuffer.
+
+      json @6 :Text;
+      # A value parsed from JSON.
+
+      wasmModule @7 :Data;
+      # A WebAssembly module. The binding will be an instance of `WebAssembly.Module`. Only
+      # supported when using Service Workers syntax.
+      #
+      # DEPRECATED: Please switch to ES modules syntax instead, and embed Wasm modules as modules.
+
+      cryptoKey @8 :CryptoKey;
+      # A CryptoKey instance, for use with the WebCrypto API.
+      #
+      # Note that by setting `extractable = false`, you can prevent the Worker code from accessing
+      # or leaking the raw key material; it will only be able to use the key to perform WebCrypto
+      # operations.
+
+      service @9 :ServiceDesignator;
+      # Binding to a named service (possibly, a worker).
+
+      durableObjectClass @26 :ServiceDesignator;
+      # A Durable Object class binding, without an actual storage namespace. This can be used to
+      # implement a facet.
+
+      durableObjectNamespace @10 :DurableObjectNamespaceDesignator;
+      # Binding to the durable object namespace implemented by the given class.
+      #
+      # In the common case that this refers to a class in the same Worker, you can specify just
+      # a string, like:
+      #
+      #     durableObjectNamespace = "MyClass"
+
+      kvNamespace @11 :ServiceDesignator;
+      # A KV namespace, implemented by the named service. The Worker sees a KvNamespace-typed
+      # binding. Requests to the namespace will be converted into HTTP requests targeting the
+      # given service name.
+
+      r2Bucket @12 :ServiceDesignator;
+      # R2 bucket binding. Similar to KV namespaces, this turns operations into HTTP requests aimed
+      # at the named service.
+
+      obsolete0 @13 :ServiceDesignator;
+
+      wrapped @14 :WrappedBinding;
+      # Wraps a collection of inner bindings in a common api functionality.
+
+      queue @15 :ServiceDesignator;
+      # A Queue binding, implemented by the named service. Requests to the
+      # namespace will be converted into HTTP requests targeting the given
+      # service name.
+
+      fromEnvironment @16 :Text;
+      # Takes the value of an environment variable from the system. The value specified here is
+      # the name of a system environment variable. The value of the binding is obtained by invoking
+      # `getenv()` with that name. If the environment variable isn't set, the binding value is
+      # `null`. A deployment in a cluster's bucket cannot have this binding. See `ClusterConfig`.
+
+      analyticsEngine @17 :ServiceDesignator;
+      # A binding for Analytics Engine. Allows workers to store information through Analytics Engine Events.
+      # workerd will forward AnalyticsEngineEvents to designated service in the body of HTTP requests
+      # This binding is subject to change and requires the `--experimental` flag
+
+      hyperdrive :group {
+        designator @18 :ServiceDesignator;
+        database @19 :Text;
+        user @20 :Text;
+        password @21 :Text;
+        scheme @22 :Text;
+      }
+      # A binding for Hyperdrive. Allows workers to use Hyperdrive caching & pooling for Postgres
+      # databases.
+
+      unsafeEval @23 :Void;
+      # A simple binding that enables access to the UnsafeEval API.
+
+      memoryCache :group {
+        # A binding representing access to an in-memory cache.
+
+        id @24 :Text;
+        # The identifier associated with this cache. Any number of isolates
+        # can access the same in-memory cache (within the same process), and
+        # each worker may use any number of in-memory caches.
+
+        limits @25 :MemoryCacheLimits;
+      }
+
+      workerLoader :group {
+        # A binding representing the ability to dynamically load Workers from code presented at
+        # runtime.
+        #
+        # A Worker loader is not just a function that loads a Worker, but also serves as a
+        # cache of Workers, automatically unloading Workers that are not in use. To that end, each
+        # Worker must have a name, and if a Worker with that name already exists, it'll be reused.
+
+        id @27 :Text;
+        # Optional: The identifier associated with this Worker loader. Multiple Workers can bind to
+        # the same ID in order to access the same loader, so that if they request the same name
+        # from it, they'll end up sharing the same loaded Worker.
+        #
+        # (If omitted, the binding will not share a cache with any other binding.)
+      }
+
+      workerdDebugPort @28 :Void;
+      # A binding that provides a connect() method to dynamically connect to any workerd
+      # instance's debug port. This allows dynamic access to worker entrypoints via the
+      # WorkerdDebugPort RPC interface.
+      #
+      # Usage: const client = await env.DEBUG_PORT.connect("localhost:1234");
+      #        const fetcher = await client.getEntrypoint("service", "entrypoint");
+      #
+      # This is a workerd-only API intended for local development and testing.
+
+      # TODO(someday): dispatch, other new features
+    }
+
+    struct Type {
+      # Specifies the type of a parameter binding.
+
+      union {
+        unspecified @0 :Void;
+        # (This catches when someone forgets to specify one of the union members. Do not set this.)
+
+        text @1 :Void;
+        data @2 :Void;
+        json @3 :Void;
+        wasm @4 :Void;
+        cryptoKey @5 :List(CryptoKey.Usage);
+        service @6 :Void;
+        durableObjectNamespace @7 :Void;
+        kvNamespace @8 :Void;
+        r2Bucket @9 :Void;
+        obsolete0 @10 :Void;
+        queue @11 :Void;
+        analyticsEngine @12 : Void;
+        hyperdrive @13: Void;
+        durableObjectClass @14: Void;
+        workerdDebugPort @15: Void;
+      }
+    }
+
+    struct DurableObjectNamespaceDesignator {
+      # The type of a Durable Object namespace binding.
+
+      className @0 :Text;
+      # Exported class name that implements the Durable Object.
+
+      serviceName @1 :Text;
+      # The service name of the worker that defines this class. If omitted, the current worker
+      # is assumed.
+      #
+      # Use of this field is discouraged. Instead, when accessing a different Worker's Durable
+      # Objects, specify a `service` binding to that worker, and have the worker implement an
+      # appropriate API.
+      #
+      # (This is intentionally not a ServiceDesignator because you cannot choose an alternate
+      # entrypoint here; the class name IS the entrypoint.)
+
+      obsolete2 @2 :AnyPointer;
+    }
+
+    struct CryptoKey {
+      # Parameters to crypto.subtle.importKey().
+
+      union {
+        raw @0 :Data;
+        hex @1 :Text;
+        base64 @2 :Text;
+        # Raw key material, possibly hex or base64-encoded. Use this for symmetric keys.
+        #
+        # Hint: `raw` would typically be used with Cap'n Proto's `embed` syntax to embed an
+        # external binary key file. `hex` or `base64` could do that too but can also be specified
+        # inline.
+
+        pkcs8 @3 :Text;
+        # Private key in PEM-encoded PKCS#8 format.
+
+        spki @4 :Text;
+        # Public key in PEM-encoded SPKI format.
+
+        jwk @5 :Text;
+        # Key in JSON format.
+      }
+
+      algorithm :union {
+        # Value for the `algorithm` parameter.
+
+        name @6 :Text;
+        # Just a name, like `AES-GCM`.
+
+        json @7 :Text;
+        # An object, encoded here as JSON.
+      }
+
+      extractable @8 :Bool = false;
+      # Is the Worker allowed to export this key to obtain the underlying key material? Setting
+      # this false ensures that the key cannot be leaked by errant JavaScript code; the key can
+      # only be used in WebCrypto operations.
+
+      usages @9 :List(Usage);
+      # What operations is this key permitted to be used for?
+
+      enum Usage {
+        encrypt @0;
+        decrypt @1;
+        sign @2;
+        verify @3;
+        deriveKey @4;
+        deriveBits @5;
+        wrapKey @6;
+        unwrapKey @7;
+      }
+    }
+
+    struct MemoryCacheLimits {
+      maxKeys @0 :UInt32;
+      maxValueSize @1 :UInt32;
+      maxTotalValueSize @2 :UInt64;
+    }
+
+    struct WrappedBinding {
+      # A binding that wraps a group of (lower-level) bindings in a common API.
+
+      moduleName @0 :Text;
+      # Wrapper module name.
+      # The module must be an internal one (provided by extension or registered in the c++ code).
+      # Module will be instantitated during binding initialization phase.
+
+      entrypoint @1 :Text = "default";
+      # Module needs to export a function with a given name (default export gets "default" name).
+      # The function needs to accept a single `env` argument - a dictionary with inner bindings.
+      # Function will be invoked during initialization phase and its return value will be used as
+      # resulting binding value.
+
+      innerBindings @2 :List(Binding);
+      # Inner bindings that will be created and passed in the env dictionary.
+      # These bindings shall be used to implement end-user api, and are not available to the
+      # binding consumers unless "re-exported" in wrapBindings function.
+    }
+  }
+
+  globalOutbound @6 :ServiceDesignator = "internet";
+  # Where should the global "fetch" go to? The default is the service called "internet", which
+  # should usually be configured to talk to the public internet.
+
+  cacheApiOutbound @11 :ServiceDesignator;
+  # Where should cache API (i.e. caches.default and caches.open(...)) requests go?
+
+  durableObjectNamespaces @7 :List(DurableObjectNamespace);
+  # List of durable object namespaces in this Worker.
+
+  struct DurableObjectNamespace {
+    className @0 :Text;
+    # Exported class name that implements the Durable Object.
+    #
+    # Changing the class name will not break compatibility with existing storage, so long as
+    # `uniqueKey` stays the same.
+
+    union {
+      uniqueKey @1 :Text;
+      # A unique, stable ID associated with this namespace. This could be a  GUID, or any other
+      # string which does not appear anywhere else in the world.
+      #
+      # This string is used to ensure that objects of this class have unique identifiers distinct
+      # from objects of any other class. Object IDs are cryptographically derived from `uniqueKey`
+      # and validated against it. It is impossible to guess or forge a valid object ID without
+      # knowing the `uniqueKey`. Hence, if you keep the key secret, you can prevent anyone from
+      # forging IDs. However, if you don't care if users can forge valid IDs, then it's not a big
+      # deal if the key leaks.
+      #
+      # DO NOT LOSE this key, otherwise it may be difficult or impossible to recover stored data.
+
+      ephemeralLocal @2 :Void;
+      # Instances of this class are ephemeral -- they have no durable storage at all. The
+      # `state.storage` API will not be present. Additionally, this namespace will allow arbitrary
+      # strings as IDs. There are no `idFromName()` nor `newUniqueId()` methods; `get()` takes any
+      # string as a parameter.
+      #
+      # Ephemeral objects are NOT globally unique, only "locally" unique, for some definition of
+      # "local". For example, on Cloudflare's network, these objects are unique per-colo.
+      #
+      # WARNING: Cloudflare Workers currently limits this feature to Cloudflare-internal users
+      #   only, because using them correctly requires deep understanding of Cloudflare network
+      #   topology. We're working on something better for public consuption. Until then for
+      #   "ephemeral" use cases we recommend using regular durable objects and just not storing
+      #   anything. An object that hasn't stored anything will not consume any storage space on
+      #   disk.
+    }
+
+    preventEviction @3 :Bool;
+    # By default, Durable Objects are evicted after 10 seconds of inactivity, and expire 70 seconds
+    # after all clients have disconnected. Some applications may want to keep their Durable Objects
+    # pinned to memory forever, so we provide this flag to change the default behavior.
+    #
+    # Note that this is only supported in Workerd; production Durable Objects cannot toggle eviction.
+
+    enableSql @4 :Bool;
+    # Whether or not Durable Objects in this namespace can use the `storage.sql` API to execute SQL
+    # queries.
+    #
+    # workerd uses SQLite to back all Durable Objects, but the SQL API is hidden by default to
+    # emulate behavior of traditional DO namespaces on Cloudflare that aren't SQLite-backed. This
+    # flag should be enabled when testing code that will run on a SQLite-backed namespace.
+
+    container @5 :ContainerOptions;
+    # If present, Durable Objects in this namespace have attached containers.
+    # workerd will talk to the configured container engine to start containers for each Durable
+    # Object from a configured default, a runtime-selected image, or a full container snapshot. The
+    # Durable Object can access the container via the ctx.container API.
+    # TODO(CloudChamber): add link to docs.
+
+    struct ContainerOptions {
+      imageName @0 :Text;
+      # Optional default image used when start() does not specify an image or full container
+      # snapshot. An empty value means that no default image is configured.
+      # When imageName omits a tag, Docker uses the "latest" tag.
+
+      privileges @1 :ContainerPrivileges;
+      # Extra Docker HostConfig privileges applied when creating the container.
+      # These fields are passed through to Docker as-is and are empty by default.
+      # They are not validated or allow-listed. Depending on the values and Docker daemon mode,
+      # they can expose arbitrary host devices, disable security profiles, or grant capabilities
+      # such as CAP_SYS_ADMIN that may provide host-level access. Only use trusted configuration.
+
+      images @2 :List(NamedImage);
+      # Named image references exposed to the Durable Object through ctx.container.images.
+      # These are optional; Worker code can instead supply an image reference from another source.
+      # When imageName is empty, the local container backend requires start() to specify an image or
+      # full container snapshot.
+
+      struct NamedImage {
+        name @0 :Text;
+        image @1 :Text;
+      }
+
+      struct ContainerPrivileges {
+        capabilities @0 :List(Text);
+        # Docker HostConfig.CapAdd values.
+
+        devices @1 :List(Device);
+        # Docker HostConfig.Devices values.
+
+        securityOpt @2 :List(Text);
+        # Docker HostConfig.SecurityOpt values.
+
+        struct Device {
+          pathOnHost @0 :Text;
+          pathInContainer @1 :Text;
+          cgroupPermissions @2 :Text;
+        }
+      }
+    }
+  }
+
+  durableObjectUniqueKeyModifier @8 :Text;
+  # Additional text which is hashed together with `DurableObjectNamespace.uniqueKey`. When using
+  # worker inheritance, each derived worker must specify a unique modifier to ensure that its
+  # Durable Object instances have unique IDs from all other workers inheriting the same parent.
+  #
+  # DO NOT LOSE this value, otherwise it may be difficult or impossible to recover stored data.
+
+  durableObjectStorage :union {
+    # Specifies where this worker's Durable Objects are stored.
+
+    none @9 :Void;
+    # Default. The worker has no Durable Objects. `durableObjectNamespaces` must be empty, or
+    # define all namespaces as `ephemeralLocal`, or this must be an abstract worker (meant to be
+    # inherited by other workers, who will specify `durableObjectStorage`).
+
+    inMemory @10 :Void;
+    # The `state.storage` API stores in-memory only. All stored data will persist for the
+    # lifetime of the process, but will be lost upon process exit.
+    #
+    # Individual objects will still shut down when idle as normal -- only data stored with the
+    # `state.storage` interface is persistent for the lifetime of the process.
+    #
+    # This mode is intended for local testing purposes.
+
+    localDisk @12 :Text;
+    # ** EXPERIMENTAL; SUBJECT TO BACKWARDS-INCOMPATIBLE CHANGE **
+    #
+    # Durable Object data will be stored in a directory on local disk. This field is the name of
+    # a service, which must be a DiskDirectory service. For each Durable Object class, a
+    # subdirectory will be created using `uniqueKey` as the name. Within the directory, one or
+    # more files are created for each object, with names `<id>.<ext>`, where `.<ext>` may be any of
+    # a number of different extensions depending on the storage mode. (Currently, the main storage
+    # is a file with the extension `.sqlite`, and in certain situations extra files with the
+    # extensions `.sqlite-wal`, and `.sqlite-shm` may also be present.)
+  }
+
+  # In a cluster (`Config.cluster`), objects stored on `localDisk` are distributed across the
+  # instances; see `ClusterConfig`.
+
+  moduleFallback @13 :Text;
+
+  tails @14 :List(ServiceDesignator);
+  # List of tail worker services that should receive tail events for this worker.
+  # See: https://developers.cloudflare.com/workers/observability/logs/tail-workers/
+
+  streamingTails @15 :List(ServiceDesignator);
+  # List of streaming tail worker services that should receive tail events for this worker.
+  # NOTE: This will be deleted in a future refactor, do not depend on this.
+
+  containerEngine :union {
+    none @16 :Void;
+    # No container engine configured. Container operations will not be available.
+
+    localDocker @17 :DockerConfiguration;
+    # Use local Docker daemon for container operations.
+    # Only used for local development and testing purposes.
+  }
+
+  struct DockerConfiguration {
+    socketPath @0 :Text;
+    # Path to the Docker socket.
+
+    containerEgressInterceptorImage @1 :Text;
+    # Docker image name for the container egress interceptor sidecar.
+    # This sidecar intercepts outbound traffic from containers and routes it
+    # through workerd for egress mappings (setEgressHttp bindings).
+    # You can find this image in repositories like DockerHub: https://hub.docker.com/r/cloudflare/proxy-everything
+
+    sessionId @2 :Text;
+    # Scopes the Docker resources workerd creates to a session chosen by the program that
+    # supervises workerd, such as Miniflare. May contain only the characters Docker allows in
+    # container names: letters, digits, `_`, `.` and `-`.
+    #
+    # When set, container and sidecar names include the session ID, so different sessions never
+    # share or adopt each other's containers, while a workerd process started with the same
+    # session adopts the containers an earlier one left running. Resources that do not outlive
+    # the session carry the label `dev.workerd.session=<sessionId>`: application containers,
+    # sidecars, snapshot helper containers, and snapshot clone volumes. The supervisor can remove
+    # them by that label once the session ends. Snapshot volumes and container snapshot images
+    # outlive sessions and are not labelled.
+  }
+
+  accessBlobHeader @18 :Text;
+  # Name of the HTTP header carrying per-request Cloudflare Access metadata for local dev.
+  # When set, the worker reads this header from every incoming request to populate `ctx.access`.
+  # The header value is a JSON object matching the production Access struct:
+  #   { "app_aud": "<audience>", "jwt_claims": { ... } }
+  # `app_aud` (string, required) populates `ctx.access.aud`.
+  # `jwt_claims` (object, optional) is passed as `ctx.props.jwtClaims` to the access binding
+  # worker (if configured via `accessBindingService`) when `ctx.access.getIdentity()` is called.
+  # Requests that carry the header get `ctx.access` populated; requests without it get
+  # `ctx.access === undefined`.
+
+  accessBindingService @19 :ServiceDesignator;
+  # Names a service that acts as the Cloudflare Access identity binding worker for local dev.
+  # When `ctx.access.getIdentity()` is called, workerd dispatches a `getIdentity` JS-RPC method
+  # on this service with per-request `props` set to `{ aud }` or `{ aud, jwtClaims }` (extracted
+  # from the `accessBlobHeader` HTTP header; `jwtClaims` is included only when the optional
+  # `jwt_claims` field is present in the header). This mimics the production path where an
+  # Access binding worker resolves the identity from JWT claims.
+  #
+  # If not set, `ctx.access.getIdentity()` resolves to `undefined` (even when `accessBlobHeader`
+  # is configured and `ctx.access.aud` is available).
+
+  workflowsEngine @20 :WorkflowsEngine;
+  # the externally-supplied service responsible for running Workflows defined in this worker
+}
+
+struct ExternalServer {
+  # Describes the ability to talk to a specific server, typically a back-end server available
+  # on the internal network.
+  #
+  # When a Worker contains a service binding that points to an ExternalServer, *all* fetch()
+  # calls on that binding will be delivered to that server, regardless of whether the hostname
+  # or protocol specified in the URL actually match the hostname or protocol used by the actual
+  # server. Typically, a Worker implementing a reverse proxy would use this to forward a request
+  # to a back-end application server. Such a back-end typically does not have a real public
+  # hostname, since it is only reachable through the proxy, but the requests forwarded to it will
+  # keep the hostname that was on the original request.
+  #
+  # Note that this also implies that regardless of whether the original URL was http: or https:,
+  # the request will be delivered to the target server using the protocol specified below. A
+  # header like `X-Forwarded-Proto` can be used to pass along the original protocol; see
+  # `HttpOptions`.
+
+  address @0 :Text;
+  # Address/port of the server. Optional; if not specified, then you will be required to specify
+  # the address on the command line with with `--external-addr <name>=<addr>`.
+  #
+  # Examples:
+  # - "1.2.3.4": Connect to the given IPv4 address on the protocol's default port.
+  # - "1.2.3.4:80": Connect to the given IPv4 address and port.
+  # - "1234:5678::abcd": Connect to the given IPv6 address on the protocol's default port.
+  # - "[1234:5678::abcd]:80": Connect to the given IPv6 address and port.
+  # - "unix:/path/to/socket": Connect to the given Unix Domain socket by path.
+  # - "unix-abstract:name": On Linux, connect to the given "abstract" Unix socket name.
+  # - "example.com:80": Perform a DNS lookup to determine the address, and then connect to it.
+  #
+  # (These are the formats supported by KJ's parseAddress().)
+
+  union {
+    http @1 :HttpOptions;
+    # Talk to the server over unencrypted HTTP.
+
+    https :group {
+      # Talk to the server over encrypted HTTPS.
+
+      options @2 :HttpOptions;
+      tlsOptions @3 :TlsOptions;
+
+      certificateHost @4 :Text;
+      # If present, expect the host to present a certificate authenticating it as this hostname.
+      # If `certificateHost` is not provided, then the certificate is checked against `address`.
+    }
+
+    tcp :group {
+      # Connect to the server over raw TCP. Bindings to this service will only support the
+      # `connect()` method; `fetch()` will throw an exception.
+      tlsOptions @5 :TlsOptions;
+      certificateHost @6 :Text;
+    }
+
+    # TODO(someday): Cap'n Proto RPC
+  }
+}
+
+struct Network {
+  # Describes the ability to talk to a network.
+  #
+  # This is commonly used to define the "internet" service which is the default `globalOutbound`
+  # for all Workers. To prevent SSRF, by default Workers will not be permitted to reach internal
+  # network addresses using global fetch(). It's recommended that you create ExternalServer
+  # bindings instead to grant access to specific servers. However, if you really want to, you
+  # can configure a service that grants arbitrary internal network access, like:
+  #
+  #     ( name = "internalNetwork",
+  #       network = (
+  #         allow = ["public", "private"],
+  #       )
+  #     )
+
+  allow @0 :List(Text) = ["public"];
+  deny @1 :List(Text);
+  # Specifies which network addresses the Worker will be allowed to connect to, e.g. using fetch().
+  # The default allows publicly-routable IP addresses only, in order to prevent SSRF attacks.
+  #
+  # The allow and deny lists specify network blocks in CIDR notation (IPv4 and IPv6), such as
+  # "192.0.2.0/24" or "2001:db8::/32". Traffic will be permitted as long as the address
+  # matches at least one entry in the allow list and none in the deny list.
+  #
+  # In addition to IPv4 and IPv6 CIDR notation, several special strings may be specified:
+  # - "private": Matches network addresses that are reserved by standards for private networks,
+  #   such as "10.0.0.0/8" or "192.168.0.0/16". This is a superset of "local".
+  # - "public": Opposite of "private".
+  # - "local": Matches network addresses that are defined by standards to only be accessible from
+  #   the local machine, such as "127.0.0.0/8" or Unix domain addresses.
+  # - "network": Opposite of "local".
+  # - "unix": Matches all Unix domain socket addresses. (In the future, we may support specifying a
+  #   glob to narrow this to specific paths.)
+  # - "unix-abstract": Matches Linux's "abstract unix domain" addresses. (In the future, we may
+  #   support specifying a glob.)
+  #
+  # In the case that the Worker specifies a DNS hostname rather than a raw address, these rules are
+  # used to filter the addresses returned by the lookup. If none of the returned addresses turn
+  # out to be permitted, then the system will behave as if the DNS entry did not exist.
+  #
+  # (The above is exactly the format supported by kj::Network::restrictPeers().)
+
+  tlsOptions @2 :TlsOptions;
+}
+
+struct DiskDirectory {
+  # Configures access to a directory on disk. This is a type of service which will expose an HTTP
+  # interface to the directory content.
+  #
+  # This is very bare-bones, generally not suitable for serving a web site on its own. In
+  # particular, no attempt is made to guess the `Content-Type` header. You normally would wrap
+  # this in a Worker that fills in the metadata in the way you want.
+  #
+  # A GET request targeting a directory (rather than a file) will return a basic JSAN directory
+  # listing like:
+  #
+  #     [{"name":"foo","type":"file"},{"name":"bar","type":"directory"}]
+  #
+  # Possible "type" values are "file", "directory", "symlink", "blockDevice", "characterDevice",
+  # "namedPipe", "socket", "other".
+  #
+  # `Content-Type` will be `application/octet-stream` for files or `application/json` for a
+  # directory listing. Files will have a `Content-Length` header, directories will not. Symlinks
+  # will be followed (but there is intentionally no way to create one, even if `writable` is
+  # `true`), and treated according to the type of file they point to. The other inode types cannot
+  # be opened; trying to do so will produce a "406 Not Acceptable" error (on the theory that there
+  # is no acceptable format for these, regardless of what the client says it accepts).
+  #
+  # `HEAD` requests are properly optimized to perform a stat() without actually opening the file.
+
+  path @0 :Text;
+  # The filesystem path of the directory. If not specified, then it must be specified on the
+  # command line with `--directory-path <service-name>=<path>`.
+  #
+  # Relative paths are interpreted relative to the current directory where the server is executed,
+  # NOT relative to the config file. So, you should usually use absolute paths in the config file.
+
+  writable @1 :Bool = false;
+  # Whether to support PUT requests for writing. A PUT will write to a temporary file which
+  # is atomically moved into place upon successful completion of the upload. Parent directories are
+  # created as needed.
+
+  allowDotfiles @2 :Bool = false;
+  # Whether to allow access to files and directories whose name starts with '.'. These are made
+  # inaccessible by default since they very often store metadata that is not meant to be served,
+  # e.g. a git repository or an `.htaccess` file.
+  #
+  # Note that the special links "." and ".." will never be accessible regardless of this setting.
+}
+
+# ========================================================================================
+# Protocol options
+
+struct HttpOptions {
+  # Options for using HTTP (as a client or server). In particular, this specifies behavior that is
+  # important in the presence of proxy servers, whether forward or reverse.
+
+  style @0 :Style = host;
+
+  enum Style {
+    host @0;
+    # Normal HTTP. The request line contains only the path, and the separate `Host` header
+    # specifies the hostname.
+
+    proxy @1;
+    # HTTP proxy protocol. The request line contains a full URL instead of a path. No `Host`
+    # header is required. This is the protocol used by HTTP forward proxies. This allows you to
+    # implement such a proxy as a Worker.
+  }
+
+  forwardedProtoHeader @1 :Text;
+  # If specified, then when the given header is present on a request, it specifies the protocol
+  # ("http" or "https") that was used by the original client. The request URL reported to the
+  # Worker will reflect this protocol. Otherwise, the URL will reflect the actual physical protocol
+  # used by the server in receiving the request.
+  #
+  # This option is useful when this server sits behind a reverse proxy that performs TLS
+  # termination. Typically such proxies forward the original protocol in a header named something
+  # like "X-Forwarded-Proto".
+  #
+  # This setting is ignored when `style` is `proxy`.
+
+  cfBlobHeader @2 :Text;
+  # If set, then the `request.cf` object will be encoded (as JSON) into / parsed from the header
+  # with this name. Otherwise, it will be discarded on send / `undefined` on receipt.
+
+  injectRequestHeaders @3 :List(Header);
+  # List of headers which will be automatically injected into all requests. This can be used
+  # e.g. to add an authorization token to all requests when using `ExternalServer`. It can also
+  # apply to incoming requests received on a `Socket` to modify the headers that will be delivered
+  # to the app. Any existing header with the same name is removed.
+
+  injectResponseHeaders @4 :List(Header);
+  # Same as `injectRequestHeaders` but for responses.
+
+  struct Header {
+    name @0 :Text;
+    # Case-insensitive.
+
+    value @1 :Text;
+    # If null, the header will be removed.
+  }
+
+  capnpConnectHost @5 :Text;
+  # A CONNECT request for this host+port will be treated as a request to form a Cap'n Proto RPC
+  # connection. The server will expose a WorkerdBootstrap as the bootstrap interface, allowing
+  # events to be delivered to the target worker via capnp. Clients will use capnp for non-HTTP
+  # event types (especially JSRPC).
+
+  # TODO(someday): When we support TCP, include an option to deliver CONNECT requests to the
+  #   TCP handler.
+}
+
+struct TlsOptions {
+  # Options that apply when using TLS. Can apply on either the client or the server side, depending
+  # on the context.
+  #
+  # This is based on KJ's TlsContext::Options.
+
+  keypair @0 :Keypair;
+  # The default private key and certificate to use. Optional when acting as a client.
+
+  struct Keypair {
+    privateKey @0 :Text;
+    # Private key in PEM format. Supports PKCS8 keys as well as "traditional format" RSA and DSA
+    # keys.
+    #
+    # Remember that you can use Cap'n Proto's `embed` syntax to reference an external file.
+
+    certificateChain @1 :Text;
+    # Certificate chain in PEM format. A chain can be constructed by concatenating multiple
+    # PEM-encoded certificates, starting with the leaf certificate.
+  }
+
+  # TODO(someday): Support SNI-based keypair selection? Is a hostname -> keypair map good enough?
+  #   Does it need to support wildcards? Maybe we should just let you provide a pile of certs and
+  #   we can figure out which hosts each one matches?
+
+  requireClientCerts @1 :Bool = false;
+  # If true, then when acting as a server, incoming connections will be rejected unless they bear
+  # a certificate signed by one of the trusted CAs.
+  #
+  # Typically, when using this, you'd set `trustBrowserCas = false` and list a specific private CA
+  # in `trustedCertificates`.
+
+  trustBrowserCas @2 :Bool = false;
+  # If true, trust certificates which are signed by one of the CAs that browsers normally trust.
+  # You should typically set this true when talking to the public internet, but you may want to
+  # set it false when talking to servers on your internal network.
+
+  trustedCertificates @3 :List(Text);
+  # Additional CA certificates to trust, in PEM format. Remember that you can use Cap'n Proto's
+  # `embed` syntax to read the certificates from other files.
+
+  minVersion @4 :Version = goodDefault;
+  # Minimum TLS version that will be allowed. Generally you should not override this unless you
+  # have unusual backwards-compatibility needs.
+
+  enum Version {
+    goodDefault @0;
+    # A good default chosen by the code maintainers. May change over time.
+
+    ssl3 @1;
+    tls1Dot0 @2;
+    tls1Dot1 @3;
+    tls1Dot2 @4;
+    tls1Dot3 @5;
+  }
+
+  cipherList @5 :Text;
+  # OpenSSL cipher list string. The default is a curated list designed to be compatible with
+  # almost all software in current use (specifically, based on Mozilla's "intermediate"
+  # recommendations). The defaults will change in future versions of this software to account
+  # for the latest cryptanalysis.
+  #
+  # Generally you should only specify your own `cipherList` if:
+  # - You have extreme backwards-compatibility needs and wish to enable obsolete and/or broken
+  #   algorithms.
+  # - You need quickly to disable an algorithm recently discovered to be broken.
+}
+
+# ========================================================================================
+# Extensions
+
+struct Extension {
+  # Additional capabilities for workers.
+
+  modules @0 :List(Module);
+  # List of javascript modules provided by the extension.
+  # These modules can either be imported directly as user-level api (if not marked internal)
+  # or used to define more complicated workerd constructs such as wrapped bindings and events.
+
+  struct Module {
+    # A module extending workerd functionality.
+
+    name @0 :Text;
+    # Full js module name. Must be a fully-qualified URL with a non-file: scheme,
+    # e.g. "my-extension:module". Workers using the new_module_registry
+    # compatibility flag reject extensions whose module names are not valid URLs;
+    # the original module registry tolerates any path-like name, but new
+    # extensions should always use the URL form.
+
+    internal @1 :Bool = false;
+    # Internal modules can be imported by other extension modules only and not the user code.
+
+    esModule @2 :Text;
+    # Raw source code of ES module.
+  }
+}
+
+# ========================================================================================
+# Fallback Service Request
+#  Used only to define the JSON structure of a request to the fallback service.
+
+struct FallbackServiceRequest {
+  type @0 :Text;
+  specifier @1 :Text;
+  rawSpecifier @2 :Text;
+  referrer @3 :Text;
+
+  struct Attribute {
+    name @0: Text;
+    value @1: Text;
+  }
+  attributes @4 :List(Attribute);
+}

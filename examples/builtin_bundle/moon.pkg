@@ -1,0 +1,13 @@
+import {
+  "Ridge-Lab/capnp",
+  "Ridge-Lab/capnp/examples/builtin_bundle/types",
+  "Ridge-Lab/capnp/internal/stdio",
+  "moonbitlang/core/encoding/utf8",
+  "moonbitlang/x/fs",
+}
+
+pkgtype(kind: "executable")
+
+options(
+  link: { "js": { "format": "esm" } },
+)

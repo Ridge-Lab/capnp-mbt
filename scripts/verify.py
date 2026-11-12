@@ -165,6 +165,11 @@ class Verification:
                       "--moon", moon, "--node", node, "--targets", *hosts, "--output", str(oracle)],
                       requires=tuple(f"build-{target}" for target in hosts) + ("node-version",),
                       artifacts=(oracle / "report.json",))
+            config = self.directory / "workerd-config"
+            self.task("workerd-deployment", [sys.executable, "examples/workerd_config/verify.py",
+                      "--capnp", args.capnp, "--moon", moon, "--node", node, "--targets", *hosts,
+                      "--output", str(config), *(["--workerd", args.workerd] if args.workerd else [])],
+                      requires=("node-version", "moon-version"), artifacts=(config / "report.json",))
             benchmark = self.directory / "benchmark.json"
             self.task("benchmark-smoke", [sys.executable, "scripts/run_benchmarks.py", "--targets", *hosts,
                       "--samples", "1", "32", "--round-ms", "5", "--warmup-ms", "5", "--rounds", "3",
@@ -201,6 +206,7 @@ def main() -> int:
     parser.add_argument("--targets", choices=TARGETS, nargs="+", default=["js"], help="Explicit backends; default: js. Full profile requires js or native.")
     parser.add_argument("--version", help="Required published package version for the release profile")
     parser.add_argument("--capnp", default="capnp", help="Independent Cap\'n Proto 1.5.0 compiler")
+    parser.add_argument("--workerd", help="Pinned workerd executable for rebuilding the deployment fixture")
     parser.add_argument("--moon", default="moon", help="MoonBit executable; never installed or upgraded by this script")
     parser.add_argument("--node", default="node", help="Node executable")
     parser.add_argument("--timeout", type=int, default=600, help="Maximum seconds per task")

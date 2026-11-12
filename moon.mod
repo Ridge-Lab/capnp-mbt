@@ -1,6 +1,6 @@
 name = "Ridge-Lab/capnp"
 
-version = "0.4.2"
+version = "0.5.0"
 
 readme = "README.md"
 

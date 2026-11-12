@@ -12,6 +12,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 
 
@@ -113,6 +114,11 @@ def verify_distribution(installed: Path) -> None:
         "benchmarks/main.mbt", "scripts/run_benchmarks.py",
         "packed_stream.mbt", "scripts/verify.py", "scripts/verify_oracles.py",
         "fixtures/conformance.bin", "fixtures/conformance.packed.bin",
+        "fixtures/upstream/workerd/LICENSE", "fixtures/upstream/workerd/modules.capnp",
+        "fixtures/upstream/workerd/config/workerd.capnp", "fixtures/upstream/workerd/config/unit-tests/config.capnp",
+        "fixtures/upstream/workerd/config/unit-tests/worker.js", "fixtures/upstream/workerd/config/unit-tests/config.bin",
+        "examples/workerd_config/build.py", "examples/workerd_config/verify.py", "examples/workerd_config/inspect.mbt",
+        "examples/builtin_bundle/main.mbt", "examples/builtin_bundle/types/capnp_generated.mbt",
     )
     for name in required:
         if not (installed / name).is_file():
@@ -220,6 +226,15 @@ pkgtype(kind: "executable")
         run(moon, "run", "--target", target, ".", cwd=directory)
     verify_distribution(installed)
     verify_host_tools(installed, directory, moon, version)
+    example = directory / "deployed-worker"
+    run(sys.executable, str(installed / "examples/workerd_config/build.py"), str(example),
+        "--moon", moon, "--capnp", capnp, cwd=directory)
+    sample = installed / "fixtures/upstream/workerd/config/unit-tests"
+    output = directory / "recovered.js"
+    app = example / "_build/js/release/build/example/workerd/cmd/inspect/inspect.js"
+    run("node", str(app), "extract", str(sample / "config.bin"), "main", "worker", str(output), cwd=directory)
+    if hashlib.sha256(output.read_bytes()).hexdigest() != "004b53a375f06ce29f10bbd2ab5d3eaeea0dbe4ac9cba48fcfae482a4ddd0149":
+        raise RuntimeError("Published inspector did not recover the upstream test Worker")
     print(f"Published Ridge-Lab/capnp@{version}: fresh consumer passed on all four backends")
 
 

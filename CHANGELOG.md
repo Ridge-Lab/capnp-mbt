@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.0
+
+- Inspect deployment configs emitted by `workerd compile --config-only`. Generate the reader from workerd's unchanged configuration schema and extract an embedded module by service and module name. Verification rebuilds the upstream unit-test Worker, runs its tests in workerd, and compares the extracted JavaScript with the source.
+- Inspect the separate module bundle embedded in a pinned workerd release using generated MoonBit bindings. See the [built-in bundle example](examples/builtin_bundle/) for the release archive and extraction procedure.
+
 ## 0.4.2
 
 - Defer delivery of frames ending inside a packed dense run until its required count and all declared raw bytes have arrived. Keep a maximum of 256 words for an unfinished run. The official 1.5.0 format and Python/C++ pipe peer reproduce the truncated-final-word case.
