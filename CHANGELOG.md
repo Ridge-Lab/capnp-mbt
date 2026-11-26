@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.6.0
+
+- Generate MoonBit-native typed union ADTs (`<Type>Which` enums with exhaustive `which_case()` methods and forward-compatible `Unknown(UInt32)` fallbacks) for every union struct and group while preserving `which()` and `is_<member>()` for backwards compatibility. Symbol allocation disambiguates `*Which` collisions automatically across unchanged upstream `test.capnp`, `schema.capnp`, and Cloudflare `workerd.capnp`.
+- Add strict canonical verification and zero-copy canonical decoding: `is_canonical(segment)` and `read_canonical(segment)` verify Cap'n Proto 1.5.0 canonical rules (struct root, contiguous preorder layout, trimmed sections, uniform composite trimming, cleared bit/byte padding, no far pointers or capabilities) in a single bounded pass and return a zero-copy `Message` without requiring a segment table.
+- Replace deprecated `UInt64::extend_uint` calls with `UInt::to_uint64()` for strict `--deny-warn` builds on MoonBit `0.10.22+124d61d05` while preserving `0.10.16` minimum compatibility; update CI and documentation toolchain pins.
+- Complete Apache-2.0 provenance documentation (`docs/PROVENANCE.md`, `fixtures/upstream/workerd/README.md`) covering all six vendored Cloudflare `workerd` fixtures and generated bindings, and enforce their Apache-2.0 notice and SHA-256 hashes in `scripts/verify_release.py` and `scripts/verify_oracles.py`.
+- Add 256-case deterministic packed differential fuzz tests, comprehensive canonical oracle and non-canonical violation regressions, and `examples/builtin_bundle` unit tests; upgrade `examples/builtin_bundle`, `examples/workerd_config`, `examples/telemetry`, and `scripts/verify_release.py` to use `which_case()` and `read_canonical()`.
+- Record fresh MoonBit `0.10.22` Node.js benchmark results covering all 8 runtime operations (including `framed_stream` and `packed_stream`), and add architecture, ecosystem comparison, and verification-harness documentation.
+
 ## 0.5.0
 
 - Inspect deployment configs emitted by `workerd compile --config-only`. Generate the reader from workerd's unchanged configuration schema and extract an embedded module by service and module name. Verification rebuilds the upstream unit-test Worker, runs its tests in workerd, and compares the extracted JavaScript with the source.

@@ -96,3 +96,86 @@ test "canonical recursion is independently bounded even with permissive reader" 
     ignore(@capnp.canonicalize(@capnp.read_message(empty), max_depth=257))
   })
 }
+
+///|
+test "is_canonical and read_canonical verify every official canonical oracle vector" {
+  let paths = [
+    "fixtures/conformance.canonical.bin", "fixtures/upstream/oracle-1.5.0/null-root.canonical.bin",
+    "fixtures/upstream/oracle-1.5.0/bool-padding.canonical.bin", "fixtures/upstream/oracle-1.5.0/data-padding.canonical.bin",
+    "fixtures/upstream/oracle-1.5.0/inline-trim.canonical.bin", "fixtures/upstream/oracle-1.5.0/inline-all-zero.canonical.bin",
+    "fixtures/upstream/oracle-1.5.0/empty-list-order.canonical.bin", "fixtures/upstream/oracle-1.5.0/nested-far.canonical.bin",
+    "fixtures/upstream/oracle-1.5.0/far-empty-child.canonical.bin", "fixtures/upstream/oracle-1.5.0/reverse-allocation.canonical.bin",
+  ]
+  for path in paths {
+    let segment = @fs.read_file_to_bytes(path)
+    assert_true(@capnp.is_canonical(segment))
+    let decoded = @capnp.read_canonical(segment)
+    assert_eq(decoded.segment_count(), 1)
+    assert_eq(@capnp.canonicalize(decoded), segment)
+  }
+  // Confirm zero-copy canonical decoding exposes the exact conformance values.
+  let conformance = @capnp.read_canonical(
+    @fs.read_file_to_bytes("fixtures/conformance.canonical.bin"),
+  ).root()
+  assert_eq(conformance.get_text(0), "MoonBit 数据交换")
+  assert_eq(conformance.get_data(1), b"\x00\xff\x80\x0a\x0d")
+}
+
+///|
+test "is_canonical and read_canonical reject every non-canonical wire violation" {
+  // Strip 8-byte single-segment frame header from non-canonical oracle inputs.
+  for
+    name in [
+      "null-root", "bool-padding", "data-padding", "inline-trim", "inline-all-zero",
+      "reverse-allocation",
+    ] {
+    let framed = @fs.read_file_to_bytes(
+      "fixtures/upstream/oracle-1.5.0/" + name + ".bin",
+    )
+    let bare = framed[8:].to_owned()
+    assert_false(@capnp.is_canonical(bare))
+    try ignore(@capnp.read_canonical(bare)) catch {
+      @capnp.CapnpError::InvalidMessage(_) | @capnp.CapnpError::Bounds(_) => ()
+      _ => fail("expected non-canonical rejection for \{name}")
+    } noraise {
+      _ => fail("accepted non-canonical vector \{name}")
+    }
+  }
+  // Empty, unaligned, list root, far pointer, untrimmed sections, aliased child.
+  let invalid_segments : Array[Bytes] = [
+    b"", b"\x00\x00\x00\x00\x00\x00\x00", b"\xfc\xff\xff\xff\x00\x00\x00\x00\x00", // trailing unaligned byte
+     b"\xfc\xff\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00", // trailing unreachable word
+     b"\x00\x00\x00\x00\x00\x00\x00\x00", // null root instead of offset -1 empty struct
+     b"\x01\x00\x00\x00\x02\x00\x00\x00", // list root (empty byte list)
+     b"\x02\x00\x00\x00\x00\x00\x00\x00", // far pointer root
+     b"\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00", // untrimmed zero data word
+     b"\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00", // untrimmed null pointer
+    // Aliased child: struct with 2 pointers both pointing to the same data word.
+     b"\x00\x00\x00\x00\x00\x00\x02\x00\x04\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x2a\x00\x00\x00\x00\x00\x00\x00",
+  ]
+  for segment in invalid_segments {
+    assert_false(@capnp.is_canonical(segment))
+    reader_error("invalid", () => ignore(@capnp.read_canonical(segment)))
+  }
+  // Truncated canonical struct root is rejected with Bounds.
+  let truncated_struct = b"\x00\x00\x00\x00\x02\x00\x00\x00"
+  assert_false(@capnp.is_canonical(truncated_struct))
+  reader_error("bounds", () => ignore(@capnp.read_canonical(truncated_struct)))
+  // Capability root is rejected as Unsupported by read_canonical and false by is_canonical.
+  let capability_root = b"\x03\x00\x00\x00\x00\x00\x00\x00"
+  assert_false(@capnp.is_canonical(capability_root))
+  reader_error("unsupported", () => {
+    ignore(@capnp.read_canonical(capability_root))
+  })
+  // Budget limits are enforced rather than silently returning false.
+  let valid = @fs.read_file_to_bytes("fixtures/conformance.canonical.bin")
+  reader_error("limit", () => {
+    ignore(@capnp.is_canonical(valid, traversal_limit_words=1))
+  })
+  reader_error("limit", () => {
+    ignore(@capnp.is_canonical(valid, nesting_limit=1))
+  })
+  reader_error("limit", () => {
+    ignore(@capnp.read_canonical(valid, traversal_limit_words=-1))
+  })
+}

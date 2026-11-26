@@ -2,7 +2,7 @@
 
 These benchmarks measure Capnp-MBT's public runtime and generated telemetry bindings. They answer practical questions such as the cost of reading two fields versus visiting all samples, packing a batch, or copying a message without knowing its schema. They do not compare Capnp-MBT against C++, JSON, or another language.
 
-From the repository root, with Python 3.10+, MoonBit `0.10.20+65efd5b93`, Node.js and a working native C toolchain on `PATH`:
+From the repository root, with Python 3.10+, MoonBit `0.10.22+124d61d05`, Node.js and a working native C toolchain on `PATH`:
 
 ```sh
 python scripts/run_benchmarks.py --output work/benchmarks/local.json
@@ -18,7 +18,7 @@ python scripts/run_benchmarks.py --targets js --samples 1 32 512 --round-ms 10 -
 python scripts/run_benchmarks.py --round-ms 250 --warmup-ms 1000 --rounds 9 --target-dir work/benchmark-long --output work/benchmarks/long.json
 ```
 
-On Windows with MoonBit 0.10.20, use an x64 Visual Studio developer shell with the MSVC C++ build tools and Windows SDK for native measurements. Use `--targets js` when that native toolchain is unavailable. The committed 0.3.0 measurements used the older LLVM-MinGW setup and retain its `CCC_OVERRIDE_OPTIONS` metadata; that setting does not configure the current Windows native backend. `--moon` and `--node` can select explicit executable paths.
+On Windows with MoonBit 0.10.22, use an x64 Visual Studio developer shell with the MSVC C++ build tools and Windows SDK for native measurements. Use `--targets js` when that native toolchain is unavailable. The committed 0.3.0 measurements used the older LLVM-MinGW setup and retain its `CCC_OVERRIDE_OPTIONS` metadata; that setting does not configure the current Windows native backend. `--moon` and `--node` can select explicit executable paths.
 
 ## Workload and measured operations
 
@@ -49,6 +49,7 @@ Comparisons require the same workload, source/toolchain, settings and machine co
 
 The executable also builds for the repository's Wasm targets through the SDK monotonic-clock implementation. The runner intentionally reports only native and Node.js measurements. A direct invocation accepts `SAMPLE_COUNT ROUND_MS WARMUP_MS ODD_ROUNDS`; sample count is bounded to 1–65536, durations to 1–60000 ms, and rounds to odd integers from 3–99.
 
-## Published local run
+## Published local runs
 
-The [0.3.0 Windows measurement](results/README.md) retains all 36 cases, raw rounds, source hashes and observed variability. It records the 0.3.0 source and MoonBit 0.10.14 toolchain. Several selected-read cases are noisy; the report makes no cross-language superiority claim.
+- The [0.6.0 Windows Node.js measurement](results/local-windows-js-0.6.0.json) records all 24 cases across all 8 operations (including `framed_stream` and `packed_stream`) on MoonBit `0.10.22+124d61d05` and Node.js 24.14.1.
+- The [0.3.0 Windows measurement](results/README.md) retains all 36 native/JS cases from 0.3.0 with raw rounds, source hashes and observed variability on MoonBit 0.10.14. Several selected-read cases are noisy; neither report makes a cross-language superiority claim.

@@ -11,6 +11,7 @@ The compatibility baseline is the **v1.5.0** specification and schema.
 | Compiler request schema | [schema.capnp v1.5.0](https://github.com/capnproto/capnproto/blob/v1.5.0/c%2B%2B/src/capnp/schema.capnp), MIT | Bootstrap decoder and existing-protocol fixture |
 | Upstream schemas and embedded values | [Official C++ 1.5.0 distribution](https://capnproto.org/capnproto-c++-1.5.0.tar.gz), MIT | Unmodified `test.capnp`, imports, `stream.capnp`, compiler schema and required test data |
 | Reference compiler | [capnproto/capnproto](https://github.com/capnproto/capnproto), MIT | Produce independent messages and canonical oracles; decode MoonBit output; no runtime dependency |
+| Cloudflare workerd schemas & sample | [cloudflare/workerd](https://github.com/cloudflare/workerd/tree/e0240debf4d6a5042a02a45311b51c61d13bd0fb), Apache-2.0 | Unmodified `modules.capnp`, `workerd.capnp`, `samples/unit-tests/` config & Worker, and compiled `config.bin` fixture |
 | Python peer | [pycapnp](https://github.com/capnproto/pycapnp), BSD-2-Clause | Separately installed Python binding to the C++ reference implementation |
 | CLI filesystem access | [moonbitlang/x](https://github.com/moonbitlang/x), Apache-2.0 | Package dependency; not copied into this repository |
 
@@ -25,11 +26,16 @@ The compatibility baseline is the **v1.5.0** specification and schema.
   are independently hand-authored wire vectors. Its [README](../fixtures/upstream/oracle-1.5.0/README.md)
   distinguishes these origins and provides generation commands and hashes.
 - `fixtures/upstream/workerd/` contains Cloudflare workerd’s unchanged
-  [module bundle schema](https://github.com/cloudflare/workerd/blob/5dc4754a80ffd9f512f8d77c4a7be6c6fb322ee2/src/workerd/jsg/modules.capnp)
-  and its [Apache 2.0 license](../fixtures/upstream/workerd/LICENSE). The upstream
-  [build rule](https://github.com/cloudflare/workerd/blob/5dc4754a80ffd9f512f8d77c4a7be6c6fb322ee2/build/wd_js_bundle.bzl)
-  uses this schema to bundle modules. The full verification checks both file
-  hashes, generates temporary bindings and exchanges project-authored synthetic data.
+  [module bundle schema](https://github.com/cloudflare/workerd/blob/e0240debf4d6a5042a02a45311b51c61d13bd0fb/src/workerd/jsg/modules.capnp),
+  [deployment config schema](https://github.com/cloudflare/workerd/blob/e0240debf4d6a5042a02a45311b51c61d13bd0fb/src/workerd/server/workerd.capnp),
+  [unit-tests sample](https://github.com/cloudflare/workerd/tree/e0240debf4d6a5042a02a45311b51c61d13bd0fb/samples/unit-tests)
+  (`config.capnp`, `worker.js`), the binary `config.bin` compiled by pinned
+  `workerd@1.20261112.1`, and its [Apache 2.0 license](../fixtures/upstream/workerd/LICENSE).
+  The [manifest](../fixtures/upstream/workerd/README.md) records upstream paths
+  and SHA-256 hashes verified by both full and published-package checks. The
+  upstream [build rule](https://github.com/cloudflare/workerd/blob/e0240debf4d6a5042a02a45311b51c61d13bd0fb/build/wd_js_bundle.bzl)
+  uses `modules.capnp` to bundle modules; `examples/builtin_bundle/types/capnp_generated.mbt`
+  contains generated bindings derived from it.
 - `codegen/fixtures/upstream.request.bin` and `compiler.request.bin` are
   official compiler outputs for the vendored upstream test and compiler schemas.
   Outside the upstream directories, `.capnp` schemas and values under `fixtures/`, `codegen/fixtures/` and

@@ -10,7 +10,11 @@ pub fn canonicalize(Message, max_words? : Int32, max_depth? : Int32) -> Bytes ra
 
 pub fn frame_length(Bytes, offset? : Int32, max_segments? : Int32, max_message_bytes? : Int32) -> Int32? raise CapnpError
 
+pub fn is_canonical(Bytes, traversal_limit_words? : Int32, nesting_limit? : Int32) -> Bool raise CapnpError
+
 pub fn pack(Bytes) -> Bytes raise CapnpError
+
+pub fn read_canonical(Bytes, traversal_limit_words? : Int32, nesting_limit? : Int32) -> Message raise CapnpError
 
 pub fn read_message(Bytes, traversal_limit_words? : Int32, nesting_limit? : Int32, max_segments? : Int32) -> Message raise CapnpError
 

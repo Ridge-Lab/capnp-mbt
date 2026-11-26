@@ -189,3 +189,66 @@ test "packed output batches cap byte expansion and tiny frame counts" {
     ignore(@capnp.PackedFrameDecoder::new(max_output_bytes_per_feed=7))
   })
 }
+
+///|
+test "deterministic packed fuzzing matches batch unpack and never panics on corruption" {
+  let mut seed = 0x51a9c3e7U
+  let next_byte = fn() -> Byte {
+    seed = seed * 1664525U + 1013904223U
+    (seed >> 24).to_byte()
+  }
+  let decoder = @capnp.PackedFrameDecoder::new(
+    max_segments=16,
+    max_message_bytes=4096,
+    max_output_bytes_per_feed=4096,
+    max_frames_per_feed=16,
+  )
+  let valid_frame = reader_frame([[0x0000000100000000UL, 0x123456789abcdef0UL]])
+  let valid_packed = @capnp.pack(valid_frame)
+  // 256 deterministic corrupted/fuzzed packed streams must either decode cleanly
+  // or fail with structured CapnpError, and reset() must always restore health.
+  for case_index in 0..<256 {
+    let length = 1 + case_index % 48
+    let raw : Array[Byte] = []
+    for _ in 0..<length {
+      raw.push(next_byte())
+    }
+    let payload = Bytes::from_array(raw[:])
+    let mut batch_ok = false
+    let mut batch_out = b""
+    try {
+      batch_out = @capnp.unpack(payload, max_output_bytes=4096)
+      batch_ok = true
+    } catch {
+      _ => ()
+    }
+    let split = case_index % (length + 1)
+    let mut stream_ok = false
+    let stream_out : Array[Byte] = []
+    try {
+      for f in decoder.feed(payload[:split].to_owned()) {
+        for b in f {
+          stream_out.push(b)
+        }
+      }
+      for f in decoder.feed(payload[split:].to_owned()) {
+        for b in f {
+          stream_out.push(b)
+        }
+      }
+      decoder.finish()
+      stream_ok = true
+    } catch {
+      _ => ()
+    }
+    if stream_ok {
+      // Any stream accepted as complete frames must match batch unpack byte-for-byte.
+      assert_true(batch_ok)
+      assert_eq(Bytes::from_array(stream_out[:]), batch_out)
+    }
+    decoder.reset()
+    assert_eq(decoder.feed(valid_packed), [valid_frame])
+    decoder.finish()
+    decoder.reset()
+  }
+}

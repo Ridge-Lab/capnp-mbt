@@ -65,6 +65,7 @@ pub fn ModuleReader::is_json(Self) -> Bool raise @capnp.CapnpError
 pub fn ModuleReader::is_src(Self) -> Bool raise @capnp.CapnpError
 pub fn ModuleReader::is_wasm(Self) -> Bool raise @capnp.CapnpError
 pub fn ModuleReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn ModuleReader::which_case(Self) -> ModuleWhich raise @capnp.CapnpError
 
 pub(all) enum ModuleType {
   Bundle
@@ -74,6 +75,14 @@ pub(all) enum ModuleType {
 }
 pub fn ModuleType::from_raw(UInt32) -> Self
 pub fn ModuleType::to_raw(Self) -> UInt32
+
+pub(all) enum ModuleWhich {
+  Src(Bytes)
+  Wasm(Bytes)
+  Data(Bytes)
+  Json(String)
+  Unknown(UInt32)
+}
 
 // Type aliases
 

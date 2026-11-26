@@ -1,30 +1,29 @@
 ///|
 fn kind(m : @schema.WorkerModuleReader) -> String raise {
-  match m.which() {
-    0U => "esModule"
-    1U => "commonJsModule"
-    2U => "text"
-    3U => "data"
-    4U => "wasm"
-    5U => "json"
-    6U => "obsolete"
-    7U => "pythonModule"
-    8U => "obsoletePythonRequirement"
-    9U => "bundled"
-    other => "unknown(\{other})"
+  match m.which_case() {
+    EsModule(_) => "esModule"
+    CommonJsModule(_) => "commonJsModule"
+    Text(_) => "text"
+    Data(_) => "data"
+    Wasm(_) => "wasm"
+    Json(_) => "json"
+    Obsolete(_) => "obsolete"
+    PythonModule(_) => "pythonModule"
+    ObsoletePythonRequirement(_) => "obsoletePythonRequirement"
+    Bundled(_) => "bundled"
+    Unknown(other) => "unknown(\{other})"
   }
 }
 
 ///|
 fn payload(m : @schema.WorkerModuleReader) -> Bytes raise {
-  match m.which() {
-    0U => @utf8.encode(m.get_es_module())
-    1U => @utf8.encode(m.get_common_js_module())
-    2U => @utf8.encode(m.get_text())
-    3U => m.get_data()
-    4U => m.get_wasm()
-    5U => @utf8.encode(m.get_json())
-    7U => @utf8.encode(m.get_python_module())
+  match m.which_case() {
+    EsModule(src)
+    | CommonJsModule(src)
+    | Text(src)
+    | Json(src)
+    | PythonModule(src) => @utf8.encode(src)
+    Data(bytes) | Wasm(bytes) => bytes
     _ => fail("No supported embedded payload for \{kind(m)}")
   }
 }

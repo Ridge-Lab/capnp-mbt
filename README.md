@@ -2,46 +2,51 @@
 
 [![Checks](https://github.com/Ridge-Lab/capnp-mbt/actions/workflows/ci.yml/badge.svg)](https://github.com/Ridge-Lab/capnp-mbt/actions/workflows/ci.yml)
 
-用同一份 `.capnp` 协议定义，在 MoonBit 与 C++、Python 等语言之间交换二进制数据。本项目提供 **MoonBit 序列化运行库**和 **`capnp` 编译器插件**，从正式的 schema 生成带类型的 MoonBit reader / builder。
+用同一份 `.capnp` 协议定义，在 MoonBit 与 C++、Python、Cloudflare `workerd` 等生态之间交换二进制数据。本项目提供纯 MoonBit 实现的 **Cap'n Proto 1.5.0 序列化运行库**和 **`capnp` 编译器插件**，从正式的 schema 生成带类型、支持 MoonBit 原生模式匹配的 reader / builder。
 
-适合已有 Cap'n Proto 协议的服务、数据采集程序、离线处理工具和二进制文件消费者接入 MoonBit。协议定义、字段布局和已有数据格式可以继续使用，业务代码无需手写偏移或经 JSON 中转。这里实现的是序列化层；网络传输和 RPC 不在本版本范围内。
+适合已有 Cap'n Proto 协议的服务、数据采集程序、离线处理工具和二进制制品检查器接入 MoonBit。协议定义、字段布局和已有数据格式可以继续使用，业务代码无需手写偏移或经 JSON 中转。这里实现的是序列化层；网络传输和 RPC 不在本版本范围内。
 
-**0.5.0 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer 和常量均纳入序列化支持，使用未经删改的官方 `test.capnp` 验证。[标准目标](docs/SERIALIZATION-STANDARD.md)与[验证矩阵](docs/CONFORMANCE.md)将兼容承诺对应到测试、独立参考实现和复现步骤。
+**0.6.0 的兼容基准是 Cap'n Proto 1.5.0。** 泛型容器、AnyPointer、常量、强类型联合体 ADT（`<Type>Which` + `which_case()`）以及完整 Canonical 闭环（`canonicalize` / `is_canonical` / 零拷贝 `read_canonical`）均纳入序列化支持，使用未经删改的官方 `test.capnp`、`schema.capnp` 与 Cloudflare `workerd` 真实协议验证。[标准目标](docs/SERIALIZATION-STANDARD.md)与[验证矩阵](docs/CONFORMANCE.md)将兼容承诺对应到测试、独立参考实现和复现步骤。
 
-Mooncakes 已有 [Protocol Buffers 运行库和生成器](https://github.com/moonbitlang/protoc-gen-mbt)以及 [FlatBuffers 实现](https://github.com/mizchi/flatbuffers)。本库面向对端已经使用 Cap’n Proto 的场合。例如采集器已有一批按 `.capnp` 定义写出的 packed 消息时，MoonBit 可以从同一份 schema 生成接口，读入旧数据，并写回原采集器可以读取的结果。下方示例验证了这个往返过程。
+## 架构概览
+
+```mermaid
+flowchart LR
+  Schema[".capnp 协议文件"] --> Capnp["官方 capnp 1.5.0 编译器"]
+  Capnp --> Req["CodeGeneratorRequest (二进制)"]
+  Req --> Plugin["capnpc-moonbit / codegen"]
+  Plugin --> Gen["生成的 MoonBit 强类型 API<br/>Reader / Builder / *Which ADT / const_*"]
+  Gen --> Runtime["Ridge-Lab/capnp 纯 MoonBit 运行库<br/>Reader · Builder · DeepCopy · Packed<br/>FrameDecoder · PackedFrameDecoder · Canonical"]
+  Runtime --> Targets["wasm · wasm-gc · js · native"]
+  Targets <--> Peers["C++ capnp · Python pycapnp · Cloudflare workerd"]
+```
+
+## 生态定位与增量
+
+| 项目 | 格式 | 适用场景 |
+| --- | --- | --- |
+| [moonbitlang/protoc-gen-mbt](https://github.com/moonbitlang/protoc-gen-mbt) | Protocol Buffers | 已有 `.proto` 协议与 gRPC/Protobuf 数据交换 |
+| [mizchi/flatbuffers](https://github.com/mizchi/flatbuffers) | FlatBuffers | 已有 `.fbs` 协议与 FlatBuffers 数据读取 |
+| **Ridge-Lab/capnp（本项目）** | **Cap'n Proto 1.5.0** | **已有 `.capnp` 协议（含泛型、AnyPointer、packed 流、canonical 校验及 `workerd` 制品检查）** |
+
+例如采集器已有一批按 `.capnp` 定义写出的 packed 消息，或需要直接解析 Cloudflare `workerd` 编译出的二进制部署配置与内置模块包时，MoonBit 可以直接从同一份原始 schema 生成强类型接口，无需改写协议或绑定 C++ 动态库。
 
 ## 可运行的完整流程
 
-0.5.0 的[内置模块读取示例](examples/builtin_bundle/)从 Cloudflare 官方发行的 workerd 程序中取出 Pyodide 模块包，用 MoonBit 列出 28 个内置模块，并按名字导出其中任一模块。CI 逐字节比对全部导出内容，还核对了两个 Python 源文件在上游 Git 中的对象哈希。
-
-[`examples/telemetry`](examples/telemetry) 演示一个数据处理任务：
-
-1. MoonBit 用生成的 API 写入任务 ID、纳秒时间戳、读数和质量标记。
-2. Python 使用 `pycapnp`（官方 C++ Cap'n Proto 实现的 Python 绑定）读取数据，剔除缺失值和 NaN，计算统计结果。
-3. MoonBit 读取 Python 写出的结果，核对数量、均值、极值和超过 JavaScript 安全整数范围的 64 位 ID。
-
-这是仓库提供的互操作示例，不代表已有外部用户部署。它说明该库如何用于实际的跨语言批处理；相同接口也可用于文件交换和消息队列的负载编解码。
-
-[`examples/schema_compat`](examples/schema_compat/README.md) 验证接入既有协议：两端直接使用官方 1.5.0 `test.capnp`，Python/C++ 写入分段及 packed 数据，MoonBit 读取嵌套泛型与五种 AnyPointer 负载，再用生成的 builder 写回；Python 核对泛型绑定、默认值、常量及未知负载的内容。原文件中的接口、常量、别名和嵌入数据均保留，复现步骤见示例文档。
-
-0.3.0 新增 [`FrameDecoder`](stream.mbt) 和[流式采集处理示例](examples/streaming/README.md)。示例从管道分块读取多条消息，逐条生成统计结果，由独立 Python/C++ 端核验；0.3.0 的本地复现处理了 8,192 条消息、135,036,992 字节输入，每次读取最多 8 KiB，单帧上限 1 MiB。这个例子不需要把完整输入流放进内存。端到端检查覆盖交互回复、极端浮点值、截断和恶意长度声明。
-
-0.4.0 增加 [`PackedFrameDecoder`](packed_stream.mbt)：压缩日志和管道输入可以边解包边分帧，不再要求先把整条压缩流展开。状态机保留跨分块的 tag、非零字节和连续段，临时展开块最多 2 KiB；单帧大小、每次返回的字节数和帧数分别设限，避免小输入放大成大量结果。流式示例的 `--packed` 模式与 C++ 双向交换消息。压缩比和吞吐量取决于数据，项目不声称优于官方实现。
-
-开发与 CI 使用同一入口：`python scripts/verify.py --profile quick --targets js`；完整外部对照使用 `--profile full --targets js native`。每次生成独立日志、源码指纹、工具链记录、报告及 SHA-256，失败或缺少工具不会计为通过。[验证矩阵](docs/CONFORMANCE.md)给出功能、独立参考和失败检查之间的对应关系。
-
-完整验证还会从 Cloudflare workerd 打包模块用的原始协议生成 MoonBit 接口。Python/C++ 用合成数据写入四类模块（JavaScript、Wasm、二进制资源、JSON），MoonBit 读取各自的 union 分支，重排模块、改名并写回。Python/C++ 再逐项核对模块内容、类型、TypeScript 声明和编译缓存。输入和返回的二进制帧保存在本次验证的 `oracles/workerd-*.bin` 中。[固定版本与许可证](docs/PROVENANCE.md)
-
-可以直接用 MoonBit 检查 workerd 实际编译的部署配置。随附的上游测试 Worker 经 `workerd compile --config-only` 生成二进制文件，检查器列出模块并提取原始源码，`workerd test --binary` 回读同一份制品运行上游测试。[复现步骤与源码](examples/workerd_config/)
+- **Cloudflare `workerd` 部署配置检查（[`examples/workerd_config`](examples/workerd_config/README.md)）**：从 1,455 行原始 `workerd.capnp` 生成 MoonBit reader，用强类型 `which_case()` 模式匹配列出并提取 `workerd compile --config-only` 生成的二进制配置中的 Worker 源码，再交由 `workerd test --binary` 回读同一份制品运行上游测试。
+- **Cloudflare `workerd` 内置模块包读取（[`examples/builtin_bundle`](examples/builtin_bundle/README.md)）**：从官方发行的 `workerd` 二进制中取出 Pyodide `Modules.Bundle`，用 MoonBit 列出全部 28 个内置模块并按名导出。CI 通过独立 `pycapnp` / C++ reader 逐字节核对全部 28 份导出载荷，并核对两个 Python 源文件的上游 Git blob 哈希。
+- **跨语言遥测批处理（[`examples/telemetry`](examples/telemetry/README.md)）**：MoonBit 写入含 64 位 ID、纳秒时间戳和 NaN/Missing 读数的消息 → Python (`pycapnp`) 独立统计并写回 `Report` → MoonBit 用 `match report.which_case()` 核对统计结果与超过 JS 安全整数范围的 64 位 ID。
+- **未经删改的官方 1.5.0 协议互操作（[`examples/schema_compat`](examples/schema_compat/README.md)）**：两端直接使用官方 `test.capnp` 与 `schema.capnp`，覆盖嵌套泛型、祖先作用域绑定、五种 AnyPointer 负载、常量、旧新版本演进、未知字段透传、嵌套 union 与交错 group。
+- **有界增量流处理（[`examples/streaming`](examples/streaming/README.md)）**：[`FrameDecoder`](stream.mbt) 与 [`PackedFrameDecoder`](packed_stream.mbt) 支持普通帧与 packed 压缩流的任意分片读取与边解包边分帧（单次最多读取 8 KiB、展开缓冲上限 2 KiB、单帧与单批输出独立设限），与独立 C++ 端双向流式交换，无需将整条流加载入内存。
 
 ## 安装与快速运行
 
-需要 MoonBit **0.10.16 或更新版本**。当前复现工具链及 CI 配置固定为 `0.10.20+65efd5b93`，使用相同版本的 core；执行结果以对应提交的工作流记录为准。运行库支持 `wasm`、`wasm-gc`、`js`、`native`，无需 C++ Cap'n Proto 动态库。
+需要 MoonBit **0.10.16 或更新版本**。当前复现工具链及 CI 配置固定为 `0.10.22+124d61d05`（使用相同版本 core），同时在 CI 中保留 `0.10.16+b1a0e846e` 最低版本验证。运行库支持 `wasm`、`wasm-gc`、`js`、`native`，无需 C++ Cap'n Proto 动态库。
 
 在自己的 MoonBit 项目中添加依赖：
 
 ```sh
-moon add Ridge-Lab/capnp@0.5.0
+moon add Ridge-Lab/capnp@0.6.0
 ```
 
 包的 `moon.pkg` 中导入：
@@ -52,41 +57,37 @@ import {
 }
 ```
 
-直接运行本仓库的例子：
+直接运行本仓库的最小可运行示例（已包含生成代码，无需先安装 `capnp`）：
 
 ```sh
-git clone --branch v0.5.0 https://github.com/Ridge-Lab/capnp-mbt
+git clone --branch v0.6.0 https://github.com/Ridge-Lab/capnp-mbt
 cd capnp-mbt
 moon update
 moon run --target js examples/roundtrip
 ```
 
-输出包含 `Read job 9007199254740993` 和 6 个样本。生成代码已随例子提交，因此运行例子无需先安装 `capnp`。Node.js 需支持 ESM；本项目在 Node.js 24 上验证。
+输出包含 `Read job 9007199254740993` 和 6 个样本。Node.js 需支持 ESM；本项目在 Node.js 24 上验证。
 
 ## 从 schema 生成 MoonBit API
 
-先安装[官方 Cap'n Proto 编译器 1.5.0](https://capnproto.org/install.html)及 native 后端所需 C 编译器，用 `capnp --version` 确认版本。在本仓库根目录执行：
+安装[官方 Cap'n Proto 编译器 1.5.0](https://capnproto.org/install.html)并用 `capnp --version` 确认版本。既可构建 native 插件，也可直接使用请求文件与 Node.js（无需 C 编译器）：
 
 ```sh
+# 方式一：Node.js + 请求文件（跨平台，无需 C 编译器）
+capnp compile -o- fixtures/conformance.capnp > request.bin
+moon run --target js cmd/capnpc-moonbit -- --request request.bin --out generated
+moon fmt
+
+# 方式二：native 官方插件直连
 moon build --target native --release cmd/capnpc-moonbit
 capnp compile -o./_build/native/release/build/cmd/capnpc-moonbit/capnpc-moonbit.exe:examples/telemetry/generated examples/telemetry/schema/telemetry.capnp
 moon fmt
 moon check --target native --deny-warn
 ```
 
-插件接收官方 `CodeGeneratorRequest`，由官方编译器处理 schema 语法和字段布局。所有所需声明（含 import）生成到同一个 `capnp_generated.mbt`，插件为新目录生成 `moon.pkg`，纯枚举及标量常量无需导入运行库。再次生成时，仅更新未经编辑且带有生成器标记的清单。多份相关 schema 应在一次 `capnp compile` 调用中传入；每次生成会替换目标文件。
+插件接收官方 `CodeGeneratorRequest`，由官方编译器负责语法解析、import 与字段布局；所有声明生成到同一个 `capnp_generated.mbt`，纯枚举或标量常量 schema 自动省略运行库依赖。二进制重定向请使用 Bash 或 `cmd.exe`；Windows native 构建说明见[开发文档](docs/DEVELOPMENT.md)。
 
-也可使用请求文件和 Node.js，不必编译 native 插件：
-
-```sh
-capnp compile -o- fixtures/conformance.capnp > request.bin
-moon run --target js cmd/capnpc-moonbit -- --request request.bin --out generated
-moon fmt
-```
-
-二进制重定向使用 Bash 或 `cmd.exe`；旧版 PowerShell 的文本管道可能损坏二进制内容。Windows native 构建说明见[开发文档](docs/DEVELOPMENT.md)。
-
-使用生成 API 的代码片段（完整可运行代码见 [`sample.mbt`](examples/telemetry/sample/sample.mbt)）：
+使用生成 API（含 0.6.0 强类型联合体 `which_case()` 与规范段零拷贝读取，完整可运行代码见 [`sample.mbt`](examples/telemetry/sample/sample.mbt)）：
 
 ```moonbit
 let message = @capnp.Builder::new()
@@ -97,56 +98,93 @@ let samples = batch.init_samples(1)
 samples.get(0).set_value(21.5)
 samples.get(0).set_quality(@telemetry.Valid)
 let bytes = message.finish()
+
+// 1. 标准帧解码
 let received = @telemetry.BatchReader::from_message(@capnp.read_message(bytes))
 assert_eq(received.get_samples().get(0).get_value(), 21.5)
+
+// 2. Canonical 规范化、严格校验与零拷贝读取（无 segment table）
+let canonical = @capnp.canonicalize(@capnp.read_message(bytes))
+assert_true(@capnp.is_canonical(canonical))
+let from_canonical = @telemetry.BatchReader::from_message(@capnp.read_canonical(canonical))
+assert_eq(from_canonical.get_job_id(), 9007199254740993UL)
+
+// 3. 强类型联合体 ADT 模式匹配（保留向前兼容 Unknown(tag) 分支）
+match report.which_case() {
+  Statistics(stats) => println("mean=\{stats.get_mean()}")
+  Empty => println("no valid samples")
+  Unknown(tag) => println("unknown union tag: \{tag}")
+}
 ```
 
-生成包在使用方 `moon.pkg` 中以 `@telemetry` 导入。reader 返回字段视图，实际访问指针时验证目标范围；Text 转换会进行 UTF-8 验证。低层接口见 [`pkg.generated.mbti`](pkg.generated.mbti)。
+reader 返回字段视图，实际访问指针时验证目标范围；Text 转换执行 UTF-8 验证。低层运行库接口见 [`pkg.generated.mbti`](pkg.generated.mbti)。
 
 ## 功能与边界
 
 | 能力 | 当前范围 |
 | --- | --- |
 | 数据类型 | Void、Bool、所有整数和浮点宽度、Text、Data、enum、struct、嵌套声明 |
-| 容器和字段 | primitive / pointer / inline-composite list、嵌套 list、group、union、标量及复合默认值 |
+| 容器与联合体 | primitive / pointer / inline-composite list、嵌套 list、group、union（提供原生 `<Type>Which` ADT 与 `which_case()` 及兼容 `which()`）、标量与复合默认值 |
 | 泛型与常量 | 显式及祖先作用域绑定、嵌套泛型、别名、未绑定参数；标量、列表、结构体及泛型常量 |
 | 动态负载 | AnyPointer / AnyStruct / AnyList 视图与写入；保留未知字段的深拷贝，失败时回滚目标 |
 | 帧和指针 | 标准分段帧、近指针、单跳和双跳 far pointer 的读取；writer 生成单段帧 |
 | 压缩与流 | 标准 packed 编解码；`FrameDecoder` / `PackedFrameDecoder` 分别增量处理普通 / packed 帧，支持任意碎片输入、串联帧及 EOF 校验 |
-| Canonical 格式 | `canonicalize` 生成无 segment table 的 canonical segment，与官方转换器输出比较 |
-| 防护 | 指针越界检查、共享遍历预算、嵌套深度限制、段数限制、解包和 writer 分配上限 |
-| 演进 | 缺失字段默认值、额外字段跳过、未知 enum 值保留、兼容的 list / struct 扩展 |
+| Canonical 闭环 | `canonicalize` 生成规范单段；`is_canonical` 严格校验规范约束；`read_canonical` 校验并返回零拷贝 `Message` |
+| 防护 | 指针越界检查、共享遍历预算、嵌套深度限制、段数限制、解包和 writer 分配上限、非规范篡改拒绝 |
+| 演进 | 缺失字段默认值、额外字段跳过、未知 enum 值与未知 union tag 保留、兼容的 list / struct 扩展 |
 | 范围外 | RPC 客户端/服务器、活动 capability table、builder 原位编辑收到的消息 |
 
-已知泛型绑定生成具体类型；未绑定参数和递归增长的泛型边界保留动态视图，业务代码可通过公开的 `.inner` 继续访问，无需改写 schema。接口声明不会阻止同文件中的数据类型生成，但不生成 RPC 调用代码。低层 capability index API 只表示数字索引；跨消息深拷贝拒绝未提供表映射的非空 capability。
+已知泛型绑定生成具体类型；未绑定参数和递归增长的泛型边界保留动态视图，业务代码可通过公开的 `.inner` 继续访问，无需改写 schema。接口声明不会阻止同文件中的数据类型生成，但不生成 RPC 调用代码。合法 schema 与自动生成的 `Reader`/`Builder`/`Which`/列表包装器或字段名冲突时，生成器使用稳定后缀消歧。
 
-合法 schema 与自动生成的类型、列表包装器或字段名称冲突时，生成器使用稳定后缀消歧，无需修改协议。`finish()` 返回普通标准帧；需要 canonical 数据时单独调用 `canonicalize`，其结果不含帧头，不能直接交给 `read_message`。运行库错误使用 `CapnpError`，生成器对无效请求或资源限制返回 `CodegenError`。
+默认 reader 遍历预算为 8,388,608 words，嵌套深度 64，最多 512 段；`unpack` 默认最多输出 64 MiB。处理分块流时，标准未压缩帧使用 `FrameDecoder`，packed 压缩流使用 `PackedFrameDecoder`，结束时均需调用 `finish()` 检查截断，错误后需 `reset()`。详见[兼容性和资源限制](docs/COMPATIBILITY.md)与[设计说明](docs/DESIGN.md)。
 
-默认 reader 遍历预算为 8,388,608 words，嵌套深度 64，最多 512 段；`unpack` 默认最多输出 64 MiB。reader 的预算会被重复访问消耗，按需缓存已取得的视图。`read_message` 要求恰好一帧，流式输入使用 `FrameDecoder` 或自行按 `frame_length` 划分。builder 使用追加式 arena，替换指针不会回收旧对象，`finish()` 返回快照。详见[兼容性和资源限制](docs/COMPATIBILITY.md)。
+## 验证闭环与回归成效
 
-处理网络或文件分块时，可以将每块 `Bytes` 交给 `FrameDecoder::feed`，再将返回的完整帧交给 `read_message`。结束时必须调用 `finish()` 检查截断。解码器只保留未完成的尾帧，错误后需 `reset()`；一次 feed 失败不会返回该次已识别的帧。它处理标准未压缩帧，不能直接输入 packed 数据。[设计说明](docs/DESIGN.md)解释边界检查、内存与生成器的取舍。
-
-## 验证
+开发与 CI 共用统一驱动入口 `scripts/verify.py`，每次运行产出独立日志、前后源码 SHA-256 指纹、工具链记录与 `summary.sha256`；缺失工具、超时、缺失制品或旧报告均判定失败（由 [`verify_harness_test.py`](scripts/verify_harness_test.py) 反向验证失败契约）：
 
 ```sh
+# 快速验证（无需 capnp / pycapnp）
+python scripts/verify.py --profile quick --targets js wasm wasm-gc
+
+# 或直接调用 MoonBit 工具链
 moon fmt --check
 moon check --target all --deny-warn
 moon test --target all --deny-warn
 moon build --target all --release
+
+# 完整跨语言外部对照（需官方 capnp 1.5.0 与 pycapnp 2.2.1）
+python scripts/verify.py --profile full --targets js native --workerd workerd
+
+# 发布包全新消费者验证（安装 Mooncakes 线上包并测试四后端、CLI 与上游哈希）
+python scripts/verify_release.py --release-tag v0.6.0
 ```
 
-测试覆盖官方编译器样例、packed 对照、多段与 double-far 指针、泛型及常量、AnyPointer 深拷贝、canonical 输出、截断和恶意输入。CI 工作流覆盖四个后端的检查、构建和测试，并安排独立的跨语言验证；具体执行结果以工作流记录为准。[基础样例](fixtures/README.md)、[原样上游协议](fixtures/upstream/capnproto-1.5.0/README.md)和[官方 oracle 数据](fixtures/upstream/oracle-1.5.0/README.md)均附来源或再生方法。本项目尚未进行生产负载验证，不宣称优于其他实现的性能。
+这套“官方编译器对照 + 跨语言 peer + 失败契约 + 模糊变异”验证闭环在迭代中实际拦截并修复了多类隐蔽缺陷：
+- **Packed 末尾稠密段提前吐帧（`0.4.2`）**：官方 `capnp encode --packed` 对照测试暴露了末尾 dense run 缺少 run-count 字节时提前释放帧的问题，改为等待完整 token 后原子提交。
+- **MoonBit 保留类型名与声明冲突（`0.2.1` / `0.4.2`）**：真实外部 schema 与生成符号冲突（如 `Int32`、`BytesView`、`*Reader`、`*Which`），由全量符号分配器与确定性后缀消歧彻底解决。
+- **内联复合列表缺失段误读（`0.2.1`）**：对照 C++ `pycapnp` 发现将纯指针 struct list 误当标量列表读取的边界问题，补齐段存在性校验并保留合法默认值演进。
+- **超长 Unicode 文本常量触发源码行长限制（`0.2.2`）**：官方 `embed` 夹具复现后改为按字符边界分块拼接。
+- **`moonc 0.10.22` 严格编译回归（`0.6.0`）**：升级至 `0.10.22+124d61d05` 时 `--deny-warn` 捕获 `UInt64::extend_uint` 弃用告警，迁移为 `UInt::to_uint64()` 并保持 `0.10.16` 兼容。
 
-发布验收还运行 `python scripts/verify_release.py`：新建独立项目，从 Mooncakes 安装该版本，使用包内生成器处理泛型、AnyPointer、常量和名称冲突，在四后端运行生成接口；同时核验分发文件、许可证和上游哈希，并运行已安装包的 native/Node.js CLI。详见[开发与发布检查](docs/DEVELOPMENT.md)。
+目前包含 **103 个 MoonBit 单元测试**（含 1,024 组深拷贝变异与 256 组 packed 差分模糊用例）、**12 份官方 1.5.0 schema 零漂移再生对照**、**11 组官方 canonical 向量双向校验**与 **4 后端 + Windows native + Linux 跨语言 CI**。[基础样例](fixtures/README.md)、[原样上游协议](fixtures/upstream/capnproto-1.5.0/README.md)、[workerd 上游协议](fixtures/upstream/workerd/README.md)与[官方 oracle 数据](fixtures/upstream/oracle-1.5.0/README.md)均附来源与 SHA-256 清单。
 
-## 性能与维护
+## 性能基准（可复现）
 
-[基准脚本](benchmarks/README.md)在进程内测量编码、选读、完整扫描、packed 编解码和未知结构复制，提供原始轮次、预热、环境、源码哈希和中位数。基准包含真实分配、GC 和校验成本；选读结果不能解释成整条消息解码吞吐，也没有用 Python 包装层时间冒充 C++ 引擎性能。CI 仅检查基准能够运行及结果可校验，不以不稳定的耗时阈值决定正确性。
+[基准脚本](benchmarks/README.md)在进程内测量 8 类运行库核心操作（含预热、自动校准、校验和、环境与源码哈希）。以下为 `0.6.0` 在 Windows x86-64 / `moonc 0.10.22+124d61d05` / Node.js 24.14.1 下的本地实测中位数（原始 5 轮数据见 [`local-windows-js-0.6.0.json`](benchmarks/results/local-windows-js-0.6.0.json)；历史 `0.3.0` native/JS 对照见 [`benchmarks/results/README.md`](benchmarks/results/README.md)）：
 
-CI 在 Linux 验证四个后端，在 Windows 验证 Node.js 和 MSVC 原生后端的检查、测试、构建及二进制流示例。跨语言用例还覆盖官方旧新版本的默认值与未知字段转发，以及嵌套 union、交错 group 和未知标签。尚无外部生产采用证明，欢迎提供真实协议和可复现的问题；维护和回归方法见[开发文档](docs/DEVELOPMENT.md)。
+| 操作 | 1 样本 (112 B) | 32 样本 (856 B) | 512 样本 (12,376 B) | 说明 |
+| --- | ---: | ---: | ---: | --- |
+| `selected_read` | 1.05 µs | 1.02 µs | 1.02 µs | 仅读关键字段，随消息扩大 110× 仍保持 $O(1)$ 随机访问 |
+| `full_scan` | 2.02 µs | 14.14 µs | 190.64 µs | 遍历全部字段、UTF-8 解码与全部样本 |
+| `encode` | 5.36 µs | 34.37 µs | 388.62 µs | 构建完整消息并输出标准帧 |
+| `pack` / `unpack` | 0.97 / 1.84 µs | 9.75 / 8.57 µs | 97.54 / 125.16 µs | 标准 Cap'n Proto packed 编解码 |
+| `opaque_copy` | 5.94 µs | 14.56 µs | 169.52 µs | 未知 schema 下的递归深拷贝与规范校验 |
+| `framed_stream` / `packed_stream` | 2.12 / 3.81 µs | 8.14 / 18.92 µs | 133.67 / 256.90 µs | 1 KiB 分块增量分帧（普通 / packed） |
+
+注：基准包含分配、GC 与校验和开销，仅用于同机复现与回归观察，不代表生产负载或跨语言绝对排名。
 
 ## 来源与许可证
 
-MIT。运行库按[公开编码规范](https://capnproto.org/encoding.html)实现；生成器接入[官方插件协议](https://capnproto.org/otherlang.html)。不是 C++ 库的 FFI 包装，也未使用 MoonBit SWE-AGI 中的 Cap'n Proto 解码题解。独立贡献包括 writer、packing、类型代码生成及跨语言工作流；生态中已有相关题目并不等于已有相同 SDK。
+MIT（见 [`LICENSE`](LICENSE)）。运行库按[公开编码规范](https://capnproto.org/encoding.html)独立实现；生成器接入[官方插件协议](https://capnproto.org/otherlang.html)。不是 C++ 库的 FFI 包装，也未使用 MoonBit SWE-AGI 中的 Cap'n Proto 解码题解。
 
-第三方依赖、测试数据及生成文件的来源见 [`docs/PROVENANCE.md`](docs/PROVENANCE.md)。
+第三方依赖、上游夹具（Cap'n Proto 1.5.0 MIT、Cloudflare `workerd` Apache-2.0）及生成文件的完整来源、许可证与 SHA-256 校验见 [`docs/PROVENANCE.md`](docs/PROVENANCE.md)。

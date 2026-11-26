@@ -179,7 +179,7 @@ pub fn const_test_constants_int64_const() -> Int64 {
 
 ///|
 pub fn const_test_constants_uint8_const() -> Byte {
-  b'\xEA'
+  234
 }
 
 ///|
@@ -1256,7 +1256,7 @@ pub fn TestAllTypesBuilder::set_int64_field(
 pub fn TestAllTypesReader::get_u_int8_field(
   self : TestAllTypesReader,
 ) -> Byte raise @capnp.CapnpError {
-  self.inner.get_uint8(16, default=b'\x00')
+  self.inner.get_uint8(16, default=0)
 }
 
 ///|
@@ -1264,7 +1264,7 @@ pub fn TestAllTypesBuilder::set_u_int8_field(
   self : TestAllTypesBuilder,
   value : Byte,
 ) -> Unit raise @capnp.CapnpError {
-  self.inner.set_uint8(16, value, default=b'\x00')
+  self.inner.set_uint8(16, value, default=0)
 }
 
 ///|
@@ -2635,7 +2635,7 @@ pub fn TestDefaultsBuilder::set_int64_field(
 pub fn TestDefaultsReader::get_u_int8_field(
   self : TestDefaultsReader,
 ) -> Byte raise @capnp.CapnpError {
-  self.inner.get_uint8(16, default=b'\xEA')
+  self.inner.get_uint8(16, default=234)
 }
 
 ///|
@@ -2643,7 +2643,7 @@ pub fn TestDefaultsBuilder::set_u_int8_field(
   self : TestDefaultsBuilder,
   value : Byte,
 ) -> Unit raise @capnp.CapnpError {
-  self.inner.set_uint8(16, value, default=b'\xEA')
+  self.inner.set_uint8(16, value, default=234)
 }
 
 ///|
@@ -4669,7 +4669,7 @@ pub fn TestUnionBuilder::set_bit7(
 pub fn TestUnionReader::get_byte0(
   self : TestUnionReader,
 ) -> Byte raise @capnp.CapnpError {
-  self.inner.get_uint8(35, default=b'\x00')
+  self.inner.get_uint8(35, default=0)
 }
 
 ///|
@@ -4677,7 +4677,7 @@ pub fn TestUnionBuilder::set_byte0(
   self : TestUnionBuilder,
   value : Byte,
 ) -> Unit raise @capnp.CapnpError {
-  self.inner.set_uint8(35, value, default=b'\x00')
+  self.inner.set_uint8(35, value, default=0)
 }
 
 ///|
@@ -4695,6 +4695,48 @@ pub fn TestUnionUnion0Reader::which(
   self : TestUnionUnion0Reader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
+}
+
+///|
+pub(all) enum TestUnionUnion0Which {
+  U0f0s0
+  U0f0s1(Bool)
+  U0f0s8(Int32)
+  U0f0s16(Int32)
+  U0f0s32(Int32)
+  U0f0s64(Int64)
+  U0f0sp(String)
+  U0f1s0
+  U0f1s1(Bool)
+  U0f1s8(Int32)
+  U0f1s16(Int32)
+  U0f1s32(Int32)
+  U0f1s64(Int64)
+  U0f1sp(String)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestUnionUnion0Reader::which_case(
+  self : TestUnionUnion0Reader,
+) -> TestUnionUnion0Which raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => U0f0s0
+    1U => U0f0s1(self.get_u0f0s1())
+    2U => U0f0s8(self.get_u0f0s8())
+    3U => U0f0s16(self.get_u0f0s16())
+    4U => U0f0s32(self.get_u0f0s32())
+    5U => U0f0s64(self.get_u0f0s64())
+    6U => U0f0sp(self.get_u0f0sp())
+    7U => U0f1s0
+    8U => U0f1s1(self.get_u0f1s1())
+    9U => U0f1s8(self.get_u0f1s8())
+    10U => U0f1s16(self.get_u0f1s16())
+    11U => U0f1s32(self.get_u0f1s32())
+    12U => U0f1s64(self.get_u0f1s64())
+    13U => U0f1sp(self.get_u0f1sp())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -5244,6 +5286,60 @@ pub fn TestUnionUnion1Reader::which(
   self : TestUnionUnion1Reader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(2)
+}
+
+///|
+pub(all) enum TestUnionUnion1Which {
+  U1f0s0
+  U1f0s1(Bool)
+  U1f1s1(Bool)
+  U1f0s8(Int32)
+  U1f1s8(Int32)
+  U1f0s16(Int32)
+  U1f1s16(Int32)
+  U1f0s32(Int32)
+  U1f1s32(Int32)
+  U1f0s64(Int64)
+  U1f1s64(Int64)
+  U1f0sp(String)
+  U1f1sp(String)
+  U1f2s0
+  U1f2s1(Bool)
+  U1f2s8(Int32)
+  U1f2s16(Int32)
+  U1f2s32(Int32)
+  U1f2s64(Int64)
+  U1f2sp(String)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestUnionUnion1Reader::which_case(
+  self : TestUnionUnion1Reader,
+) -> TestUnionUnion1Which raise @capnp.CapnpError {
+  match self.inner.get_uint16(2) {
+    0U => U1f0s0
+    1U => U1f0s1(self.get_u1f0s1())
+    2U => U1f1s1(self.get_u1f1s1())
+    3U => U1f0s8(self.get_u1f0s8())
+    4U => U1f1s8(self.get_u1f1s8())
+    5U => U1f0s16(self.get_u1f0s16())
+    6U => U1f1s16(self.get_u1f1s16())
+    7U => U1f0s32(self.get_u1f0s32())
+    8U => U1f1s32(self.get_u1f1s32())
+    9U => U1f0s64(self.get_u1f0s64())
+    10U => U1f1s64(self.get_u1f1s64())
+    11U => U1f0sp(self.get_u1f0sp())
+    12U => U1f1sp(self.get_u1f1sp())
+    13U => U1f2s0
+    14U => U1f2s1(self.get_u1f2s1())
+    15U => U1f2s8(self.get_u1f2s8())
+    16U => U1f2s16(self.get_u1f2s16())
+    17U => U1f2s32(self.get_u1f2s32())
+    18U => U1f2s64(self.get_u1f2s64())
+    19U => U1f2sp(self.get_u1f2sp())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -6144,6 +6240,30 @@ pub fn TestUnionUnion2Reader::which(
 }
 
 ///|
+pub(all) enum TestUnionUnion2Which {
+  U2f0s1(Bool)
+  U2f0s8(Int32)
+  U2f0s16(Int32)
+  U2f0s32(Int32)
+  U2f0s64(Int64)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestUnionUnion2Reader::which_case(
+  self : TestUnionUnion2Reader,
+) -> TestUnionUnion2Which raise @capnp.CapnpError {
+  match self.inner.get_uint16(4) {
+    0U => U2f0s1(self.get_u2f0s1())
+    1U => U2f0s8(self.get_u2f0s8())
+    2U => U2f0s16(self.get_u2f0s16())
+    3U => U2f0s32(self.get_u2f0s32())
+    4U => U2f0s64(self.get_u2f0s64())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn TestUnionUnion2Reader::is_u2f0s1(
   self : TestUnionUnion2Reader,
 ) -> Bool raise @capnp.CapnpError {
@@ -6313,6 +6433,30 @@ pub fn TestUnionUnion3Reader::which(
   self : TestUnionUnion3Reader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(6)
+}
+
+///|
+pub(all) enum TestUnionUnion3Which {
+  U3f0s1(Bool)
+  U3f0s8(Int32)
+  U3f0s16(Int32)
+  U3f0s32(Int32)
+  U3f0s64(Int64)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestUnionUnion3Reader::which_case(
+  self : TestUnionUnion3Reader,
+) -> TestUnionUnion3Which raise @capnp.CapnpError {
+  match self.inner.get_uint16(6) {
+    0U => U3f0s1(self.get_u3f0s1())
+    1U => U3f0s8(self.get_u3f0s8())
+    2U => U3f0s16(self.get_u3f0s16())
+    3U => U3f0s32(self.get_u3f0s32())
+    4U => U3f0s64(self.get_u3f0s64())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -6502,6 +6646,24 @@ pub fn TestUnnamedUnionReader::which(
 }
 
 ///|
+pub(all) enum TestUnnamedUnionWhich {
+  Foo(UInt32)
+  Bar(UInt32)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestUnnamedUnionReader::which_case(
+  self : TestUnnamedUnionReader,
+) -> TestUnnamedUnionWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(4) {
+    0U => Foo(self.get_foo())
+    1U => Bar(self.get_bar())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn TestUnnamedUnionReader::get_before(
   self : TestUnnamedUnionReader,
 ) -> String raise @capnp.CapnpError {
@@ -6617,6 +6779,24 @@ pub fn TestUnionInUnionOuterInnerReader::which(
   self : TestUnionInUnionOuterInnerReader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(4)
+}
+
+///|
+pub(all) enum TestUnionInUnionOuterInnerWhich {
+  Foo(Int32)
+  Bar(Int32)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestUnionInUnionOuterInnerReader::which_case(
+  self : TestUnionInUnionOuterInnerReader,
+) -> TestUnionInUnionOuterInnerWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(4) {
+    0U => Foo(self.get_foo())
+    1U => Bar(self.get_bar())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -6740,6 +6920,24 @@ pub fn TestUnionInUnionOuterReader::which(
   self : TestUnionInUnionOuterReader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(8)
+}
+
+///|
+pub(all) enum TestUnionInUnionOuterWhich {
+  Inner(TestUnionInUnionOuterInnerReader)
+  Baz(Int32)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestUnionInUnionOuterReader::which_case(
+  self : TestUnionInUnionOuterReader,
+) -> TestUnionInUnionOuterWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(8) {
+    0U => Inner(self.get_inner())
+    1U => Baz(self.get_baz())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -7039,6 +7237,26 @@ pub fn TestGroupsGroupsReader::which(
 }
 
 ///|
+pub(all) enum TestGroupsGroupsWhich {
+  Foo(TestGroupsGroupsFooReader)
+  Baz(TestGroupsGroupsBazReader)
+  Bar(TestGroupsGroupsBarReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestGroupsGroupsReader::which_case(
+  self : TestGroupsGroupsReader,
+) -> TestGroupsGroupsWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(4) {
+    0U => Foo(self.get_foo())
+    1U => Baz(self.get_baz())
+    2U => Bar(self.get_bar())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn TestGroupsGroupsReader::is_foo(
   self : TestGroupsGroupsReader,
 ) -> Bool raise @capnp.CapnpError {
@@ -7314,6 +7532,26 @@ pub fn TestInterleavedGroupsGroup1Reader::which(
 }
 
 ///|
+pub(all) enum TestInterleavedGroupsGroup1Which {
+  Qux(UInt32)
+  Corge(TestInterleavedGroupsGroup1CorgeReader)
+  Fred(String)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestInterleavedGroupsGroup1Reader::which_case(
+  self : TestInterleavedGroupsGroup1Reader,
+) -> TestInterleavedGroupsGroup1Which raise @capnp.CapnpError {
+  match self.inner.get_uint16(28) {
+    0U => Qux(self.get_qux())
+    1U => Corge(self.get_corge())
+    2U => Fred(self.get_fred())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn TestInterleavedGroupsGroup1Reader::get_foo(
   self : TestInterleavedGroupsGroup1Reader,
 ) -> UInt32 raise @capnp.CapnpError {
@@ -7468,6 +7706,26 @@ pub fn TestInterleavedGroupsGroup2Reader::which(
   self : TestInterleavedGroupsGroup2Reader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(30)
+}
+
+///|
+pub(all) enum TestInterleavedGroupsGroup2Which {
+  Qux(UInt32)
+  Corge(TestInterleavedGroupsGroup2CorgeReader)
+  Fred(String)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestInterleavedGroupsGroup2Reader::which_case(
+  self : TestInterleavedGroupsGroup2Reader,
+) -> TestInterleavedGroupsGroup2Which raise @capnp.CapnpError {
+  match self.inner.get_uint16(30) {
+    0U => Qux(self.get_qux())
+    1U => Corge(self.get_corge())
+    2U => Fred(self.get_fred())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -8120,7 +8378,7 @@ pub fn TestListsStruct8Builder::init_root(
 pub fn TestListsStruct8Reader::get_f(
   self : TestListsStruct8Reader,
 ) -> Byte raise @capnp.CapnpError {
-  self.inner.get_uint8(0, default=b'\x00')
+  self.inner.get_uint8(0, default=0)
 }
 
 ///|
@@ -8128,7 +8386,7 @@ pub fn TestListsStruct8Builder::set_f(
   self : TestListsStruct8Builder,
   value : Byte,
 ) -> Unit raise @capnp.CapnpError {
-  self.inner.set_uint8(0, value, default=b'\x00')
+  self.inner.set_uint8(0, value, default=0)
 }
 
 ///|
@@ -9198,7 +9456,7 @@ pub fn TestListsStruct8cBuilder::init_root(
 pub fn TestListsStruct8cReader::get_f(
   self : TestListsStruct8cReader,
 ) -> Byte raise @capnp.CapnpError {
-  self.inner.get_uint8(0, default=b'\x00')
+  self.inner.get_uint8(0, default=0)
 }
 
 ///|
@@ -9206,7 +9464,7 @@ pub fn TestListsStruct8cBuilder::set_f(
   self : TestListsStruct8cBuilder,
   value : Byte,
 ) -> Unit raise @capnp.CapnpError {
-  self.inner.set_uint8(0, value, default=b'\x00')
+  self.inner.set_uint8(0, value, default=0)
 }
 
 ///|
@@ -9498,7 +9756,7 @@ pub fn TestFieldZeroIsBitBuilder::set_second_bit(
 pub fn TestFieldZeroIsBitReader::get_third_field(
   self : TestFieldZeroIsBitReader,
 ) -> Byte raise @capnp.CapnpError {
-  self.inner.get_uint8(1, default=b'\x7B')
+  self.inner.get_uint8(1, default=123)
 }
 
 ///|
@@ -9506,7 +9764,7 @@ pub fn TestFieldZeroIsBitBuilder::set_third_field(
   self : TestFieldZeroIsBitBuilder,
   value : Byte,
 ) -> Unit raise @capnp.CapnpError {
-  self.inner.set_uint8(1, value, default=b'\x7B')
+  self.inner.set_uint8(1, value, default=123)
 }
 
 ///|
@@ -9701,6 +9959,26 @@ pub fn TestLateUnionTheUnionReader::which(
 }
 
 ///|
+pub(all) enum TestLateUnionTheUnionWhich {
+  Qux(String)
+  Corge(TestLateUnionTheUnionCorgeListReader)
+  Grault(Float)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestLateUnionTheUnionReader::which_case(
+  self : TestLateUnionTheUnionReader,
+) -> TestLateUnionTheUnionWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(6) {
+    0U => Qux(self.get_qux())
+    1U => Corge(self.get_corge())
+    2U => Grault(self.get_grault())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn TestLateUnionTheUnionReader::is_qux(
   self : TestLateUnionTheUnionReader,
 ) -> Bool raise @capnp.CapnpError {
@@ -9855,6 +10133,26 @@ pub fn TestLateUnionAnotherUnionReader::which(
   self : TestLateUnionAnotherUnionReader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(12)
+}
+
+///|
+pub(all) enum TestLateUnionAnotherUnionWhich {
+  Qux(String)
+  Corge(TestLateUnionAnotherUnionCorgeListReader)
+  Grault(Float)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestLateUnionAnotherUnionReader::which_case(
+  self : TestLateUnionAnotherUnionReader,
+) -> TestLateUnionAnotherUnionWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(12) {
+    0U => Qux(self.get_qux())
+    1U => Corge(self.get_corge())
+    2U => Grault(self.get_grault())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -10211,6 +10509,24 @@ pub fn TestOldUnionVersionReader::which(
 }
 
 ///|
+pub(all) enum TestOldUnionVersionWhich {
+  A
+  B(UInt64)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestOldUnionVersionReader::which_case(
+  self : TestOldUnionVersionReader,
+) -> TestOldUnionVersionWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => A
+    1U => B(self.get_b())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn TestOldUnionVersionReader::is_a(
   self : TestOldUnionVersionReader,
 ) -> Bool raise @capnp.CapnpError {
@@ -10296,6 +10612,24 @@ pub fn TestNewUnionVersionReader::which(
 }
 
 ///|
+pub(all) enum TestNewUnionVersionWhich {
+  A(TestNewUnionVersionAReader)
+  B(UInt64)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestNewUnionVersionReader::which_case(
+  self : TestNewUnionVersionReader,
+) -> TestNewUnionVersionWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => A(self.get_a())
+    1U => B(self.get_b())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn TestNewUnionVersionReader::is_a(
   self : TestNewUnionVersionReader,
 ) -> Bool raise @capnp.CapnpError {
@@ -10367,6 +10701,24 @@ pub fn TestNewUnionVersionAReader::which(
   self : TestNewUnionVersionAReader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(8)
+}
+
+///|
+pub(all) enum TestNewUnionVersionAWhich {
+  A0
+  A1(UInt64)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestNewUnionVersionAReader::which_case(
+  self : TestNewUnionVersionAReader,
+) -> TestNewUnionVersionAWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(8) {
+    0U => A0
+    1U => A1(self.get_a1())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -10540,6 +10892,24 @@ pub fn TestStructUnionUnReader::which(
   self : TestStructUnionUnReader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
+}
+
+///|
+pub(all) enum TestStructUnionUnWhich {
+  Struct(TestStructUnionSomeStructReader)
+  Object(TestAnyPointerReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestStructUnionUnReader::which_case(
+  self : TestStructUnionUnReader,
+) -> TestStructUnionUnWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => Struct(self.get_struct())
+    1U => Object(self.get_object())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -10865,6 +11235,24 @@ pub fn TestGenericsReader::which(
   self : TestGenericsReader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
+}
+
+///|
+pub(all) enum TestGenericsWhich {
+  Uv
+  Ug(TestGenericsUgReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestGenericsReader::which_case(
+  self : TestGenericsReader,
+) -> TestGenericsWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => Uv
+    1U => Ug(self.get_ug())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -11582,6 +11970,24 @@ pub fn TestGenericsAsTestAllTypesAndTestAnyPointerReader::which(
 }
 
 ///|
+pub(all) enum TestGenericsAsTestAllTypesAndTestAnyPointerWhich {
+  Uv
+  Ug(TestGenericsUgAsTestAllTypesAndTestAnyPointerReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestGenericsAsTestAllTypesAndTestAnyPointerReader::which_case(
+  self : TestGenericsAsTestAllTypesAndTestAnyPointerReader,
+) -> TestGenericsAsTestAllTypesAndTestAnyPointerWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => Uv
+    1U => Ug(self.get_ug())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn TestGenericsAsTestAllTypesAndTestAnyPointerReader::get_foo(
   self : TestGenericsAsTestAllTypesAndTestAnyPointerReader,
 ) -> TestAllTypesReader raise @capnp.CapnpError {
@@ -11770,6 +12176,24 @@ pub fn TestGenericsAsTestAnyPointerAndTestAllTypesReader::which(
   self : TestGenericsAsTestAnyPointerAndTestAllTypesReader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
+}
+
+///|
+pub(all) enum TestGenericsAsTestAnyPointerAndTestAllTypesWhich {
+  Uv
+  Ug(TestGenericsUgAsTestAnyPointerAndTestAllTypesReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestGenericsAsTestAnyPointerAndTestAllTypesReader::which_case(
+  self : TestGenericsAsTestAnyPointerAndTestAllTypesReader,
+) -> TestGenericsAsTestAnyPointerAndTestAllTypesWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => Uv
+    1U => Ug(self.get_ug())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -12615,6 +13039,24 @@ pub fn TestGenericsAsTextAndTestAllTypesReader::which(
 }
 
 ///|
+pub(all) enum TestGenericsAsTextAndTestAllTypesWhich {
+  Uv
+  Ug(TestGenericsUgAsTextAndTestAllTypesReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestGenericsAsTextAndTestAllTypesReader::which_case(
+  self : TestGenericsAsTextAndTestAllTypesReader,
+) -> TestGenericsAsTextAndTestAllTypesWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => Uv
+    1U => Ug(self.get_ug())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn TestGenericsAsTextAndTestAllTypesReader::get_foo(
   self : TestGenericsAsTextAndTestAllTypesReader,
 ) -> String raise @capnp.CapnpError {
@@ -12796,6 +13238,24 @@ pub fn TestGenericsAsTestAllTypesAndTextReader::which(
   self : TestGenericsAsTestAllTypesAndTextReader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
+}
+
+///|
+pub(all) enum TestGenericsAsTestAllTypesAndTextWhich {
+  Uv
+  Ug(TestGenericsUgAsTestAllTypesAndTextReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestGenericsAsTestAllTypesAndTextReader::which_case(
+  self : TestGenericsAsTestAllTypesAndTextReader,
+) -> TestGenericsAsTestAllTypesAndTextWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => Uv
+    1U => Ug(self.get_ug())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -13331,6 +13791,24 @@ pub fn TestGenericsUnionReader::which(
   self : TestGenericsUnionReader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
+}
+
+///|
+pub(all) enum TestGenericsUnionWhich {
+  Foo(@capnp.PointerReader)
+  Bar(@capnp.PointerReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestGenericsUnionReader::which_case(
+  self : TestGenericsUnionReader,
+) -> TestGenericsUnionWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => Foo(self.get_foo())
+    1U => Bar(self.get_bar())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -15083,6 +15561,24 @@ pub fn TestGenericsAsCapabilityAndTextReader::which(
 }
 
 ///|
+pub(all) enum TestGenericsAsCapabilityAndTextWhich {
+  Uv
+  Ug(TestGenericsUgAsCapabilityAndTextReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestGenericsAsCapabilityAndTextReader::which_case(
+  self : TestGenericsAsCapabilityAndTextReader,
+) -> TestGenericsAsCapabilityAndTextWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => Uv
+    1U => Ug(self.get_ug())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn TestGenericsAsCapabilityAndTextReader::get_foo(
   self : TestGenericsAsCapabilityAndTextReader,
 ) -> @capnp.PointerReader raise @capnp.CapnpError {
@@ -15287,6 +15783,24 @@ pub fn TestGenericsAsTextAndCapabilityReader::which(
   self : TestGenericsAsTextAndCapabilityReader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
+}
+
+///|
+pub(all) enum TestGenericsAsTextAndCapabilityWhich {
+  Uv
+  Ug(TestGenericsUgAsTextAndCapabilityReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestGenericsAsTextAndCapabilityReader::which_case(
+  self : TestGenericsAsTextAndCapabilityReader,
+) -> TestGenericsAsTextAndCapabilityWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => Uv
+    1U => Ug(self.get_ug())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -15678,6 +16192,24 @@ pub fn TestGenericsAsListOfTestEnumAndTextReader::which(
 }
 
 ///|
+pub(all) enum TestGenericsAsListOfTestEnumAndTextWhich {
+  Uv
+  Ug(TestGenericsUgAsListOfTestEnumAndTextReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestGenericsAsListOfTestEnumAndTextReader::which_case(
+  self : TestGenericsAsListOfTestEnumAndTextReader,
+) -> TestGenericsAsListOfTestEnumAndTextWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => Uv
+    1U => Ug(self.get_ug())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub(all) struct TestGenericsAsListOfTestEnumAndTextFooListReader {
   inner : @capnp.ListReader
 }
@@ -15908,6 +16440,24 @@ pub fn TestGenericsAsTextAndListOfTestEnumReader::which(
   self : TestGenericsAsTextAndListOfTestEnumReader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
+}
+
+///|
+pub(all) enum TestGenericsAsTextAndListOfTestEnumWhich {
+  Uv
+  Ug(TestGenericsUgAsTextAndListOfTestEnumReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestGenericsAsTextAndListOfTestEnumReader::which_case(
+  self : TestGenericsAsTextAndListOfTestEnumReader,
+) -> TestGenericsAsTextAndListOfTestEnumWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => Uv
+    1U => Ug(self.get_ug())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -21108,6 +21658,24 @@ pub fn TestNameAnnotationReader::which(
 }
 
 ///|
+pub(all) enum TestNameAnnotationWhich {
+  BadFieldName(Bool)
+  Bar(Int32)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestNameAnnotationReader::which_case(
+  self : TestNameAnnotationReader,
+) -> TestNameAnnotationWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(2) {
+    0U => BadFieldName(self.get_bad_field_name())
+    1U => Bar(self.get_bar())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn TestNameAnnotationReader::is_bad_field_name(
   self : TestNameAnnotationReader,
 ) -> Bool raise @capnp.CapnpError {
@@ -21221,6 +21789,24 @@ pub fn TestNameAnnotationBadlyNamedUnionReader::which(
 }
 
 ///|
+pub(all) enum TestNameAnnotationBadlyNamedUnionWhich {
+  BadlyNamedGroup(TestNameAnnotationBadlyNamedUnionBadlyNamedGroupReader)
+  Baz(TestNameAnnotationNestedStructReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TestNameAnnotationBadlyNamedUnionReader::which_case(
+  self : TestNameAnnotationBadlyNamedUnionReader,
+) -> TestNameAnnotationBadlyNamedUnionWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(6) {
+    0U => BadlyNamedGroup(self.get_badly_named_group())
+    1U => Baz(self.get_baz())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn TestNameAnnotationBadlyNamedUnionReader::is_badly_named_group(
   self : TestNameAnnotationBadlyNamedUnionReader,
 ) -> Bool raise @capnp.CapnpError {
@@ -21310,7 +21896,7 @@ pub fn TypeNc12efc3b075adfe9Builder::init_root(
 pub fn TypeNc12efc3b075adfe9Reader::get_badly_named_param(
   self : TypeNc12efc3b075adfe9Reader,
 ) -> Byte raise @capnp.CapnpError {
-  self.inner.get_uint8(0, default=b'\x00')
+  self.inner.get_uint8(0, default=0)
 }
 
 ///|
@@ -21318,7 +21904,7 @@ pub fn TypeNc12efc3b075adfe9Builder::set_badly_named_param(
   self : TypeNc12efc3b075adfe9Builder,
   value : Byte,
 ) -> Unit raise @capnp.CapnpError {
-  self.inner.set_uint8(0, value, default=b'\x00')
+  self.inner.set_uint8(0, value, default=0)
 }
 
 ///|

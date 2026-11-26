@@ -485,6 +485,26 @@ pub fn SwitchingReader::which(
 }
 
 ///|
+pub(all) enum SwitchingWhich {
+  None
+  Configuration(SwitchingConfigurationReader)
+  Code(UInt64)
+  Unknown(UInt32)
+}
+
+///|
+pub fn SwitchingReader::which_case(
+  self : SwitchingReader,
+) -> SwitchingWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(2) {
+    0U => None
+    1U => Configuration(self.get_configuration())
+    2U => Code(self.get_code())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn SwitchingReader::get_preserved(
   self : SwitchingReader,
 ) -> Bool raise @capnp.CapnpError {

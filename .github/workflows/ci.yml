@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         target: [wasm, wasm-gc, js, native]
-        sdk: ["0.10.20+65efd5b93"]
+        sdk: ["0.10.22+124d61d05"]
         include:
           - target: js
             sdk: "0.10.16+b1a0e846e"
@@ -48,8 +48,8 @@ jobs:
           node-version: "24"
       - uses: hustcer/setup-moonbit@v1.22
         with:
-          version: "0.10.20+65efd5b93"
-          core-version: "0.10.20+65efd5b93"
+          version: "0.10.22+124d61d05"
+          core-version: "0.10.22+124d61d05"
       - run: moon version --all
       - uses: ilammy/msvc-dev-cmd@v1
         if: matrix.target == 'native'
@@ -85,8 +85,8 @@ jobs:
           node-version: "24"
       - uses: hustcer/setup-moonbit@v1.22
         with:
-          version: "0.10.20+65efd5b93"
-          core-version: "0.10.20+65efd5b93"
+          version: "0.10.22+124d61d05"
+          core-version: "0.10.22+124d61d05"
       - run: moon version --all
       - uses: actions/setup-python@v5
         with:
@@ -123,7 +123,7 @@ jobs:
         if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: python scripts/verify.py --profile release --version 0.5.0
+        run: python scripts/verify.py --profile release --version 0.6.0
       - uses: actions/upload-artifact@v4
         if: always()
         with:

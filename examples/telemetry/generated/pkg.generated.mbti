@@ -76,6 +76,7 @@ pub fn ReportReader::get_total(Self) -> UInt32 raise @capnp.CapnpError
 pub fn ReportReader::is_empty(Self) -> Bool raise @capnp.CapnpError
 pub fn ReportReader::is_statistics(Self) -> Bool raise @capnp.CapnpError
 pub fn ReportReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn ReportReader::which_case(Self) -> ReportWhich raise @capnp.CapnpError
 
 pub(all) struct ReportStatisticsBuilder {
   inner : @capnp.StructBuilder
@@ -90,6 +91,12 @@ pub(all) struct ReportStatisticsReader {
 pub fn ReportStatisticsReader::get_maximum(Self) -> Double raise @capnp.CapnpError
 pub fn ReportStatisticsReader::get_mean(Self) -> Double raise @capnp.CapnpError
 pub fn ReportStatisticsReader::get_minimum(Self) -> Double raise @capnp.CapnpError
+
+pub(all) enum ReportWhich {
+  Empty
+  Statistics(ReportStatisticsReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct SampleBuilder {
   inner : @capnp.StructBuilder

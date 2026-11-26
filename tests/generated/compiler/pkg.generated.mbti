@@ -46,6 +46,13 @@ pub fn BrandBindingReader::get_unbound(Self) -> Unit raise @capnp.CapnpError
 pub fn BrandBindingReader::is_type(Self) -> Bool raise @capnp.CapnpError
 pub fn BrandBindingReader::is_unbound(Self) -> Bool raise @capnp.CapnpError
 pub fn BrandBindingReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn BrandBindingReader::which_case(Self) -> BrandBindingWhich raise @capnp.CapnpError
+
+pub(all) enum BrandBindingWhich {
+  Unbound
+  Type(TypeReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct BrandBuilder {
   inner : @capnp.StructBuilder
@@ -91,6 +98,13 @@ pub fn BrandScopeReader::get_scope_id(Self) -> UInt64 raise @capnp.CapnpError
 pub fn BrandScopeReader::is_bind(Self) -> Bool raise @capnp.CapnpError
 pub fn BrandScopeReader::is_inherit(Self) -> Bool raise @capnp.CapnpError
 pub fn BrandScopeReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn BrandScopeReader::which_case(Self) -> BrandScopeWhich raise @capnp.CapnpError
+
+pub(all) enum BrandScopeWhich {
+  Bind(BrandScopeBindListReader)
+  Inherit
+  Unknown(UInt32)
+}
 
 pub(all) struct BrandScopesListBuilder {
   inner : @capnp.ListBuilder
@@ -204,6 +218,13 @@ pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::get_type
 pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::is_member(Self) -> Bool raise @capnp.CapnpError
 pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::is_type_id(Self) -> Bool raise @capnp.CapnpError
 pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::which_case(Self) -> CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierWhich raise @capnp.CapnpError
+
+pub(all) enum CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierWhich {
+  TypeId(UInt64)
+  Member(CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierMemberReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct CodeGeneratorRequestRequestedFileFileSourceInfoIdentifiersListBuilder {
   inner : @capnp.ListBuilder
@@ -375,6 +396,13 @@ pub fn FieldOrdinalReader::get_implicit(Self) -> Unit raise @capnp.CapnpError
 pub fn FieldOrdinalReader::is_explicit(Self) -> Bool raise @capnp.CapnpError
 pub fn FieldOrdinalReader::is_implicit(Self) -> Bool raise @capnp.CapnpError
 pub fn FieldOrdinalReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn FieldOrdinalReader::which_case(Self) -> FieldOrdinalWhich raise @capnp.CapnpError
+
+pub(all) enum FieldOrdinalWhich {
+  Implicit
+  Explicit(UInt32)
+  Unknown(UInt32)
+}
 
 pub(all) struct FieldReader {
   inner : @capnp.StructReader
@@ -390,6 +418,7 @@ pub fn FieldReader::get_slot(Self) -> FieldSlotReader raise @capnp.CapnpError
 pub fn FieldReader::is_group(Self) -> Bool raise @capnp.CapnpError
 pub fn FieldReader::is_slot(Self) -> Bool raise @capnp.CapnpError
 pub fn FieldReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn FieldReader::which_case(Self) -> FieldWhich raise @capnp.CapnpError
 
 pub(all) struct FieldSlotBuilder {
   inner : @capnp.StructBuilder
@@ -408,6 +437,12 @@ pub fn FieldSlotReader::get_default_value(Self) -> ValueReader raise @capnp.Capn
 pub fn FieldSlotReader::get_had_explicit_default(Self) -> Bool raise @capnp.CapnpError
 pub fn FieldSlotReader::get_offset(Self) -> UInt32 raise @capnp.CapnpError
 pub fn FieldSlotReader::get_type(Self) -> TypeReader raise @capnp.CapnpError
+
+pub(all) enum FieldWhich {
+  Slot(FieldSlotReader)
+  Group(FieldGroupReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct MethodAnnotationsListBuilder {
   inner : @capnp.ListBuilder
@@ -686,6 +721,7 @@ pub fn NodeReader::is_file(Self) -> Bool raise @capnp.CapnpError
 pub fn NodeReader::is_interface(Self) -> Bool raise @capnp.CapnpError
 pub fn NodeReader::is_struct(Self) -> Bool raise @capnp.CapnpError
 pub fn NodeReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn NodeReader::which_case(Self) -> NodeWhich raise @capnp.CapnpError
 
 pub(all) struct NodeSourceInfoBuilder {
   inner : @capnp.StructBuilder
@@ -767,6 +803,16 @@ pub fn NodeStructReader::get_is_group(Self) -> Bool raise @capnp.CapnpError
 pub fn NodeStructReader::get_pointer_count(Self) -> UInt32 raise @capnp.CapnpError
 pub fn NodeStructReader::get_preferred_list_encoding(Self) -> ElementSize raise @capnp.CapnpError
 
+pub(all) enum NodeWhich {
+  File
+  Struct(NodeStructReader)
+  Enum(NodeEnumReader)
+  Interface(NodeInterfaceReader)
+  Const(NodeConstReader)
+  Annotation(NodeAnnotationReader)
+  Unknown(UInt32)
+}
+
 pub(all) struct SuperclassBuilder {
   inner : @capnp.StructBuilder
 }
@@ -821,6 +867,7 @@ pub fn TypeAnyPointerReader::is_implicit_method_parameter(Self) -> Bool raise @c
 pub fn TypeAnyPointerReader::is_parameter(Self) -> Bool raise @capnp.CapnpError
 pub fn TypeAnyPointerReader::is_unconstrained(Self) -> Bool raise @capnp.CapnpError
 pub fn TypeAnyPointerReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TypeAnyPointerReader::which_case(Self) -> TypeAnyPointerWhich raise @capnp.CapnpError
 
 pub(all) struct TypeAnyPointerUnconstrainedBuilder {
   inner : @capnp.StructBuilder
@@ -842,6 +889,22 @@ pub fn TypeAnyPointerUnconstrainedReader::is_capability(Self) -> Bool raise @cap
 pub fn TypeAnyPointerUnconstrainedReader::is_list(Self) -> Bool raise @capnp.CapnpError
 pub fn TypeAnyPointerUnconstrainedReader::is_struct(Self) -> Bool raise @capnp.CapnpError
 pub fn TypeAnyPointerUnconstrainedReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TypeAnyPointerUnconstrainedReader::which_case(Self) -> TypeAnyPointerUnconstrainedWhich raise @capnp.CapnpError
+
+pub(all) enum TypeAnyPointerUnconstrainedWhich {
+  AnyKind
+  Struct
+  List
+  Capability
+  Unknown(UInt32)
+}
+
+pub(all) enum TypeAnyPointerWhich {
+  Unconstrained(TypeAnyPointerUnconstrainedReader)
+  Parameter(TypeAnyPointerParameterReader)
+  ImplicitMethodParameter(TypeAnyPointerImplicitMethodParameterReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct TypeBuilder {
   inner : @capnp.StructBuilder
@@ -947,6 +1010,7 @@ pub fn TypeReader::is_uint64(Self) -> Bool raise @capnp.CapnpError
 pub fn TypeReader::is_uint8(Self) -> Bool raise @capnp.CapnpError
 pub fn TypeReader::is_void(Self) -> Bool raise @capnp.CapnpError
 pub fn TypeReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TypeReader::which_case(Self) -> TypeWhich raise @capnp.CapnpError
 
 pub(all) struct TypeStructBuilder {
   inner : @capnp.StructBuilder
@@ -960,6 +1024,29 @@ pub(all) struct TypeStructReader {
 }
 pub fn TypeStructReader::get_brand(Self) -> BrandReader raise @capnp.CapnpError
 pub fn TypeStructReader::get_type_id(Self) -> UInt64 raise @capnp.CapnpError
+
+pub(all) enum TypeWhich {
+  Void
+  Bool
+  Int8
+  Int16
+  Int32
+  Int64
+  Uint8
+  Uint16
+  Uint32
+  Uint64
+  Float32
+  Float64
+  Text
+  Data
+  List(TypeListReader)
+  Enum(TypeEnumReader)
+  Struct(TypeStructReader)
+  Interface(TypeInterfaceReader)
+  AnyPointer(TypeAnyPointerReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct ValueBuilder {
   inner : @capnp.StructBuilder
@@ -1031,6 +1118,30 @@ pub fn ValueReader::is_uint64(Self) -> Bool raise @capnp.CapnpError
 pub fn ValueReader::is_uint8(Self) -> Bool raise @capnp.CapnpError
 pub fn ValueReader::is_void(Self) -> Bool raise @capnp.CapnpError
 pub fn ValueReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn ValueReader::which_case(Self) -> ValueWhich raise @capnp.CapnpError
+
+pub(all) enum ValueWhich {
+  Void
+  Bool(Bool)
+  Int8(Int32)
+  Int16(Int32)
+  Int32(Int32)
+  Int64(Int64)
+  Uint8(Byte)
+  Uint16(UInt32)
+  Uint32(UInt32)
+  Uint64(UInt64)
+  Float32(Float)
+  Float64(Double)
+  Text(String)
+  Data(Bytes)
+  List(@capnp.PointerReader)
+  Enum(UInt32)
+  Struct(@capnp.PointerReader)
+  Interface
+  AnyPointer(@capnp.PointerReader)
+  Unknown(UInt32)
+}
 
 // Type aliases
 

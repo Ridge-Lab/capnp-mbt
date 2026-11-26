@@ -28,8 +28,10 @@ compiler, so callers can use existing schema sources directly.
 - `const name :Type = ...` produces `const_name()`. Scalar, enum, text/data,
   struct, list, generic and AnyPointer constant values come from the official
   compiler's evaluated `Value`, including imported references and embedded data.
-- Union readers provide `which()` and `is_member()`. Reading an inactive member
-  fails. A builder setter or initializer selects the member and clears overlapping
+- Union readers provide both a MoonBit-native typed ADT (`<Type>Which` enum via
+  `which_case()`, preserving unknown discriminants as `Unknown(UInt32)`) and
+  raw `which()` / `is_member()` helpers. Reading an inactive member fails. A
+  builder setter or initializer selects the member and clears overlapping
   storage without clearing adjacent non-union fields.
 - A group's `get_group()` builder accessor preserves existing fields;
   `init_group()` resets that group's storage, including nested discriminants.

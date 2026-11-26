@@ -118,6 +118,26 @@ pub fn FixtureReader::which(
 }
 
 ///|
+pub(all) enum FixtureWhich {
+  None
+  Message(String)
+  Code(UInt32)
+  Unknown(UInt32)
+}
+
+///|
+pub fn FixtureReader::which_case(
+  self : FixtureReader,
+) -> FixtureWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(38) {
+    0U => None
+    1U => Message(self.get_message())
+    2U => Code(self.get_code())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn FixtureReader::get_boolean(
   self : FixtureReader,
 ) -> Bool raise @capnp.CapnpError {
@@ -200,7 +220,7 @@ pub fn FixtureBuilder::set_i64(
 pub fn FixtureReader::get_u8(
   self : FixtureReader,
 ) -> Byte raise @capnp.CapnpError {
-  self.inner.get_uint8(16, default=b'\xFA')
+  self.inner.get_uint8(16, default=250)
 }
 
 ///|
@@ -208,7 +228,7 @@ pub fn FixtureBuilder::set_u8(
   self : FixtureBuilder,
   value : Byte,
 ) -> Unit raise @capnp.CapnpError {
-  self.inner.set_uint8(16, value, default=b'\xFA')
+  self.inner.set_uint8(16, value, default=250)
 }
 
 ///|

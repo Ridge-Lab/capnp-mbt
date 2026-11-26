@@ -7,6 +7,8 @@ test "official compiler request deterministically generates typed bindings" {
   assert_eq(first[0].path, "capnp_generated.mbt")
   assert_eq(first[0].content, second[0].content)
   assert_true(first[0].content.contains("struct FixtureReader"))
+  assert_true(first[0].content.contains("enum FixtureWhich"))
+  assert_true(first[0].content.contains("FixtureReader::which_case"))
   assert_true(first[0].content.contains("get_uint64"))
   assert_true(first[0].content.contains("18446744073709551615UL"))
 }

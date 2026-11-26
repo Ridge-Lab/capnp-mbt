@@ -28,6 +28,10 @@ struct Envelope {
   extra @1 :AnyPointer;
   status @2 :RecordReader;
   width @3 :Int32;
+  union {
+    empty @4 :Void;
+    note @5 :Text;
+  }
 }
 const defaultId :UInt64 = 9007199254740993;
 const fallback :Record = (id = 42, name = "constant payload");
@@ -48,6 +52,7 @@ CONSUMER = """fn main raise {
   record.set_name("fresh Mooncakes consumer")
   root.set_status(@types.RecordReader::Ready)
   root.set_width(Large)
+  root.set_note("typed union ADT")
   root.init_extra().set_struct(@types.const_fallback().inner)
   let bytes = @capnp.unpack(@capnp.pack(message.finish()))
   let received = @types.EnvelopeReader::from_message(@capnp.read_message(bytes))
@@ -55,15 +60,20 @@ CONSUMER = """fn main raise {
   assert_eq(received.get_item().get_value().get_name(), "fresh Mooncakes consumer")
   assert_eq(received.get_status().to_raw(), 1U)
   assert_eq(received.get_width().to_raw(), 1U)
+  match received.which_case() {
+    Note(text) => assert_eq(text, "typed union ADT")
+    Empty | Unknown(_) => fail("expected Note union variant")
+  }
   let payload = received.get_extra().as_struct()
   assert_eq(payload.get_uint64(0), 42UL)
   assert_eq(payload.get_text(0), "constant payload")
   let copied = @capnp.Builder::new()
   copied.root_pointer().set(@capnp.read_message(bytes).root_pointer())
-  assert_eq(
-    @capnp.canonicalize(@capnp.read_message(bytes)),
-    @capnp.canonicalize(@capnp.read_message(copied.finish())),
-  )
+  let canonical = @capnp.canonicalize(@capnp.read_message(bytes))
+  assert_eq(canonical, @capnp.canonicalize(@capnp.read_message(copied.finish())))
+  assert_true(@capnp.is_canonical(canonical))
+  let canonical_root = @types.EnvelopeReader::from_message(@capnp.read_canonical(canonical))
+  assert_eq(canonical_root.get_item().get_value().get_name(), "fresh Mooncakes consumer")
   let decoder = @capnp.FrameDecoder::new(max_message_bytes=bytes.length())
   assert_eq(decoder.feed(bytes[:3].to_owned()), [])
   let frames = decoder.feed(bytes[3:].to_owned() + bytes)
@@ -114,7 +124,8 @@ def verify_distribution(installed: Path) -> None:
         "benchmarks/main.mbt", "scripts/run_benchmarks.py",
         "packed_stream.mbt", "scripts/verify.py", "scripts/verify_oracles.py",
         "fixtures/conformance.bin", "fixtures/conformance.packed.bin",
-        "fixtures/upstream/workerd/LICENSE", "fixtures/upstream/workerd/modules.capnp",
+        "fixtures/upstream/workerd/LICENSE", "fixtures/upstream/workerd/README.md",
+        "fixtures/upstream/workerd/modules.capnp",
         "fixtures/upstream/workerd/config/workerd.capnp", "fixtures/upstream/workerd/config/unit-tests/config.capnp",
         "fixtures/upstream/workerd/config/unit-tests/worker.js", "fixtures/upstream/workerd/config/unit-tests/config.bin",
         "examples/workerd_config/build.py", "examples/workerd_config/verify.py", "examples/workerd_config/inspect.mbt",
@@ -123,8 +134,11 @@ def verify_distribution(installed: Path) -> None:
     for name in required:
         if not (installed / name).is_file():
             raise RuntimeError(f"Published package is missing {name}")
-    if "Permission is hereby granted" not in (installed / "LICENSE").read_text():
+    if "Permission is hereby granted" not in (installed / "LICENSE").read_text(encoding="utf-8"):
         raise RuntimeError("Published package is missing the MIT permission notice")
+    workerd_license = (installed / "fixtures/upstream/workerd/LICENSE").read_text(encoding="utf-8")
+    if "Apache License" not in workerd_license or "Version 2.0" not in workerd_license:
+        raise RuntimeError("Published package is missing the workerd Apache 2.0 license notice")
     upstream = Path("fixtures/upstream/capnproto-1.5.0")
     # Use this checkout's recorded upstream hashes, not a package-supplied checksum
     # paired with a potentially changed file. These values refer to upstream 1.5.0.
@@ -136,6 +150,15 @@ def verify_distribution(installed: Path) -> None:
         data = (installed / upstream / name).read_bytes()
         if hashlib.sha256(data).hexdigest() != expected:
             raise RuntimeError(f"Published upstream file differs from 1.5.0: {name}")
+    workerd_upstream = Path("fixtures/upstream/workerd")
+    workerd_manifest = (ROOT / workerd_upstream / "README.md").read_text(encoding="utf-8")
+    workerd_entries = re.findall(r"\| `([^`]+)` \| [^|]+ \| `([0-9a-f]{64})` \|", workerd_manifest)
+    if len(workerd_entries) != 6:
+        raise RuntimeError("Expected the six-file workerd upstream source/license manifest")
+    for name, expected in workerd_entries:
+        data = (installed / workerd_upstream / name).read_bytes()
+        if hashlib.sha256(data).hexdigest() != expected:
+            raise RuntimeError(f"Published workerd upstream file differs: {name}")
     print("Verified published documentation, licenses, host adapters and upstream hashes")
 
 

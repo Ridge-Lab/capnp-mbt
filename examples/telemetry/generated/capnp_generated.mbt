@@ -261,6 +261,24 @@ pub fn ReportReader::which(
 }
 
 ///|
+pub(all) enum ReportWhich {
+  Empty
+  Statistics(ReportStatisticsReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn ReportReader::which_case(
+  self : ReportReader,
+) -> ReportWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(20) {
+    0U => Empty
+    1U => Statistics(self.get_statistics())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn ReportReader::get_job_id(
   self : ReportReader,
 ) -> UInt64 raise @capnp.CapnpError {

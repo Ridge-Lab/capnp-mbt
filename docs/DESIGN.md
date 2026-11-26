@@ -29,12 +29,7 @@ Opaque copy recursively preserves unknown fields, duplicates aliases, and rolls
 back destination changes if an error or configured limit occurs. Reader work
 budgets stay consumed even when a copy fails.
 
-`FrameDecoder` handles fragmented and concatenated input separately from object
-decoding. It progresses through segment count, segment table and payload once,
-retains only an incomplete frame, and requires explicit EOF validation. Its
-logical byte limit does not claim a process RSS bound. Callers should bound
-input chunks and immediately process/release returned frames. The streaming
-example demonstrates that pattern using 8 KiB reads and a 1 MiB per-frame limit.
+`FrameDecoder` and `PackedFrameDecoder` handle fragmented and concatenated input separately from object decoding. `FrameDecoder` progresses through segment count, segment table and payload once, retains only an incomplete frame, and requires explicit EOF validation; `PackedFrameDecoder` layers bounded incremental unpacking (at most 2 KiB per expansion step and per-feed frame/byte budgets) ahead of the standard framer. Their logical byte limits do not claim a process RSS bound. Callers should bound input chunks and immediately process/release returned frames. The streaming example demonstrates both patterns using 8 KiB reads and a 1 MiB per-frame limit.
 
 ## Generated APIs and evolution
 

@@ -1,11 +1,11 @@
 ///|
 fn payload(m : @types.ModuleReader) -> (String, Bytes) raise {
-  match m.which() {
-    0U => ("src", m.get_src())
-    1U => ("wasm", m.get_wasm())
-    2U => ("data", m.get_data())
-    3U => ("json", @utf8.encode(m.get_json()))
-    other => fail("Unknown module discriminant \{other}")
+  match m.which_case() {
+    Src(bytes) => ("src", bytes)
+    Wasm(bytes) => ("wasm", bytes)
+    Data(bytes) => ("data", bytes)
+    Json(text) => ("json", @utf8.encode(text))
+    Unknown(other) => fail("Unknown module discriminant \{other}")
   }
 }
 

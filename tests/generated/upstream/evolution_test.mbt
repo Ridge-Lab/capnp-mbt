@@ -135,6 +135,10 @@ test "unknown upstream union discriminants cannot expose known fields and surviv
   assert_eq(unknown.which(), 4U)
   assert_false(unknown.is_a())
   assert_false(unknown.is_b())
+  match unknown.which_case() {
+    Unknown(tag) => assert_eq(tag, 4U)
+    _ => fail("expected Unknown(4U) typed union variant")
+  }
   try unknown.get_a() catch {
     @capnp.CapnpError::TypeMismatch(_) => ()
     _ => fail("unexpected unknown union error")

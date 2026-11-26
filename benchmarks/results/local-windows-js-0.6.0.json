@@ -1,0 +1,1038 @@
+{
+  "format_version": 1,
+  "workload": "telemetry-batch-v1",
+  "metadata": {
+    "recorded_at_utc": "2026-11-26T02:26:07.748513+00:00",
+    "platform": "Windows-10-10.0.26300-SP0",
+    "system": "Windows",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+    "logical_cpu_count": 20,
+    "python": "3.11.9",
+    "moon": "moon 0.1.20261119 (738607b 2026-11-19) ~\\.moon\\bin\\moon.EXE\nmoonc v0.10.22+124d61d05 (2026-11-19) ~\\.moon\\bin\\moonc.exe\nmoonrun 0.1.20261119 (738607b 2026-11-19) ~\\.moon\\bin\\moonrun.exe",
+    "node": "v24.14.1",
+    "native_compiler_candidates": {},
+    "native_c_override_options": null,
+    "git_revision": "f4373cf1c026eb074b61049286b35b89870953fa",
+    "git_dirty": true,
+    "source_snapshot": {
+      "sha256": "dd67514b1b65d498b8f0530df39f54980e353f15519d1bf26f946fb90c42aaf9",
+      "files": {
+        "benchmarks/main.mbt": "33bdb4ef90105a29df7ddf7995a582b1fd4a2b1e38a02146f7372d838db76688",
+        "benchmarks/moon.pkg": "49bd7198f332026a3ba2455e01d957529818652b700b62e8a69a011c1d9a7718",
+        "benchmarks/workload.mbt": "f02e1f99ca2b35b2b752b82955ee1f84cde9bd01822c29ce4985f02151f382f6",
+        "builder.mbt": "bbb4f297545d56a5e0da643b942e6aedf4a79e287bfd4b9ca1f61b12ae463fb1",
+        "builder_list.mbt": "ecafdac1c4586b04686d6a12e205b1cd6b4201c2bc22c39af179a5ce89a80f38",
+        "builder_scalar.mbt": "dc5778f05647f78319edfe78c6f2317c14ce9732ea22ae9743b31cfe6cfc2fee",
+        "builder_test.mbt": "b0a2fc7474d66fc1901bddb4ade5b4364fa3b8eb1c9515848150d4532c75cd5c",
+        "canonical.mbt": "82955bb222150946074dcefb7217231bd54a118bb90d83fe7da2921129de4b5e",
+        "canonical_test.mbt": "878af53ba04648662e83db6da61990beb91b927ebbeabcbdf1cbeac9173321fa",
+        "copy.mbt": "7991104f01a3422cbb42d56577aa66afd245d7833be26bfb1da84126cd26ad64",
+        "copy_test.mbt": "20e7728762430be73588d4b9053016c27bc0c07524bd8056cb99e30715b4db2d",
+        "errors.mbt": "9cf068d006958751cfecdd28edfe9384fdd9ee7c2164b544ed0fb49ad6259b8c",
+        "examples/telemetry/generated/capnp_generated.mbt": "926697bc6bdd40be1ee2ba2776b83ded88f0ba7ab4be0ebc6e11ec5a63b24f94",
+        "examples/telemetry/generated/moon.pkg": "6e1a3f25a904ba60183e53efcf2c89c00073c8aac3858a76bd5024674ad077e9",
+        "internal/stdio/js.mbt": "d289e498ee09a23e7044fdf76ffa14dcdea76dcc87d705722ccb4230042f27ae",
+        "internal/stdio/moon.pkg": "1038d1ec084bdd90e31190afa117adde87a2610042ac4f6728604d7986e013fb",
+        "internal/stdio/native.mbt": "17c85c8b58d51fdbc8cce48defc8d72e3071706ef2929db9330e0a86884d6d33",
+        "internal/stdio/stdio.c": "591952c9d409e260b4f375e319f5e9d21ed7ef12e3c5f6e8e1f7a08b4f39ddc1",
+        "internal/stdio/stdio.mbt": "3e136c8fa4f404f33f31fe0a460bdc46d8cf7b4c1feb49135a43dc2b3c28128f",
+        "internal/stdio/wasm.mbt": "91efd4d15e2ea1e7e932e5e1266b6be009bd5ddbeeb94f8987bb53fb010dc7d7",
+        "moon.mod": "5fd8f4c0758cbbf8f66e6e0591543dda7df1556d097aef39b3f0311c0e8e76c0",
+        "moon.pkg": "c5d7ff78547585eda4ad148f0660f324472ae04891bda8ee749cec942ae14e7f",
+        "packed.mbt": "aa86bbee29d0dd1c885913685b6535dea9d7b061571e553ae687c593259b809a",
+        "packed_stream.mbt": "34fe0bf842eea72b45645d7f7a8d62aa0f8586fd1cbfa0613178a21870263d09",
+        "packed_stream_test.mbt": "e98ea304b411b5154621bbfbe83bbb2ce7d717660b3b86e3513c25343ba153a8",
+        "packed_test.mbt": "bf6a7d972a512976b05a09b689ee682d4c9ce3bbb5c0c603751c42e477362645",
+        "pointer_builder.mbt": "f4d3da9ad40dd76d20c0bfd75ae958c1fb32e7b86bb34c7a24cbef2283aedb9a",
+        "reader_list.mbt": "8d846fa453ce84b2c1ac70fbac0100c466d13fe261875fc511f7fec8d0631c02",
+        "reader_oracle_test.mbt": "fc01b1c176a056615a1bf9d0a61d1efbbb1f1987a6432c78e69c8baeb854f1ee",
+        "reader_pointer.mbt": "9e066acf8a528ee1a18a009b19e554c9cc06c042b049c07888b8e84073b00a10",
+        "reader_scalar.mbt": "b06fe23f400f211e681f5c72b9979028620f1c2ece8d6302d01f708f6a51670a",
+        "reader_security_test.mbt": "9c2ffbc65bec5deb7cdc2f7a26dc96ed5f8db68bd0353ed00d2c6cf2bbedb01c",
+        "reader_types.mbt": "7bb439201bec94a4d52fc4fc4119c697ed635afab61d1b5ef30a92297abff9e9",
+        "scripts/run_benchmarks.py": "7ec69970494d69a53d78b93fe6ee7bce4b191aec1127a1f420a24d1b09468a4d",
+        "stream.mbt": "8f0b83839b63a41de74c6df7d2bdc018657f60a046c498d3e52a5b4105a538f0",
+        "stream_decoder_test.mbt": "e236ebb30662c334c39b81fb88526418b19acf9c2cd573da2a7affb8c384d060",
+        "stream_test.mbt": "622a6ef2d06a218f0426cf442c53674479f354f26c6ff5c4a616bfc6a0fa1982"
+      }
+    }
+  },
+  "configuration": {
+    "targets": [
+      "js"
+    ],
+    "samples": [
+      1,
+      32,
+      512
+    ],
+    "rounds": 5,
+    "round_ms": 50,
+    "warmup_ms": 100,
+    "build_mode": "release",
+    "clock": "moonbitlang/core/bench monotonic clock",
+    "clock_output_unit": "microseconds",
+    "build_commands": [
+      [
+        "C:\\Users\\21859\\.moon\\bin\\moon.EXE",
+        "build",
+        "--target",
+        "js",
+        "--release",
+        "--target-dir",
+        "C:\\Users\\21859\\.gemini\\antigravity\\scratch\\capnp-mbt\\work\\benchmark-build",
+        "benchmarks",
+        "--deny-warn"
+      ]
+    ],
+    "fresh_process_per_target_and_sample_count": true
+  },
+  "interpretation": [
+    "Local measurements, not a cross-language or cross-machine ranking.",
+    "Each round includes operation dispatch, checksum accumulation and normal allocations/GC.",
+    "Byte-producing operations include a constant-size output fingerprint; complete validation is outside timing.",
+    "Selected read accesses job ID, list length and first/last value; it does not decode the entire message.",
+    "Wire MiB/s uses full uncompressed message size even for selected read; it is message-size-equivalent throughput, not memory bandwidth.",
+    "Serialized-input-equivalent MiB/s uses packed bytes for unpack; encode has no serialized input and reports null. This is not memory bandwidth.",
+    "CPU frequency, background activity, thermal state and JS JIT/GC can affect the recorded spread."
+  ],
+  "results": [
+    {
+      "operation": "encode",
+      "sample_count": 1,
+      "wire_bytes": 112,
+      "packed_bytes": 64,
+      "input_bytes": 0,
+      "iterations": 16384,
+      "round_target_ms": 50,
+      "calibration_us": 91706.20000000003,
+      "warmup_us": 142375.50000000003,
+      "warmup_batches": 3,
+      "round_us": [
+        98810.99999999999,
+        87787.59999999999,
+        87756.59999999993,
+        85317.19999999995,
+        86642.99999999991
+      ],
+      "checksums": [
+        4226310144,
+        4226310144,
+        4226310144,
+        4226310144,
+        4226310144
+      ],
+      "variant_checksums": [
+        861395517,
+        3885499654
+      ],
+      "median_ns_per_op": 5356.237792968746,
+      "operations_per_second": 186698.20845383723,
+      "wire_mib_per_second": 19.941520068006295,
+      "target": "js",
+      "min_ns_per_op": 5207.348632812497,
+      "max_ns_per_op": 6030.944824218749,
+      "round_range_percent_of_median": 15.376393342495087,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": null
+    },
+    {
+      "operation": "selected_read",
+      "sample_count": 1,
+      "wire_bytes": 112,
+      "packed_bytes": 64,
+      "input_bytes": 112,
+      "iterations": 65536,
+      "round_target_ms": 50,
+      "calibration_us": 68251.69999999981,
+      "warmup_us": 136765.49999999997,
+      "warmup_batches": 2,
+      "round_us": [
+        71222.09999999995,
+        68900.70000000014,
+        71336.00000000001,
+        65284.0000000001,
+        68079.29999999987
+      ],
+      "checksums": [
+        715423744,
+        715423744,
+        715423744,
+        715423744,
+        715423744
+      ],
+      "variant_checksums": [
+        1072457455,
+        1448996442
+      ],
+      "median_ns_per_op": 1051.341247558596,
+      "operations_per_second": 951165.953321227,
+      "wire_mib_per_second": 101.59548451612227,
+      "target": "js",
+      "min_ns_per_op": 996.1547851562516,
+      "max_ns_per_op": 1088.5009765625002,
+      "round_range_percent_of_median": 8.7836553184509,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 101.59548451612227
+    },
+    {
+      "operation": "full_scan",
+      "sample_count": 1,
+      "wire_bytes": 112,
+      "packed_bytes": 64,
+      "input_bytes": 112,
+      "iterations": 32768,
+      "round_target_ms": 50,
+      "calibration_us": 68517.00000000006,
+      "warmup_us": 138477.7999999999,
+      "warmup_batches": 2,
+      "round_us": [
+        74094.40000000018,
+        65753.40000000005,
+        65067.40000000036,
+        66218.8000000001,
+        67530.09999999995
+      ],
+      "checksums": [
+        4152999936,
+        4152999936,
+        4152999936,
+        4152999936,
+        4152999936
+      ],
+      "variant_checksums": [
+        3801584127,
+        2936294440
+      ],
+      "median_ns_per_op": 2020.8374023437532,
+      "operations_per_second": 494844.36444030923,
+      "wire_mib_per_second": 52.85508043033088,
+      "target": "js",
+      "min_ns_per_op": 1985.699462890636,
+      "max_ns_per_op": 2261.1816406250055,
+      "round_range_percent_of_median": 13.632080315559646,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 52.85508043033088
+    },
+    {
+      "operation": "pack",
+      "sample_count": 1,
+      "wire_bytes": 112,
+      "packed_bytes": 64,
+      "input_bytes": 112,
+      "iterations": 65536,
+      "round_target_ms": 50,
+      "calibration_us": 65968.49999999994,
+      "warmup_us": 138755.49999999977,
+      "warmup_batches": 2,
+      "round_us": [
+        63651.89999999984,
+        61033.89999999991,
+        60742.29999999989,
+        67568.90000000021,
+        66168.20000000007
+      ],
+      "checksums": [
+        3994910720,
+        3994910720,
+        3994910720,
+        3994910720,
+        3994910720
+      ],
+      "variant_checksums": [
+        1076004633,
+        3313849634
+      ],
+      "median_ns_per_op": 971.2509155273414,
+      "operations_per_second": 1029600.059071295,
+      "wire_mib_per_second": 109.973150840745,
+      "target": "js",
+      "min_ns_per_op": 926.853942871092,
+      "max_ns_per_op": 1031.0195922851594,
+      "round_range_percent_of_median": 10.724895878992367,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 109.973150840745
+    },
+    {
+      "operation": "unpack",
+      "sample_count": 1,
+      "wire_bytes": 112,
+      "packed_bytes": 64,
+      "input_bytes": 64,
+      "iterations": 32768,
+      "round_target_ms": 50,
+      "calibration_us": 56511.099999999715,
+      "warmup_us": 112831.59999999998,
+      "warmup_batches": 2,
+      "round_us": [
+        60364.09999999978,
+        53986.70000000038,
+        63186.900000000154,
+        59536.49999999971,
+        61036.39999999996
+      ],
+      "checksums": [
+        4157652992,
+        4157652992,
+        4157652992,
+        4157652992,
+        4157652992
+      ],
+      "variant_checksums": [
+        861395517,
+        3885499654
+      ],
+      "median_ns_per_op": 1842.166137695306,
+      "operations_per_second": 542839.2040964765,
+      "wire_mib_per_second": 57.98148237114465,
+      "target": "js",
+      "min_ns_per_op": 1647.543334960949,
+      "max_ns_per_op": 1928.3111572265673,
+      "round_range_percent_of_median": 15.241178117456908,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 33.132275640654086
+    },
+    {
+      "operation": "opaque_copy",
+      "sample_count": 1,
+      "wire_bytes": 112,
+      "packed_bytes": 64,
+      "input_bytes": 112,
+      "iterations": 16384,
+      "round_target_ms": 50,
+      "calibration_us": 104482.50000000007,
+      "warmup_us": 104363.60000000014,
+      "warmup_batches": 1,
+      "round_us": [
+        109181.30000000019,
+        97105.49999999967,
+        99107.19999999946,
+        93667.90000000037,
+        97251.8
+      ],
+      "checksums": [
+        2000642048,
+        2000642048,
+        2000642048,
+        2000642048,
+        2000642048
+      ],
+      "variant_checksums": [
+        3819564582,
+        259115989
+      ],
+      "median_ns_per_op": 5935.77880859375,
+      "operations_per_second": 168469.88950333052,
+      "wire_mib_per_second": 17.994525551198024,
+      "target": "js",
+      "min_ns_per_op": 5717.034912109398,
+      "max_ns_per_op": 6663.897705078137,
+      "round_range_percent_of_median": 15.951787010625837,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 17.994525551198024
+    },
+    {
+      "operation": "framed_stream",
+      "sample_count": 1,
+      "wire_bytes": 112,
+      "packed_bytes": 64,
+      "input_bytes": 112,
+      "iterations": 32768,
+      "round_target_ms": 50,
+      "calibration_us": 70465.69999999975,
+      "warmup_us": 145397.70000000045,
+      "warmup_batches": 2,
+      "round_us": [
+        69429.1000000003,
+        66710.20000000045,
+        67005.7999999999,
+        71004.59999999931,
+        91216.99999999965
+      ],
+      "checksums": [
+        4157652992,
+        4157652992,
+        4157652992,
+        4157652992,
+        4157652992
+      ],
+      "variant_checksums": [
+        861395517,
+        3885499654
+      ],
+      "median_ns_per_op": 2118.8079833984466,
+      "operations_per_second": 471963.485051655,
+      "wire_mib_per_second": 50.41113884523902,
+      "target": "js",
+      "min_ns_per_op": 2035.8337402343886,
+      "max_ns_per_op": 2783.7219238281145,
+      "round_range_percent_of_median": 35.297591355784675,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 50.41113884523902
+    },
+    {
+      "operation": "packed_stream",
+      "sample_count": 1,
+      "wire_bytes": 112,
+      "packed_bytes": 64,
+      "input_bytes": 64,
+      "iterations": 16384,
+      "round_target_ms": 50,
+      "calibration_us": 62943.10000000041,
+      "warmup_us": 119055.19999999978,
+      "warmup_batches": 2,
+      "round_us": [
+        60681.19999999999,
+        62231.699999999364,
+        64366.50000000009,
+        63431.799999999384,
+        62384.10000000022
+      ],
+      "checksums": [
+        4226310144,
+        4226310144,
+        4226310144,
+        4226310144,
+        4226310144
+      ],
+      "variant_checksums": [
+        861395517,
+        3885499654
+      ],
+      "median_ns_per_op": 3807.623291015638,
+      "operations_per_second": 262631.02296899277,
+      "wire_mib_per_second": 28.05201966526717,
+      "target": "js",
+      "min_ns_per_op": 3703.6865234374995,
+      "max_ns_per_op": 3928.6193847656305,
+      "round_range_percent_of_median": 5.907434746994963,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 16.029725523009812
+    },
+    {
+      "operation": "encode",
+      "sample_count": 32,
+      "wire_bytes": 856,
+      "packed_bytes": 540,
+      "input_bytes": 0,
+      "iterations": 2048,
+      "round_target_ms": 50,
+      "calibration_us": 73472.69999999997,
+      "warmup_us": 138972.90000000002,
+      "warmup_batches": 2,
+      "round_us": [
+        87543.99999999999,
+        70388.30000000002,
+        71624.19999999997,
+        68178.70000000006,
+        66940.90000000005
+      ],
+      "checksums": [
+        1209695232,
+        1209695232,
+        1209695232,
+        1209695232,
+        1209695232
+      ],
+      "variant_checksums": [
+        1855432722,
+        3518652045
+      ],
+      "median_ns_per_op": 34369.28710937501,
+      "operations_per_second": 29095.744605282405,
+      "wire_mib_per_second": 23.752171880838144,
+      "target": "js",
+      "min_ns_per_op": 32685.986328125025,
+      "max_ns_per_op": 42746.09374999999,
+      "round_range_percent_of_median": 29.270631624858005,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": null
+    },
+    {
+      "operation": "selected_read",
+      "sample_count": 32,
+      "wire_bytes": 856,
+      "packed_bytes": 540,
+      "input_bytes": 856,
+      "iterations": 65536,
+      "round_target_ms": 50,
+      "calibration_us": 59456.10000000011,
+      "warmup_us": 132024.50000000012,
+      "warmup_batches": 2,
+      "round_us": [
+        67249.80000000005,
+        67452.49999999987,
+        66722.19999999992,
+        64192.50000000011,
+        62403.19999999997
+      ],
+      "checksums": [
+        715423744,
+        715423744,
+        715423744,
+        715423744,
+        715423744
+      ],
+      "variant_checksums": [
+        4134954700,
+        4146982525
+      ],
+      "median_ns_per_op": 1018.0999755859364,
+      "operations_per_second": 982221.80923291,
+      "wire_mib_per_second": 801.8320738824568,
+      "target": "js",
+      "min_ns_per_op": 952.1972656249995,
+      "max_ns_per_op": 1029.2434692382792,
+      "round_range_percent_of_median": 7.56764615075628,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 801.8320738824568
+    },
+    {
+      "operation": "full_scan",
+      "sample_count": 32,
+      "wire_bytes": 856,
+      "packed_bytes": 540,
+      "input_bytes": 856,
+      "iterations": 4096,
+      "round_target_ms": 50,
+      "calibration_us": 74739.90000000004,
+      "warmup_us": 137770.9,
+      "warmup_batches": 2,
+      "round_us": [
+        60945.399999999834,
+        57925.79999999998,
+        68350.69999999995,
+        52850.09999999988,
+        52886.50000000007
+      ],
+      "checksums": [
+        2853881856,
+        2853881856,
+        2853881856,
+        2853881856,
+        2853881856
+      ],
+      "variant_checksums": [
+        1156431801,
+        3819406240
+      ],
+      "median_ns_per_op": 14142.041015624995,
+      "operations_per_second": 70711.1511623491,
+      "wire_mib_per_second": 57.724709887476756,
+      "target": "js",
+      "min_ns_per_op": 12902.85644531247,
+      "max_ns_per_op": 16687.18261718749,
+      "round_range_percent_of_median": 26.759405998708825,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 57.724709887476756
+    },
+    {
+      "operation": "pack",
+      "sample_count": 32,
+      "wire_bytes": 856,
+      "packed_bytes": 540,
+      "input_bytes": 856,
+      "iterations": 8192,
+      "round_target_ms": 50,
+      "calibration_us": 76550.00000000017,
+      "warmup_us": 164294.30000000002,
+      "warmup_batches": 2,
+      "round_us": [
+        83025.50000000019,
+        79839.50000000004,
+        80389.29999999981,
+        76642.40000000018,
+        77799.10000000018
+      ],
+      "checksums": [
+        685436928,
+        685436928,
+        685436928,
+        685436928,
+        685436928
+      ],
+      "variant_checksums": [
+        2365491510,
+        1267991673
+      ],
+      "median_ns_per_op": 9746.032714843755,
+      "operations_per_second": 102605.85299256627,
+      "wire_mib_per_second": 83.76179710544274,
+      "target": "js",
+      "min_ns_per_op": 9355.761718750022,
+      "max_ns_per_op": 10134.948730468774,
+      "round_range_percent_of_median": 7.994914797813116,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 83.76179710544274
+    },
+    {
+      "operation": "unpack",
+      "sample_count": 32,
+      "wire_bytes": 856,
+      "packed_bytes": 540,
+      "input_bytes": 540,
+      "iterations": 8192,
+      "round_target_ms": 50,
+      "calibration_us": 66085.59999999989,
+      "warmup_us": 142603.70000000013,
+      "warmup_batches": 2,
+      "round_us": [
+        68099.90000000017,
+        72755.30000000026,
+        70226.99999999985,
+        68988.10000000003,
+        70856.49999999987
+      ],
+      "checksums": [
+        543813632,
+        543813632,
+        543813632,
+        543813632,
+        543813632
+      ],
+      "variant_checksums": [
+        1855432722,
+        3518652045
+      ],
+      "median_ns_per_op": 8572.631835937482,
+      "operations_per_second": 116650.29119854211,
+      "wire_mib_per_second": 95.22690703005986,
+      "target": "js",
+      "min_ns_per_op": 8312.97607421877,
+      "max_ns_per_op": 8881.262207031283,
+      "round_range_percent_of_median": 6.6290742876672875,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 60.07304882737421
+    },
+    {
+      "operation": "opaque_copy",
+      "sample_count": 32,
+      "wire_bytes": 856,
+      "packed_bytes": 540,
+      "input_bytes": 856,
+      "iterations": 4096,
+      "round_target_ms": 50,
+      "calibration_us": 55690.79999999986,
+      "warmup_us": 128278.50000000035,
+      "warmup_batches": 2,
+      "round_us": [
+        59625.30000000015,
+        59159.7999999999,
+        60107.80000000022,
+        56937.59999999929,
+        65125.2999999997
+      ],
+      "checksums": [
+        1855125504,
+        1855125504,
+        1855125504,
+        1855125504,
+        1855125504
+      ],
+      "variant_checksums": [
+        4031383371,
+        1396951828
+      ],
+      "median_ns_per_op": 14556.958007812536,
+      "operations_per_second": 68695.67113289141,
+      "wire_mib_per_second": 56.079382409815835,
+      "target": "js",
+      "min_ns_per_op": 13900.781249999827,
+      "max_ns_per_op": 15899.731445312425,
+      "round_range_percent_of_median": 13.731922522822334,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 56.079382409815835
+    },
+    {
+      "operation": "framed_stream",
+      "sample_count": 32,
+      "wire_bytes": 856,
+      "packed_bytes": 540,
+      "input_bytes": 856,
+      "iterations": 8192,
+      "round_target_ms": 50,
+      "calibration_us": 65727.69999999946,
+      "warmup_us": 140664.30000000037,
+      "warmup_batches": 2,
+      "round_us": [
+        68668.70000000017,
+        67910.70000000036,
+        66649.49999999953,
+        66661.49999999924,
+        63783.59999999975
+      ],
+      "checksums": [
+        543813632,
+        543813632,
+        543813632,
+        543813632,
+        543813632
+      ],
+      "variant_checksums": [
+        1855432722,
+        3518652045
+      ],
+      "median_ns_per_op": 8137.390136718657,
+      "operations_per_second": 122889.52393810659,
+      "wire_mib_per_second": 100.32027482129979,
+      "target": "js",
+      "min_ns_per_op": 7786.08398437497,
+      "max_ns_per_op": 8382.409667968772,
+      "round_range_percent_of_median": 7.328217936890822,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 100.32027482129979
+    },
+    {
+      "operation": "packed_stream",
+      "sample_count": 32,
+      "wire_bytes": 856,
+      "packed_bytes": 540,
+      "input_bytes": 540,
+      "iterations": 4096,
+      "round_target_ms": 50,
+      "calibration_us": 74177.5000000007,
+      "warmup_us": 154958.50000000064,
+      "warmup_batches": 2,
+      "round_us": [
+        74581.00000000013,
+        77491.50000000009,
+        72288.40000000037,
+        78827.00000000023,
+        77903.59999999964
+      ],
+      "checksums": [
+        2419390464,
+        2419390464,
+        2419390464,
+        2419390464,
+        2419390464
+      ],
+      "variant_checksums": [
+        1855432722,
+        3518652045
+      ],
+      "median_ns_per_op": 18918.823242187522,
+      "operations_per_second": 52857.410167566704,
+      "wire_mib_per_second": 43.149893859326454,
+      "target": "js",
+      "min_ns_per_op": 17648.53515625009,
+      "max_ns_per_op": 19244.87304687506,
+      "round_range_percent_of_median": 8.437828665079206,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 27.220727434621832
+    },
+    {
+      "operation": "encode",
+      "sample_count": 512,
+      "wire_bytes": 12376,
+      "packed_bytes": 7877,
+      "input_bytes": 0,
+      "iterations": 256,
+      "round_target_ms": 50,
+      "calibration_us": 103516.3,
+      "warmup_us": 228258.80000000002,
+      "warmup_batches": 2,
+      "round_us": [
+        103435.3000000001,
+        99487.8000000001,
+        93386.70000000001,
+        103886.60000000005,
+        90814.4000000001
+      ],
+      "checksums": [
+        533776768,
+        533776768,
+        533776768,
+        533776768,
+        533776768
+      ],
+      "variant_checksums": [
+        1761576400,
+        457186243
+      ],
+      "median_ns_per_op": 388624.2187500004,
+      "operations_per_second": 2573.1798270742715,
+      "wire_mib_per_second": 30.370400943633257,
+      "target": "js",
+      "min_ns_per_op": 354743.75000000035,
+      "max_ns_per_op": 405807.0312500002,
+      "round_range_percent_of_median": 13.139500521671943,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": null
+    },
+    {
+      "operation": "selected_read",
+      "sample_count": 512,
+      "wire_bytes": 12376,
+      "packed_bytes": 7877,
+      "input_bytes": 12376,
+      "iterations": 65536,
+      "round_target_ms": 50,
+      "calibration_us": 70476.89999999989,
+      "warmup_us": 137264.59999999998,
+      "warmup_batches": 2,
+      "round_us": [
+        66651.79999999987,
+        68164.00000000022,
+        67084.89999999983,
+        63448.20000000004,
+        63247.299999999996
+      ],
+      "checksums": [
+        4037312512,
+        4037312512,
+        4037312512,
+        4037312512,
+        4037312512
+      ],
+      "variant_checksums": [
+        12510508,
+        1050606621
+      ],
+      "median_ns_per_op": 1017.0257568359356,
+      "operations_per_second": 983259.266816502,
+      "wire_mib_per_second": 11605.08793460944,
+      "target": "js",
+      "min_ns_per_op": 965.0772094726561,
+      "max_ns_per_op": 1040.1000976562534,
+      "round_range_percent_of_median": 7.376695002986014,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 11605.08793460944
+    },
+    {
+      "operation": "full_scan",
+      "sample_count": 512,
+      "wire_bytes": 12376,
+      "packed_bytes": 7877,
+      "input_bytes": 12376,
+      "iterations": 512,
+      "round_target_ms": 50,
+      "calibration_us": 103668.50000000022,
+      "warmup_us": 111248.29999999997,
+      "warmup_batches": 2,
+      "round_us": [
+        100305.80000000009,
+        102051.60000000024,
+        96507.59999999992,
+        97605.99999999977,
+        91776.89999999985
+      ],
+      "checksums": [
+        3568900352,
+        3568900352,
+        3568900352,
+        3568900352,
+        3568900352
+      ],
+      "variant_checksums": [
+        621748665,
+        2932184928
+      ],
+      "median_ns_per_op": 190636.71874999953,
+      "operations_per_second": 5245.579165215266,
+      "wire_mib_per_second": 61.91185736532605,
+      "target": "js",
+      "min_ns_per_op": 179251.7578124997,
+      "max_ns_per_op": 199319.53125000047,
+      "round_range_percent_of_median": 10.526709423601433,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 61.91185736532605
+    },
+    {
+      "operation": "pack",
+      "sample_count": 512,
+      "wire_bytes": 12376,
+      "packed_bytes": 7877,
+      "input_bytes": 12376,
+      "iterations": 1024,
+      "round_target_ms": 50,
+      "calibration_us": 101647.79999999973,
+      "warmup_us": 142232.60000000027,
+      "warmup_batches": 3,
+      "round_us": [
+        98922.90000000002,
+        100457.80000000013,
+        103421.40000000017,
+        99876.09999999995,
+        97774.69999999994
+      ],
+      "checksums": [
+        3647302144,
+        3647302144,
+        3647302144,
+        3647302144,
+        3647302144
+      ],
+      "variant_checksums": [
+        3448274407,
+        862205134
+      ],
+      "median_ns_per_op": 97535.25390624994,
+      "operations_per_second": 10252.703099139839,
+      "wire_mib_per_second": 121.00930552955117,
+      "target": "js",
+      "min_ns_per_op": 95483.10546874994,
+      "max_ns_per_op": 100997.46093750016,
+      "round_range_percent_of_median": 5.653704940421416,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 121.00930552955117
+    },
+    {
+      "operation": "unpack",
+      "sample_count": 512,
+      "wire_bytes": 12376,
+      "packed_bytes": 7877,
+      "input_bytes": 7877,
+      "iterations": 512,
+      "round_target_ms": 50,
+      "calibration_us": 65652.9999999998,
+      "warmup_us": 127518.49999999968,
+      "warmup_batches": 2,
+      "round_us": [
+        64081.899999999674,
+        63086.80000000004,
+        62819.99999999971,
+        66107.69999999958,
+        66397.90000000084
+      ],
+      "checksums": [
+        1067553536,
+        1067553536,
+        1067553536,
+        1067553536,
+        1067553536
+      ],
+      "variant_checksums": [
+        1761576400,
+        457186243
+      ],
+      "median_ns_per_op": 125159.96093749936,
+      "operations_per_second": 7989.775584057317,
+      "wire_mib_per_second": 94.30071127728783,
+      "target": "js",
+      "min_ns_per_op": 122695.31249999943,
+      "max_ns_per_op": 129683.39843750163,
+      "round_range_percent_of_median": 5.583323840274941,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 60.01993396341275
+    },
+    {
+      "operation": "opaque_copy",
+      "sample_count": 512,
+      "wire_bytes": 12376,
+      "packed_bytes": 7877,
+      "input_bytes": 12376,
+      "iterations": 512,
+      "round_target_ms": 50,
+      "calibration_us": 90091.69999999995,
+      "warmup_us": 161919.20000000027,
+      "warmup_batches": 2,
+      "round_us": [
+        86791.79999999996,
+        86760.80000000002,
+        87439.0000000003,
+        90548.20000000019,
+        84326.29999999973
+      ],
+      "checksums": [
+        4173866752,
+        4173866752,
+        4173866752,
+        4173866752,
+        4173866752
+      ],
+      "variant_checksums": [
+        4008060586,
+        3977421181
+      ],
+      "median_ns_per_op": 169515.2343749999,
+      "operations_per_second": 5899.174806836593,
+      "wire_mib_per_second": 69.62603321972816,
+      "target": "js",
+      "min_ns_per_op": 164699.80468749948,
+      "max_ns_per_op": 176851.95312500035,
+      "round_range_percent_of_median": 7.168764791144397,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 69.62603321972816
+    },
+    {
+      "operation": "framed_stream",
+      "sample_count": 512,
+      "wire_bytes": 12376,
+      "packed_bytes": 7877,
+      "input_bytes": 12376,
+      "iterations": 512,
+      "round_target_ms": 50,
+      "calibration_us": 70770.70000000004,
+      "warmup_us": 141871.1000000003,
+      "warmup_batches": 2,
+      "round_us": [
+        68438.5000000002,
+        70925.79999999999,
+        68762.60000000002,
+        66417.40000000027,
+        67878.80000000041
+      ],
+      "checksums": [
+        1067553536,
+        1067553536,
+        1067553536,
+        1067553536,
+        1067553536
+      ],
+      "variant_checksums": [
+        1761576400,
+        457186243
+      ],
+      "median_ns_per_op": 133668.9453125004,
+      "operations_per_second": 7481.169224924545,
+      "wire_mib_per_second": 88.29779656187647,
+      "target": "js",
+      "min_ns_per_op": 129721.48437500052,
+      "max_ns_per_op": 138526.95312499997,
+      "round_range_percent_of_median": 6.587520182353067,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 88.29779656187647
+    },
+    {
+      "operation": "packed_stream",
+      "sample_count": 512,
+      "wire_bytes": 12376,
+      "packed_bytes": 7877,
+      "input_bytes": 7877,
+      "iterations": 256,
+      "round_target_ms": 50,
+      "calibration_us": 67370.69999999949,
+      "warmup_us": 145855.30000000016,
+      "warmup_batches": 2,
+      "round_us": [
+        65880.2000000005,
+        64709.79999999963,
+        69761.30000000012,
+        65444.99999999971,
+        65765.90000000033
+      ],
+      "checksums": [
+        533776768,
+        533776768,
+        533776768,
+        533776768,
+        533776768
+      ],
+      "variant_checksums": [
+        1761576400,
+        457186243
+      ],
+      "median_ns_per_op": 256898.04687500128,
+      "operations_per_second": 3892.59479456677,
+      "wire_mib_per_second": 45.94302480464778,
+      "target": "js",
+      "min_ns_per_op": 252772.65624999857,
+      "max_ns_per_op": 272505.07812500047,
+      "round_range_percent_of_median": 7.681032267482787,
+      "calibration_target_met": true,
+      "serialized_input_equivalent_mib_per_second": 29.241532513430066
+    }
+  ]
+}

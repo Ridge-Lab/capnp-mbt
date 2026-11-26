@@ -72,7 +72,7 @@ pub fn ListBuilder::set_uint16(
   if value > 65535U {
     raise Bounds("uint16 list value exceeds 65535")
   }
-  b_write(self.owner, self.start + index * 2, UInt64::extend_uint(value), 2)
+  b_write(self.owner, self.start + index * 2, value.to_uint64(), 2)
 }
 
 ///|
@@ -82,7 +82,7 @@ pub fn ListBuilder::set_uint32(
   value : UInt32,
 ) -> Unit raise CapnpError {
   b_list_index(self, index, 4)
-  b_write(self.owner, self.start + index * 4, UInt64::extend_uint(value), 4)
+  b_write(self.owner, self.start + index * 4, value.to_uint64(), 4)
 }
 
 ///|

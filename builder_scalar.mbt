@@ -46,7 +46,7 @@ pub fn StructBuilder::set_uint16(
   b_write(
     self.owner,
     b_data(self, byte_offset, 2),
-    UInt64::extend_uint(value ^ default),
+    (value ^ default).to_uint64(),
     2,
   )
 }
@@ -61,7 +61,7 @@ pub fn StructBuilder::set_uint32(
   b_write(
     self.owner,
     b_data(self, byte_offset, 4),
-    UInt64::extend_uint(value ^ default),
+    (value ^ default).to_uint64(),
     4,
   )
 }
@@ -122,7 +122,7 @@ pub fn StructBuilder::set_int32(
   b_write(
     self.owner,
     b_data(self, byte_offset, 4),
-    UInt64::extend_uint((value ^ default).reinterpret_as_uint()),
+    (value ^ default).reinterpret_as_uint().to_uint64(),
     4,
   )
 }

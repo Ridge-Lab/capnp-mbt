@@ -1,6 +1,6 @@
 # Compatibility and limits
 
-Version 0.5.0 uses **Cap'n Proto 1.5.0** as its serialization baseline. The
+Version 0.6.0 uses **Cap'n Proto 1.5.0** as its serialization baseline. The
 [standard target](SERIALIZATION-STANDARD.md) defines the endpoint; the
 [unchanged-schema example](../examples/schema_compat/README.md) records a
 reproducible interoperability case. This is not a claim that every schema or
@@ -54,7 +54,11 @@ an unpacked canonical **segment without the segment table**. Its root must be
 a struct; null roots normalize to empty structs and list roots are rejected.
 Canonicalization preserves pointer order, trims zero sections, clears unused
 list padding and rejects capabilities. Ordinary writer output is not promised
-to be canonical.
+to be canonical. `is_canonical(segment)` verifies all Cap'n Proto 1.5.0
+canonical constraints in a single bounded preorder pass (returning `false` on
+non-canonical wire layouts and raising `Limit` if configured budgets are
+invalid or exceeded); `read_canonical(segment)` enforces the same verification
+and returns a zero-copy `Message` view without requiring a segment table.
 
 `PointerReader`/`PointerBuilder` expose opaque values. Text and Data are byte
 lists on the wire; their intended meaning comes from the schema or caller.
@@ -129,6 +133,7 @@ pipelining and distributed capability lifetime management are outside this SDK.
 | `Builder::new` | 8,388,608 words | Arena allocation, including the root pointer |
 | Opaque deep copy | 8,388,608 words; depth 64 | Independent copy budget, in addition to reader and destination limits |
 | `canonicalize` | 8,388,608 output words; depth 64 | Output allocation and recursive depth, in addition to reader limits |
+| `is_canonical` / `read_canonical` | 8,388,608 traversal words; depth 64 | Single-pass canonical verification and zero-copy canonical decoding |
 | `codegen.generate` | 16 MiB input | Maximum compiler request size |
 
 Copy depth accepts 0..256; canonical depth accepts 1..256. Empty-list and

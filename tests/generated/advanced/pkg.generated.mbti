@@ -274,6 +274,14 @@ pub fn SwitchingReader::is_code(Self) -> Bool raise @capnp.CapnpError
 pub fn SwitchingReader::is_configuration(Self) -> Bool raise @capnp.CapnpError
 pub fn SwitchingReader::is_none(Self) -> Bool raise @capnp.CapnpError
 pub fn SwitchingReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn SwitchingReader::which_case(Self) -> SwitchingWhich raise @capnp.CapnpError
+
+pub(all) enum SwitchingWhich {
+  None
+  Configuration(SwitchingConfigurationReader)
+  Code(UInt64)
+  Unknown(UInt32)
+}
 
 // Type aliases
 

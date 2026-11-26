@@ -82,6 +82,24 @@ pub fn FieldReader::which(self : FieldReader) -> UInt32 raise @capnp.CapnpError 
 }
 
 ///|
+pub(all) enum FieldWhich {
+  Slot(FieldSlotReader)
+  Group(FieldGroupReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn FieldReader::which_case(
+  self : FieldReader,
+) -> FieldWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(8) {
+    0U => Slot(self.get_slot())
+    1U => Group(self.get_group())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn FieldReader::get_name(
   self : FieldReader,
 ) -> String raise @capnp.CapnpError {
@@ -379,6 +397,58 @@ pub fn ValueReader::which(self : ValueReader) -> UInt32 raise @capnp.CapnpError 
 }
 
 ///|
+pub(all) enum ValueWhich {
+  Void
+  Bool(Bool)
+  Int8(Int32)
+  Int16(Int32)
+  Int32(Int32)
+  Int64(Int64)
+  Uint8(Byte)
+  Uint16(UInt32)
+  Uint32(UInt32)
+  Uint64(UInt64)
+  Float32(Float)
+  Float64(Double)
+  Text(String)
+  Data(Bytes)
+  List(@capnp.PointerReader)
+  Enum(UInt32)
+  Struct(@capnp.PointerReader)
+  Interface
+  AnyPointer(@capnp.PointerReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn ValueReader::which_case(
+  self : ValueReader,
+) -> ValueWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => Void
+    1U => Bool(self.get_bool())
+    2U => Int8(self.get_int8())
+    3U => Int16(self.get_int16())
+    4U => Int32(self.get_int32())
+    5U => Int64(self.get_int64())
+    6U => Uint8(self.get_uint8())
+    7U => Uint16(self.get_uint16())
+    8U => Uint32(self.get_uint32())
+    9U => Uint64(self.get_uint64())
+    10U => Float32(self.get_float32())
+    11U => Float64(self.get_float64())
+    12U => Text(self.get_text())
+    13U => Data(self.get_data())
+    14U => List(self.get_list())
+    15U => Enum(self.get_enum())
+    16U => Struct(self.get_struct())
+    17U => Interface
+    18U => AnyPointer(self.get_any_pointer())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn ValueReader::is_void(self : ValueReader) -> Bool raise @capnp.CapnpError {
   self.inner.get_uint16(0) == 0U
 }
@@ -644,7 +714,7 @@ pub fn ValueReader::get_uint8(
   if self.inner.get_uint16(0) != 6U {
     raise @capnp.CapnpError::TypeMismatch("inactive union field")
   }
-  self.inner.get_uint8(2, default=b'\x00')
+  self.inner.get_uint8(2, default=0)
 }
 
 ///|
@@ -670,7 +740,7 @@ pub fn ValueBuilder::set_uint8(
   self.inner.clear_pointer(0)
   self.inner.clear_pointer(0)
   self.inner.set_uint16(0, 6U)
-  self.inner.set_uint8(2, value, default=b'\x00')
+  self.inner.set_uint8(2, value, default=0)
 }
 
 ///|
@@ -1377,6 +1447,24 @@ pub fn BrandScopeReader::which(
 }
 
 ///|
+pub(all) enum BrandScopeWhich {
+  Bind(BrandScopeBindListReader)
+  Inherit
+  Unknown(UInt32)
+}
+
+///|
+pub fn BrandScopeReader::which_case(
+  self : BrandScopeReader,
+) -> BrandScopeWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(8) {
+    0U => Bind(self.get_bind())
+    1U => Inherit
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn BrandScopeReader::get_scope_id(
   self : BrandScopeReader,
 ) -> UInt64 raise @capnp.CapnpError {
@@ -1527,6 +1615,24 @@ pub fn BrandBindingReader::which(
 }
 
 ///|
+pub(all) enum BrandBindingWhich {
+  Unbound
+  Type(TypeReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn BrandBindingReader::which_case(
+  self : BrandBindingReader,
+) -> BrandBindingWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => Unbound
+    1U => Type(self.get_type())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn BrandBindingReader::is_unbound(
   self : BrandBindingReader,
 ) -> Bool raise @capnp.CapnpError {
@@ -1616,6 +1722,58 @@ pub fn TypeBuilder::init_root(
 ///|
 pub fn TypeReader::which(self : TypeReader) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(0)
+}
+
+///|
+pub(all) enum TypeWhich {
+  Void
+  Bool
+  Int8
+  Int16
+  Int32
+  Int64
+  Uint8
+  Uint16
+  Uint32
+  Uint64
+  Float32
+  Float64
+  Text
+  Data
+  List(TypeListReader)
+  Enum(TypeEnumReader)
+  Struct(TypeStructReader)
+  Interface(TypeInterfaceReader)
+  AnyPointer(TypeAnyPointerReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TypeReader::which_case(
+  self : TypeReader,
+) -> TypeWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(0) {
+    0U => Void
+    1U => Bool
+    2U => Int8
+    3U => Int16
+    4U => Int32
+    5U => Int64
+    6U => Uint8
+    7U => Uint16
+    8U => Uint32
+    9U => Uint64
+    10U => Float32
+    11U => Float64
+    12U => Text
+    13U => Data
+    14U => List(self.get_list())
+    15U => Enum(self.get_enum())
+    16U => Struct(self.get_struct())
+    17U => Interface(self.get_interface())
+    18U => AnyPointer(self.get_any_pointer())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -2478,6 +2636,26 @@ pub fn TypeAnyPointerReader::which(
 }
 
 ///|
+pub(all) enum TypeAnyPointerWhich {
+  Unconstrained(TypeAnyPointerUnconstrainedReader)
+  Parameter(TypeAnyPointerParameterReader)
+  ImplicitMethodParameter(TypeAnyPointerImplicitMethodParameterReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn TypeAnyPointerReader::which_case(
+  self : TypeAnyPointerReader,
+) -> TypeAnyPointerWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(8) {
+    0U => Unconstrained(self.get_unconstrained())
+    1U => Parameter(self.get_parameter())
+    2U => ImplicitMethodParameter(self.get_implicit_method_parameter())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn TypeAnyPointerReader::is_unconstrained(
   self : TypeAnyPointerReader,
 ) -> Bool raise @capnp.CapnpError {
@@ -2579,6 +2757,28 @@ pub fn TypeAnyPointerUnconstrainedReader::which(
   self : TypeAnyPointerUnconstrainedReader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(10)
+}
+
+///|
+pub(all) enum TypeAnyPointerUnconstrainedWhich {
+  AnyKind
+  Struct
+  List
+  Capability
+  Unknown(UInt32)
+}
+
+///|
+pub fn TypeAnyPointerUnconstrainedReader::which_case(
+  self : TypeAnyPointerUnconstrainedReader,
+) -> TypeAnyPointerUnconstrainedWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(10) {
+    0U => AnyKind
+    1U => Struct
+    2U => List
+    3U => Capability
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -2877,6 +3077,24 @@ pub fn FieldOrdinalReader::which(
 }
 
 ///|
+pub(all) enum FieldOrdinalWhich {
+  Implicit
+  Explicit(UInt32)
+  Unknown(UInt32)
+}
+
+///|
+pub fn FieldOrdinalReader::which_case(
+  self : FieldOrdinalReader,
+) -> FieldOrdinalWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(10) {
+    0U => Implicit
+    1U => Explicit(self.get_explicit())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn FieldOrdinalReader::is_implicit(
   self : FieldOrdinalReader,
 ) -> Bool raise @capnp.CapnpError {
@@ -2957,6 +3175,32 @@ pub fn NodeBuilder::init_root(
 ///|
 pub fn NodeReader::which(self : NodeReader) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(12)
+}
+
+///|
+pub(all) enum NodeWhich {
+  File
+  Struct(NodeStructReader)
+  Enum(NodeEnumReader)
+  Interface(NodeInterfaceReader)
+  Const(NodeConstReader)
+  Annotation(NodeAnnotationReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn NodeReader::which_case(
+  self : NodeReader,
+) -> NodeWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(12) {
+    0U => File
+    1U => Struct(self.get_struct())
+    2U => Enum(self.get_enum())
+    3U => Interface(self.get_interface())
+    4U => Const(self.get_const())
+    5U => Annotation(self.get_annotation())
+    other => Unknown(other)
+  }
 }
 
 ///|
@@ -4934,7 +5178,7 @@ pub fn CapnpVersionBuilder::set_major(
 pub fn CapnpVersionReader::get_minor(
   self : CapnpVersionReader,
 ) -> Byte raise @capnp.CapnpError {
-  self.inner.get_uint8(2, default=b'\x00')
+  self.inner.get_uint8(2, default=0)
 }
 
 ///|
@@ -4942,14 +5186,14 @@ pub fn CapnpVersionBuilder::set_minor(
   self : CapnpVersionBuilder,
   value : Byte,
 ) -> Unit raise @capnp.CapnpError {
-  self.inner.set_uint8(2, value, default=b'\x00')
+  self.inner.set_uint8(2, value, default=0)
 }
 
 ///|
 pub fn CapnpVersionReader::get_micro(
   self : CapnpVersionReader,
 ) -> Byte raise @capnp.CapnpError {
-  self.inner.get_uint8(3, default=b'\x00')
+  self.inner.get_uint8(3, default=0)
 }
 
 ///|
@@ -4957,7 +5201,7 @@ pub fn CapnpVersionBuilder::set_micro(
   self : CapnpVersionBuilder,
   value : Byte,
 ) -> Unit raise @capnp.CapnpError {
-  self.inner.set_uint8(3, value, default=b'\x00')
+  self.inner.set_uint8(3, value, default=0)
 }
 
 ///|
@@ -5269,6 +5513,24 @@ pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::which(
   self : CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader,
 ) -> UInt32 raise @capnp.CapnpError {
   self.inner.get_uint16(16)
+}
+
+///|
+pub(all) enum CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierWhich {
+  TypeId(UInt64)
+  Member(CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierMemberReader)
+  Unknown(UInt32)
+}
+
+///|
+pub fn CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader::which_case(
+  self : CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierReader,
+) -> CodeGeneratorRequestRequestedFileFileSourceInfoIdentifierWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(16) {
+    0U => TypeId(self.get_type_id())
+    1U => Member(self.get_member())
+    other => Unknown(other)
+  }
 }
 
 ///|

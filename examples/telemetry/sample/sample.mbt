@@ -40,9 +40,12 @@ pub fn verify_report(bytes : Bytes) -> Unit raise {
   assert_eq(report.get_total(), 6U)
   assert_eq(report.get_accepted(), 4U)
   assert_eq(report.get_rejected(), 2U)
-  assert_true(report.is_statistics())
-  let statistics = report.get_statistics()
-  assert_eq(statistics.get_mean(), 21.0)
-  assert_eq(statistics.get_minimum(), 19.5)
-  assert_eq(statistics.get_maximum(), 23.0)
+  match report.which_case() {
+    Statistics(statistics) => {
+      assert_eq(statistics.get_mean(), 21.0)
+      assert_eq(statistics.get_minimum(), 19.5)
+      assert_eq(statistics.get_maximum(), 23.0)
+    }
+    Empty | Unknown(_) => fail("expected telemetry statistics union arm")
+  }
 }

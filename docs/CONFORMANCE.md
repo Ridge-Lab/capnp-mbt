@@ -25,9 +25,11 @@ percentage-complete estimate or an assertion of exhaustive protocol coverage.
 | Existing old/new protocol defaults and unknown-field forwarding | [upstream evolution tests](../tests/generated/upstream/evolution_test.mbt) | Original `TestOldVersion`/`TestNewVersion` and old/new union types exchange values with C++; opaque copying retains new fields even through the older generated view |
 | Nested unions, interleaved groups and unknown discriminant guards | [upstream evolution tests](../tests/generated/upstream/evolution_test.mbt) | Original `TestUnionInUnion` and `TestInterleavedGroups` are independently checked; a C++-generated discriminant unknown to a smaller view cannot expose a known member and survives opaque copying |
 | Schema-free copying preserves unknown contents and fails within budgets | [copy tests](../copy_test.mbt) | Complete official multi-segment fixture copied; canonical bytes compared, plus 1,024 deterministic malformed-input mutations and destination rollback checks |
-| Canonical struct-message encoding | [canonical tests](../canonical_test.mbt) | [Official converter outputs](../fixtures/upstream/oracle-1.5.0/README.md); CI regenerates and byte-compares every canonical vector |
+| Canonical struct-message encoding, verification and zero-copy decoding | [canonical tests](../canonical_test.mbt) | [Official converter outputs](../fixtures/upstream/oracle-1.5.0/README.md); CI regenerates and byte-compares every canonical vector; `is_canonical` and `read_canonical` verify all 10 canonical fixtures and reject every non-canonical violation |
+| MoonBit-native typed union ADTs (`<Type>Which` + `which_case()`) | [upstream evolution tests](../tests/generated/upstream/evolution_test.mbt), [bundle tests](../examples/builtin_bundle/builtin_bundle_wbtest.mbt), [workerd config inspector](../examples/workerd_config/inspect.mbt) | Generated across all 12 official schemas plus 1,455-line `workerd.capnp`; exhaustive pattern matching with forward-compatible `Unknown(UInt32)` preservation |
 | Stable generation despite irrelevant compiler metadata | [generator regression](../codegen/codegen_test.mbt) | Stored Windows requests and fresh Linux 1.5.0 compilation generate identical formatted source; source-info/annotation/version mutations are also checked |
 | Valid schema names colliding with generated Reader/Builder, list or generic names | [collision regression](../tests/generated/collision_compat/collision_test.mbt) | [Official-compiler input](../codegen/fixtures/collision-compat.capnp) retains the original names; generated APIs read/write each distinct declaration and field |
+| Real-world external schemas (`workerd` deployment config & module bundles) | [config inspector](../examples/workerd_config/README.md), [built-in bundle inspector](../examples/builtin_bundle/README.md), [bundle tests](../examples/builtin_bundle/builtin_bundle_wbtest.mbt) | Official `workerd@1.20261112.1` compiled `config.bin` (`workerd test --binary` replay), linked 28-module Pyodide bundle verified byte-for-byte via `pycapnp` and Git blob IDs |
 
 ## Reproduce
 
@@ -46,7 +48,7 @@ unbounded output amplification merely because each individual frame is small.
 These checks demonstrate error detection; they do not prove the absence of all
 bugs or replace independent protocol evidence.
 
-Use MoonBit `0.10.20+65efd5b93` with matching core. Node.js 24 and Python 3.12
+Use MoonBit `0.10.22+124d61d05` with matching core. Node.js 24 and Python 3.12
 are configured in CI. The generated bindings are committed; the first commands need no `capnp`
 compiler or C++ runtime:
 

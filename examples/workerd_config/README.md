@@ -9,7 +9,7 @@ node inspect-config.mjs list sample/config.bin
 node inspect-config.mjs extract sample/config.bin main worker recovered.js
 ```
 
-从源码构建需要 MoonBit 0.10.20、Node.js、Python 3 和官方 Cap’n Proto 编译器 1.5.0。在仓库根目录执行以下命令。输出目录需为新目录，生成的接口和构建文件都放在其中。
+从源码构建需要 MoonBit 0.10.22、Node.js、Python 3 和官方 Cap’n Proto 编译器 1.5.0。在仓库根目录执行以下命令。输出目录需为新目录，生成的接口和构建文件都放在其中。
 
 ```sh
 python examples/workerd_config/build.py work/workerd-reader

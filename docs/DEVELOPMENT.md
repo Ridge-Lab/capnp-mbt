@@ -1,7 +1,7 @@
 # Development
 
 The main branch and CI pin MoonBit
-`0.10.20+65efd5b93` with matching core. Check the workflow for the relevant
+`0.10.22+124d61d05` with matching core. Check the workflow for the relevant
 commit's execution results. From the repository root:
 
 ```sh
@@ -34,7 +34,7 @@ commands, not individual assertions or independent test cases. `--moon`,
 The driver installs no toolchain and keeps child temporary files in its run
 directory. Do not run two builds against the same checkout concurrently.
 
-The full profile compiles eleven schemas with official 1.5.0, compares formatted
+The full profile compiles twelve schemas with official 1.5.0, compares formatted
 generated APIs without rewriting source, checks eleven canonical fixtures,
 executes both peers and verifies plain/packed streams. Source archive hashing
 is additionally enforced in CI. Keep each implementation change, its regression
@@ -58,17 +58,17 @@ moon run --target native examples/roundtrip
 
 `internal/stdio` is a host adapter. C handles binary stdin/stdout; JS uses Node's `node:fs`. Protocol parsing, generation and packing remain MoonBit code. Standard input/output is supported on native and Node.js. Wasm users can use file-based commands where the host filesystem package is available, or call the library directly.
 
-Linux CI uses the system C compiler. MoonBit `0.10.20+65efd5b93` requires an MSVC-compatible compiler/linker and Windows SDK for Windows native builds; run native commands from an x64 Visual Studio developer shell with the C++ build tools installed. The Node.js request-file path and JS/Wasm tests do not need a C compiler.
+Linux CI uses the system C compiler. MoonBit `0.10.22+124d61d05` requires an MSVC-compatible compiler/linker and Windows SDK for Windows native builds; run native commands from an x64 Visual Studio developer shell with the C++ build tools installed. The Node.js request-file path and JS/Wasm tests do not need a C compiler.
 
-The 0.3.0 local benchmark used MoonBit 0.10.14 with LLVM-MinGW 20261006 and `CCC_OVERRIDE_OPTIONS=+-D_CRT_RAND_S`. That is a historical environment record, not the Windows native setup for 0.5.0.
+The 0.3.0 local benchmark used MoonBit 0.10.14 with LLVM-MinGW 20261006 and `CCC_OVERRIDE_OPTIONS=+-D_CRT_RAND_S`. That is a historical environment record, not the Windows native setup for 0.6.0.
 
 ## Layout
 
-- Root `reader_*`, `builder_*`, `pointer_builder.mbt`, `copy.mbt`, `canonical.mbt`, `packed.mbt`, `stream.mbt`: serialization runtime.
+- Root `errors.mbt`, `reader_*`, `builder_*`, `pointer_builder.mbt`, `copy.mbt`, `canonical.mbt`, `packed.mbt`, `packed_stream.mbt`, `stream.mbt`: serialization runtime.
 - `codegen/`: compiler request decoding and MoonBit source generation.
 - `cmd/`: compiler plugin and packing utilities.
 - `fixtures/`, `tests/`: independent fixtures, generated API tests and regressions.
-- `examples/`: portable roundtrip, cross-language batch processing, and unchanged-schema interoperability.
+- `examples/`: portable roundtrip, cross-language telemetry batch/streaming pipelines, unchanged-schema interoperability, and Cloudflare `workerd` config/bundle inspectors.
 
 Changes should include a reproducer or reference fixture where practical. Do not add performance or production-use claims without reproducible evidence.
 
@@ -83,10 +83,10 @@ and [benchmark methodology](../benchmarks/README.md) for full reproductions.
 After publishing to Mooncakes, run this from the matching release checkout:
 
 ```sh
-python scripts/verify_release.py --release-tag v0.5.0
+python scripts/verify_release.py --release-tag v0.6.0
 ```
 
-The script requires Python 3.12, MoonBit `0.10.20+65efd5b93`, Node.js 24, a native C compiler,
+The script requires Python 3.12, MoonBit `0.10.22+124d61d05`, Node.js 24, a native C compiler,
 and the official `capnp` 1.5.0 executable. `--moon` and `--capnp` accept explicit
 tool paths. `--version` may select another package only if it provides the APIs
 exercised by this checkout's script. To verify an older release, use its matching

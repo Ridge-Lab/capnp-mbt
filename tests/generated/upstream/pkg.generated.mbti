@@ -1182,6 +1182,13 @@ pub fn TestGenericsAsCapabilityAndTextReader::get_uv(Self) -> Unit raise @capnp.
 pub fn TestGenericsAsCapabilityAndTextReader::is_ug(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsCapabilityAndTextReader::is_uv(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsCapabilityAndTextReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestGenericsAsCapabilityAndTextReader::which_case(Self) -> TestGenericsAsCapabilityAndTextWhich raise @capnp.CapnpError
+
+pub(all) enum TestGenericsAsCapabilityAndTextWhich {
+  Uv
+  Ug(TestGenericsUgAsCapabilityAndTextReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestGenericsAsListOfTestEnumAndTextBuilder {
   inner : @capnp.StructBuilder
@@ -1232,6 +1239,13 @@ pub fn TestGenericsAsListOfTestEnumAndTextReader::get_uv(Self) -> Unit raise @ca
 pub fn TestGenericsAsListOfTestEnumAndTextReader::is_ug(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsListOfTestEnumAndTextReader::is_uv(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsListOfTestEnumAndTextReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestGenericsAsListOfTestEnumAndTextReader::which_case(Self) -> TestGenericsAsListOfTestEnumAndTextWhich raise @capnp.CapnpError
+
+pub(all) enum TestGenericsAsListOfTestEnumAndTextWhich {
+  Uv
+  Ug(TestGenericsUgAsListOfTestEnumAndTextReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestGenericsAsTestAllTypesAndTestAnyPointerBuilder {
   inner : @capnp.StructBuilder
@@ -1270,6 +1284,13 @@ pub fn TestGenericsAsTestAllTypesAndTestAnyPointerReader::get_uv(Self) -> Unit r
 pub fn TestGenericsAsTestAllTypesAndTestAnyPointerReader::is_ug(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsTestAllTypesAndTestAnyPointerReader::is_uv(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsTestAllTypesAndTestAnyPointerReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestGenericsAsTestAllTypesAndTestAnyPointerReader::which_case(Self) -> TestGenericsAsTestAllTypesAndTestAnyPointerWhich raise @capnp.CapnpError
+
+pub(all) enum TestGenericsAsTestAllTypesAndTestAnyPointerWhich {
+  Uv
+  Ug(TestGenericsUgAsTestAllTypesAndTestAnyPointerReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestGenericsAsTestAllTypesAndTextBuilder {
   inner : @capnp.StructBuilder
@@ -1308,6 +1329,13 @@ pub fn TestGenericsAsTestAllTypesAndTextReader::get_uv(Self) -> Unit raise @capn
 pub fn TestGenericsAsTestAllTypesAndTextReader::is_ug(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsTestAllTypesAndTextReader::is_uv(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsTestAllTypesAndTextReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestGenericsAsTestAllTypesAndTextReader::which_case(Self) -> TestGenericsAsTestAllTypesAndTextWhich raise @capnp.CapnpError
+
+pub(all) enum TestGenericsAsTestAllTypesAndTextWhich {
+  Uv
+  Ug(TestGenericsUgAsTestAllTypesAndTextReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestGenericsAsTestAnyPointerAndTestAllTypesBuilder {
   inner : @capnp.StructBuilder
@@ -1346,6 +1374,13 @@ pub fn TestGenericsAsTestAnyPointerAndTestAllTypesReader::get_uv(Self) -> Unit r
 pub fn TestGenericsAsTestAnyPointerAndTestAllTypesReader::is_ug(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsTestAnyPointerAndTestAllTypesReader::is_uv(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsTestAnyPointerAndTestAllTypesReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestGenericsAsTestAnyPointerAndTestAllTypesReader::which_case(Self) -> TestGenericsAsTestAnyPointerAndTestAllTypesWhich raise @capnp.CapnpError
+
+pub(all) enum TestGenericsAsTestAnyPointerAndTestAllTypesWhich {
+  Uv
+  Ug(TestGenericsUgAsTestAnyPointerAndTestAllTypesReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestGenericsAsTextAndCapabilityBuilder {
   inner : @capnp.StructBuilder
@@ -1383,6 +1418,13 @@ pub fn TestGenericsAsTextAndCapabilityReader::get_uv(Self) -> Unit raise @capnp.
 pub fn TestGenericsAsTextAndCapabilityReader::is_ug(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsTextAndCapabilityReader::is_uv(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsTextAndCapabilityReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestGenericsAsTextAndCapabilityReader::which_case(Self) -> TestGenericsAsTextAndCapabilityWhich raise @capnp.CapnpError
+
+pub(all) enum TestGenericsAsTextAndCapabilityWhich {
+  Uv
+  Ug(TestGenericsUgAsTextAndCapabilityReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestGenericsAsTextAndListOfTestEnumBuilder {
   inner : @capnp.StructBuilder
@@ -1420,6 +1462,13 @@ pub fn TestGenericsAsTextAndListOfTestEnumReader::get_uv(Self) -> Unit raise @ca
 pub fn TestGenericsAsTextAndListOfTestEnumReader::is_ug(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsTextAndListOfTestEnumReader::is_uv(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsTextAndListOfTestEnumReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestGenericsAsTextAndListOfTestEnumReader::which_case(Self) -> TestGenericsAsTextAndListOfTestEnumWhich raise @capnp.CapnpError
+
+pub(all) enum TestGenericsAsTextAndListOfTestEnumWhich {
+  Uv
+  Ug(TestGenericsUgAsTextAndListOfTestEnumReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestGenericsAsTextAndTestAllTypesBuilder {
   inner : @capnp.StructBuilder
@@ -1457,6 +1506,13 @@ pub fn TestGenericsAsTextAndTestAllTypesReader::get_uv(Self) -> Unit raise @capn
 pub fn TestGenericsAsTextAndTestAllTypesReader::is_ug(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsTextAndTestAllTypesReader::is_uv(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsAsTextAndTestAllTypesReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestGenericsAsTextAndTestAllTypesReader::which_case(Self) -> TestGenericsAsTextAndTestAllTypesWhich raise @capnp.CapnpError
+
+pub(all) enum TestGenericsAsTextAndTestAllTypesWhich {
+  Uv
+  Ug(TestGenericsUgAsTextAndTestAllTypesReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestGenericsBuilder {
   inner : @capnp.StructBuilder
@@ -1908,6 +1964,7 @@ pub fn TestGenericsReader::get_uv(Self) -> Unit raise @capnp.CapnpError
 pub fn TestGenericsReader::is_ug(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsReader::is_uv(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestGenericsReader::which_case(Self) -> TestGenericsWhich raise @capnp.CapnpError
 
 pub(all) struct TestGenericsUgAsCapabilityAndTextBuilder {
   inner : @capnp.StructBuilder
@@ -2017,6 +2074,13 @@ pub fn TestGenericsUnionReader::get_foo(Self) -> @capnp.PointerReader raise @cap
 pub fn TestGenericsUnionReader::is_bar(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsUnionReader::is_foo(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGenericsUnionReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestGenericsUnionReader::which_case(Self) -> TestGenericsUnionWhich raise @capnp.CapnpError
+
+pub(all) enum TestGenericsUnionWhich {
+  Foo(@capnp.PointerReader)
+  Bar(@capnp.PointerReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestGenericsUseAliasesAsTestAllTypesAndListOfUint32Builder {
   inner : @capnp.StructBuilder
@@ -2087,6 +2151,12 @@ pub fn TestGenericsUseAliasesReader::get_inner2(Self) -> TestGenericsInner2Reade
 pub fn TestGenericsUseAliasesReader::get_inner2_bind(Self) -> TestGenericsInner2AsAnyPointerAndAnyPointerAndTextReader raise @capnp.CapnpError
 pub fn TestGenericsUseAliasesReader::get_inner2_text(Self) -> TestGenericsInner2AsAnyPointerAndAnyPointerAndTextReader raise @capnp.CapnpError
 pub fn TestGenericsUseAliasesReader::get_rev_foo(Self) -> @capnp.PointerReader raise @capnp.CapnpError
+
+pub(all) enum TestGenericsWhich {
+  Uv
+  Ug(TestGenericsUgReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestGenericsWrapper2Builder {
   inner : @capnp.StructBuilder
@@ -2206,6 +2276,14 @@ pub fn TestGroupsGroupsReader::is_bar(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGroupsGroupsReader::is_baz(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGroupsGroupsReader::is_foo(Self) -> Bool raise @capnp.CapnpError
 pub fn TestGroupsGroupsReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestGroupsGroupsReader::which_case(Self) -> TestGroupsGroupsWhich raise @capnp.CapnpError
+
+pub(all) enum TestGroupsGroupsWhich {
+  Foo(TestGroupsGroupsFooReader)
+  Baz(TestGroupsGroupsBazReader)
+  Bar(TestGroupsGroupsBarReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestGroupsReader {
   inner : @capnp.StructReader
@@ -2318,6 +2396,14 @@ pub fn TestInterleavedGroupsGroup1Reader::is_corge(Self) -> Bool raise @capnp.Ca
 pub fn TestInterleavedGroupsGroup1Reader::is_fred(Self) -> Bool raise @capnp.CapnpError
 pub fn TestInterleavedGroupsGroup1Reader::is_qux(Self) -> Bool raise @capnp.CapnpError
 pub fn TestInterleavedGroupsGroup1Reader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestInterleavedGroupsGroup1Reader::which_case(Self) -> TestInterleavedGroupsGroup1Which raise @capnp.CapnpError
+
+pub(all) enum TestInterleavedGroupsGroup1Which {
+  Qux(UInt32)
+  Corge(TestInterleavedGroupsGroup1CorgeReader)
+  Fred(String)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestInterleavedGroupsGroup2Builder {
   inner : @capnp.StructBuilder
@@ -2358,6 +2444,14 @@ pub fn TestInterleavedGroupsGroup2Reader::is_corge(Self) -> Bool raise @capnp.Ca
 pub fn TestInterleavedGroupsGroup2Reader::is_fred(Self) -> Bool raise @capnp.CapnpError
 pub fn TestInterleavedGroupsGroup2Reader::is_qux(Self) -> Bool raise @capnp.CapnpError
 pub fn TestInterleavedGroupsGroup2Reader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestInterleavedGroupsGroup2Reader::which_case(Self) -> TestInterleavedGroupsGroup2Which raise @capnp.CapnpError
+
+pub(all) enum TestInterleavedGroupsGroup2Which {
+  Qux(UInt32)
+  Corge(TestInterleavedGroupsGroup2CorgeReader)
+  Fred(String)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestInterleavedGroupsReader {
   inner : @capnp.StructReader
@@ -2406,6 +2500,14 @@ pub fn TestLateUnionAnotherUnionReader::is_corge(Self) -> Bool raise @capnp.Capn
 pub fn TestLateUnionAnotherUnionReader::is_grault(Self) -> Bool raise @capnp.CapnpError
 pub fn TestLateUnionAnotherUnionReader::is_qux(Self) -> Bool raise @capnp.CapnpError
 pub fn TestLateUnionAnotherUnionReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestLateUnionAnotherUnionReader::which_case(Self) -> TestLateUnionAnotherUnionWhich raise @capnp.CapnpError
+
+pub(all) enum TestLateUnionAnotherUnionWhich {
+  Qux(String)
+  Corge(TestLateUnionAnotherUnionCorgeListReader)
+  Grault(Float)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestLateUnionBuilder {
   inner : @capnp.StructBuilder
@@ -2459,6 +2561,14 @@ pub fn TestLateUnionTheUnionReader::is_corge(Self) -> Bool raise @capnp.CapnpErr
 pub fn TestLateUnionTheUnionReader::is_grault(Self) -> Bool raise @capnp.CapnpError
 pub fn TestLateUnionTheUnionReader::is_qux(Self) -> Bool raise @capnp.CapnpError
 pub fn TestLateUnionTheUnionReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestLateUnionTheUnionReader::which_case(Self) -> TestLateUnionTheUnionWhich raise @capnp.CapnpError
+
+pub(all) enum TestLateUnionTheUnionWhich {
+  Qux(String)
+  Corge(TestLateUnionTheUnionCorgeListReader)
+  Grault(Float)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestListDefaultsBuilder {
   inner : @capnp.StructBuilder
@@ -2925,6 +3035,13 @@ pub fn TestNameAnnotationBadlyNamedUnionReader::get_baz(Self) -> TestNameAnnotat
 pub fn TestNameAnnotationBadlyNamedUnionReader::is_badly_named_group(Self) -> Bool raise @capnp.CapnpError
 pub fn TestNameAnnotationBadlyNamedUnionReader::is_baz(Self) -> Bool raise @capnp.CapnpError
 pub fn TestNameAnnotationBadlyNamedUnionReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestNameAnnotationBadlyNamedUnionReader::which_case(Self) -> TestNameAnnotationBadlyNamedUnionWhich raise @capnp.CapnpError
+
+pub(all) enum TestNameAnnotationBadlyNamedUnionWhich {
+  BadlyNamedGroup(TestNameAnnotationBadlyNamedUnionBadlyNamedGroupReader)
+  Baz(TestNameAnnotationNestedStructReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestNameAnnotationBuilder {
   inner : @capnp.StructBuilder
@@ -2971,6 +3088,13 @@ pub fn TestNameAnnotationReader::get_bar(Self) -> Int32 raise @capnp.CapnpError
 pub fn TestNameAnnotationReader::is_bad_field_name(Self) -> Bool raise @capnp.CapnpError
 pub fn TestNameAnnotationReader::is_bar(Self) -> Bool raise @capnp.CapnpError
 pub fn TestNameAnnotationReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestNameAnnotationReader::which_case(Self) -> TestNameAnnotationWhich raise @capnp.CapnpError
+
+pub(all) enum TestNameAnnotationWhich {
+  BadFieldName(Bool)
+  Bar(Int32)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestNestedTypesBuilder {
   inner : @capnp.StructBuilder
@@ -3034,6 +3158,13 @@ pub fn TestNewUnionVersionAReader::get_a1(Self) -> UInt64 raise @capnp.CapnpErro
 pub fn TestNewUnionVersionAReader::is_a0(Self) -> Bool raise @capnp.CapnpError
 pub fn TestNewUnionVersionAReader::is_a1(Self) -> Bool raise @capnp.CapnpError
 pub fn TestNewUnionVersionAReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestNewUnionVersionAReader::which_case(Self) -> TestNewUnionVersionAWhich raise @capnp.CapnpError
+
+pub(all) enum TestNewUnionVersionAWhich {
+  A0
+  A1(UInt64)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestNewUnionVersionBuilder {
   inner : @capnp.StructBuilder
@@ -3051,6 +3182,13 @@ pub fn TestNewUnionVersionReader::get_b(Self) -> UInt64 raise @capnp.CapnpError
 pub fn TestNewUnionVersionReader::is_a(Self) -> Bool raise @capnp.CapnpError
 pub fn TestNewUnionVersionReader::is_b(Self) -> Bool raise @capnp.CapnpError
 pub fn TestNewUnionVersionReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestNewUnionVersionReader::which_case(Self) -> TestNewUnionVersionWhich raise @capnp.CapnpError
+
+pub(all) enum TestNewUnionVersionWhich {
+  A(TestNewUnionVersionAReader)
+  B(UInt64)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestNewVersionBuilder {
   inner : @capnp.StructBuilder
@@ -3089,6 +3227,13 @@ pub fn TestOldUnionVersionReader::get_b(Self) -> UInt64 raise @capnp.CapnpError
 pub fn TestOldUnionVersionReader::is_a(Self) -> Bool raise @capnp.CapnpError
 pub fn TestOldUnionVersionReader::is_b(Self) -> Bool raise @capnp.CapnpError
 pub fn TestOldUnionVersionReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestOldUnionVersionReader::which_case(Self) -> TestOldUnionVersionWhich raise @capnp.CapnpError
+
+pub(all) enum TestOldUnionVersionWhich {
+  A
+  B(UInt64)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestOldVersionBuilder {
   inner : @capnp.StructBuilder
@@ -3267,6 +3412,13 @@ pub fn TestStructUnionUnReader::get_struct(Self) -> TestStructUnionSomeStructRea
 pub fn TestStructUnionUnReader::is_object(Self) -> Bool raise @capnp.CapnpError
 pub fn TestStructUnionUnReader::is_struct(Self) -> Bool raise @capnp.CapnpError
 pub fn TestStructUnionUnReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestStructUnionUnReader::which_case(Self) -> TestStructUnionUnWhich raise @capnp.CapnpError
+
+pub(all) enum TestStructUnionUnWhich {
+  Struct(TestStructUnionSomeStructReader)
+  Object(TestAnyPointerReader)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestSturdyRefBuilder {
   inner : @capnp.StructBuilder
@@ -3460,6 +3612,13 @@ pub fn TestUnionInUnionOuterInnerReader::get_foo(Self) -> Int32 raise @capnp.Cap
 pub fn TestUnionInUnionOuterInnerReader::is_bar(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionInUnionOuterInnerReader::is_foo(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionInUnionOuterInnerReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestUnionInUnionOuterInnerReader::which_case(Self) -> TestUnionInUnionOuterInnerWhich raise @capnp.CapnpError
+
+pub(all) enum TestUnionInUnionOuterInnerWhich {
+  Foo(Int32)
+  Bar(Int32)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestUnionInUnionOuterReader {
   inner : @capnp.StructReader
@@ -3469,6 +3628,13 @@ pub fn TestUnionInUnionOuterReader::get_inner(Self) -> TestUnionInUnionOuterInne
 pub fn TestUnionInUnionOuterReader::is_baz(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionInUnionOuterReader::is_inner(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionInUnionOuterReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestUnionInUnionOuterReader::which_case(Self) -> TestUnionInUnionOuterWhich raise @capnp.CapnpError
+
+pub(all) enum TestUnionInUnionOuterWhich {
+  Inner(TestUnionInUnionOuterInnerReader)
+  Baz(Int32)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestUnionInUnionReader {
   inner : @capnp.StructReader
@@ -3543,6 +3709,25 @@ pub fn TestUnionUnion0Reader::is_u0f1s64(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionUnion0Reader::is_u0f1s8(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionUnion0Reader::is_u0f1sp(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionUnion0Reader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestUnionUnion0Reader::which_case(Self) -> TestUnionUnion0Which raise @capnp.CapnpError
+
+pub(all) enum TestUnionUnion0Which {
+  U0f0s0
+  U0f0s1(Bool)
+  U0f0s8(Int32)
+  U0f0s16(Int32)
+  U0f0s32(Int32)
+  U0f0s64(Int64)
+  U0f0sp(String)
+  U0f1s0
+  U0f1s1(Bool)
+  U0f1s8(Int32)
+  U0f1s16(Int32)
+  U0f1s32(Int32)
+  U0f1s64(Int64)
+  U0f1sp(String)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestUnionUnion1Builder {
   inner : @capnp.StructBuilder
@@ -3612,6 +3797,31 @@ pub fn TestUnionUnion1Reader::is_u1f2s64(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionUnion1Reader::is_u1f2s8(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionUnion1Reader::is_u1f2sp(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionUnion1Reader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestUnionUnion1Reader::which_case(Self) -> TestUnionUnion1Which raise @capnp.CapnpError
+
+pub(all) enum TestUnionUnion1Which {
+  U1f0s0
+  U1f0s1(Bool)
+  U1f1s1(Bool)
+  U1f0s8(Int32)
+  U1f1s8(Int32)
+  U1f0s16(Int32)
+  U1f1s16(Int32)
+  U1f0s32(Int32)
+  U1f1s32(Int32)
+  U1f0s64(Int64)
+  U1f1s64(Int64)
+  U1f0sp(String)
+  U1f1sp(String)
+  U1f2s0
+  U1f2s1(Bool)
+  U1f2s8(Int32)
+  U1f2s16(Int32)
+  U1f2s32(Int32)
+  U1f2s64(Int64)
+  U1f2sp(String)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestUnionUnion2Builder {
   inner : @capnp.StructBuilder
@@ -3636,6 +3846,16 @@ pub fn TestUnionUnion2Reader::is_u2f0s32(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionUnion2Reader::is_u2f0s64(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionUnion2Reader::is_u2f0s8(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionUnion2Reader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestUnionUnion2Reader::which_case(Self) -> TestUnionUnion2Which raise @capnp.CapnpError
+
+pub(all) enum TestUnionUnion2Which {
+  U2f0s1(Bool)
+  U2f0s8(Int32)
+  U2f0s16(Int32)
+  U2f0s32(Int32)
+  U2f0s64(Int64)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestUnionUnion3Builder {
   inner : @capnp.StructBuilder
@@ -3660,6 +3880,16 @@ pub fn TestUnionUnion3Reader::is_u3f0s32(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionUnion3Reader::is_u3f0s64(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionUnion3Reader::is_u3f0s8(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnionUnion3Reader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestUnionUnion3Reader::which_case(Self) -> TestUnionUnion3Which raise @capnp.CapnpError
+
+pub(all) enum TestUnionUnion3Which {
+  U3f0s1(Bool)
+  U3f0s8(Int32)
+  U3f0s16(Int32)
+  U3f0s32(Int32)
+  U3f0s64(Int64)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestUnnamedUnionBuilder {
   inner : @capnp.StructBuilder
@@ -3683,6 +3913,13 @@ pub fn TestUnnamedUnionReader::get_middle(Self) -> UInt32 raise @capnp.CapnpErro
 pub fn TestUnnamedUnionReader::is_bar(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnnamedUnionReader::is_foo(Self) -> Bool raise @capnp.CapnpError
 pub fn TestUnnamedUnionReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn TestUnnamedUnionReader::which_case(Self) -> TestUnnamedUnionWhich raise @capnp.CapnpError
+
+pub(all) enum TestUnnamedUnionWhich {
+  Foo(UInt32)
+  Bar(UInt32)
+  Unknown(UInt32)
+}
 
 pub(all) struct TestUseGenericsBuilder {
   inner : @capnp.StructBuilder

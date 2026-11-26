@@ -65,6 +65,9 @@ fn node_symbols(node : Node, name : String) -> Array[String] {
     1 => {
       result.push(name + "Reader")
       result.push(name + "Builder")
+      if node.discriminant_count > 0 {
+        result.push(name + "Which")
+      }
       for field in node.fields {
         if field.typ is ListOf(element) {
           list_symbols(result, list_name(name, field), element)

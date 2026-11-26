@@ -317,6 +317,96 @@ fn pointer_expr(node : Node, field : Field) -> String raise {
 }
 
 ///|
+fn union_variants(fields : Array[Field]) -> Array[String] {
+  let names : Map[String, Bool] = Map([])
+  let result : Array[String] = []
+  for field in fields {
+    let raw = symbol(field.name, true)
+    let base = if raw == "Self" { "SelfVariant" } else { raw }
+    let mut name = base
+    let mut attempt = 0
+    while names.contains(name) {
+      name = base + "V" + field.discriminant.to_string()
+      if attempt > 0 {
+        name += "N" + attempt.to_string()
+      }
+      attempt += 1
+    }
+    names[name] = true
+    result.push(name)
+  }
+  result
+}
+
+///|
+fn union_fallback(variants : Array[String]) -> String {
+  let mut suffix = 0
+  let mut candidate = "Unknown"
+  while variants.contains(candidate) {
+    suffix += 1
+    candidate = "UnknownTag" + suffix.to_string()
+  }
+  candidate
+}
+
+///|
+fn field_reader_type(
+  owner : String,
+  field : Field,
+  nodes : Array[Node],
+) -> String? raise CodegenError {
+  match field.typ {
+    Scalar(0) => None
+    Scalar(tag) => Some(scalar_type(tag))
+    EnumRef(id) => Some(node_name(lookup(nodes, id), nodes))
+    StructRef(id) => Some(node_name(lookup(nodes, id), nodes) + "Reader")
+    ListOf(_) => Some(list_name(owner, field) + "Reader")
+    AnyPointer(kind) => Some(any_reader_type(kind))
+    _ => raise InvalidRequest("unresolved generic union field type")
+  }
+}
+
+///|
+fn emit_union_which(
+  out : StringBuilder,
+  name : String,
+  node : Node,
+  nodes : Array[Node],
+) -> Unit raise CodegenError {
+  let which_enum = name + "Which"
+  let reader = name + "Reader"
+  let union_fields = node.fields.filter(f => f.discriminant != 65535)
+  let variants = union_variants(union_fields)
+  let fallback = union_fallback(variants)
+  let cases = StringBuilder()
+  let arms = StringBuilder()
+  for i, field in union_fields {
+    let variant = variants[i]
+    let accessor = field_method(field)
+    match field_reader_type(name, field, nodes) {
+      None => {
+        cases.write_string("  " + variant + "\n")
+        arms.write_string("    \{field.discriminant}U => \{variant}\n")
+      }
+      Some(typ) => {
+        cases.write_string("  \{variant}(\{typ})\n")
+        arms.write_string(
+          "    \{field.discriminant}U => \{variant}(self.\{accessor}())\n",
+        )
+      }
+    }
+  }
+  emit_block(
+    out,
+    "pub(all) enum \{which_enum} {\n\{cases.to_string()}  \{fallback}(UInt)\n}",
+  )
+  emit_block(
+    out,
+    "pub fn \{reader}::which_case(self : \{reader}) -> \{which_enum} raise @capnp.CapnpError {\n  match self.inner.get_uint16(\{node.discriminant_offset}) {\n\{arms.to_string()}    other => \{fallback}(other)\n  }\n}",
+  )
+}
+
+///|
 fn emit_struct(
   out : StringBuilder,
   node : Node,
@@ -342,6 +432,7 @@ fn emit_struct(
       out,
       "pub fn \{reader}::which(self : \{reader}) -> UInt raise @capnp.CapnpError { self.inner.get_uint16(\{node.discriminant_offset}) }",
     )
+    emit_union_which(out, name, node, nodes)
   }
   for field in node.fields {
     let accessor = field_method(field)

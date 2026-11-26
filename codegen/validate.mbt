@@ -36,6 +36,9 @@ fn validate_names(nodes : Array[Node]) -> Unit raise CodegenError {
       let name = node_name(node, nodes)
       register_symbol(names, name + "Reader")
       register_symbol(names, name + "Builder")
+      if node.discriminant_count > 0 {
+        register_symbol(names, name + "Which")
+      }
       for field in node.fields {
         validate_field(node, field, nodes)
         match field.typ {

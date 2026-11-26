@@ -64,6 +64,28 @@ pub fn ModuleReader::which(
 }
 
 ///|
+pub(all) enum ModuleWhich {
+  Src(Bytes)
+  Wasm(Bytes)
+  Data(Bytes)
+  Json(String)
+  Unknown(UInt32)
+}
+
+///|
+pub fn ModuleReader::which_case(
+  self : ModuleReader,
+) -> ModuleWhich raise @capnp.CapnpError {
+  match self.inner.get_uint16(2) {
+    0U => Src(self.get_src())
+    1U => Wasm(self.get_wasm())
+    2U => Data(self.get_data())
+    3U => Json(self.get_json())
+    other => Unknown(other)
+  }
+}
+
+///|
 pub fn ModuleReader::get_name(
   self : ModuleReader,
 ) -> String raise @capnp.CapnpError {

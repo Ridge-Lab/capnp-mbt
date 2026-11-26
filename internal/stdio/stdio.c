@@ -28,6 +28,7 @@ int capnp_mbt_stdin_read(unsigned char *data, int size) {
 }
 
 int capnp_mbt_stdout_write(const unsigned char *data, int size) {
+  if (size < 0) return -1;
 #ifdef _WIN32
   if (_setmode(_fileno(stdout), _O_BINARY) == -1) return -1;
 #endif

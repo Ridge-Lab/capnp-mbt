@@ -266,6 +266,7 @@ pub fn FixtureReader::is_code(Self) -> Bool raise @capnp.CapnpError
 pub fn FixtureReader::is_message(Self) -> Bool raise @capnp.CapnpError
 pub fn FixtureReader::is_none(Self) -> Bool raise @capnp.CapnpError
 pub fn FixtureReader::which(Self) -> UInt32 raise @capnp.CapnpError
+pub fn FixtureReader::which_case(Self) -> FixtureWhich raise @capnp.CapnpError
 
 pub(all) struct FixtureShortsListBuilder {
   inner : @capnp.ListBuilder
@@ -290,6 +291,13 @@ pub(all) struct FixtureTextsListReader {
 }
 pub fn FixtureTextsListReader::get(Self, Int32) -> String raise @capnp.CapnpError
 pub fn FixtureTextsListReader::length(Self) -> Int32
+
+pub(all) enum FixtureWhich {
+  None
+  Message(String)
+  Code(UInt32)
+  Unknown(UInt32)
+}
 
 // Type aliases
 
